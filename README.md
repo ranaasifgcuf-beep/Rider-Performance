@@ -1,14 +1,18 @@
 # Rider-Performance — HRMS & Payroll (Oracle Cloud)
 
-Custom Oracle APEX extension for rider/logistics HRMS & Payroll, integrating with
-Oracle Fusion HCM/Payroll as the system of record for core HR and payroll data.
+Standalone Oracle APEX HRMS & Payroll system (Oracle Autonomous Database), built
+in-house — no Oracle Fusion HCM integration. This app is the system of record
+for employee data, assignments, and payroll.
 
 ## Modules (in progress)
 
-- **Employee Profile** — rider/staff master data, synced from Fusion HCM
-- **Project Assignment** — assigning riders/employees to projects, zones, or routes
+- **Employee Profile** — employee/rider master data
+- **Project Assignment** — assigning employees/riders to projects, zones, or routes
 - **BIE (Bike/Equipment Issuance)** — tracking issuance/return of bikes and equipment
 - **SIM Assignment** — tracking SIM card issuance per rider
+- **Payroll** — since there's no Fusion Payroll to lean on, payroll calculation
+  (salary, deductions, tax/EOBI/PF, overtime, leave) is owned entirely by this app —
+  the highest-risk area to get right; needs careful review and test coverage.
 
 > Naming note: confirm what "BIE" stands for in your team's usage so this doc and
 > the schema match (e.g. Bike Issuance Entry vs. Bulk Import/Export).
@@ -22,8 +26,7 @@ db/packages/          PL/SQL package specs & bodies
 db/views/             Views
 db/triggers/          Triggers
 db/sequences/         Sequences
-integration/fusion-rest/  Fusion HCM REST call definitions (Employee, Assignment APIs)
-integration/oic/      OIC integration flow exports, if used
+integration/          External integrations (bank/payment disbursement, SMS/notify, etc.), if any
 docs/                 Architecture & data model notes
 scripts/              One-off deploy/setup scripts
 ```
@@ -51,11 +54,11 @@ subfolder — this keeps history and reviews sane per-object instead of one gian
 
 ## Workflow from here
 
-1. Paste or upload your existing components (APEX pages, packages, table DDL,
-   REST integration calls) — either in chat or as files — and they'll be added here.
-2. Each addition gets reviewed for: Fusion HCM integration pattern (REST/HCM Extract
-   vs. duplicating master data), payroll logic placement (should stay in Fusion
-   Payroll, not reimplemented here), and standard APEX/PL/SQL practices (bind
-   variables, authorization schemes, session state protection).
+1. Paste or upload your existing components (APEX pages, packages, table DDL) —
+   either in chat or as files — and they'll be added here.
+2. Each addition gets reviewed for: data model soundness (employee/project/BIE/SIM
+   relationships), payroll calculation correctness and auditability, and standard
+   APEX/PL-SQL practices (bind variables, authorization schemes, session state
+   protection).
 3. Once there's a real baseline, this README's module list becomes a proper
    architecture doc.

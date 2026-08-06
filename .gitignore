@@ -1,0 +1,18 @@
+# Oracle Wallet / credentials — never commit
+*wallet*/
+cwallet.sso
+ewallet.p12
+tnsnames.ora
+sqlnet.ora
+
+# Env / secrets
+.env
+.env.*
+*.env
+
+# APEX single-file exports (use split format instead — see README)
+f[0-9]*.sql
+
+# OS / editor cruft
+.DS_Store
+*.log

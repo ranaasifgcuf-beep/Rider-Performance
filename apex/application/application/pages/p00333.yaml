@@ -1,0 +1,1659 @@
+---
+# ====== Page: SIM Master Form ===============================
+id: 333
+identification: 
+  name: SIM Master Form
+  alias: SIM-MASTER-FORM
+  title: SIM Master
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  width: 900
+  height: 680
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* SIM form labels */
+    #sim_form .t-Form-label {
+        font-weight: 600;
+        color: #344054;
+    }
+    
+    /* Inputs */
+    #sim_form .apex-item-text,
+    #sim_form .apex-item-select,
+    #sim_form .apex-item-textarea,
+    #sim_form .apex-item-datepicker {
+        border-radius: 7px;
+        border-color: #d0d5dd;
+        background-color: #ffffff;
+        min-height: 42px;
+    }
+    
+    /* Input focus */
+    #sim_form .apex-item-text:focus,
+    #sim_form .apex-item-select:focus,
+    #sim_form .apex-item-textarea:focus {
+        border-color: #2684ff;
+        box-shadow: 0 0 0 2px rgba(38, 132, 255, 0.12);
+    }
+    
+    /* Reduce excessive vertical spacing */
+    #sim_form .t-Form-fieldContainer {
+        margin-bottom: 8px;
+    }
+    
+    /* Subregion headings */
+    #sim_form .t-Region-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #1d2939;
+    }
+    
+    /* Text areas */
+    #sim_form textarea.apex-item-textarea {
+        min-height: 85px;
+        resize: vertical;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: SIM Master Form =============================
+  id: 43045210997367498
+  identification: 
+    name: SIM Master Form
+    title: SIM Details
+    type: Form
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: FLEET_SIMS
+    include-rowid-column: false
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: sim_form
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+- # ====== Region: Buttons =====================================
+  id: 43062270774367519
+  identification: 
+    name: Buttons
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: Text (escape special characters)
+      show-line-breaks: true
+
+page-items: 
+- # ====== Page Item: P333_SIM_ID ==============================
+  id: 43045505000367498
+  identification: 
+    name: P333_SIM_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: SIM_ID
+    data-type: NUMBER
+    query-only: true
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_MOBILE_NO ===========================
+  id: 43045989196367503
+  identification: 
+    name: P333_MOBILE_NO
+    type: Text Field
+
+  label: 
+    label: Mobile No
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 20
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+    column-attributes: 
+    - inputmode="numeric"
+    - autocomplete="tel"
+    - pattern="[0-9]*"
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 10
+    value-placeholder: 0501234567
+
+  validation: 
+    value-required: true
+    maximum-length: 30
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: MOBILE_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_ICCID_NO ============================
+  id: 43046320896367503
+  identification: 
+    name: P333_ICCID_NO
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 40
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: ICCID_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_OPERATOR_CODE =======================
+  id: 43046745418367503
+  identification: 
+    name: P333_OPERATOR_CODE
+    type: Select List
+
+  label: 
+    label: Operator Code
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select operator_name d,
+             operator_code r
+        from fleet_sim_operators
+       where is_active = 'Y'
+       order by seq_no, operator_name;
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: OPERATOR_CODE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_SIM_STATUS_CODE =====================
+  id: 43047479764367509
+  identification: 
+    name: P333_SIM_STATUS_CODE
+    type: Select List
+
+  label: 
+    label: Sim Status Code
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 60
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select sim_status_name d,
+             sim_status_code r
+        from fleet_sim_status_master
+       where is_active = 'Y'
+       order by seq_no, sim_status_name;
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: SIM_STATUS_CODE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: AVAILABLE
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_OWNERSHIP_TYPE ======================
+  id: 43048192428367509
+  identification: 
+    name: P333_OWNERSHIP_TYPE
+    type: Select List
+
+  label: 
+    label: Ownership Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 80
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select 'Supplier / Aggregator', 'SUPPLIER' from dual
+      union all select 'Employee Own', 'EMPLOYEE' from dual
+      union all select 'Third Party / Friend', 'THIRD_PARTY' from dual
+      union all select 'Rental', 'RENTAL' from dual
+      union all select 'Other', 'OTHER' from dual
+      order by 1;
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: OWNERSHIP_TYPE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: RENTAL
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_OWNER_SUPPLIER_ID ===================
+  id: 43048599394367509
+  identification: 
+    name: P333_OWNER_SUPPLIER_ID
+    type: Select List
+
+  label: 
+    label: Owner Supplier Id
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 90
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select supplier_name d,
+             supplier_id r
+        from fin_suppliers
+       order by supplier_name;
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: OWNER_SUPPLIER_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_EXTERNAL_OWNER_NAME =================
+  id: 43048994354367510
+  identification: 
+    name: P333_EXTERNAL_OWNER_NAME
+    type: Text Field
+
+  label: 
+    label: External Owner Name
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 100
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 200
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: EXTERNAL_OWNER_NAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_EXTERNAL_OWNER_MOBILE ===============
+  id: 43049350110367510
+  identification: 
+    name: P333_EXTERNAL_OWNER_MOBILE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 110
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: EXTERNAL_OWNER_MOBILE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_EXTERNAL_OWNER_REF ==================
+  id: 43049709553367510
+  identification: 
+    name: P333_EXTERNAL_OWNER_REF
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 120
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: EXTERNAL_OWNER_REF
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_PLAN_NAME ===========================
+  id: 43050195384367511
+  identification: 
+    name: P333_PLAN_NAME
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 210
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: PLAN_NAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_DATA_PACKAGE ========================
+  id: 43050575237367511
+  identification: 
+    name: P333_DATA_PACKAGE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 220
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: DATA_PACKAGE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_MONTHLY_COST ========================
+  id: 43050909455367511
+  identification: 
+    name: P333_MONTHLY_COST
+    type: Number Field
+
+  label: 
+    label: Monthly Cost
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 70
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: MONTHLY_COST
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_BILL_ACCOUNT_NO =====================
+  id: 43051350451367512
+  identification: 
+    name: P333_BILL_ACCOUNT_NO
+    type: Text Field
+
+  label: 
+    label: Bill Account No
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 240
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 100
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: BILL_ACCOUNT_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_CONTRACT_NO =========================
+  id: 43051734443367512
+  identification: 
+    name: P333_CONTRACT_NO
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 140
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: CONTRACT_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_BILLING_REMARKS =====================
+  id: 43052101602367512
+  identification: 
+    name: P333_BILLING_REMARKS
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 250
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: BILLING_REMARKS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_ACTIVATION_DT =======================
+  id: 43052532743367512
+  identification: 
+    name: P333_ACTIVATION_DT
+    type: Date Picker
+
+  label: 
+    label: Activation Dt
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 150
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: ACTIVATION_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_CANCELLATION_DT =====================
+  id: 43052973032367513
+  identification: 
+    name: P333_CANCELLATION_DT
+    type: Date Picker
+
+  label: 
+    label: Cancellation Dt
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 160
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: CANCELLATION_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_REMARKS =============================
+  id: 43053319738367513
+  identification: 
+    name: P333_REMARKS
+    type: Textarea
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 260
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+    height: 4
+
+  validation: 
+    value-required: false
+    maximum-length: 4000
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: REMARKS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_CREATED_BY ==========================
+  id: 43053703315367513
+  identification: 
+    name: P333_CREATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 170
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: CREATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_CREATED_DT ==========================
+  id: 43054143713367514
+  identification: 
+    name: P333_CREATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 180
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: CREATED_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_UPDATED_BY ==========================
+  id: 43054553487367514
+  identification: 
+    name: P333_UPDATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 190
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: UPDATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P333_UPDATED_DT ==========================
+  id: 43054920023367514
+  identification: 
+    name: P333_UPDATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 200
+    region: SIM Master Form # 43045210997367498
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: SIM Master Form # 43045210997367498
+    column: UPDATED_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: CANCEL ======================================
+  id: 43062644295367520
+  identification: 
+    button-name: CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 10
+    region: Buttons # 43062270774367519
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: DELETE ======================================
+  id: 43064055070367521
+  identification: 
+    button-name: DELETE
+    label: Delete
+
+  layout: 
+    sequence: 20
+    region: Buttons # 43062270774367519
+    slot: DELETE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: false
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL DELETE action
+
+  confirmation: 
+    message: '&APP_TEXT$DELETE_MSG!RAW.'
+    style: Danger
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P333_SIM_ID
+
+- # ====== Button: SAVE ========================================
+  id: 43064477236367522
+  identification: 
+    button-name: SAVE
+    label: Apply Changes
+
+  layout: 
+    sequence: 30
+    region: Buttons # 43062270774367519
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P333_SIM_ID
+
+- # ====== Button: CREATE ======================================
+  id: 43064897345367522
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 40
+    region: Buttons # 43062270774367519
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P333_SIM_ID
+
+dynamic-actions: 
+- # ====== Dynamic Action: Show Hide Owner Fields ==============
+  id: 43013317612045447
+  identification: 
+    name: Show Hide Owner Fields
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P333_OWNERSHIP_TYPE
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 43013447068045448
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        var ownerType = apex.item("P333_OWNERSHIP_TYPE").getValue();
+        
+        var supplierItems = [
+            "P333_OWNER_SUPPLIER_ID"
+        ];
+        
+        var externalItems = [
+            "P333_EXTERNAL_OWNER_NAME",
+            "P333_EXTERNAL_OWNER_MOBILE",
+            "P333_EXTERNAL_OWNER_REF"
+        ];
+        
+        supplierItems.forEach(function(i){
+            if (ownerType === "SUPPLIER") {
+                apex.item(i).show();
+            } else {
+                apex.item(i).setValue("");
+                apex.item(i).hide();
+            }
+        });
+        
+        externalItems.forEach(function(i){
+            if (["CLIENT", "THIRD_PARTY", "OTHER"].indexOf(ownerType) >= 0) {
+                apex.item(i).show();
+            } else {
+                apex.item(i).setValue("");
+                apex.item(i).hide();
+            }
+        });
+
+    execution: 
+      sequence: 10
+      event: Show Hide Owner Fields # 43013317612045447
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: Cancel Dialog =======================
+  id: 43062721081367520
+  identification: 
+    name: Cancel Dialog
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 43062644295367520
+
+  actions: 
+  - # ====== Action: Cancel Dialog ===============================
+    id: 43063516091367521
+    identification: 
+      action: Cancel Dialog
+
+    execution: 
+      sequence: 10
+      event: Cancel Dialog # 43062721081367520
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations: 
+- # ====== Validation: Supplier Required =======================
+  id: 43013584103045449
+  identification: 
+    name: Supplier Required
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if :P333_OWNERSHIP_TYPE = 'SUPPLIER'
+             and :P333_OWNER_SUPPLIER_ID is null then
+              return 'Owner Supplier is required for supplier/aggregator SIM.';
+          end if;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: External Owner Required =================
+  id: 43013638245045450
+  identification: 
+    name: External Owner Required
+
+  execution: 
+    sequence: 20
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if :P333_OWNERSHIP_TYPE in ('CLIENT','THIRD_PARTY','OTHER')
+             and :P333_EXTERNAL_OWNER_NAME is null then
+              return 'External owner name is required for this ownership type.';
+          end if;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: Mobile No Required ======================
+  id: 43070120909428301
+  identification: 
+    name: Mobile No Required
+
+  execution: 
+    sequence: 30
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if :P333_MOBILE_NO is null then
+              return 'Mobile number is required.';
+          end if;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: Validate No =============================
+  id: 43071440442428314
+  identification: 
+    name: Validate No
+
+  execution: 
+    sequence: 40
+
+  validation: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: |
+      REGEXP_LIKE(
+          REGEXP_REPLACE(:P333_MOBILE_NO, '[^0-9]', ''),
+          '^05[0-9]{8}$'
+      )
+    always-execute: false
+
+  error: 
+    error-message: Enter a valid UAE mobile number in the format 0501234567.
+    display-location: Inline with Field and in Notification
+    associated-item: P333_MOBILE_NO # 43045989196367503
+
+processes: 
+- # ====== Process: Initialize form SIM Master Form ============
+  id: 43065216765367523
+  identification: 
+    name: Initialize form SIM Master Form
+    type: Form - Initialization
+    execution-chain: None
+    form-region: SIM Master Form # 43045210997367498
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Process form SIM Master Form ===============
+  id: 43065694508367523
+  identification: 
+    name: Process form SIM Master Form
+    type: Form - Automatic Row Processing (DML)
+    execution-chain: None
+    form-region: SIM Master Form # 43045210997367498
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Close Dialog ===============================
+  id: 43066093226367523
+  identification: 
+    name: Close Dialog
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 50
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request is contained in Value
+    value: CREATE,SAVE,DELETE
+

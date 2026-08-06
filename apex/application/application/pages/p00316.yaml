@@ -1,0 +1,1152 @@
+---
+# ====== Page: Close Accident ================================
+id: 316
+identification: 
+  name: Close Accident
+  alias: CLOSE-ACCIDENT
+  title: Close Accident
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Drawer
+  template-options: 
+  - '#DEFAULT#'
+  - js-dialog-class-t-Drawer--pullOutEnd
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Bike Details ================================
+  id: 91837158614639428
+  identification: 
+    name: Bike Details
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Hero
+    template-options: 
+    - '#DEFAULT#'
+    - t-HeroRegion--hideIcon
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Close Accident ==============================
+  id: 91841063694639467
+  identification: 
+    name: Close Accident
+    type: Static Content
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P316_REPAIR_END_DT =======================
+  id: 30544209818223647
+  identification: 
+    name: P316_REPAIR_END_DT
+    type: Date Picker
+
+  label: 
+    label: Repair End Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 10
+    region: Close Accident # 91841063694639467
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sysdate
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P316_NEXT_STATUS =========================
+  id: 30544375332223648
+  identification: 
+    name: P316_NEXT_STATUS
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: Close Accident # 91841063694639467
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: AVAILABLE
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P316_BIKE_ID =============================
+  id: 91838456545639407
+  identification: 
+    name: P316_BIKE_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Bike Details # 91837158614639428
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P316_ACCIDENT_ID =========================
+  id: 91838534132639408
+  identification: 
+    name: P316_ACCIDENT_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: Bike Details # 91837158614639428
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P316_CURRENT_STATUS ======================
+  id: 91838665443639409
+  identification: 
+    name: P316_CURRENT_STATUS
+    type: Display Only
+
+  label: 
+    label: Current Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 80
+    region: Bike Details # 91837158614639428
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P316_PLATE_NO ============================
+  id: 91838755404639410
+  identification: 
+    name: P316_PLATE_NO
+    type: Display Only
+
+  label: 
+    label: Plate No
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Bike Details # 91837158614639428
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P316_CURRENT_CUSTODY =====================
+  id: 91838824658639411
+  identification: 
+    name: P316_CURRENT_CUSTODY
+    type: Display Only
+
+  label: 
+    label: Current Custody
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 90
+    region: Bike Details # 91837158614639428
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P316_EMP_ID ==============================
+  id: 91841373430639405
+  identification: 
+    name: P316_EMP_ID
+    type: Display Only
+
+  label: 
+    label: Employee
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Display Value of List of Values
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 40
+    region: Bike Details # 91837158614639428
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: FLEET.EMPLOYEE_LOV # 18130747472806310
+    display-extra-values: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P316_ACCIDENT_DT =========================
+  id: 91841621329639407
+  identification: 
+    name: P316_ACCIDENT_DT
+    type: Display Only
+
+  label: 
+    label: Accident Date
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 50
+    region: Bike Details # 91837158614639428
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sysdate
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P316_REMARKS =============================
+  id: 91846915318639406
+  identification: 
+    name: P316_REMARKS
+    type: Text Field
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 50
+    region: Close Accident # 91841063694639467
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P316_NEXT_CUSTODY ========================
+  id: 91847009900639407
+  identification: 
+    name: P316_NEXT_CUSTODY
+    type: Select List
+
+  label: 
+    label: Next Custody
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Close Accident # 91841063694639467
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select custody_type_name d,
+             custody_type_code r
+      from fleet_ref_custody_types
+      where is_active = 'Y'
+      order by nvl(seq_no,9999)
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P316_NEXT_LOCATION_ID ====================
+  id: 91847158956639408
+  identification: 
+    name: P316_NEXT_LOCATION_ID
+    type: Select List
+
+  label: 
+    label: Accident Location
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: Close Accident # 91841063694639467
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select location_name d,
+             location_id r
+      from fleet_ref_custody_locations
+      where is_active = 'Y'
+        and custody_type_code = :P316_next_CUSTODY
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P316_NEXT_CUSTODY
+    items-to-submit: 
+    - P316_NEXT_CUSTODY
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P316_REPAIR_START_DT =====================
+  id: 91850444706639412
+  identification: 
+    name: P316_REPAIR_START_DT
+    type: Display Only
+
+  label: 
+    label: Repair Start Date
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 60
+    region: Bike Details # 91837158614639428
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sysdate
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: BTN_CANCEL ==================================
+  id: 30665004551737475
+  identification: 
+    button-name: BTN_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 30
+    region: Close Accident # 91841063694639467
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-times-circle
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:309:&SESSION.::&DEBUG.:RR,::'
+      page: 309 # Bike Operations
+      clear-cache: RR
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: BTN_SAVE ====================================
+  id: 30665468178737475
+  identification: 
+    button-name: BTN_SAVE
+    label: Save
+
+  layout: 
+    sequence: 40
+    region: Close Accident # 91841063694639467
+    slot: CHANGE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-save
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: CREATE_CHARGE =======================
+  id: 30669218330737472
+  identification: 
+    name: CREATE_CHARGE
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P316_CREATE_CHARGE_YN
+
+  client-side-condition: 
+    type: Item = Value
+    item: P316_CREATE_CHARGE_YN
+    value: Y
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 30669779059737472
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P316_CHARGE_TO_EMPLOYEE_YN
+      - P316_REPAIR_START_DT
+      - P316_ESTIMATED_COST
+
+    execution: 
+      sequence: 10
+      event: CREATE_CHARGE # 30669218330737472
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Set Value ===================================
+    id: 30670215123737472
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: Y
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P316_CHARGE_TO_EMPLOYEE_YN
+
+    execution: 
+      sequence: 20
+      event: CREATE_CHARGE # 30669218330737472
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Hide ========================================
+    id: 30670791405737471
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P316_CHARGE_TO_EMPLOYEE_YN
+      - P316_REPAIR_START_DT
+      - P316_ESTIMATED_COST
+
+    execution: 
+      sequence: 20
+      event: CREATE_CHARGE # 30669218330737472
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+  - # ====== Action: Set Value ===================================
+    id: 30671208592737471
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: Y
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P316_CHARGE_TO_EMPLOYEE_YN
+
+    execution: 
+      sequence: 10
+      event: CREATE_CHARGE # 30669218330737472
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: Close Dialof ========================
+  id: 30678239701699311
+  identification: 
+    name: Close Dialof
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: BTN_CANCEL # 30665004551737475
+
+  actions: 
+  - # ====== Action: Close Dialog ================================
+    id: 30678330723699312
+    identification: 
+      action: Close Dialog
+
+    execution: 
+      sequence: 10
+      event: Close Dialof # 30678239701699311
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations: 
+- # ====== Validation: Repair end date required ================
+  id: 30544414252223649
+  identification: 
+    name: Repair end date required
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return :P316_REPAIR_END_DT is not null;'
+    always-execute: false
+
+  error: 
+    error-message: Repair end date required!
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: End date not before accident ============
+  id: 30544556747223650
+  identification: 
+    name: End date not before accident
+
+  execution: 
+    sequence: 20
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return :P316_REPAIR_END_DT >= :P316_ACCIDENT_DT;'
+    always-execute: false
+
+  error: 
+    error-message: End date not before accident!
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: End date not before repair start ========
+  id: 30677238118699301
+  identification: 
+    name: End date not before repair start
+
+  execution: 
+    sequence: 30
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      return :P316_REPAIR_START_DT is null
+          or :P316_REPAIR_END_DT >= :P316_REPAIR_START_DT;
+    always-execute: false
+
+  error: 
+    error-message: End date not before repair start!
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: Next custody required ===================
+  id: 30677323775699302
+  identification: 
+    name: Next custody required
+
+  execution: 
+    sequence: 40
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return :P316_NEXT_CUSTODY is not null;'
+    always-execute: false
+
+  error: 
+    error-message: Next custody required!
+    display-location: Inline with Field and in Notification
+
+processes: 
+- # ====== Process: FETCH_ACCIDENT_INFO ========================
+  id: 30668482827737473
+  identification: 
+    name: FETCH_ACCIDENT_INFO
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          select A.EMP_ID,
+                 b.plate_no,
+                 a.accident_dt,
+                  a.repair_start_dt,
+                 v.bike_status_name,
+                 v.custody_type_name
+            into :P316_EMP_ID,
+                 :P316_PLATE_NO,
+                 :P316_ACCIDENT_DT,
+                 :P316_REPAIR_START_DT,
+                 :P316_CURRENT_STATUS,
+                 :P316_CURRENT_CUSTODY
+            from fleet_bike_accidents a
+            join fleet_bikes b
+              on b.bike_id = a.bike_id
+            left join vw_fleet_bike_current v
+              on v.bike_id = a.bike_id
+           where a.accident_id = :P316_ACCIDENT_ID;
+      exception
+          when no_data_found then
+              raise_application_error(-20001, 'Accident case not found.');
+      end;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: CLOSE_BIKE_ACCIDENT ========================
+  id: 30668854041737472
+  identification: 
+    name: CLOSE_BIKE_ACCIDENT
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          fleet_pkg.close_bike_accident(
+              p_accident_id      => :P316_ACCIDENT_ID,
+              p_repair_end_dt    => :P316_REPAIR_END_DT,
+            --  p_actual_cost      => :P316_ACTUAL_COST,
+              p_next_status      => :P316_NEXT_STATUS,
+              p_next_custody     => :P316_NEXT_CUSTODY,
+              p_next_location_id => :P316_NEXT_LOCATION_ID,
+              p_remarks          => :P316_REMARKS
+          );
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: BTN_SAVE # 30665468178737475
+
+- # ====== Process: New ========================================
+  id: 30678132800699310
+  identification: 
+    name: New
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: BTN_SAVE # 30665468178737475
+

@@ -1,0 +1,1006 @@
+---
+# ====== Page: Manual Loan Request ===========================
+id: 173
+identification: 
+  name: Manual Loan Request
+  alias: MANUAL-LOAN-REQUEST
+  title: Create Manual Loan Request
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Modal Dialog
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Loan Request ================================
+  id: 35843041522830015
+  identification: 
+    name: Loan Request
+    title: Request Detail
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: loan-request-card
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P173_LOAN_ID =============================
+  id: 35843143264830016
+  identification: 
+    name: P173_LOAN_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Loan Request # 35843041522830015
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P173_EMP_ID ==============================
+  id: 35843206694830017
+  identification: 
+    name: P173_EMP_ID
+    type: Popup LOV
+
+  label: 
+    label: Employee
+    alignment: Left
+
+  settings: 
+    display-as: Modal Dialog
+    initial-fetch: Automatic
+    manual-entry: false
+    fetch-on-search: false
+
+  search: 
+    match-type: Contains
+    case-sensitive: false
+    minimum-characters: 0
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: Loan Request # 35843041522830015
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: HR.EMPLOYEE_LOV # 34519350958620461
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P173_LOAN_AMOUNT =========================
+  id: 35843375839830018
+  identification: 
+    name: P173_LOAN_AMOUNT
+    type: Number Field
+
+  label: 
+    label: Loan Amount
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 30
+    region: Loan Request # 35843041522830015
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P173_EMI_AMOUNT ==========================
+  id: 35843440282830019
+  identification: 
+    name: P173_EMI_AMOUNT
+    type: Number Field
+
+  label: 
+    label: EMI Amount
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 50
+    region: Loan Request # 35843041522830015
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P173_ISSUE_DT ============================
+  id: 35843550124830020
+  identification: 
+    name: P173_ISSUE_DT
+    type: Date Picker
+
+  label: 
+    label: Issue Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 60
+    region: Loan Request # 35843041522830015
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sysdate
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P173_START_MONTH =========================
+  id: 35843635697830021
+  identification: 
+    name: P173_START_MONTH
+    type: Date Picker
+
+  label: 
+    label: Start Month
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 70
+    region: Loan Request # 35843041522830015
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P173_REMARKS =============================
+  id: 35843706496830022
+  identification: 
+    name: P173_REMARKS
+    type: Textarea
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 80
+    region: Loan Request # 35843041522830015
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P173_APPROVAL_STATUS =====================
+  id: 35843810429830023
+  identification: 
+    name: P173_APPROVAL_STATUS
+    type: Display Only
+
+  label: 
+    label: Approval Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 90
+    region: Loan Request # 35843041522830015
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - loan-status-display
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: DRAFT
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P173_STATUS ==============================
+  id: 35843999201830024
+  identification: 
+    name: P173_STATUS
+    type: Display Only
+
+  label: 
+    label: Loan Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 100
+    region: Loan Request # 35843041522830015
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - loan-status-display
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: ACTIVE
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P173_AGREED_ADVANCE_AMOUNT ===============
+  id: 37298518176639642
+  identification: 
+    name: P173_AGREED_ADVANCE_AMOUNT
+    type: Text Field
+
+  label: 
+    label: Agreed Advance Amount
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 40
+    region: Loan Request # 35843041522830015
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: SAVE_DRAFT ==================================
+  id: 35844378324830028
+  identification: 
+    button-name: SAVE_DRAFT
+    label: Save Draft
+
+  layout: 
+    sequence: 20
+    region: Loan Request # 35843041522830015
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-save
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: SUBMIT_APPROVAL =============================
+  id: 35844463542830029
+  identification: 
+    button-name: SUBMIT_APPROVAL
+    label: Submit Approval
+
+  layout: 
+    sequence: 30
+    region: Loan Request # 35843041522830015
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-send
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Item is in colon delimited list
+    item: P173_APPROVAL_STATUS
+    list: 'DRAFT:REJECTED'
+
+- # ====== Button: PB_CANCEL ===================================
+  id: 35844542204830030
+  identification: 
+    button-name: PB_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 120
+    region: Loan Request # 35843041522830015
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-times-circle
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: Cancel dialog =======================
+  id: 35844601127830031
+  identification: 
+    name: Cancel dialog
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: PB_CANCEL # 35844542204830030
+
+  actions: 
+  - # ====== Action: Cancel Dialog ===============================
+    id: 35844792107830032
+    identification: 
+      action: Cancel Dialog
+
+    execution: 
+      sequence: 10
+      event: Cancel dialog # 35844601127830031
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations: 
+- # ====== Validation: Loan amount must be greater than zero. ==
+  id: 35844079901830025
+  identification: 
+    name: Loan amount must be greater than zero.
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: 'nvl(:P173_LOAN_AMOUNT,0) > 0'
+    always-execute: false
+
+  error: 
+    error-message: Loan amount must be greater than zero.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: EMI amount must be greater than zero ====
+  id: 35844189197830026
+  identification: 
+    name: EMI amount must be greater than zero
+
+  execution: 
+    sequence: 20
+
+  validation: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: 'nvl(:P173_EMI_AMOUNT,0) > 0'
+    always-execute: false
+
+  error: 
+    error-message: EMI amount must be greater than zero.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: EMI cannot exceed loan amount ===========
+  id: 35844272962830027
+  identification: 
+    name: EMI cannot exceed loan amount
+
+  execution: 
+    sequence: 30
+
+  validation: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: 'to_number(nvl(:P173_LOAN_AMOUNT,0))>= to_number(nvl(:P173_EMI_AMOUNT,0))'
+    always-execute: true
+
+  error: 
+    error-message: EMI amount cannot be greater than loan amount.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: Agreed advance cannot be greater than loa
+  id: 37298680367639643
+  identification: 
+    name: Agreed advance cannot be greater than loan amount.
+
+  execution: 
+    sequence: 40
+
+  validation: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: 'nvl(:P173_AGREED_ADVANCE_AMOUNT,0) >= nvl(:P173_LOAN_AMOUNT,0)'
+    always-execute: false
+
+  error: 
+    error-message: Agreed advance cannot be greater than loan amount.
+    display-location: Inline with Field and in Notification
+
+processes: 
+- # ====== Process: Save Manual Loan ===========================
+  id: 35844844763830033
+  identification: 
+    name: Save Manual Loan
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          if :P173_LOAN_ID is null then
+      
+              insert into hr_emp_loans (
+                  emp_id,
+                  loan_type,
+                  loan_amount,
+                  emi_amount,
+                  issue_dt,
+                  start_month,
+                  source_type,
+                  source_id,
+                  approval_status,
+                  status,
+                  remarks,
+                  created_by,
+                  created_dt,
+                  AGREED_ADVANCE_AMOUNT
+              )
+              values (
+                  :P173_EMP_ID,
+                  'LONG_TERM_LOAN',
+                  :P173_LOAN_AMOUNT,
+                  :P173_EMI_AMOUNT,
+                  nvl(:P173_ISSUE_DT, trunc(cast(systimestamp at time zone 'Asia/Dubai' as date))),
+                  :P173_START_MONTH,
+                  'MANUAL',
+                  null,
+                  'DRAFT',
+                  'ACTIVE',
+                  :P173_REMARKS,
+                  nvl(sys_context('APEX$SESSION','APP_USER'), user),
+                  cast(systimestamp at time zone 'Asia/Dubai' as timestamp),
+                  :P173_AGREED_ADVANCE_AMOUNT
+              )
+              returning loan_id into :P173_LOAN_ID;
+      
+          else
+      
+              update hr_emp_loans
+                 set emp_id      = :P173_EMP_ID,
+                     loan_type   = 'LONG_TERM_LOAN',
+                     loan_amount = :P173_LOAN_AMOUNT,
+                     emi_amount  = :P173_EMI_AMOUNT,
+                     issue_dt    = :P173_ISSUE_DT,
+                     AGREED_ADVANCE_AMOUNT=:P173_AGREED_ADVANCE_AMOUNT,
+                     start_month = :P173_START_MONTH,
+                     remarks     = :P173_REMARKS,
+                     updated_by  = nvl(sys_context('APEX$SESSION','APP_USER'), user),
+                     updated_dt  = cast(systimestamp at time zone 'Asia/Dubai' as timestamp)
+               where loan_id = :P173_LOAN_ID
+                 and approval_status in ('DRAFT','REJECTED');
+      
+              if sql%rowcount = 0 then
+                  raise_application_error(
+                      -20910,
+                      'Only Draft or Rejected loan can be modified.'
+                  );
+              end if;
+      
+          end if;
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request is contained in Value
+    value: SAVE_DRAFT,SUBMIT_APPROVAL
+
+- # ====== Process: Submit Loan for Approval ===================
+  id: 35844905348830034
+  identification: 
+    name: Submit Loan for Approval
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          hr_loan_app_pkg.submit_loan_for_approval(:P173_LOAN_ID);
+      end;
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: SUBMIT_APPROVAL # 35844463542830029
+
+- # ====== Process: Close Doialog ==============================
+  id: 35845744405830042
+  identification: 
+    name: Close Doialog
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request is contained in Value
+    value: SAVE_DRAFT,SUBMIT_APPROVAL
+
+- # ====== Process: Load Manual Loan ===========================
+  id: 35846586759830050
+  identification: 
+    name: Load Manual Loan
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          select emp_id,
+                 loan_amount,
+                 emi_amount,
+                 issue_dt,
+                 start_month,
+                 remarks,
+                 approval_status,
+                 status,
+                 AGREED_ADVANCE_AMOUNT
+            into :P173_EMP_ID,
+                 :P173_LOAN_AMOUNT,
+                 :P173_EMI_AMOUNT,
+                 :P173_ISSUE_DT,
+                 :P173_START_MONTH,
+                 :P173_REMARKS,
+                 :P173_APPROVAL_STATUS,
+                 :P173_STATUS,
+                 :P173_AGREED_ADVANCE_AMOUNT
+            from hr_emp_loans
+           where loan_id = :P173_LOAN_ID;
+      end;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P173_LOAN_ID
+

@@ -1,0 +1,455 @@
+---
+# ====== Page: Roles =========================================
+id: 920
+identification: 
+  name: Roles
+  alias: ROLES
+  title: Roles
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Roles =======================================
+  id: 9847670949418296
+  identification: 
+    name: Roles
+    type: Interactive Grid
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: SEC_ROLES
+    include-rowid-column: false
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 9848111132418301
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+      add-row-if-empty: true
+
+    edit-authorization: 
+      add: AUTH_IG_ADD # 9993779001807624
+      update: AUTH_IG_UPDATE # 9993943233810314
+      delete: AUTH_IG_DELETE # 9994264908817843
+
+    performance: 
+      lazy-loading: false
+
+    appearance: 
+      select-first-row: true
+      fixed-row-height: true
+
+    pagination: 
+      type: Scroll
+      show-total-count: true
+
+    toolbar: 
+      show: true
+      controls: 
+      - Search Column Selection
+      - Search Field
+      - Actions Menu
+      - Reset Button
+      - Save Button
+
+    enable-users-to: 
+      save-public-report: false
+      flashback: true
+      define-chart-view: true
+      download: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - PDF
+      - Excel
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 9848548316418302
+      identification: 
+        name: Primary Report
+        alias: 98486
+
+  columns: 
+  - # ====== Column: APEX$ROW_ACTION =============================
+    id: 9836958211147105
+    identification: 
+      column-name: APEX$ROW_ACTION
+      type: Actions Menu
+
+    layout: 
+      sequence: 20
+
+  - # ====== Column: APEX$ROW_SELECTOR ===========================
+    id: 9837005819147106
+    identification: 
+      column-name: APEX$ROW_SELECTOR
+      type: Row Selector
+
+    settings: 
+      enable-multi-select: true
+      show-select-all: true
+      hide-control: false
+
+    layout: 
+      sequence: 10
+
+  - # ====== Column: ROLE_ID =====================================
+    id: 9850490677418311
+    identification: 
+      column-name: ROLE_ID
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 30
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: ROLE_ID
+      data-type: NUMBER
+      query-only: true
+      primary-key: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+
+  - # ====== Column: ROLE_CODE ===================================
+    id: 9851482364418312
+    identification: 
+      column-name: ROLE_CODE
+      type: Text Field
+
+    heading: 
+      heading: Role Code
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: Upper
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 50
+
+    source: 
+      type: Database Column
+      database-column: ROLE_CODE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: ROLE_NAME ===================================
+    id: 9852459537418313
+    identification: 
+      column-name: ROLE_NAME
+      type: Text Field
+
+    heading: 
+      heading: Role Name
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 200
+
+    source: 
+      type: Database Column
+      database-column: ROLE_NAME
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: IS_ACTIVE ===================================
+    id: 9853434872418313
+    identification: 
+      column-name: IS_ACTIVE
+      type: Switch
+
+    heading: 
+      heading: Is Active
+      alignment: start
+
+    settings: 
+      use-defaults: false
+      on-value: Y
+      on-label: Active
+      off-value: N
+      off-label: In Active
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    source: 
+      type: Database Column
+      database-column: IS_ACTIVE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  printing: 
+    page: 
+      size: Letter
+      orientation: Landscape
+      units: Inches
+      width: 11
+      height: 8.5
+      border-width: 0.5
+      border-color: '#666666'
+
+    page-header: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+      page-header-text: Roles
+
+    column-headings: 
+      font: Helvetica
+      font-weight: Bold
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#EEEEEE'
+
+    columns: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#FFFFFF'
+
+    page-footer: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+processes: 
+- # ====== Process: Set Authorization Values ===================
+  id: 9740990179536826
+  identification: 
+    name: Set Authorization Values
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      apex_util.set_session_state('G_IG_PERM_ADD', 'SEC_ROLE_ADD');
+      apex_util.set_session_state('G_IG_PERM_UPD', 'SEC_ROLE_UPDATE');
+      apex_util.set_session_state('G_IG_PERM_DEL', 'SEC_ROLE_DELETE');
+      
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Roles - Save Interactive Grid Data =========
+  id: 9837179507147107
+  identification: 
+    name: Roles - Save Interactive Grid Data
+    type: Interactive Grid - Automatic Row Processing (DML)
+    execution-chain: None
+    editable-region: Roles # 9847670949418296
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    execution-scope: For Created and Modified Rows
+

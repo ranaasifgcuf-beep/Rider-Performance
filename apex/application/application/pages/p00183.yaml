@@ -1,0 +1,2952 @@
+---
+# ====== Page: Legal & WPS Profile ===========================
+id: 183
+identification: 
+  name: Legal & WPS Profile
+  alias: LEGAL-WPS-PROFILE
+  title: Legal & WPS Profile
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+  - ui-dialog--stretch
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    .legal-header-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+        min-height: 105px;
+        padding: 20px 24px;
+        border-left: 5px solid #2563eb;
+        border-radius: 14px;
+        background: #ffffff;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+    }
+    
+    .legal-header-left {
+        flex: 1;
+    }
+    
+    .legal-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: #111827;
+        letter-spacing: -0.3px;
+    }
+    
+    .legal-sub {
+        margin-top: 6px;
+        font-size: 14px;
+        color: #64748b;
+        font-weight: 500;
+    }
+    
+    .legal-header-right {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+    }
+    
+    .legal-status-box {
+        min-width: 170px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        background: #f8fafc;
+    }
+    
+    .legal-mini-label {
+        margin-bottom: 7px;
+        font-size: 11px;
+        font-weight: 800;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+    
+    .legal-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 800;
+        background: #eef2ff;
+        color: #1e40af;
+    }
+    
+    .legal-badge-success {
+        background: #ecfdf5;
+        color: #047857;
+    }
+    
+    .legal-badge-warning {
+        background: #fffbeb;
+        color: #92400e;
+    }
+    
+    .legal-badge-danger {
+        background: #fef2f2;
+        color: #991b1b;
+    }
+    
+    @media (max-width: 900px) {
+        .legal-header-card {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    
+        .legal-header-right {
+            width: 100%;
+            flex-direction: column;
+            align-items: stretch;
+        }
+    
+        .legal-status-box {
+            width: 100%;
+        }
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Profile Setup ===============================
+  id: 33169089795775209
+  identification: 
+    name: Profile Setup
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Legal & WPS Profile # 38631721748010986
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Legal Status ================================
+  id: 33169243987775211
+  identification: 
+    name: Legal Status
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: Legal & WPS Profile # 38631721748010986
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: WPS Setup ===================================
+  id: 33169380988775212
+  identification: 
+    name: WPS Setup
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: Legal & WPS Profile # 38631721748010986
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Legal Status History ========================
+  id: 33170153855775220
+  identification: 
+    name: Legal Status History
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select old_legal_status,
+             new_legal_status,
+             to_char(effective_from_dt, 'DD-MON-YYYY HH24:MI') effective_from,
+             to_char(effective_to_dt, 'DD-MON-YYYY HH24:MI') effective_to,
+             case is_current_record
+                 when 'Y' then '<span class="t-Badge t-Badge--success">Current</span>'
+                 else '<span class="t-Badge">Closed</span>'
+             end current_status,
+             legal_status_reason,
+             legal_case_ref,
+             remarks,
+             created_by,
+             to_char(created_dt, 'DD-MON-YYYY HH24:MI') created_dt
+      from hr_emp_legal_status_hist_v
+      where emp_id = :P183_EMP_ID
+      order by effective_from_dt desc, legal_status_hist_id desc;
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 50
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: legal_status_history
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: OLD_LEGAL_STATUS ============================
+    id: 33170266581775221
+    identification: 
+      column-name: OLD_LEGAL_STATUS
+      type: Plain Text
+
+    heading: 
+      heading: Old Legal Status
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: NEW_LEGAL_STATUS ============================
+    id: 33170392991775222
+    identification: 
+      column-name: NEW_LEGAL_STATUS
+      type: Plain Text
+
+    heading: 
+      heading: New Legal Status
+      alignment: start
+
+    layout: 
+      sequence: 20
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LEGAL_STATUS_REASON =========================
+    id: 33170413785775223
+    identification: 
+      column-name: LEGAL_STATUS_REASON
+      type: Plain Text
+
+    heading: 
+      heading: Legal Status Reason
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LEGAL_CASE_REF ==============================
+    id: 33170674949775225
+    identification: 
+      column-name: LEGAL_CASE_REF
+      type: Plain Text
+
+    heading: 
+      heading: Legal Case Ref
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REMARKS =====================================
+    id: 33170770728775226
+    identification: 
+      column-name: REMARKS
+      type: Plain Text
+
+    heading: 
+      heading: Remarks
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CREATED_BY ==================================
+    id: 33170863397775227
+    identification: 
+      column-name: CREATED_BY
+      type: Plain Text
+
+    heading: 
+      heading: Created By
+      alignment: start
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CREATED_DT ==================================
+    id: 33170980955775228
+    identification: 
+      column-name: CREATED_DT
+      type: Plain Text
+
+    heading: 
+      heading: Created Dt
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EFFECTIVE_FROM ==============================
+    id: 39251384471729109
+    identification: 
+      column-name: EFFECTIVE_FROM
+      type: Plain Text
+
+    heading: 
+      heading: Effective From
+      alignment: start
+
+    layout: 
+      sequence: 90
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EFFECTIVE_TO ================================
+    id: 39251414606729110
+    identification: 
+      column-name: EFFECTIVE_TO
+      type: Plain Text
+
+    heading: 
+      heading: Effective To
+      alignment: start
+
+    layout: 
+      sequence: 100
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CURRENT_STATUS ==============================
+    id: 39251508432729111
+    identification: 
+      column-name: CURRENT_STATUS
+      type: Plain Text
+
+    heading: 
+      heading: Current Status
+      alignment: start
+
+    layout: 
+      sequence: 110
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: false
+
+- # ====== Region: Region Display Sector =======================
+  id: 38206921433256238
+  identification: 
+    name: Region Display Sector
+    type: Region Display Selector
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      mode: View Single Region
+      display-region-icons: false
+      include-'show-all': false
+      remember-selection: By User
+
+- # ====== Region: Employee Detail =============================
+  id: 38207040909256239
+  identification: 
+    name: Employee Detail
+    type: Dynamic Content
+
+  source: 
+    language: PL/SQL
+    pl/sql-function-body-returning-a-clob: |
+      declare
+          l_html          clob;
+          l_worker_text   varchar2(4000);
+          l_status_text   varchar2(4000);
+          l_wps_text      varchar2(4000);
+          l_status_class  varchar2(100);
+          l_wps_class     varchar2(100);
+      
+          function fmt_text(p_value varchar2) return varchar2 is
+          begin
+              return replace(initcap(replace(nvl(p_value, 'Not Set'), '_', ' ')), 'Wps', 'WPS');
+          end;
+      begin
+          for r in (
+              select emp_code,
+                     employee_name,
+                     legal_worker_type,
+                     legal_party_name,
+                     legal_status,
+                     wps_clearing_display
+                from hr_emp_legal_profile_v
+               where legal_profile_id = :P183_LEGAL_PROFILE_ID
+          ) loop
+      
+              l_worker_text := fmt_text(r.legal_worker_type);
+      
+              if r.legal_party_name is not null then
+                  l_worker_text := l_worker_text || ' | ' || r.legal_party_name;
+              end if;
+      
+              l_status_text := fmt_text(r.legal_status);
+              l_wps_text    := nvl(r.wps_clearing_display, 'Not Set');
+      
+              l_status_class :=
+                  case
+                      when upper(r.legal_status) in ('ACTIVE', 'APPROVED', 'COMPLETED', 'VALID') then
+                          'legal-badge legal-badge-success'
+                      when upper(r.legal_status) in ('IN_PROCESS', 'PENDING', 'UNDER_PROCESS') then
+                          'legal-badge legal-badge-warning'
+                      when upper(r.legal_status) in ('EXPIRED', 'CANCELLED', 'BLOCKED', 'REJECTED') then
+                          'legal-badge legal-badge-danger'
+                      else
+                          'legal-badge'
+                  end;
+      
+              l_wps_class :=
+                  case
+                      when upper(r.wps_clearing_display) like '%INSIDE%' then
+                          'legal-badge legal-badge-success'
+                      when upper(r.wps_clearing_display) like '%OUTSIDE%' then
+                          'legal-badge legal-badge-warning'
+                      when r.wps_clearing_display is null then
+                          'legal-badge legal-badge-danger'
+                      else
+                          'legal-badge'
+                  end;
+      
+              l_html :=
+                  '<div class="legal-header-card">' ||
+      
+                      '<div class="legal-header-left">' ||
+                          '<div class="legal-title">' ||
+                              apex_escape.html(r.emp_code || ' - ' || r.employee_name) ||
+                          '</div>' ||
+      
+                          '<div class="legal-sub">' ||
+                              apex_escape.html(l_worker_text) ||
+                          '</div>' ||
+                      '</div>' ||
+      
+                      '<div class="legal-header-right">' ||
+      
+                          '<div class="legal-status-box">' ||
+                              '<div class="legal-mini-label">Legal Status</div>' ||
+                              '<div class="' || l_status_class || '">' ||
+                                  apex_escape.html(l_status_text) ||
+                              '</div>' ||
+                          '</div>' ||
+      
+                          '<div class="legal-status-box">' ||
+                              '<div class="legal-mini-label">WPS</div>' ||
+                              '<div class="' || l_wps_class || '">' ||
+                                  apex_escape.html(l_wps_text) ||
+                              '</div>' ||
+                          '</div>' ||
+      
+                      '</div>' ||
+      
+                  '</div>';
+          end loop;
+      
+          return nvl(
+              l_html,
+              '<div class="legal-header-card"><div class="legal-title">Profile not found.</div></div>'
+          );
+      end;
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: legal_emp_header
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    performance: 
+      lazy-loading: false
+
+- # ====== Region: Document Snapshot ===========================
+  id: 38207106206256240
+  identification: 
+    name: Document Snapshot
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select 'Passport' document,
+             passport_no document_number,
+             to_char(passport_issue_dt, 'DD-MON-YYYY') issue_date,
+             to_char(passport_expiry_dt, 'DD-MON-YYYY') expiry_date,
+             passport_expiry_days expiry_days
+      from hr_emp_legal_profile_v
+      where legal_profile_id = :P183_LEGAL_PROFILE_ID
+      
+      union all
+      
+      select 'Emirates ID',
+             emirates_id_no,
+             to_char(emirates_id_issue_dt, 'DD-MON-YYYY'),
+             to_char(emirates_id_expiry_dt, 'DD-MON-YYYY'),
+             eid_expiry_days
+      from hr_emp_legal_profile_v
+      where legal_profile_id = :P183_LEGAL_PROFILE_ID
+      
+      union all
+      
+      select 'Visa',
+             visa_no,
+             to_char(visa_issue_dt, 'DD-MON-YYYY'),
+             to_char(visa_expiry_dt, 'DD-MON-YYYY'),
+             visa_expiry_days
+      from hr_emp_legal_profile_v
+      where legal_profile_id = :P183_LEGAL_PROFILE_ID
+      
+      union all
+      
+      select 'Labour Card',
+             labour_card_no,
+             to_char(labour_card_issue_dt, 'DD-MON-YYYY'),
+             to_char(labour_card_expiry_dt, 'DD-MON-YYYY'),
+             labour_card_expiry_days
+      from hr_emp_legal_profile_v
+      where legal_profile_id = :P183_LEGAL_PROFILE_ID;
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: legal_doc_snapshot
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: DOCUMENT ====================================
+    id: 38207288587256241
+    identification: 
+      column-name: DOCUMENT
+      type: Plain Text
+
+    heading: 
+      heading: Document
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DOCUMENT_NUMBER =============================
+    id: 38207303285256242
+    identification: 
+      column-name: DOCUMENT_NUMBER
+      type: Plain Text
+
+    heading: 
+      heading: Document Number
+      alignment: start
+
+    layout: 
+      sequence: 20
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ISSUE_DATE ==================================
+    id: 38207421869256243
+    identification: 
+      column-name: ISSUE_DATE
+      type: Plain Text
+
+    heading: 
+      heading: Issue Date
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EXPIRY_DATE =================================
+    id: 38207580417256244
+    identification: 
+      column-name: EXPIRY_DATE
+      type: Plain Text
+
+    heading: 
+      heading: Expiry Date
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EXPIRY_DAYS =================================
+    id: 38207607986256245
+    identification: 
+      column-name: EXPIRY_DAYS
+      type: Plain Text
+
+    heading: 
+      heading: Expiry Days
+      alignment: end
+
+    layout: 
+      sequence: 50
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Legal & WPS Profile =========================
+  id: 38631721748010986
+  identification: 
+    name: Legal & WPS Profile
+    type: Form
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_EMP_LEGAL_PROFILE
+    include-rowid-column: false
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+- # ====== Region: Buttons =====================================
+  id: 38677968228011032
+  identification: 
+    name: Buttons
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: Text (escape special characters)
+      show-line-breaks: true
+
+page-items: 
+- # ====== Page Item: P183_WPS_REQUIRED_YN =====================
+  id: 38206606731256235
+  identification: 
+    name: P183_WPS_REQUIRED_YN
+    type: Switch
+
+  label: 
+    label: WPS Required
+    alignment: Left
+
+  settings: 
+    use-defaults: false
+    on-value: Y
+    on-label: Yes
+    off-value: N
+    off-label: No
+
+  layout: 
+    sequence: 10
+    region: WPS Setup # 33169380988775212
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: WPS_REQUIRED_YN
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_DEFAULT_WPS_CLEARING_MODE ===========
+  id: 38206731483256236
+  identification: 
+    name: P183_DEFAULT_WPS_CLEARING_MODE
+    type: Select List
+
+  label: 
+    label: Default Wps Clearing Mode
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: WPS Setup # 33169380988775212
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Internal WPS;INTERNAL_WPS,Outside Clearing;OUTSIDE_CLEARING,Supplier WPS;SUPPLIER_WPS,Not Required;NOT_REQUIRED,Blocked;BLOCKED'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: DEFAULT_WPS_CLEARING_MODE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_WPS_CONTRACT_SALARY =================
+  id: 38206803483256237
+  identification: 
+    name: P183_WPS_CONTRACT_SALARY
+    type: Number Field
+
+  label: 
+    label: Wps Contract Salary
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 40
+    region: WPS Setup # 33169380988775212
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: WPS_CONTRACT_SALARY
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_LEGAL_PROFILE_ID ====================
+  id: 38632191231010987
+  identification: 
+    name: P183_LEGAL_PROFILE_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Legal & WPS Profile # 38631721748010986
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: LEGAL_PROFILE_ID
+    data-type: NUMBER
+    query-only: true
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_EMP_ID ==============================
+  id: 38632550998010992
+  identification: 
+    name: P183_EMP_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: Legal & WPS Profile # 38631721748010986
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: EMP_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_LEGAL_WORKER_TYPE ===================
+  id: 38632927608010994
+  identification: 
+    name: P183_LEGAL_WORKER_TYPE
+    type: Select List
+
+  label: 
+    label: Legal Worker Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Profile Setup # 33169089795775209
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Own Visa;OWN_VISA,Subcontract;SUBCONTRACT,Freelance;FREELANCE,Family Sponsored;FAMILY_SPONSORED,Golden Visa;GOLDEN_VISA,Labour Card;LABOUR_CARD,Other;OTHER'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: LEGAL_WORKER_TYPE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_LEGAL_ORG_ID ========================
+  id: 38633798512010996
+  identification: 
+    name: P183_LEGAL_ORG_ID
+    type: Select List
+
+  label: 
+    label: Legal Org Id
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 50
+    region: Profile Setup # 33169089795775209
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: HR_ORGS.ORG_CODE # 34389172366944418
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: LEGAL_ORG_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_EXTERNAL_SPONSOR_NAME ===============
+  id: 38634419404010996
+  identification: 
+    name: P183_EXTERNAL_SPONSOR_NAME
+    type: Text Field
+
+  label: 
+    label: External Sponsor Name
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 70
+    region: Profile Setup # 33169089795775209
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+
+  validation: 
+    value-required: false
+    maximum-length: 300
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: EXTERNAL_SPONSOR_NAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_EXTERNAL_SPONSOR_REF ================
+  id: 38634867026010997
+  identification: 
+    name: P183_EXTERNAL_SPONSOR_REF
+    type: Text Field
+
+  label: 
+    label: External Sponsor Ref
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 80
+    region: Profile Setup # 33169089795775209
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 100
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: EXTERNAL_SPONSOR_REF
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_LEGAL_STATUS ========================
+  id: 38645903944011007
+  identification: 
+    name: P183_LEGAL_STATUS
+    type: Select List
+
+  label: 
+    label: Legal Status
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 350
+    region: Legal Status # 33169243987775211
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:In Process;IN_PROCESS,Valid;VALID,Absconding;ABSCONDING,Employee Complaint;EMPLOYEE_COMPLAINT,Cancelled by MOHRE;CANCELLED_MOHRE,Cancelled;CANCELLED,Outside Country;OUTSIDE_COUNTRY'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: LEGAL_STATUS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_LEGAL_STATUS_REASON =================
+  id: 38646332533011008
+  identification: 
+    name: P183_LEGAL_STATUS_REASON
+    type: Textarea
+
+  label: 
+    label: Legal Status Reason
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 400
+    region: Legal Status # 33169243987775211
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+    height: 4
+
+  validation: 
+    value-required: false
+    maximum-length: 1000
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: LEGAL_STATUS_REASON
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_LEGAL_STATUS_DT =====================
+  id: 38646716561011008
+  identification: 
+    name: P183_LEGAL_STATUS_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 370
+    region: Legal Status # 33169243987775211
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: LEGAL_STATUS_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_LEGAL_CASE_REF ======================
+  id: 38647179139011008
+  identification: 
+    name: P183_LEGAL_CASE_REF
+    type: Text Field
+
+  label: 
+    label: Legal Case Ref
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 380
+    region: Legal Status # 33169243987775211
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 100
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: LEGAL_CASE_REF
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_LEGAL_CASE_REMARKS ==================
+  id: 38647580136011009
+  identification: 
+    name: P183_LEGAL_CASE_REMARKS
+    type: Textarea
+
+  label: 
+    label: Legal Case Remarks
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 390
+    region: Legal Status # 33169243987775211
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+    height: 4
+
+  validation: 
+    value-required: false
+    maximum-length: 2000
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: LEGAL_CASE_REMARKS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_WPS_STATUS ==========================
+  id: 38648397001011009
+  identification: 
+    name: P183_WPS_STATUS
+    type: Select List
+
+  label: 
+    label: Wps Status
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: WPS Setup # 33169380988775212
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Setup Pending;SETUP_PENDING,Active;ACTIVE,Blocked;BLOCKED,Not Required;NOT_REQUIRED'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: WPS_STATUS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_WPS_SALARY_AMOUNT ===================
+  id: 38650751470011011
+  identification: 
+    name: P183_WPS_SALARY_AMOUNT
+    type: Number Field
+
+  label: 
+    label: Wps Salary Amount
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 60
+    region: WPS Setup # 33169380988775212
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: WPS_SALARY_AMOUNT
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_WPS_EFFECTIVE_FROM_DT ===============
+  id: 38654758129011014
+  identification: 
+    name: P183_WPS_EFFECTIVE_FROM_DT
+    type: Date Picker
+
+  label: 
+    label: Wps Effective From Dt
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 70
+    region: WPS Setup # 33169380988775212
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: WPS_EFFECTIVE_FROM_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_WPS_REMARKS =========================
+  id: 38655573884011014
+  identification: 
+    name: P183_WPS_REMARKS
+    type: Textarea
+
+  label: 
+    label: Wps Remarks
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 80
+    region: WPS Setup # 33169380988775212
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+    height: 4
+
+  validation: 
+    value-required: false
+    maximum-length: 4000
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: WPS_REMARKS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_REMARKS =============================
+  id: 38655970908011015
+  identification: 
+    name: P183_REMARKS
+    type: Textarea
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 410
+    region: Legal Status # 33169243987775211
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+    height: 4
+
+  validation: 
+    value-required: false
+    maximum-length: 4000
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: REMARKS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_CREATED_BY ==========================
+  id: 38656373323011015
+  identification: 
+    name: P183_CREATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 610
+    region: Legal & WPS Profile # 38631721748010986
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: CREATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_CREATED_DT ==========================
+  id: 38656793831011015
+  identification: 
+    name: P183_CREATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 620
+    region: Legal & WPS Profile # 38631721748010986
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: CREATED_DT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_UPDATED_BY ==========================
+  id: 38657584008011017
+  identification: 
+    name: P183_UPDATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 630
+    region: Legal & WPS Profile # 38631721748010986
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: UPDATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P183_UPDATED_DT ==========================
+  id: 38657947924011018
+  identification: 
+    name: P183_UPDATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 640
+    region: Legal & WPS Profile # 38631721748010986
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Legal & WPS Profile # 38631721748010986
+    column: UPDATED_DT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: OpenDocuments ===============================
+  id: 38207779191256246
+  identification: 
+    button-name: OpenDocuments
+    label: Open Documents
+
+  layout: 
+    sequence: 10
+    region: Employee Detail # 38207040909256239
+    slot: TOP
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    horizontal-alignment: Right
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-folder-open
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:105:&SESSION.::&DEBUG.::P105_EMP_ID:&P183_EMP_ID.'
+      page: 105 # Employees Documents of Record
+      values: 
+        p105_emp_id: '&P183_EMP_ID.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: CANCEL ======================================
+  id: 38678303974011032
+  identification: 
+    button-name: CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 10
+    region: Buttons # 38677968228011032
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: DELETE ======================================
+  id: 38679773067011036
+  identification: 
+    button-name: DELETE
+    label: Delete
+
+  layout: 
+    sequence: 20
+    region: Buttons # 38677968228011032
+    slot: DELETE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: false
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL DELETE action
+
+  confirmation: 
+    message: '&APP_TEXT$DELETE_MSG!RAW.'
+    style: Danger
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sec_pkg.has_perm('PRO_LEGAL_PROFILE_DELETE') = 1
+
+- # ====== Button: SAVE ========================================
+  id: 38680184729011036
+  identification: 
+    button-name: SAVE
+    label: Apply Changes
+
+  layout: 
+    sequence: 30
+    region: Buttons # 38677968228011032
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sec_pkg.has_perm('PRO_LEGAL_PROFILE_UPDATE') = 1
+
+- # ====== Button: CREATE ======================================
+  id: 38680510496011036
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 40
+    region: Buttons # 38677968228011032
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P183_LEGAL_PROFILE_ID
+
+dynamic-actions: 
+- # ====== Dynamic Action: Show Hide Worker Fields =============
+  id: 38207835893256247
+  identification: 
+    name: Show Hide Worker Fields
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P183_LEGAL_WORKER_TYPE
+
+  client-side-condition: 
+    type: Item is in list
+    item: P183_LEGAL_WORKER_TYPE
+    list: 
+    - GROUP_COMPANY
+    - FREELANCE
+    - FAMILY_SPONSORED
+    - OTHER
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 39250741558729103
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P183_EXTERNAL_SPONSOR_NAME
+      - P183_EXTERNAL_SPONSOR_REF
+
+    execution: 
+      sequence: 10
+      event: Show Hide Worker Fields # 38207835893256247
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 39250861141729104
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P183_EXTERNAL_SPONSOR_NAME
+      - P183_EXTERNAL_SPONSOR_REF
+
+    execution: 
+      sequence: 10
+      event: Show Hide Worker Fields # 38207835893256247
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: Cancel Dialog =======================
+  id: 38678497311011032
+  identification: 
+    name: Cancel Dialog
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 38678303974011032
+
+  actions: 
+  - # ====== Action: Cancel Dialog ===============================
+    id: 38679267519011035
+    identification: 
+      action: Cancel Dialog
+
+    execution: 
+      sequence: 10
+      event: Cancel Dialog # 38678497311011032
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: DA_WPS_SALARY_FIELDS ================
+  id: 39250987493729105
+  identification: 
+    name: DA_WPS_SALARY_FIELDS
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P183_WPS_REQUIRED_YN
+
+  client-side-condition: 
+    type: Item = Value
+    item: P183_WPS_REQUIRED_YN
+    value: Y
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 39251091877729106
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P183_WPS_STATUS
+      - P183_DEFAULT_WPS_CLEARING_MODE
+      - P183_WPS_CONTRACT_SALARY
+      - P183_WPS_SALARY_AMOUNT
+      - P183_WPS_EFFECTIVE_FROM_DT
+
+    execution: 
+      sequence: 10
+      event: DA_WPS_SALARY_FIELDS # 39250987493729105
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 39251152814729107
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P183_WPS_STATUS
+      - P183_DEFAULT_WPS_CLEARING_MODE
+      - P183_WPS_CONTRACT_SALARY
+      - P183_WPS_SALARY_AMOUNT
+      - P183_WPS_EFFECTIVE_FROM_DT
+
+    execution: 
+      sequence: 10
+      event: DA_WPS_SALARY_FIELDS # 39250987493729105
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+validations: 
+- # ====== Validation: P183_CREATED_DT must be timestamp =======
+  id: 38657286207011017
+  identification: 
+    name: P183_CREATED_DT must be timestamp
+
+  execution: 
+    sequence: 610
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P183_CREATED_DT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P183_CREATED_DT # 38656793831011015
+
+- # ====== Validation: P183_UPDATED_DT must be timestamp =======
+  id: 38658461534011018
+  identification: 
+    name: P183_UPDATED_DT must be timestamp
+
+  execution: 
+    sequence: 630
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P183_UPDATED_DT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P183_UPDATED_DT # 38657947924011018
+
+- # ====== Validation: Validate Legal Profile Basic Rules ======
+  id: 39251213558729108
+  identification: 
+    name: Validate Legal Profile Basic Rules
+
+  execution: 
+    sequence: 640
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if :P183_LEGAL_STATUS = 'VALID'
+             and :P183_LEGAL_WORKER_TYPE in ('OWN_VISA','GROUP_COMPANY')
+             and :P183_LEGAL_ORG_ID is null then
+              return 'Legal company is required when legal status is Valid.';
+          end if;
+      
+          if :P183_LEGAL_STATUS = 'VALID'
+             and :P183_LEGAL_WORKER_TYPE in ('FREELANCE','FAMILY_SPONSORED','GOLDEN_VISA','OTHER')
+             and :P183_EXTERNAL_SPONSOR_NAME is null then
+              return 'External sponsor is required for this worker type.';
+          end if;
+      
+          if :P183_WPS_STATUS = 'ACTIVE'
+             and :P183_WPS_REQUIRED_YN = 'Y'
+             and nvl(:P183_WPS_SALARY_AMOUNT,0) <= 0 then
+              return 'WPS salary amount is required when WPS status is Active.';
+          end if;
+      
+          return null;
+      end;
+    always-execute: true
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: Dont Allow Cancellation if employee has a
+  id: 40309545653675219
+  identification: 
+    name: Dont Allow Cancellation if employee has actie assignment
+
+  execution: 
+    sequence: 650
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      declare
+          l_active_assignment number;
+          l_legal_status      varchar2(50);
+      begin
+          l_legal_status := replace(upper(nvl(:P183_LEGAL_STATUS, 'X')), 'LEGAL_', '');
+      
+          if l_legal_status in (
+              'CANCELLED',
+              'CANCELLED_MOHRE',
+              'CANCELLED_ICP'
+          ) then
+      
+              select count(*)
+                into l_active_assignment
+                from hr_assignments
+               where emp_id = :P183_EMP_ID
+                 and end_dt is null;
+      
+              if l_active_assignment > 0 then
+                  return 'Legal status cannot be changed to Cancelled because employee has an active assignment. Please unassign/offboard the employee first.';
+              end if;
+      
+          end if;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+processes: 
+- # ====== Process: Initialize form Legal & WPS Profile ========
+  id: 38680926948011037
+  identification: 
+    name: Initialize form Legal & WPS Profile
+    type: Form - Initialization
+    execution-chain: None
+    form-region: Legal & WPS Profile # 38631721748010986
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Process form Legal & WPS Profile ===========
+  id: 38681343199011038
+  identification: 
+    name: Process form Legal & WPS Profile
+    type: Form - Automatic Row Processing (DML)
+    execution-chain: None
+    form-region: Legal & WPS Profile # 38631721748010986
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Close Dialog ===============================
+  id: 38681755101011038
+  identification: 
+    name: Close Dialog
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request is contained in Value
+    value: CREATE,SAVE,DELETE
+
+- # ====== Process: New ========================================
+  id: 40309683702675220
+  identification: 
+    name: New
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          hr_legal_status_sync_pkg.sync_working_status(
+              p_emp_id       => :P183_EMP_ID,
+              p_legal_status => :P183_LEGAL_STATUS,
+              p_reason       => :P183_LEGAL_STATUS_REASON
+          );
+      end;
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

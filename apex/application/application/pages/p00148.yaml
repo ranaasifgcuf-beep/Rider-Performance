@@ -1,0 +1,1906 @@
+---
+# ====== Page: Task Administration ===========================
+id: 148
+identification: 
+  name: Task Administration
+  alias: TASK-ADMINISTRATION
+  title: Task Administration
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Task Administration =========================
+  id: 34676972143302721
+  identification: 
+    name: Task Administration
+    type: Breadcrumb
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useRegionTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: '#DEFAULT_BREADCRUMB_TEMPLATE#'
+
+- # ====== Region: Admin Tasks - Smart Filters =================
+  id: 34677750182302722
+  identification: 
+    name: Admin Tasks - Smart Filters
+    type: Smart Filters
+
+  source: 
+    filtered-region: Admin Tasks - Report # 34677884008302722
+
+  layout: 
+    sequence: 10
+    parent-region: Task Administration # 34676972143302721
+    slot: SMART_FILTERS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      maximum-suggestion-chips: 0
+      more-filters-suggestion-chip: false
+      compact-numbers-threshold: 10000
+      show-total-row-count: No
+
+  facets: 
+  - # ====== Facet: P148_SEARCH ==================================
+    id: 34678293863302722
+    identification: 
+      name: P148_SEARCH
+      type: Search
+
+    label: 
+      label: Search
+
+    settings: 
+      search-type: Row Search
+      input-field: Top of Faceted Search Region
+
+    layout: 
+      sequence: 10
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Facet: P148_DUE =====================================
+    id: 34678606241302722
+    identification: 
+      name: P148_DUE
+      type: Range
+
+    label: 
+      label: Due
+      show-label-for-current-facet: true
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 20
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: UNIFIED_TASK_LIST.LOV.DUE # 34641387301298757
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: DUE_IN_HOURS
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Facet: P148_TYPE ====================================
+    id: 34679032356302722
+    identification: 
+      name: P148_TYPE
+      type: Checkbox Group
+
+    label: 
+      label: Type
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 30
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: UNIFIED_TASK_LIST.LOV.TYPE # 34644463324298760
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: TASK_TYPE
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P148_CATEGORY ================================
+    id: 34679402355302723
+    identification: 
+      name: P148_CATEGORY
+      type: Checkbox Group
+
+    label: 
+      label: Category
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 40
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: TASK_DEF_NAME
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P148_PRIORITY ================================
+    id: 34679852379302723
+    identification: 
+      name: P148_PRIORITY
+      type: Checkbox Group
+
+    label: 
+      label: Priority
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 50
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: UNIFIED_TASK_LIST.LOV.PRIORITY # 34645593231298760
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: false
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: PRIORITY
+      data-type: NUMBER
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P148_STATE ===================================
+    id: 34680284403302723
+    identification: 
+      name: P148_STATE
+      type: Checkbox Group
+
+    label: 
+      label: State
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 60
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: UNIFIED_TASK_LIST.LOV.STATE # 34646289021298761
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: false
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: STATE_CODE
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P148_OUTCOME =================================
+    id: 34680699688302723
+    identification: 
+      name: P148_OUTCOME
+      type: Checkbox Group
+
+    label: 
+      label: Outcome
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 70
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: OUTCOME
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P148_APPLICATION =============================
+    id: 34681075538302724
+    identification: 
+      name: P148_APPLICATION
+      type: Checkbox Group
+
+    label: 
+      label: Application
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 80
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: DETAILS_APP_NAME
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P148_INITIATOR ===============================
+    id: 34681463602302724
+    identification: 
+      name: P148_INITIATOR
+      type: Checkbox Group
+
+    label: 
+      label: Initiator
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 90
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: INITIATOR
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P148_INITIATED ===============================
+    id: 34681892464302724
+    identification: 
+      name: P148_INITIATED
+      type: Range
+
+    label: 
+      label: Initiated
+      show-label-for-current-facet: true
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 100
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: UNIFIED_TASK_LIST.LOV.INITIATED # 34648112558298762
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: CREATED_AGO_HOURS
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Facet: P148_OWNER ===================================
+    id: 34682210362302724
+    identification: 
+      name: P148_OWNER
+      type: Checkbox Group
+
+    label: 
+      label: Owner
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 110
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: ACTUAL_OWNER
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  filters: 
+  - # ====== Filter: P148_SEARCH =================================
+    id: 34678293863302722
+    identification: 
+      name: P148_SEARCH
+      type: Search
+
+    label: 
+      label: Search
+
+    settings: 
+      search-type: Row Search
+      collapsed-search-field: false
+
+    layout: 
+      sequence: 10
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Filter: P148_DUE ====================================
+    id: 34678606241302722
+    identification: 
+      name: P148_DUE
+      type: Range
+
+    label: 
+      label: Due
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 20
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: UNIFIED_TASK_LIST.LOV.DUE # 34641387301298757
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: DUE_IN_HOURS
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Filter: P148_TYPE ===================================
+    id: 34679032356302722
+    identification: 
+      name: P148_TYPE
+      type: Checkbox Group
+
+    label: 
+      label: Type
+
+    layout: 
+      sequence: 30
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: UNIFIED_TASK_LIST.LOV.TYPE # 34644463324298760
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: TASK_TYPE
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P148_CATEGORY ===============================
+    id: 34679402355302723
+    identification: 
+      name: P148_CATEGORY
+      type: Checkbox Group
+
+    label: 
+      label: Category
+
+    layout: 
+      sequence: 40
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: TASK_DEF_NAME
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P148_PRIORITY ===============================
+    id: 34679852379302723
+    identification: 
+      name: P148_PRIORITY
+      type: Checkbox Group
+
+    label: 
+      label: Priority
+
+    layout: 
+      sequence: 50
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: UNIFIED_TASK_LIST.LOV.PRIORITY # 34645593231298760
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: false
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: PRIORITY
+      data-type: NUMBER
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P148_STATE ==================================
+    id: 34680284403302723
+    identification: 
+      name: P148_STATE
+      type: Checkbox Group
+
+    label: 
+      label: State
+
+    layout: 
+      sequence: 60
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: UNIFIED_TASK_LIST.LOV.STATE # 34646289021298761
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: false
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: STATE_CODE
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P148_OUTCOME ================================
+    id: 34680699688302723
+    identification: 
+      name: P148_OUTCOME
+      type: Checkbox Group
+
+    label: 
+      label: Outcome
+
+    layout: 
+      sequence: 70
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: OUTCOME
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P148_APPLICATION ============================
+    id: 34681075538302724
+    identification: 
+      name: P148_APPLICATION
+      type: Checkbox Group
+
+    label: 
+      label: Application
+
+    layout: 
+      sequence: 80
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: DETAILS_APP_NAME
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P148_INITIATOR ==============================
+    id: 34681463602302724
+    identification: 
+      name: P148_INITIATOR
+      type: Checkbox Group
+
+    label: 
+      label: Initiator
+
+    layout: 
+      sequence: 90
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: INITIATOR
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P148_INITIATED ==============================
+    id: 34681892464302724
+    identification: 
+      name: P148_INITIATED
+      type: Range
+
+    label: 
+      label: Initiated
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 100
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: UNIFIED_TASK_LIST.LOV.INITIATED # 34648112558298762
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: CREATED_AGO_HOURS
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Filter: P148_OWNER ==================================
+    id: 34682210362302724
+    identification: 
+      name: P148_OWNER
+      type: Checkbox Group
+
+    label: 
+      label: Owner
+
+    layout: 
+      sequence: 110
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: ACTUAL_OWNER
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+- # ====== Region: Admin Tasks - Report ========================
+  id: 34677884008302722
+  identification: 
+    name: Admin Tasks - Report
+    type: Content Row
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select task_id,
+             task_type,
+             task_def_name,
+             details_app_name,
+             details_link_target,
+             subject,
+             initiator,
+             actual_owner,
+             priority,
+             due_on,
+             due_in,
+             due_in_hours,
+             due_code,
+             state_code,
+             is_completed,
+             outcome,
+             created_on,
+             created_ago,
+             created_ago_hours,
+             last_updated_on,
+             badge_text,
+             badge_state
+        from table ( apex_human_task.get_tasks (
+                         p_context            => 'ADMIN_TASKS',
+                         p_show_expired_tasks => :P148_SHOW_EXPIRED
+                         --, p_application_id => :APP_ID
+                         ) )
+    page-items-to-submit: 
+    - P148_SHOW_EXPIRED
+    optimizer-hint: APEX$USE_NO_GROUPING_SETS
+
+  order-by: 
+    type: Item
+    item: 
+      item-name: P148_SORT_BY
+      order-bys: 
+      - key: CREATED_ON
+        clause: created_on desc
+
+      - key: DUE_ON
+        clause: priority asc, due_on asc nulls last
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Main
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      display: Multiple (Report)
+
+    settings: 
+      title: '&SUBJECT.'
+      description: |
+        <strong>&TASK_DEF_NAME!HTML.</strong>
+        {if INITIATOR/}
+            <span role="separator" aria-label="&middot;"> &middot; </span>
+            &{APEX.TASK.INITIATED_BY_USER_SINCE 0=&INITIATOR!HTML. 1=&CREATED_AGO.}.
+        {endif/}
+        {if ACTUAL_OWNER/}
+            <span role="separator" aria-label="&middot;"> &middot; </span>
+            &{APEX.TASK.ASSIGNED_TO_USER 0=&ACTUAL_OWNER!HTML.}.
+        {endif/}
+        {if !IS_COMPLETED/}
+            {case DUE_CODE/}
+                {when OVERDUE/}
+                    <span role="separator" aria-label="&middot;"> &middot; </span>
+                    <strong class="u-danger-text">&{APEX.TASK.DUE_SINCE 0=&DUE_IN.}.</strong>
+                {when NEXT_HOUR/}
+                    <span role="separator" aria-label="&middot;"> &middot; </span>
+                    <strong class="u-danger-text">&{APEX.TASK.DUE_SINCE 0=&DUE_IN.}.</strong>
+                {when NEXT_24_HOURS/}
+                    <span role="separator" aria-label="&middot;"> &middot; </span>
+                    <span class="u-danger-text">&{APEX.TASK.DUE_SINCE 0=&DUE_IN.}.</span>
+                {otherwise/}
+                    {if DUE_IN/}
+                        <span role="separator" aria-label="&middot;"> &middot; </span>
+                        &{APEX.TASK.DUE_SINCE 0=&DUE_IN.}.
+                    {endif/}
+            {endcase/}
+        {endif/}
+        {if !IS_COMPLETED/}
+            <span role="separator" aria-label="&middot;"> &middot; </span>
+            {case PRIORITY/}
+                {when 1/}
+                    <strong class="u-danger-text">&{APEX.TASK.PRIORITY.1.DESCRIPTION}.</strong>
+                {when 2/}
+                    <span class="u-danger-text">&{APEX.TASK.PRIORITY.2.DESCRIPTION}.</span>
+                {when 3/}
+                    &{APEX.TASK.PRIORITY.3.DESCRIPTION}.
+                {when 4/}
+                    &{APEX.TASK.PRIORITY.4.DESCRIPTION}.
+                {when 5/}
+                    &{APEX.TASK.PRIORITY.5.DESCRIPTION}.
+            {endcase/}
+        {endif/}
+        {if OUTCOME/}
+            <span role="separator" aria-label="&middot;"> &middot; </span>
+            &OUTCOME.
+        {endif/}
+        
+      display-avatar: false
+      display-badge: true
+
+    badge: 
+      label: State
+      value: BADGE_TEXT
+      state: BADGE_STATE
+      display-label: false
+      style: Default
+      shape: Default
+      size: Default
+      column-width: Medium
+      position: START
+      alignment: START
+
+    appearance: 
+      apply-theme-colors: false
+      style: Default
+      hide-borders: false
+      remove-padding: false
+
+    row-selection: 
+      type: None
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+    entity-title: 
+      singular: task
+      plural: tasks
+
+    messages: 
+      when-no-data-found: No Tasks
+      no-data-found-icon: fa-clipboard-check-alt fa-lg
+
+  columns: 
+  - # ====== Column: TASK_ID =====================================
+    id: 34682978195302729
+    identification: 
+      name: TASK_ID
+
+    layout: 
+      sequence: 10
+
+    source: 
+      type: Database Column
+      database-column: TASK_ID
+      data-type: NUMBER
+      primary-key: true
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: TASK_TYPE ===================================
+    id: 34683474574302729
+    identification: 
+      name: TASK_TYPE
+
+    layout: 
+      sequence: 20
+
+    source: 
+      type: Database Column
+      database-column: TASK_TYPE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: TASK_DEF_NAME ===============================
+    id: 34683970788302730
+    identification: 
+      name: TASK_DEF_NAME
+
+    layout: 
+      sequence: 30
+
+    source: 
+      type: Database Column
+      database-column: TASK_DEF_NAME
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: DETAILS_APP_NAME ============================
+    id: 34684474658302730
+    identification: 
+      name: DETAILS_APP_NAME
+
+    layout: 
+      sequence: 40
+
+    source: 
+      type: Database Column
+      database-column: DETAILS_APP_NAME
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: DETAILS_LINK_TARGET =========================
+    id: 34684902713302730
+    identification: 
+      name: DETAILS_LINK_TARGET
+
+    layout: 
+      sequence: 50
+
+    source: 
+      type: Database Column
+      database-column: DETAILS_LINK_TARGET
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: SUBJECT =====================================
+    id: 34685459131302731
+    identification: 
+      name: SUBJECT
+
+    layout: 
+      sequence: 60
+
+    source: 
+      type: Database Column
+      database-column: SUBJECT
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: true
+
+    appearance: 
+      group: false
+
+  - # ====== Column: INITIATOR ===================================
+    id: 34685920415302731
+    identification: 
+      name: INITIATOR
+
+    layout: 
+      sequence: 70
+
+    source: 
+      type: Database Column
+      database-column: INITIATOR
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: ACTUAL_OWNER ================================
+    id: 34686499834302731
+    identification: 
+      name: ACTUAL_OWNER
+
+    layout: 
+      sequence: 80
+
+    source: 
+      type: Database Column
+      database-column: ACTUAL_OWNER
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: PRIORITY ====================================
+    id: 34686942686302732
+    identification: 
+      name: PRIORITY
+
+    layout: 
+      sequence: 90
+
+    source: 
+      type: Database Column
+      database-column: PRIORITY
+      data-type: NUMBER
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: DUE_ON ======================================
+    id: 34687408734302732
+    identification: 
+      name: DUE_ON
+
+    layout: 
+      sequence: 100
+
+    source: 
+      type: Database Column
+      database-column: DUE_ON
+      data-type: TIMESTAMP WITH TIME ZONE
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      format-mask: SINCE
+      group: false
+
+  - # ====== Column: DUE_IN ======================================
+    id: 34687915023302732
+    identification: 
+      name: DUE_IN
+
+    layout: 
+      sequence: 110
+
+    source: 
+      type: Database Column
+      database-column: DUE_IN
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: DUE_IN_HOURS ================================
+    id: 34688464331302733
+    identification: 
+      name: DUE_IN_HOURS
+
+    layout: 
+      sequence: 120
+
+    source: 
+      type: Database Column
+      database-column: DUE_IN_HOURS
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: DUE_CODE ====================================
+    id: 34688950606302733
+    identification: 
+      name: DUE_CODE
+
+    layout: 
+      sequence: 130
+
+    source: 
+      type: Database Column
+      database-column: DUE_CODE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: STATE_CODE ==================================
+    id: 34689451693302733
+    identification: 
+      name: STATE_CODE
+
+    layout: 
+      sequence: 140
+
+    source: 
+      type: Database Column
+      database-column: STATE_CODE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: IS_COMPLETED ================================
+    id: 34689918722302734
+    identification: 
+      name: IS_COMPLETED
+
+    layout: 
+      sequence: 150
+
+    source: 
+      type: Database Column
+      database-column: IS_COMPLETED
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: OUTCOME =====================================
+    id: 34690438473302734
+    identification: 
+      name: OUTCOME
+
+    layout: 
+      sequence: 160
+
+    source: 
+      type: Database Column
+      database-column: OUTCOME
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: CREATED_ON ==================================
+    id: 34690965267302734
+    identification: 
+      name: CREATED_ON
+
+    layout: 
+      sequence: 170
+
+    source: 
+      type: Database Column
+      database-column: CREATED_ON
+      data-type: TIMESTAMP WITH TIME ZONE
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      format-mask: SINCE
+      group: false
+
+  - # ====== Column: CREATED_AGO =================================
+    id: 34691446092302735
+    identification: 
+      name: CREATED_AGO
+
+    layout: 
+      sequence: 180
+
+    source: 
+      type: Database Column
+      database-column: CREATED_AGO
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: CREATED_AGO_HOURS ===========================
+    id: 34691979910302735
+    identification: 
+      name: CREATED_AGO_HOURS
+
+    layout: 
+      sequence: 190
+
+    source: 
+      type: Database Column
+      database-column: CREATED_AGO_HOURS
+      data-type: NUMBER
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: LAST_UPDATED_ON =============================
+    id: 34692486552302735
+    identification: 
+      name: LAST_UPDATED_ON
+
+    layout: 
+      sequence: 200
+
+    source: 
+      type: Database Column
+      database-column: LAST_UPDATED_ON
+      data-type: TIMESTAMP WITH TIME ZONE
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      format-mask: SINCE
+      group: false
+
+  - # ====== Column: BADGE_TEXT ==================================
+    id: 34692969794302736
+    identification: 
+      name: BADGE_TEXT
+
+    layout: 
+      sequence: 210
+
+    source: 
+      type: Database Column
+      database-column: BADGE_TEXT
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: BADGE_STATE =================================
+    id: 34693403120302736
+    identification: 
+      name: BADGE_STATE
+
+    layout: 
+      sequence: 220
+
+    source: 
+      type: Database Column
+      database-column: BADGE_STATE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  actions: 
+  - # ====== Action: Title Link ==================================
+    id: 34693989608302736
+    identification: 
+      position: Title Link # 348722977165395441
+
+    layout: 
+      sequence: 10
+
+    link: 
+      type: Redirect to URL
+      target: '&DETAILS_LINK_TARGET.'
+
+page-items: 
+- # ====== Page Item: P148_TASK_ID =============================
+  id: 34677343744302721
+  identification: 
+    name: P148_TASK_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: false
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P148_SORT_BY =============================
+  id: 34694438190302737
+  identification: 
+    name: P148_SORT_BY
+    type: Select List
+
+  label: 
+    label: Sort by
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Admin Tasks - Report # 34677884008302722
+    slot: ORDER_BY_ITEM
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: 0
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-sort-amount-desc
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC2:Create Date;CREATED_ON,Due Date;DUE_ON'
+    display-extra-values: false
+    display-null-value: false
+
+  advanced: 
+    css-classes: 
+    - mnw160
+    warn-on-unsaved-changes: Ignore
+
+  source: 
+    type: Static Value
+    static-value: DUE_ON
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per User (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P148_SHOW_EXPIRED ========================
+  id: 34694813769302737
+  identification: 
+    name: P148_SHOW_EXPIRED
+    type: Checkbox
+
+  label: 
+    label: Show expired tasks
+    alignment: Left
+
+  settings: 
+    use-defaults: false
+    checked-value: Y
+    unchecked-value: N
+
+  layout: 
+    sequence: 20
+    region: Admin Tasks - Report # 34677884008302722
+    slot: ORDER_BY_ITEM
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - u-nowrap
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Ignore
+
+  source: 
+    type: Static Value
+    static-value: N
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per User (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+dynamic-actions: 
+- # ====== Dynamic Action: Refresh - Admin Tasks - Report ======
+  id: 34695232754302737
+  identification: 
+    name: Refresh - Admin Tasks - Report
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed or Canceled
+    selection-type: Region
+    region: Admin Tasks - Report # 34677884008302722
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 34695636031302737
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Admin Tasks - Report # 34677884008302722
+
+    execution: 
+      sequence: 10
+      event: Refresh - Admin Tasks - Report # 34695232754302737
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 34696194731302738
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Admin Tasks - Smart Filters # 34677750182302722
+
+    execution: 
+      sequence: 20
+      event: Refresh - Admin Tasks - Report # 34695232754302737
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Refresh - Admin Tasks - Report ======
+  id: 34696645741302738
+  identification: 
+    name: Refresh - Admin Tasks - Report
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P148_SHOW_EXPIRED
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 34697055514302738
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Admin Tasks - Report # 34677884008302722
+
+    execution: 
+      sequence: 10
+      event: Refresh - Admin Tasks - Report # 34696645741302738
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 34697537191302738
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Admin Tasks - Smart Filters # 34677750182302722
+
+    execution: 
+      sequence: 20
+      event: Refresh - Admin Tasks - Report # 34696645741302738
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

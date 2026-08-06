@@ -1,0 +1,3686 @@
+---
+# ====== Page: HR WC Insurrance Dashboard ====================
+id: 117
+identification: 
+  name: HR WC Insurrance Dashboard
+  alias: HR-WC-INSURRANCE-DASHBOARD
+  title: HR WC Insurrance Dashboard
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Valid =======================================
+  id: 32808392035148941
+  identification: 
+    name: Valid
+    title: Policy Valid  <span class="t-Badge t-Badge--success">&P117_VALID_CNT.</span>
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select 
+      INSURANCE_ID,
+      emp_id,
+             emp_code,
+             employee_name,
+             provider_name,
+             policy_no,
+             member_card_no,
+             plan_name,
+             class_name,
+             start_dt,
+             expiry_dt,
+             days_left,
+             '<span class="fa fa-edit"></span>' as edit_icon,
+             '<span class="fa fa-times"></span>' as cancel_icon,
+             STATUS_BADGE_TEXT,
+             CURRENT_PROJECT
+      from vw_hr_emp_insurance_status
+      where insurance_type = :P117_INS_TYPE
+        and insurance_bucket = 'VALID'
+      order by expiry_dt, emp_code
+
+  layout: 
+    sequence: 80
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 32809169195148948
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 33201493071806830
+      identification: 
+        name: Primary Report
+        alias: 165412
+
+    columns: 
+    - # ====== Column: EMP_ID ======================================
+      id: 32809213403148949
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 32809361600148950
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Employee Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 32809478225148951
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PROVIDER_NAME ===============================
+      id: 32809545653148952
+      identification: 
+        column-name: PROVIDER_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Provider Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: POLICY_NO ===================================
+      id: 32809659355148953
+      identification: 
+        column-name: POLICY_NO
+        type: Plain Text
+
+      heading: 
+        heading: Policy No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MEMBER_CARD_NO ==============================
+      id: 32809717732148954
+      identification: 
+        column-name: MEMBER_CARD_NO
+        type: Plain Text
+
+      heading: 
+        heading: Member Card No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PLAN_NAME ===================================
+      id: 32809829477148955
+      identification: 
+        column-name: PLAN_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Plan Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CLASS_NAME ==================================
+      id: 32809897222148956
+      identification: 
+        column-name: CLASS_NAME
+        type: Hidden
+
+      heading: 
+        heading: Class Name
+
+      layout: 
+        sequence: 80
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: START_DT ====================================
+      id: 32810005919148957
+      identification: 
+        column-name: START_DT
+        type: Plain Text
+
+      heading: 
+        heading: Start Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_DT ===================================
+      id: 32810137220148958
+      identification: 
+        column-name: EXPIRY_DT
+        type: Plain Text
+
+      heading: 
+        heading: Expiry Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DAYS_LEFT ===================================
+      id: 32810188838148959
+      identification: 
+        column-name: DAYS_LEFT
+        type: Plain Text
+
+      heading: 
+        heading: Days Left
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 110
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EDIT_ICON ===================================
+      id: 32810367185148960
+      identification: 
+        column-name: EDIT_ICON
+        type: Hidden
+
+      heading: 
+        heading: Edit Icon
+
+      layout: 
+        sequence: 120
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CANCEL_ICON =================================
+      id: 32810415180148961
+      identification: 
+        column-name: CANCEL_ICON
+        type: Link
+
+      heading: 
+        heading: Cancel
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 130
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:116:&SESSION.::&DEBUG.::P116_INSURANCE_ID:#INSURANCE_ID#'
+          page: 116 # HR Insurrance Cancel Form
+          values: 
+            p116_insurance_id: '#INSURANCE_ID#'
+
+        link-text: '#CANCEL_ICON#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: STATUS_BADGE_TEXT ===========================
+      id: 33205392313803256
+      identification: 
+        column-name: STATUS_BADGE_TEXT
+        type: Plain Text
+
+      heading: 
+        heading: Employee Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 140
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CURRENT_PROJECT =============================
+      id: 33205578524803257
+      identification: 
+        column-name: CURRENT_PROJECT
+        type: Plain Text
+
+      heading: 
+        heading: Current Project
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 150
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: INSURANCE_ID ================================
+      id: 33206552533803267
+      identification: 
+        column-name: INSURANCE_ID
+        type: Hidden
+
+      heading: 
+        heading: Insurance Id
+
+      layout: 
+        sequence: 160
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Policy Valid  <span class="t-Badge t-Badge--success">&P117_VALID_CNT.</span>
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Near Expiry =================================
+  id: 32808508341148942
+  identification: 
+    name: Near Expiry
+    title: Policy Near Expiry <span class="t-Badge t-Badge--warning">&P117_NEAR_EXPIRY_CNT.</span>
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select emp_id,
+             emp_code,
+             employee_name,
+             provider_name,
+             policy_no,
+             member_card_no,
+             plan_name,
+             class_name,
+             start_dt,
+             expiry_dt,
+             days_left,
+             '<span class="fa fa-refresh"></span>' as renew_icon,
+              '<span class="fa fa-plus"></span>' as add_icon,
+             STATUS_BADGE_TEXT,
+             CURRENT_PROJECT,
+             INSURANCE_ID
+      from vw_hr_emp_insurance_status
+      where insurance_type = :P117_INS_TYPE
+        and insurance_bucket = 'NEAR_EXPIRY'
+      order by expiry_dt, emp_code
+
+  layout: 
+    sequence: 90
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 32810539276148962
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 33216856250798435
+      identification: 
+        name: Primary Report
+        alias: 165565
+
+    columns: 
+    - # ====== Column: EMP_ID ======================================
+      id: 32810592866148963
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 32810731428148964
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Employee Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 32810807292148965
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PROVIDER_NAME ===============================
+      id: 32810936916148966
+      identification: 
+        column-name: PROVIDER_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Provider Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: POLICY_NO ===================================
+      id: 32810989614148967
+      identification: 
+        column-name: POLICY_NO
+        type: Plain Text
+
+      heading: 
+        heading: Policy No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MEMBER_CARD_NO ==============================
+      id: 32811135386148968
+      identification: 
+        column-name: MEMBER_CARD_NO
+        type: Plain Text
+
+      heading: 
+        heading: Member Card No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PLAN_NAME ===================================
+      id: 32811215417148969
+      identification: 
+        column-name: PLAN_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Plan Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CLASS_NAME ==================================
+      id: 32811323266148970
+      identification: 
+        column-name: CLASS_NAME
+        type: Hidden
+
+      heading: 
+        heading: Class Name
+
+      layout: 
+        sequence: 80
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: START_DT ====================================
+      id: 32811422775148971
+      identification: 
+        column-name: START_DT
+        type: Plain Text
+
+      heading: 
+        heading: Start Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_DT ===================================
+      id: 32811490769148972
+      identification: 
+        column-name: EXPIRY_DT
+        type: Plain Text
+
+      heading: 
+        heading: Expiry Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DAYS_LEFT ===================================
+      id: 33202177500803223
+      identification: 
+        column-name: DAYS_LEFT
+        type: Plain Text
+
+      heading: 
+        heading: Days Left
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 110
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: RENEW_ICON ==================================
+      id: 33202224759803224
+      identification: 
+        column-name: RENEW_ICON
+        type: Hidden
+
+      heading: 
+        heading: Renew
+
+      layout: 
+        sequence: 120
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: STATUS_BADGE_TEXT ===========================
+      id: 33205605228803258
+      identification: 
+        column-name: STATUS_BADGE_TEXT
+        type: Plain Text
+
+      heading: 
+        heading: Employee Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 140
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CURRENT_PROJECT =============================
+      id: 33205703747803259
+      identification: 
+        column-name: CURRENT_PROJECT
+        type: Plain Text
+
+      heading: 
+        heading: Current Project
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 150
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ADD_ICON ====================================
+      id: 33206996247803272
+      identification: 
+        column-name: ADD_ICON
+        type: Link
+
+      heading: 
+        heading: Renew Policy
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 160
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:115:&SESSION.::&DEBUG.::P115_EMP_ID,P115_INSURANCE_TYPE:#EMP_ID#,&P117_INS_TYPE.'
+          page: 115 # HR Insurrance Form
+          values: 
+            p115_emp_id: '#EMP_ID#'
+            p115_insurance_type: '&P117_INS_TYPE.'
+
+        link-text: '#ADD_ICON#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: INSURANCE_ID ================================
+      id: 33297801313323723
+      identification: 
+        column-name: INSURANCE_ID
+        type: Hidden
+
+      heading: 
+        heading: Insurance Id
+
+      layout: 
+        sequence: 170
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Policy Near Expiry <span class="t-Badge t-Badge--warning">&P117_NEAR_EXPIRY_CNT.</span>
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Expired =====================================
+  id: 32808627853148943
+  identification: 
+    name: Expired
+    title: Policy Expired <span class="t-Badge t-Badge--danger">&P117_EXPIRED_CNT.</span>
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select emp_id,
+             emp_code,
+             employee_name,
+             provider_name,
+             policy_no,
+             member_card_no,
+             plan_name,
+             class_name,
+             start_dt,
+             expiry_dt,
+             abs(days_left) as expired_days,
+             '<span class="fa fa-refresh"></span>' as renew_icon,
+              STATUS_BADGE_TEXT,
+             CURRENT_PROJECT
+      from vw_hr_emp_insurance_status
+      where insurance_type = :P117_INS_TYPE
+        and insurance_bucket = 'EXPIRED'
+      order by expiry_dt desc, emp_code
+
+  layout: 
+    sequence: 100
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 33202448183803226
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 33217386580798412
+      identification: 
+        name: Primary Report
+        alias: 165570
+
+    columns: 
+    - # ====== Column: EMP_ID ======================================
+      id: 33202553243803227
+      identification: 
+        column-name: EMP_ID
+        type: Plain Text
+
+      heading: 
+        heading: Emp Id
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 33202625139803228
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Emp Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 33202711366803229
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PROVIDER_NAME ===============================
+      id: 33202839219803230
+      identification: 
+        column-name: PROVIDER_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Provider Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: POLICY_NO ===================================
+      id: 33202958682803231
+      identification: 
+        column-name: POLICY_NO
+        type: Plain Text
+
+      heading: 
+        heading: Policy No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MEMBER_CARD_NO ==============================
+      id: 33203008793803232
+      identification: 
+        column-name: MEMBER_CARD_NO
+        type: Plain Text
+
+      heading: 
+        heading: Member Card No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PLAN_NAME ===================================
+      id: 33203091017803233
+      identification: 
+        column-name: PLAN_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Plan Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CLASS_NAME ==================================
+      id: 33203232841803234
+      identification: 
+        column-name: CLASS_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Class Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 80
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: START_DT ====================================
+      id: 33203386501803235
+      identification: 
+        column-name: START_DT
+        type: Plain Text
+
+      heading: 
+        heading: Start Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_DT ===================================
+      id: 33203467373803236
+      identification: 
+        column-name: EXPIRY_DT
+        type: Plain Text
+
+      heading: 
+        heading: Expiry Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRED_DAYS ================================
+      id: 33203519700803237
+      identification: 
+        column-name: EXPIRED_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Expired Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 110
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: RENEW_ICON ==================================
+      id: 33203676217803238
+      identification: 
+        column-name: RENEW_ICON
+        type: Link
+
+      heading: 
+        heading: Renew Icon
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 120
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:115:&SESSION.::&DEBUG.::P115_EMP_ID,P115_INSURANCE_TYPE:#EMP_ID#,&P117_INS_TYPE.'
+          page: 115 # HR Insurrance Form
+          values: 
+            p115_emp_id: '#EMP_ID#'
+            p115_insurance_type: '&P117_INS_TYPE.'
+
+        link-text: '#RENEW_ICON#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: STATUS_BADGE_TEXT ===========================
+      id: 33205881567803260
+      identification: 
+        column-name: STATUS_BADGE_TEXT
+        type: Plain Text
+
+      heading: 
+        heading: Status Badge Text
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 130
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CURRENT_PROJECT =============================
+      id: 33205980232803261
+      identification: 
+        column-name: CURRENT_PROJECT
+        type: Plain Text
+
+      heading: 
+        heading: Current Project
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 140
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Policy Expired <span class="t-Badge t-Badge--danger">&P117_EXPIRED_CNT.</span>
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Pending =====================================
+  id: 32808767250148944
+  identification: 
+    name: Pending
+    title: Policy Pending <span class="t-Badge t-Badge--info">&P117_PENDING_CNT.</span>
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select emp_id,
+             emp_code,
+             employee_name,
+             '<span class="fa fa-plus"></span>' as add_icon,
+              STATUS_BADGE_TEXT,
+             CURRENT_PROJECT
+      from vw_hr_emp_insurance_status
+      where insurance_type = :P117_INS_TYPE
+        and insurance_bucket = 'PENDING'
+      order by emp_code
+
+  layout: 
+    sequence: 110
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 33203721766803239
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 33224715279787712
+      identification: 
+        name: Primary Report
+        alias: 165644
+
+    columns: 
+    - # ====== Column: EMP_ID ======================================
+      id: 33203861353803240
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 33203929127803241
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Employe Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 33204049703803242
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ADD_ICON ====================================
+      id: 33204180056803243
+      identification: 
+        column-name: ADD_ICON
+        type: Link
+
+      heading: 
+        heading: Link Insurrance
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:115:&SESSION.::&DEBUG.::P115_EMP_ID,P115_INSURANCE_TYPE:#EMP_ID#,&P117_INS_TYPE.'
+          page: 115 # HR Insurrance Form
+          values: 
+            p115_emp_id: '#EMP_ID#'
+            p115_insurance_type: '&P117_INS_TYPE.'
+
+        link-text: '#ADD_ICON#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: STATUS_BADGE_TEXT ===========================
+      id: 33206067756803262
+      identification: 
+        column-name: STATUS_BADGE_TEXT
+        type: Plain Text
+
+      heading: 
+        heading: Employee Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CURRENT_PROJECT =============================
+      id: 33206120241803263
+      identification: 
+        column-name: CURRENT_PROJECT
+        type: Plain Text
+
+      heading: 
+        heading: Current Project
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Policy Pending <span class="t-Badge t-Badge--info">&P117_PENDING_CNT.</span>
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Cancelled ===================================
+  id: 32808867957148945
+  identification: 
+    name: Cancelled
+    title: Policy Cancelled <span class="t-Badge t-Badge--danger">   <span class="fa fa-ban"></span> &P117_CANCELLED_CNT. </span>
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select emp_id,
+             emp_code,
+             employee_name,
+             provider_name,
+             policy_no,
+             start_dt,
+             expiry_dt,
+             cancel_dt,
+             cancel_reason,
+             cancelled_by,
+             '<span class="fa fa-plus"></span>' as add_new_icon,
+              STATUS_BADGE_TEXT,
+             CURRENT_PROJECT
+      from vw_hr_emp_insurance_status
+      where insurance_type = :P117_INS_TYPE
+        and insurance_bucket = 'CANCELLED'
+      order by cancel_dt desc, emp_code
+
+  layout: 
+    sequence: 120
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 33204204056803244
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 33225256000787689
+      identification: 
+        name: Primary Report
+        alias: 165649
+
+    columns: 
+    - # ====== Column: EMP_ID ======================================
+      id: 33204336483803245
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 33204467621803246
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Employe Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 33204501294803247
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PROVIDER_NAME ===============================
+      id: 33204649313803248
+      identification: 
+        column-name: PROVIDER_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Provider Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: POLICY_NO ===================================
+      id: 33204746351803249
+      identification: 
+        column-name: POLICY_NO
+        type: Plain Text
+
+      heading: 
+        heading: Policy No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: START_DT ====================================
+      id: 33204875130803250
+      identification: 
+        column-name: START_DT
+        type: Plain Text
+
+      heading: 
+        heading: Start Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_DT ===================================
+      id: 33204929096803251
+      identification: 
+        column-name: EXPIRY_DT
+        type: Plain Text
+
+      heading: 
+        heading: Expiry Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CANCEL_DT ===================================
+      id: 33205047115803252
+      identification: 
+        column-name: CANCEL_DT
+        type: Plain Text
+
+      heading: 
+        heading: Cancel Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 80
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CANCEL_REASON ===============================
+      id: 33205178392803253
+      identification: 
+        column-name: CANCEL_REASON
+        type: Plain Text
+
+      heading: 
+        heading: Cancel Reason
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CANCELLED_BY ================================
+      id: 33205190683803254
+      identification: 
+        column-name: CANCELLED_BY
+        type: Plain Text
+
+      heading: 
+        heading: Cancelled By
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ADD_NEW_ICON ================================
+      id: 33205371216803255
+      identification: 
+        column-name: ADD_NEW_ICON
+        type: Link
+
+      heading: 
+        heading: Renew
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 110
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:115:&SESSION.::&DEBUG.::P115_EMP_ID,P115_INSURANCE_TYPE:#EMP_ID#,&P117_INS_TYPE.'
+          page: 115 # HR Insurrance Form
+          values: 
+            p115_emp_id: '#EMP_ID#'
+            p115_insurance_type: '&P117_INS_TYPE.'
+
+        link-text: '#ADD_NEW_ICON#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: STATUS_BADGE_TEXT ===========================
+      id: 33206252094803264
+      identification: 
+        column-name: STATUS_BADGE_TEXT
+        type: Plain Text
+
+      heading: 
+        heading: Employee Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 120
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CURRENT_PROJECT =============================
+      id: 33206300866803265
+      identification: 
+        column-name: CURRENT_PROJECT
+        type: Plain Text
+
+      heading: 
+        heading: Current Project
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 130
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Policy Cancelled <span class="t-Badge t-Badge--danger">   <span class="fa fa-ban"></span> &P117_CANCELLED_CNT. </span>
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Region Display ==============================
+  id: 32809021835148947
+  identification: 
+    name: Region Display
+    type: Region Display Selector
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Tabs Container
+    template-options: 
+    - '#DEFAULT#'
+    - js-useLocalStorage
+    - t-TabsRegion-mod--fillLabels
+    - t-TabsRegion-mod--pill
+    - t-TabsRegion-mod--large
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      mode: View Single Region
+      display-region-icons: false
+      include-'show-all': false
+      remember-selection: By User
+
+page-items: 
+- # ====== Page Item: P117_INS_TYPE ============================
+  id: 32832781540148903
+  identification: 
+    name: P117_INS_TYPE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: WC
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P117_VALID_CNT ===========================
+  id: 32832848215148904
+  identification: 
+    name: P117_VALID_CNT
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 30
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P117_NEAR_EXPIRY_CNT =====================
+  id: 32832935576148905
+  identification: 
+    name: P117_NEAR_EXPIRY_CNT
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 40
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P117_EXPIRED_CNT =========================
+  id: 32833036034148906
+  identification: 
+    name: P117_EXPIRED_CNT
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 50
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P117_PENDING_CNT =========================
+  id: 32833135418148907
+  identification: 
+    name: P117_PENDING_CNT
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 60
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P117_CANCELLED_CNT =======================
+  id: 32833229900148908
+  identification: 
+    name: P117_CANCELLED_CNT
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 70
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+dynamic-actions: 
+- # ====== Dynamic Action: REFRESH_AFTER_DOC_DIALOG ============
+  id: 16687705093671488
+  identification: 
+    name: REFRESH_AFTER_DOC_DIALOG
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: JavaScript Expression
+    javascript-expression: apex.gPageContext$
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 16688266023671488
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: JavaScript Expression
+      javascript-expression: location.reload();
+
+    execution: 
+      sequence: 10
+      event: REFRESH_AFTER_DOC_DIALOG # 16687705093671488
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Calculate Counts ===========================
+  id: 16687334663671489
+  identification: 
+    name: Calculate Counts
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+      select count(*) into :P117_VALID_CNT
+      from vw_hr_emp_insurance_status
+      where insurance_type = :P117_INS_TYPE
+        and insurance_bucket = 'VALID';
+      
+      select count(*) into :P117_NEAR_EXPIRY_CNT
+      from vw_hr_emp_insurance_status
+      where insurance_type = :P117_INS_TYPE
+        and insurance_bucket = 'NEAR_EXPIRY';
+      
+      select count(*) into :P117_EXPIRED_CNT
+      from vw_hr_emp_insurance_status
+      where insurance_type = :P117_INS_TYPE
+        and insurance_bucket = 'EXPIRED';
+      
+      select count(*) into :P117_PENDING_CNT
+      from vw_hr_emp_insurance_status
+      where insurance_type = :P117_INS_TYPE
+        and insurance_bucket = 'PENDING';
+      
+      select count(*) into :P117_CANCELLED_CNT
+      from vw_hr_emp_insurance_status
+      where insurance_type = :P117_INS_TYPE
+        and insurance_bucket = 'CANCELLED';
+      end;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+

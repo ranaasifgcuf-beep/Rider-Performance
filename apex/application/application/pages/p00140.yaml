@@ -1,0 +1,1014 @@
+---
+# ====== Page: PRO Deal Workbech =============================
+id: 140
+identification: 
+  name: PRO Deal Workbech
+  alias: PRO-DEAL-WORKBECH
+  title: PRO Deal Workbech
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Breadcrumb ==================================
+  id: 34378202858934000
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 9721609352336316
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: PRO Deal Workbech ===========================
+  id: 34378964252934010
+  identification: 
+    name: PRO Deal Workbech
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select d.deal_id,
+             d.deal_no,
+      
+             e.emp_code,
+             trim(e.first_name || ' ' || e.last_name) as employee_name,
+      
+             o.org_name as visa_company,
+             t.deal_type_name,
+             d.entry_status,
+      
+             d.deal_advance,
+             d.deal_amount,
+      
+             case d.recoverable
+                 when 'Y' then 'Yes'
+                 when 'N' then 'No'
+                 else '-'
+             end as recoverable,
+      
+             d.emi_amount,
+             to_char(d.recovery_start_month, 'MON-YYYY') as recovery_start_month,
+      
+             case d.approval_status
+                 when 'DRAFT' then
+                     '<span class="t-Badge">Draft</span>'
+                 when 'SUBMITTED' then
+                     '<span class="t-Badge t-Badge--warning">Submitted</span>'
+                 when 'APPROVED' then
+                     '<span class="t-Badge t-Badge--success">Approved</span>'
+                 when 'REJECTED' then
+                     '<span class="t-Badge t-Badge--danger">Rejected</span>'
+                 else
+                     '<span class="t-Badge">' || apex_escape.html(nvl(d.approval_status, '-')) || '</span>'
+             end as approval_status,
+      
+             case d.loan_created
+                 when 'Y' then 'Yes'
+                 when 'N' then 'No'
+                 else '-'
+             end as loan_created,
+      
+             case d.agreement_signed
+                 when 'Y' then 'Yes'
+                 when 'N' then 'No'
+                 else '-'
+             end as agreement_signed,
+      
+             '<span class="fa fa-eye" title="Open"></span>' as open_link
+      
+      from hr_pro_deals d
+      join hr_employees e
+        on e.emp_id = d.emp_id
+      left join hr_orgs o
+        on o.org_id = d.org_id
+      join hr_pro_deal_type_master t
+        on t.deal_type_code = d.deal_type_code
+      order by d.deal_id desc;
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 34379014602934010
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 34386527858937636
+      identification: 
+        name: Primary Report
+        alias: 343866
+
+    columns: 
+    - # ====== Column: DEAL_ID =====================================
+      id: 34379734207934016
+      identification: 
+        column-name: DEAL_ID
+        type: Hidden
+
+      heading: 
+        heading: Deal Id
+
+      layout: 
+        sequence: 1
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DEAL_NO =====================================
+      id: 34380178777934018
+      identification: 
+        column-name: DEAL_NO
+        type: Plain Text
+
+      heading: 
+        heading: Deal No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 34380518426934018
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Emp Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 34380988444934019
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DEAL_TYPE_NAME ==============================
+      id: 34381780025934019
+      identification: 
+        column-name: DEAL_TYPE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Deal Type Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 6
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ENTRY_STATUS ================================
+      id: 34382147607934020
+      identification: 
+        column-name: ENTRY_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Entry Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 7
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DEAL_AMOUNT =================================
+      id: 34382902574934020
+      identification: 
+        column-name: DEAL_AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Deal Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 9
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G990D00
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: RECOVERABLE =================================
+      id: 34383321409934021
+      identification: 
+        column-name: RECOVERABLE
+        type: Plain Text
+
+      heading: 
+        heading: Recoverable
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMI_AMOUNT ==================================
+      id: 34383744089934021
+      identification: 
+        column-name: EMI_AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Emi Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 11
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G990D00
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: APPROVAL_STATUS =============================
+      id: 34384547960934021
+      identification: 
+        column-name: APPROVAL_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Approval Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 13
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: LOAN_CREATED ================================
+      id: 34384958532934022
+      identification: 
+        column-name: LOAN_CREATED
+        type: Plain Text
+
+      heading: 
+        heading: Loan Created
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 14
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: AGREEMENT_SIGNED ============================
+      id: 34385313491934022
+      identification: 
+        column-name: AGREEMENT_SIGNED
+        type: Plain Text
+
+      heading: 
+        heading: Agreement Signed
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 15
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: OPEN_LINK ===================================
+      id: 34385777532934022
+      identification: 
+        column-name: OPEN_LINK
+        type: Link
+
+      heading: 
+        heading: Open Link
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 16
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:141:&SESSION.::&DEBUG.::P141_DEAL_ID:#DEAL_ID#'
+          page: 141 # PRO Deal
+          values: 
+            p141_deal_id: '#DEAL_ID#'
+
+        link-text: '#OPEN_LINK#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: DEAL_ADVANCE ================================
+      id: 34525857384673617
+      identification: 
+        column-name: DEAL_ADVANCE
+        type: Plain Text
+
+      heading: 
+        heading: Deal Advance
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 26
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: VISA_COMPANY ================================
+      id: 35005231081124538
+      identification: 
+        column-name: VISA_COMPANY
+        type: Plain Text
+
+      heading: 
+        heading: Visa Company
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 36
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: RECOVERY_START_MONTH ========================
+      id: 35005381965124539
+      identification: 
+        column-name: RECOVERY_START_MONTH
+        type: Plain Text
+
+      heading: 
+        heading: Recovery Start Month
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 46
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: PRO Deal Workbech
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+buttons: 
+- # ====== Button: PB_OPEN_DEAL ================================
+  id: 34223218939120346
+  identification: 
+    button-name: PB_OPEN_DEAL
+    label: Create Deal
+
+  layout: 
+    sequence: 10
+    region: PRO Deal Workbech # 34378964252934010
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-cash-register
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:141:&SESSION.::&DEBUG.:::'
+      page: 141 # PRO Deal
+
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sec_pkg.has_perm('PRO_DEAL_ADD') = 1
+
+dynamic-actions: 
+- # ====== Dynamic Action: Refresh Region ======================
+  id: 35004059212124526
+  identification: 
+    name: Refresh Region
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: PRO Deal Workbech # 34378964252934010
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 35004108474124527
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: PRO Deal Workbech # 34378964252934010
+
+    execution: 
+      sequence: 10
+      event: Refresh Region # 35004059212124526
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

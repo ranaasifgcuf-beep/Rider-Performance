@@ -1,0 +1,355 @@
+---
+# ====== Page: Roles & Permission Mapping ====================
+id: 930
+identification: 
+  name: Roles & Permission Mapping
+  alias: ROLES-PERMISSION-MAPPING
+  title: Roles & Permission Mapping
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Roles -> Permissions ========================
+  id: 9837243399147108
+  identification: 
+    name: Roles -> Permissions
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P930_ROLE_ID =============================
+  id: 9837328356147109
+  identification: 
+    name: P930_ROLE_ID
+    type: Select List
+
+  label: 
+    label: Role Id
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Roles -> Permissions # 9837243399147108
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select role_name d, role_id r
+      from sec_roles
+      where is_active='Y'
+      order by role_name
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P930_PERM_IDS ============================
+  id: 9837471519147110
+  identification: 
+    name: P930_PERM_IDS
+    type: Shuttle
+
+  label: 
+    label: Perm Ids
+    alignment: Left
+
+  settings: 
+    show-controls: All
+
+  multiple-values: 
+    type: Delimited List
+    separator: ':'
+
+  layout: 
+    sequence: 20
+    region: Roles -> Permissions # 9837243399147108
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 5
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select m.module_code||' - '||perm_name d, perm_id r
+      from sec_perms p,
+      sec_modules m
+      where p.is_active='Y'
+      and p.module_id = m.module_id
+      order by m.module_id, perm_name
+    display-extra-values: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Function Body
+    language: PL/SQL
+    pl/sql-function-body: |
+      declare
+        l_list varchar2(32767);
+      begin
+        select listagg(rp.perm_id, ':') within group (order by rp.perm_id)
+          into l_list
+          from sec_role_perms rp
+         where rp.role_id = :P930_ROLE_ID;
+      
+        return l_list;
+      end;
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: BTN_SAVE ====================================
+  id: 9837775094147113
+  identification: 
+    button-name: BTN_SAVE
+    label: Save
+
+  layout: 
+    sequence: 30
+    region: Roles -> Permissions # 9837243399147108
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-save
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: DA_ROLE_CHANGE ======================
+  id: 9837895349147114
+  identification: 
+    name: DA_ROLE_CHANGE
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P930_ROLE_ID
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 9837969481147115
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        declare
+          l_list varchar2(32767);
+        begin
+          select listagg(rp.perm_id, ':') within group (order by rp.perm_id)
+            into l_list
+            from sec_role_perms rp
+           where rp.role_id = :P930_ROLE_ID;
+        
+          :P930_PERM_IDS := l_list;
+        end;
+        
+      items-to-submit: 
+      - P930_ROLE_ID
+      items-to-return: 
+      - P930_PERM_IDS
+      suppress-change-event: false
+
+    execution: 
+      sequence: 20
+      event: DA_ROLE_CHANGE # 9837895349147114
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Refresh =====================================
+    id: 9838017909147116
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Roles -> Permissions # 9837243399147108
+
+    execution: 
+      sequence: 30
+      event: DA_ROLE_CHANGE # 9837895349147114
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Save Roles Permission ======================
+  id: 9837621483147112
+  identification: 
+    name: Save Roles Permission
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+        delete from sec_role_perms where role_id = :P930_ROLE_ID;
+      
+        if :P930_PERM_IDS is not null then
+          for r in (
+            select to_number(column_value) perm_id
+            from table(apex_string.split(:P930_PERM_IDS, ':'))
+          ) loop
+            insert into sec_role_perms(role_id, perm_id)
+            values(:P930_ROLE_ID, r.perm_id);
+          end loop;
+        end if;
+      end;
+
+  execution: 
+    sequence: 10
+    point: After Submit
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

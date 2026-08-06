@@ -1,0 +1,233 @@
+---
+- # ====== Task Definition: ADVANCE_APPROVAL ===================
+  id: 10336604365467995
+  identification: 
+    name: ADVANCE_APPROVAL
+
+  settings: 
+    subject: TEst
+    task-type: Approval Task
+    initiator-can-complete: N
+    priority: 3-Medium
+
+  deadline: 
+    due-on-type: None
+
+  source: 
+    table-owner: Parsing Schema
+
+  advanced: 
+    static-id: ADVANCE_APPROVAL
+
+- # ====== Task Definition: Unified Approval Task ==============
+  id: 34211635075000907
+  identification: 
+    name: Unified Approval Task
+
+  settings: 
+    subject: '&APPROVAL_SUBJECT.'
+    task-type: Approval Task
+    initiator-can-complete: Y
+    priority: 3-Medium
+    details-page: 
+      url: 'f?p=&APP_ID.:25:&SESSION.::&DEBUG.:RP,25:P25_TASK_ID:&TASK_ID.'
+      page: 25 # Task Details
+      clear-cache: RP,25
+      values: 
+        p25_task_id: '&TASK_ID.'
+
+  deadline: 
+    due-on-type: None
+
+  source: 
+    table-owner: Parsing Schema
+
+  advanced: 
+    static-id: UNIFIED_APPROVAL_TASK
+
+  parameters: 
+  - # ====== Parameter: Approval Id ==============================
+    id: 34216145088040364
+    identification: 
+      static-id: APPROVAL_ID
+
+    label: 
+      label: Approval Id
+
+    value: 
+      data-type: String
+      required: true
+
+    advanced: 
+      show-on-task-details: true
+      updatable: false
+
+  - # ====== Parameter: Approval Step Id =========================
+    id: 34216538459040364
+    identification: 
+      static-id: APPROVAL_STEP_ID
+
+    label: 
+      label: Approval Step Id
+
+    value: 
+      data-type: String
+      required: true
+
+    advanced: 
+      show-on-task-details: true
+      updatable: false
+
+  - # ====== Parameter: Approval Subject =========================
+    id: 34216953753040365
+    identification: 
+      static-id: APPROVAL_SUBJECT
+
+    label: 
+      label: Approval Subject
+
+    value: 
+      data-type: String
+      required: true
+
+    advanced: 
+      show-on-task-details: true
+      updatable: false
+
+  - # ====== Parameter: Approver Users ===========================
+    id: 34217312809040365
+    identification: 
+      static-id: APPROVER_USERS
+
+    label: 
+      label: Approver Users
+
+    value: 
+      data-type: String
+      required: true
+
+    advanced: 
+      show-on-task-details: true
+      updatable: false
+
+  - # ====== Parameter: Module Code ==============================
+    id: 34217758757040365
+    identification: 
+      static-id: MODULE_CODE
+
+    label: 
+      label: Module Code
+
+    value: 
+      data-type: String
+      required: true
+
+    advanced: 
+      show-on-task-details: true
+      updatable: false
+
+  - # ====== Parameter: Record Pk ================================
+    id: 34218174020040365
+    identification: 
+      static-id: RECORD_PK
+
+    label: 
+      label: Record Pk
+
+    value: 
+      data-type: String
+      required: true
+
+    advanced: 
+      show-on-task-details: true
+      updatable: false
+
+  actions: 
+  - # ====== Action: Email Current Approver ======================
+    id: 35594814268352656
+    identification: 
+      name: Email Current Approver
+      type: Execute Code
+
+    source: 
+      location: Local Database
+      language: PL/SQL
+      pl/sql-code: |
+        declare
+            l_step_id  number := to_number(:APEX$TASK_PK);
+            l_task_id  number;
+            l_html     clob;
+            l_body     clob;
+            l_subject  varchar2(500);
+            l_mail_id  number;
+        begin
+            select max(task_id)
+              into l_task_id
+              from apex_tasks
+             where detail_pk = to_char(l_step_id);
+        
+            l_html := hr_approval_ui_pkg.render_approval_email(
+                          p_approval_step_id => l_step_id,
+                          p_task_id          => l_task_id
+                      );
+        
+            l_body := to_clob('Approval required. Please open HRMS to review and take action.');
+        
+            for r in (
+                select ar.approval_subject,
+                       u.email
+                  from hr_approval_request_steps s
+                  join hr_approval_requests ar
+                    on ar.approval_id = s.approval_id
+                  join sec_users u
+                    on instr(',' || upper(s.approver_users) || ',',
+                             ',' || upper(u.username) || ',') > 0
+                 where s.approval_step_id = l_step_id
+                   and u.email is not null
+            )
+            loop
+                l_subject := 'Approval Required: ' || r.approval_subject;
+        
+                l_mail_id := apex_mail.send(
+                    p_to        => r.email,
+                    p_from      => 'no-reply@najahalsareea.com',
+                    p_subj      => l_subject,
+                    p_body      => l_body,
+                    p_body_html => l_html
+                );
+            end loop;
+        
+            apex_mail.push_queue;
+        end;
+
+    error-handling: 
+      log-message-type: None
+
+    execution: 
+      on-event: Create
+      sequence: 10
+
+    error: 
+      stop-execution-on-error: true
+
+  participants: 
+  - # ====== Participant: Potential Owner ========================
+    id: 34215376844040363
+    identification: 
+      type: Potential Owner
+
+    value: 
+      type: Expression
+      language: PL/SQL
+      pl/sql-expression: ':APPROVER_USERS'
+
+  - # ====== Participant: Business Administrator =================
+    id: 34215768688040364
+    identification: 
+      type: Business Administrator
+
+    value: 
+      type: Function Body
+      language: PL/SQL
+      pl/sql-function-body: return hr_approval_wf_pkg.get_role_users('APPROVAL_ADMIN');
+

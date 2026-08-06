@@ -1,0 +1,53 @@
+---
+- # ====== Application Item: G_IG_PERM_ADD =====================
+  id: 9996331739914387
+  identification: 
+    name: G_IG_PERM_ADD
+    scope: Application
+
+  security: 
+    session-state-protection: Restricted - May not be set from browser
+    escape-special-characters: true
+
+  subscription: 
+    version-number: 39900577375073
+
+- # ====== Application Item: G_IG_PERM_UPD =====================
+  id: 9996676749915182
+  identification: 
+    name: G_IG_PERM_UPD
+    scope: Application
+
+  security: 
+    session-state-protection: Restricted - May not be set from browser
+    escape-special-characters: true
+
+  subscription: 
+    version-number: 39904113504421
+
+- # ====== Application Item: G_IG_PERM_DEL =====================
+  id: 9996802789916532
+  identification: 
+    name: G_IG_PERM_DEL
+    scope: Application
+
+  security: 
+    session-state-protection: Restricted - May not be set from browser
+    escape-special-characters: true
+
+  subscription: 
+    version-number: 39900577393602
+
+- # ====== Application Item: P0_PERM_CODE ======================
+  id: 16700679588528764
+  identification: 
+    name: P0_PERM_CODE
+    scope: Application
+
+  security: 
+    session-state-protection: Restricted - May not be set from browser
+    escape-special-characters: true
+
+  subscription: 
+    version-number: 39904111004918
+

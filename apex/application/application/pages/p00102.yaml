@@ -1,0 +1,3362 @@
+---
+# ====== Page: Employee Create ===============================
+id: 102
+identification: 
+  name: Employee Create
+  alias: EMPLOYEE-CREATE1
+  title: Employee Create
+
+appearance: 
+  page-mode: Normal
+  page-template: Standard
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* Page background */
+    .t-Body-content,
+    .t-Body-main,
+    .t-Region,
+    .apex-page-context {
+      background: #f5f7fb;
+    }
+    
+    /* Main content wrapper */
+    .t-Body-contentInner {
+      padding: 16px;
+    }
+    
+    /* Card style for all regions */
+    .t-Region {
+      background: #ffffff;
+      border: 1px solid #e6ebf2;
+      border-radius: 14px;
+      box-shadow: 0 4px 14px rgba(31, 45, 61, 0.06);
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    
+    /* Region header */
+    .t-Region-header {
+      background: #ffffff;
+      border-bottom: 1px solid #edf1f7;
+      padding: 10px 12px;
+    }
+    
+    /* Region title */
+    .t-Region-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2d3d;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .t-Region-title::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 14px;
+      border-radius: 10px;
+      background: #2d7ff9;
+    }
+    
+    /* Region body spacing */
+    .t-Region-body {
+      padding: 8px 10px !important;
+    }
+    
+    /* Item containers */
+    .t-Form-fieldContainer {
+      margin-bottom: 14px;
+    }
+    
+    /* Labels */
+    .t-Form-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #5b6b7f;
+      margin-bottom: 6px;
+    }
+    
+    /* Inputs */
+    .t-Form-inputContainer input,
+    .t-Form-inputContainer select,
+    .t-Form-inputContainer textarea,
+    .apex-item-text,
+    .apex-item-select,
+    .apex-item-textarea {
+      border-radius: 10px !important;
+      border: 1px solid #dbe3ee !important;
+      background: #fbfcfe !important;
+      min-height: 38px;
+      box-shadow: none !important;
+      transition: all 0.2s ease;
+    }
+    
+    /* Focus state */
+    .t-Form-inputContainer input:focus,
+    .t-Form-inputContainer select:focus,
+    .t-Form-inputContainer textarea:focus,
+    .apex-item-text:focus,
+    .apex-item-select:focus,
+    .apex-item-textarea:focus {
+      border-color: #2d7ff9 !important;
+      background: #ffffff !important;
+      box-shadow: 0 0 0 3px rgba(45, 127, 249, 0.10) !important;
+    }
+    
+    /* Date picker / LOV buttons */
+    .a-Button--popupLOV,
+    .ui-datepicker-trigger,
+    .t-Form-itemText--postButton button {
+      border-radius: 10px !important;
+      height: 38px !important;
+    }
+    
+    /* Toolbar buttons top right */
+    .t-Button,
+    button.t-Button {
+      border-radius: 10px !important;
+      font-weight: 600;
+      min-height: 38px;
+      padding: 0 14px;
+      box-shadow: none;
+    }
+    
+    /* Primary button */
+    .t-Button--hot {
+      background: linear-gradient(135deg, #2d7ff9, #1f6fe5) !important;
+      border: none !important;
+    }
+    
+    /* Secondary button */
+    .t-Button--simple {
+      border: 1px solid #d7dfeb !important;
+      background: #ffffff !important;
+      color: #304050 !important;
+    }
+    
+    /* Danger button */
+    .t-Button--danger {
+      background: #fff1f1 !important;
+      border: 1px solid #f3c7c7 !important;
+      color: #c62828 !important;
+    }
+    
+    /* Profile picture region special styling */
+    .profile-card .t-Region-body {
+      text-align: center;
+      padding-top: 24px;
+    }
+    
+    /* Circular avatar */
+    .profile-card img,
+    .profile-card .emp-photo-preview img {
+      width: 130px;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #ffffff;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      display: inline-block;
+    }
+    
+    /* Employee code display area */
+    .emp-code-badge {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 8px 14px;
+      background: #f3f7ff;
+      color: #1f5fbf;
+      border: 1px solid #d7e5ff;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    
+    /* Rich text editor area */
+    .ck-editor__editable,
+    .a-RichText-editor {
+      min-height: 140px !important;
+      border-radius: 10px !important;
+    }
+    
+    /* Remove overly flat grey feeling */
+    .t-Region.no-border,
+    .t-Region--noBorder {
+      border: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+    }
+    
+    .apex-col {
+      padding-left: 2px !important;
+      padding-right: 2px !important;
+    }
+    
+    .apex-row {
+      margin-left: -2px !important;
+      margin-right: -2px !important;
+    }
+    
+    .t-Region {
+      margin-bottom: 6px !important;
+    }
+    
+    .t-Region-header {
+      padding: 8px 10px !important;
+    }
+    
+    .t-Region-body {
+      padding: 6px 8px !important;
+    }
+    
+    .t-Form-fieldContainer {
+      margin-bottom: 8px !important;
+    }
+    
+    /* Reduce switch size */
+    .t-Switch {
+      transform: scale(0.75);
+      transform-origin: left center;
+    }
+    
+    /* Optional: reduce spacing */
+    .t-Form-fieldContainer {
+      margin-bottom: 6px !important;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Personal Information ========================
+  id: 28082340933883674
+  identification: 
+    name: Personal Information
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: Employee Create # 29256905961142249
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 10
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    - t-Form--slimPadding
+    css-classes: 
+    - emp-card
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Employment Information ======================
+  id: 28082549340883676
+  identification: 
+    name: Employment Information
+    type: Static Content
+
+  layout: 
+    sequence: 50
+    parent-region: Employee Create # 29256905961142249
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 6
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    - t-Form--slimPadding
+    - margin-top-sm
+    css-classes: 
+    - emp-card
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: false
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Hiring Information ==========================
+  id: 28082723213883677
+  identification: 
+    name: Hiring Information
+    type: Static Content
+
+  layout: 
+    sequence: 60
+    parent-region: Employee Create # 29256905961142249
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 6
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    - t-Form--slimPadding
+    - margin-top-sm
+    css-classes: 
+    - emp-card
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Profile Picture =============================
+  id: 28083440651883685
+  identification: 
+    name: Profile Picture
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: Employee Create # 29256905961142249
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 2
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    - t-Form--slimPadding
+    - margin-top-none
+    css-classes: 
+    - emp-card
+    - emp-profile-card
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Employee Create =============================
+  id: 29256905961142249
+  identification: 
+    name: Employee Create
+    type: Form
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_EMPLOYEES
+    include-rowid-column: false
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noPadding
+    - t-Region--scrollBody
+    - t-Form--slimPadding
+    - margin-left-md
+    - margin-right-md
+    css-classes: 
+    - emp-main-shell
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+page-items: 
+- # ====== Page Item: P102_CURRENT_STATUS ======================
+  id: 15894453877110442
+  identification: 
+    name: P102_CURRENT_STATUS
+    type: Display Only
+
+  label: 
+    label: Current Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 70
+    region: Profile Picture # 28083440651883685
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      select  sm.status_name  as status_badge
+      from hr_emp_status_hist h
+      join hr_status_master sm
+        on sm.status_code = h.status_code
+      where h.emp_id = :P102_EMP_ID
+        and h.effective_to is null
+      fetch first 1 row only
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_EMPLOYEE_CATEGORY ===================
+  id: 17329383760959450
+  identification: 
+    name: P102_EMPLOYEE_CATEGORY
+    type: Select List
+
+  label: 
+    label: Employee Category
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Employment Information # 28082549340883676
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:License Holder ;LICENSE_HOLDER,Non-Licensed;NON_LICENSED,Office Staff;OFFICE_STAFF,Free Lance;FREE_LANCE'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: EMPLOYEE_CATEGORY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_ID
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_CONTRACT_REF ========================
+  id: 28085913089883655
+  identification: 
+    name: P102_CONTRACT_REF
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 270
+    region: Employee Create # 29256905961142249
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: CONTRACT_REF
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_AGREED_COUNTRY_ID ===================
+  id: 28099621540883627
+  identification: 
+    name: P102_AGREED_COUNTRY_ID
+    type: Select List
+
+  label: 
+    label: Agreed Country
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 100
+    region: Employment Information # 28082549340883676
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: REF_COUNTRIES.COUNTRY_CODE # 13331444176708110
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_NEED_VISA ===========================
+  id: 28100754823883638
+  identification: 
+    name: P102_NEED_VISA
+    type: Switch
+
+  label: 
+    label: Need Visa?
+    alignment: Left
+
+  settings: 
+    use-defaults: true
+
+  layout: 
+    sequence: 20
+    region: Employment Information # 28082549340883676
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: NEED_VISA
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_NEED_LABOUR_CARD ====================
+  id: 28100853194883639
+  identification: 
+    name: P102_NEED_LABOUR_CARD
+    type: Switch
+
+  label: 
+    label: Need Labour Card?
+    alignment: Left
+
+  settings: 
+    use-defaults: true
+
+  layout: 
+    sequence: 30
+    region: Employment Information # 28082549340883676
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    - margin-left-none
+    - margin-right-none
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: NEED_LABOUR_CARD
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: N
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_AGENCY_ID ===========================
+  id: 28107268716883632
+  identification: 
+    name: P102_AGENCY_ID
+    type: Select List
+
+  label: 
+    label: Agency
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: Hiring Information # 28082723213883677
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: FIN_SUPPLIERS.SUPPLIER_NAME # 13537762223988225
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: AGENCY_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_EMP_ID ==============================
+  id: 29268072564142203
+  identification: 
+    name: P102_EMP_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 100
+    region: Personal Information # 28082340933883674
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: EMP_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_EMP_CODE ============================
+  id: 29268447813142209
+  identification: 
+    name: P102_EMP_CODE
+    type: Display Only
+
+  label: 
+    label: Emp Code
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Personal Information # 28082340933883674
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: EMP_CODE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_PHOTO_FILE_ID =======================
+  id: 29268594156142235
+  identification: 
+    name: P102_PHOTO_FILE_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 210
+    region: Employee Create # 29256905961142249
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: PHOTO_FILE_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_FIRST_NAME ==========================
+  id: 29268917233142209
+  identification: 
+    name: P102_FIRST_NAME
+    type: Text Field
+
+  label: 
+    label: First Name
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: Upper
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 40
+    region: Personal Information # 28082340933883674
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 64
+
+  validation: 
+    value-required: true
+    maximum-length: 80
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: FIRST_NAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_LAST_NAME ===========================
+  id: 29269270656142210
+  identification: 
+    name: P102_LAST_NAME
+    type: Text Field
+
+  label: 
+    label: Last Name
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: Upper
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 50
+    region: Personal Information # 28082340933883674
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 64
+
+  validation: 
+    value-required: true
+    maximum-length: 80
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: LAST_NAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_CREATED_BY ==========================
+  id: 29269450145142235
+  identification: 
+    name: P102_CREATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 230
+    region: Employee Create # 29256905961142249
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: CREATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_FATHER_NAME =========================
+  id: 29269690935142210
+  identification: 
+    name: P102_FATHER_NAME
+    type: Text Field
+
+  label: 
+    label: Father Name
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: Upper
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 70
+    region: Personal Information # 28082340933883674
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 64
+
+  validation: 
+    value-required: false
+    maximum-length: 80
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: FATHER_NAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_CREATED_DT ==========================
+  id: 29269799005142236
+  identification: 
+    name: P102_CREATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 240
+    region: Employee Create # 29256905961142249
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: CREATED_DT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_DOB =================================
+  id: 29270138172142210
+  identification: 
+    name: P102_DOB
+    type: Date Picker
+
+  label: 
+    label: Date of Birth
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 60
+    region: Personal Information # 28082340933883674
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: DOB
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_NATIONALITY_COUNTRY_ID ==============
+  id: 29270462231142212
+  identification: 
+    name: P102_NATIONALITY_COUNTRY_ID
+    type: Select List
+
+  label: 
+    label: Nationality
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Personal Information # 28082340933883674
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: REF_COUNTRIES.COUNTRY_CODE # 13331444176708110
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: NATIONALITY_COUNTRY_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_UPDATED_BY ==========================
+  id: 29270668457142238
+  identification: 
+    name: P102_UPDATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 250
+    region: Employee Create # 29256905961142249
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: UPDATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_MOBILE ==============================
+  id: 29270935938142213
+  identification: 
+    name: P102_MOBILE
+    type: Text Field
+
+  label: 
+    label: Contact Number
+    alignment: Left
+
+  settings: 
+    subtype: Phone Number
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 80
+    region: Personal Information # 28082340933883674
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 30
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: MOBILE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_UPDATED_DT ==========================
+  id: 29271056065142238
+  identification: 
+    name: P102_UPDATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 260
+    region: Employee Create # 29256905961142249
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: UPDATED_DT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_EMAIL ===============================
+  id: 29271269516142213
+  identification: 
+    name: P102_EMAIL
+    type: Text Field
+
+  label: 
+    label: Email
+    alignment: Left
+
+  settings: 
+    subtype: E-Mail
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 90
+    region: Personal Information # 28082340933883674
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 120
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: EMAIL
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_PHOTO_BLOB ==========================
+  id: 29276494264142228
+  identification: 
+    name: P102_PHOTO_BLOB
+    type: Image Upload
+
+  label: 
+    alignment: Left
+
+  display: 
+    display-as: Icon Dropzone
+    preview-size: Medium
+    display-download-link: true
+    capture-using: NONE
+
+  storage:: 
+    type: BLOB column specified in Item Source attribute
+
+  cropping: 
+    allow-cropping: true
+    aspect-ratio: '1:1 (square)'
+
+  layout: 
+    sequence: 10
+    region: Profile Picture # 28083440651883685
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    - margin-top-none
+    - margin-left-lg
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: PHOTO_BLOB
+    data-type: BLOB
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_PHOTO_FILENAME ======================
+  id: 29276859601142228
+  identification: 
+    name: P102_PHOTO_FILENAME
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 30
+    region: Profile Picture # 28083440651883685
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: PHOTO_FILENAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_PHOTO_MIME_TYPE =====================
+  id: 29277298256142228
+  identification: 
+    name: P102_PHOTO_MIME_TYPE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 40
+    region: Profile Picture # 28083440651883685
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: PHOTO_MIME_TYPE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_JOIN_DATE ===========================
+  id: 29277581862142208
+  identification: 
+    name: P102_JOIN_DATE
+    type: Date Picker
+
+  label: 
+    label: Join Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 70
+    region: Employment Information # 28082549340883676
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: true
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: JOIN_DATE
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_PHOTO_CHARSET =======================
+  id: 29277669693142229
+  identification: 
+    name: P102_PHOTO_CHARSET
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 50
+    region: Profile Picture # 28083440651883685
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: PHOTO_CHARSET
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_AGREED_PROJECT_ID ===================
+  id: 29277914290142209
+  identification: 
+    name: P102_AGREED_PROJECT_ID
+    type: Select List
+
+  label: 
+    label: Agreed Project
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 90
+    region: Employment Information # 28082549340883676
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: HR_PROJECTS.PROJECT_CODE # 13533642402988221
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: AGREED_PROJECT_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_PHOTO_LASTUPD =======================
+  id: 29278131997142229
+  identification: 
+    name: P102_PHOTO_LASTUPD
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 60
+    region: Profile Picture # 28083440651883685
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: PHOTO_LASTUPD
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_AGREED_CITY_ID ======================
+  id: 29278638062142212
+  identification: 
+    name: P102_AGREED_CITY_ID
+    type: Select List
+
+  label: 
+    label: Agreed City
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 110
+    region: Employment Information # 28082549340883676
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select city_name d, city_id r
+      from ref_cities
+      where is_active = 'Y'
+        and country_id = :P102_AGREED_COUNTRY_ID
+      order by 1
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P102_AGREED_COUNTRY_ID
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: AGREED_CITY_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_JOB_ID ==============================
+  id: 29279368292142212
+  identification: 
+    name: P102_JOB_ID
+    type: Select List
+
+  label: 
+    label: Job
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 80
+    region: Employment Information # 28082549340883676
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: REF_JOBS.JOB_NAME # 13535095115988223
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: JOB_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_WORKER_TYPE =========================
+  id: 29281647570142214
+  identification: 
+    name: P102_WORKER_TYPE
+    type: Select List
+
+  label: 
+    label: Worker Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 120
+    region: Employment Information # 28082549340883676
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Direct;DIRECT,Subcontract;SUBCONTRACT'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: WORKER_TYPE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_SUPPLIER_ID =========================
+  id: 29282074079142214
+  identification: 
+    name: P102_SUPPLIER_ID
+    type: Select List
+
+  label: 
+    label: Supplier Id
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 130
+    region: Employment Information # 28082549340883676
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: FIN_SUPPLIERS.SUPPLIER_NAME # 13537762223988225
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P102_WORKER_TYPE
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: SUPPLIER_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_REFERENCE_SOURCE ====================
+  id: 29286657948142208
+  identification: 
+    name: P102_REFERENCE_SOURCE
+    type: Select List
+
+  label: 
+    label: Source
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Hiring Information # 28082723213883677
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select SOURCE_NAME,SOURCE_CODE
+      from "HR_HIRING_SOURCE_MASTER" a
+      where IS_ACTIVE = 'Y'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: REFERENCE_SOURCE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_REFERRED_BY_TEXT ====================
+  id: 29287089958142208
+  identification: 
+    name: P102_REFERRED_BY_TEXT
+    type: Text Field
+
+  label: 
+    label: Referrence
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: Upper
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 50
+    region: Hiring Information # 28082723213883677
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 200
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: REFERRED_BY_TEXT
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_DEAL_BY_USER ========================
+  id: 29287435351142208
+  identification: 
+    name: P102_DEAL_BY_USER
+    type: Select List
+
+  label: 
+    label: Deal By User
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: Hiring Information # 28082723213883677
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select USERNAME,USER_ID
+      from "SEC_USERS" a
+      WHERE IS_ACTIVE = 'Y'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: DEAL_BY_USER
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_HIRE_NOTES ==========================
+  id: 29287927627142209
+  identification: 
+    name: P102_HIRE_NOTES
+    type: Textarea
+
+  label: 
+    label: Hire Notes
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 110
+    region: Hiring Information # 28082723213883677
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: HIRE_NOTES
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_HAS_DRIVING_LICENSE =================
+  id: 31072768073438890
+  identification: 
+    name: P102_HAS_DRIVING_LICENSE
+    type: Switch
+
+  label: 
+    label: Need Driving License
+    alignment: Left
+
+  settings: 
+    use-defaults: false
+    on-value: Y
+    on-label: Yes
+    off-value: N
+    off-label: No
+
+  layout: 
+    sequence: 50
+    region: Employment Information # 28082549340883676
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: HAS_DRIVING_LICENSE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: N
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P102_ENTRY_STATUS ========================
+  id: 31072873287438891
+  identification: 
+    name: P102_ENTRY_STATUS
+    type: Select List
+
+  label: 
+    label: Entry Status
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 60
+    region: Employment Information # 28082549340883676
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Inside;INSIDE,Outside;OUTSIDE'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Create # 29256905961142249
+    column: ENTRY_STATUS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P102_EMP_CODE
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: CANCEL ======================================
+  id: 15728225208154011
+  identification: 
+    button-name: CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 30
+    region: Employee Create # 29256905961142249
+    slot: COPY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:101:&SESSION.::&DEBUG.:::'
+      page: 101 # Employee Management
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: DELETE ======================================
+  id: 15728625971154009
+  identification: 
+    button-name: DELETE
+    label: Delete
+
+  layout: 
+    sequence: 40
+    region: Employee Create # 29256905961142249
+    slot: COPY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: false
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL DELETE action
+
+  confirmation: 
+    message: '&APP_TEXT$DELETE_MSG!RAW.'
+    style: Danger
+
+  server-side-condition: 
+    type: Never
+
+- # ====== Button: SAVE ========================================
+  id: 15729025723154009
+  identification: 
+    button-name: SAVE
+    label: Apply Changes
+
+  layout: 
+    sequence: 20
+    region: Employee Create # 29256905961142249
+    slot: COPY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P102_EMP_ID
+
+- # ====== Button: CREATE ======================================
+  id: 15729413860154009
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 10
+    region: Employee Create # 29256905961142249
+    slot: COPY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P102_EMP_ID
+
+dynamic-actions: 
+- # ====== Dynamic Action: DA_SHOW_SUPPLIER ====================
+  id: 15756613959153965
+  identification: 
+    name: DA_SHOW_SUPPLIER
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P102_WORKER_TYPE
+
+  client-side-condition: 
+    type: Item = Value
+    item: P102_WORKER_TYPE
+    value: SUBCONTRACT
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 15757124570153963
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P102_SUPPLIER_ID
+
+    execution: 
+      sequence: 10
+      event: DA_SHOW_SUPPLIER # 15756613959153965
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 15757697344153963
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P102_SUPPLIER_ID
+
+    execution: 
+      sequence: 10
+      event: DA_SHOW_SUPPLIER # 15756613959153965
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+  - # ====== Action: Set Value ===================================
+    id: 15758156213153963
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P102_SUPPLIER_ID
+
+    execution: 
+      sequence: 20
+      event: DA_SHOW_SUPPLIER # 15756613959153965
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: Show_Agency =========================
+  id: 15758572550153963
+  identification: 
+    name: Show_Agency
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P102_REFERENCE_SOURCE
+
+  client-side-condition: 
+    type: Item = Value
+    item: P102_REFERENCE_SOURCE
+    value: AGENCY
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 15759075607153962
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P102_AGENCY_ID
+
+    execution: 
+      sequence: 20
+      event: Show_Agency # 15758572550153963
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Show ========================================
+    id: 15759535012153962
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P102_AGENCY_ID
+
+    execution: 
+      sequence: 10
+      event: Show_Agency # 15758572550153963
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 15760076921153962
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P102_AGENCY_ID
+
+    execution: 
+      sequence: 10
+      event: Show_Agency # 15758572550153963
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: Set Value Free Lance & Office Staff =
+  id: 17423544277850804
+  identification: 
+    name: Set Value Free Lance & Office Staff
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P102_EMPLOYEE_CATEGORY
+
+  client-side-condition: 
+    type: Item is in list
+    item: P102_EMPLOYEE_CATEGORY
+    list: 
+    - FREE_LANCE
+    - OFFICE_STAFF
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 17423611100850805
+    identification: 
+      name: Set Value
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: N
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P102_NEED_VISA
+      - P102_HAS_DRIVING_LICENSE
+      - P102_NEED_LABOUR_CARD
+
+    execution: 
+      sequence: 10
+      event: Set Value Free Lance & Office Staff # 17423544277850804
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: Set Value LICENSE_HOLDER ============
+  id: 17423879096850807
+  identification: 
+    name: Set Value LICENSE_HOLDER
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P102_EMPLOYEE_CATEGORY
+
+  client-side-condition: 
+    type: Item = Value
+    item: P102_EMPLOYEE_CATEGORY
+    value: LICENSE_HOLDER
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 17423995837850808
+    identification: 
+      name: Set Value
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: N
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P102_HAS_DRIVING_LICENSE
+      - P102_NEED_LABOUR_CARD
+
+    execution: 
+      sequence: 10
+      event: Set Value LICENSE_HOLDER # 17423879096850807
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Set Value ===================================
+    id: 17424051764850809
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: Y
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P102_NEED_VISA
+
+    execution: 
+      sequence: 20
+      event: Set Value LICENSE_HOLDER # 17423879096850807
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: Set Value NON_LICENSE_HOLDER ========
+  id: 17424104802850810
+  identification: 
+    name: Set Value NON_LICENSE_HOLDER
+
+  execution: 
+    sequence: 50
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P102_EMPLOYEE_CATEGORY
+
+  client-side-condition: 
+    type: Item = Value
+    item: P102_EMPLOYEE_CATEGORY
+    value: NON_LICENSED
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 17424282465850811
+    identification: 
+      name: Set Value
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: N
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P102_NEED_LABOUR_CARD
+
+    execution: 
+      sequence: 10
+      event: Set Value NON_LICENSE_HOLDER # 17424104802850810
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Set Value ===================================
+    id: 17424324712850812
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: Y
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P102_NEED_VISA
+      - P102_HAS_DRIVING_LICENSE
+
+    execution: 
+      sequence: 20
+      event: Set Value NON_LICENSE_HOLDER # 17424104802850810
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+validations: 
+- # ====== Validation: P102_CREATED_DT must be timestamp =======
+  id: 15754316548153967
+  identification: 
+    name: P102_CREATED_DT must be timestamp
+
+  execution: 
+    sequence: 230
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P102_CREATED_DT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P102_CREATED_DT # 29269799005142236
+
+- # ====== Validation: P102_UPDATED_DT must be timestamp =======
+  id: 15754786615153967
+  identification: 
+    name: P102_UPDATED_DT must be timestamp
+
+  execution: 
+    sequence: 250
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P102_UPDATED_DT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P102_UPDATED_DT # 29271056065142238
+
+- # ====== Validation: P102_PHOTO_LASTUPD must be timestamp ====
+  id: 15755138637153967
+  identification: 
+    name: P102_PHOTO_LASTUPD must be timestamp
+
+  execution: 
+    sequence: 300
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P102_PHOTO_LASTUPD
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P102_PHOTO_LASTUPD # 29278131997142229
+
+- # ====== Validation: Agency is Required ======================
+  id: 15755501976153966
+  identification: 
+    name: Agency is Required
+
+  execution: 
+    sequence: 310
+
+  validation: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: " :P102_REFERENCE_SOURCE != 'AGENCY' Or :P102_AGENCY_ID IS not NULL"
+    always-execute: true
+
+  error: 
+    error-message: Agency is required!
+    display-location: Inline with Field and in Notification
+    associated-item: P102_AGENCY_ID # 28107268716883632
+
+- # ====== Validation: DOB Must be Past ========================
+  id: 15755991707153966
+  identification: 
+    name: DOB Must be Past
+
+  execution: 
+    sequence: 320
+
+  validation: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ':P102_DOB < SYSDATE'
+    always-execute: true
+
+  error: 
+    error-message: Date of Birth must be in the past
+    display-location: Inline with Field and in Notification
+    associated-item: P102_DOB # 29270138172142210
+
+- # ====== Validation: Validate Mobile Number ==================
+  id: 39252490924729120
+  identification: 
+    name: Validate Mobile Number
+
+  execution: 
+    sequence: 330
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if :P102_MOBILE is null then
+              return null;
+          end if;
+      
+          for r in (
+              select emp_code,
+                     trim(first_name || ' ' || last_name) employee_name
+              from hr_employees
+              where emp_id <> nvl(:P102_EMP_ID, -1)
+                and hr_normalize_mobile(mobile) =
+                    hr_normalize_mobile(:P102_MOBILE)
+              fetch first 1 row only
+          )
+          loop
+              return 'This mobile number is already assigned to employee '
+                     || r.emp_code || ' - ' || r.employee_name || '.';
+          end loop;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: Validate Duplicate Email ================
+  id: 39252594119729121
+  identification: 
+    name: Validate Duplicate Email
+
+  execution: 
+    sequence: 340
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if trim(:P102_EMAIL) is null then
+              return null;
+          end if;
+      
+          for r in (
+              select emp_code,
+                     trim(first_name || ' ' || last_name) employee_name
+              from hr_employees
+              where emp_id <> nvl(:P102_EMP_ID, -1)
+                and lower(trim(email)) = lower(trim(:P102_EMAIL))
+              fetch first 1 row only
+          )
+          loop
+              return 'This email address is already assigned to employee '
+                     || r.emp_code || ' - ' || r.employee_name || '.';
+          end loop;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: Duplicate Person Detail Verification ====
+  id: 39252606038729122
+  identification: 
+    name: Duplicate Person Detail Verification
+
+  execution: 
+    sequence: 350
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if :P102_FIRST_NAME is null
+             or :P102_DOB is null then
+              return null;
+          end if;
+      
+          for r in (
+              select emp_code,
+                     trim(first_name || ' ' || last_name) employee_name
+              from hr_employees
+              where emp_id <> nvl(:P102_EMP_ID, -1)
+      
+                and upper(trim(first_name)) =
+                    upper(trim(:P102_FIRST_NAME))
+      
+                and nvl(upper(trim(last_name)), '#') =
+                    nvl(upper(trim(:P102_LAST_NAME)), '#')
+      
+                and nvl(upper(trim(father_name)), '#') =
+                    nvl(upper(trim(:P102_FATHER_NAME)), '#')
+      
+                and dob = :P102_DOB
+      
+              fetch first 1 row only
+          )
+          loop
+              return 'Possible duplicate employee found: '
+                     || r.emp_code || ' - ' || r.employee_name
+                     || '. The same name, father name, date of birth '
+                     || 'and nationality already exist.';
+          end loop;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+processes: 
+- # ====== Process: Initialize form Employee Create ============
+  id: 15733428686154000
+  identification: 
+    name: Initialize form Employee Create
+    type: Form - Initialization
+    execution-chain: None
+    form-region: Employee Create # 29256905961142249
+
+  execution: 
+    sequence: 20
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Process form Employee Create ===============
+  id: 15733848985153999
+  identification: 
+    name: Process form Employee Create
+    type: Form - Automatic Row Processing (DML)
+    execution-chain: None
+    form-region: Employee Create # 29256905961142249
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Agreed Country =============================
+  id: 15756286966153966
+  identification: 
+    name: Agreed Country
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+        if :P102_AGREED_CITY_ID is not null then
+          select country_id
+            into :P102_AGREED_COUNTRY_ID
+            from ref_cities
+           where city_id = :P102_AGREED_CITY_ID;
+        end if;
+      exception
+        when no_data_found then
+          :P102_AGREED_COUNTRY_ID := null;
+      end;
+
+  execution: 
+    sequence: 30
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+branches: 
+- # ====== Branch: Go To Page 101 ==============================
+  id: 15760512345153961
+  identification: 
+    name: Go To Page 101
+
+  execution: 
+    sequence: 1
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:101:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 101 # Employee Management
+

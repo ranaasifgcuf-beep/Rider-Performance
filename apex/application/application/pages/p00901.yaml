@@ -1,0 +1,339 @@
+---
+# ====== Page: Change Password ===============================
+id: 901
+identification: 
+  name: Change Password
+  alias: CHANGE-PASSWORD
+  title: Change Password
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Change Password =============================
+  id: 9738438480536801
+  identification: 
+    name: Change Password
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P901_OLD_PASSWORD ========================
+  id: 9738582201536802
+  identification: 
+    name: P901_OLD_PASSWORD
+    type: Password
+
+  label: 
+    label: Old Password
+    alignment: Left
+
+  settings: 
+    submit-when-enter-pressed: true
+
+  layout: 
+    sequence: 10
+    region: Change Password # 9738438480536801
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P901_NEW_PASSWORD ========================
+  id: 9738648009536803
+  identification: 
+    name: P901_NEW_PASSWORD
+    type: Password
+
+  label: 
+    label: New Password
+    alignment: Left
+
+  settings: 
+    submit-when-enter-pressed: true
+
+  layout: 
+    sequence: 20
+    region: Change Password # 9738438480536801
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P901_CONFIRM_PASSWORD ====================
+  id: 9738729026536804
+  identification: 
+    name: P901_CONFIRM_PASSWORD
+    type: Password
+
+  label: 
+    label: Confirm Password
+    alignment: Left
+
+  settings: 
+    submit-when-enter-pressed: true
+
+  layout: 
+    sequence: 30
+    region: Change Password # 9738438480536801
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: BTN_CHANGE_PASSWORD =========================
+  id: 9739269002536809
+  identification: 
+    button-name: BTN_CHANGE_PASSWORD
+    label: Change Password
+
+  layout: 
+    sequence: 10
+    region: Change Password # 9738438480536801
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-lock-password
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+validations: 
+- # ====== Validation: New = Confirm ===========================
+  id: 9738876230536805
+  identification: 
+    name: New = Confirm
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ':P901_NEW_PASSWORD = :P901_CONFIRM_PASSWORD'
+    always-execute: false
+
+  error: 
+    error-message: New password and confirm password do not match.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: Password policy =========================
+  id: 9738984793536806
+  identification: 
+    name: Password policy
+
+  execution: 
+    sequence: 20
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      return length(:P901_NEW_PASSWORD) >= 8
+         and regexp_like(:P901_NEW_PASSWORD, '[A-Z]')
+         and regexp_like(:P901_NEW_PASSWORD, '[a-z]')
+         and regexp_like(:P901_NEW_PASSWORD, '[0-9]')
+         and regexp_like(:P901_NEW_PASSWORD, '[^A-Za-z0-9]');
+    always-execute: false
+
+  error: 
+    error-message: Password must be 8+ chars with upper, lower, number, and special character.
+    display-location: Inline with Field and in Notification
+
+processes: 
+- # ====== Process: Update Password ============================
+  id: 9739061339536807
+  identification: 
+    name: Update Password
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+        sec_user_ops_pkg.change_my_password(:P901_OLD_PASSWORD, :P901_NEW_PASSWORD);
+      end;
+
+  execution: 
+    sequence: 10
+    point: After Submit
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+branches: 
+- # ====== Branch: Redirect to Home ============================
+  id: 9739161763536808
+  identification: 
+    name: Redirect to Home
+
+  execution: 
+    sequence: 10
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:1:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 1 # Home
+

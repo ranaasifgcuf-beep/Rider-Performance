@@ -1,0 +1,1731 @@
+---
+# ====== Page: HR Employee Docs Log ==========================
+id: 120
+identification: 
+  name: HR Employee Docs Log
+  alias: HR-EMPLOYEE-DOCS-LOG
+  title: Employees Document Log
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Company =====================================
+  id: 14879828182413919
+  identification: 
+    name: Company
+    title: Company <span class="t-Badge t-Badge--success">&P120_COMPANY.</span>
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select emp_id,
+             emp_code,
+             employee_name,
+             txn_dt as last_movement_dt,
+             holder_type,
+             holder_user,
+             holder_dept,
+             purpose,
+             expected_return_dt,
+             handled_by,
+             remarks,
+             '<span style="display:inline-block; background:#27AE60; color:#fff; padding:6px 10px; border-radius:6px; font-size:13px;">
+        <span class="fa fa-paper-plane"></span> Issue
+      </span>' AS ISSUE_LINK,
+      '<span class="fa fa-exchange"></span>' as IT_link
+      from vw_hr_doc_custody_current
+      where current_status = 'WITH_COMPANY'
+      order by txn_dt desc, emp_code
+
+  layout: 
+    sequence: 50
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 14880258317413923
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 16241030774500590
+      identification: 
+        name: Primary Report
+        alias: 162411
+
+    columns: 
+    - # ====== Column: EMP_ID ======================================
+      id: 14880333266413924
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 14880421570413925
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Employee Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 14880520396413926
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LAST_MOVEMENT_DT ============================
+      id: 14880680710413927
+      identification: 
+        column-name: LAST_MOVEMENT_DT
+        type: Plain Text
+
+      heading: 
+        heading: Transaction Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: HOLDER_TYPE =================================
+      id: 14880768097413928
+      identification: 
+        column-name: HOLDER_TYPE
+        type: Hidden
+
+      heading: 
+        heading: Holder Type
+
+      layout: 
+        sequence: 50
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: HOLDER_USER =================================
+      id: 14880818468413929
+      identification: 
+        column-name: HOLDER_USER
+        type: Plain Text
+
+      heading: 
+        heading: Holder User
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: HOLDER_DEPT =================================
+      id: 14880949789413930
+      identification: 
+        column-name: HOLDER_DEPT
+        type: Hidden
+
+      heading: 
+        heading: Holder Dept
+
+      layout: 
+        sequence: 80
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PURPOSE =====================================
+      id: 14881092769413931
+      identification: 
+        column-name: PURPOSE
+        type: Plain Text
+
+      heading: 
+        heading: Purpose
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPECTED_RETURN_DT ==========================
+      id: 14881106818413932
+      identification: 
+        column-name: EXPECTED_RETURN_DT
+        type: Plain Text
+
+      heading: 
+        heading: Expected Return Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: HANDLED_BY ==================================
+      id: 14881289973413933
+      identification: 
+        column-name: HANDLED_BY
+        type: Plain Text
+
+      heading: 
+        heading: Handled By
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REMARKS =====================================
+      id: 14881371667413934
+      identification: 
+        column-name: REMARKS
+        type: Plain Text
+
+      heading: 
+        heading: Remarks
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 120
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ISSUE_LINK ==================================
+      id: 16250390416426818
+      identification: 
+        column-name: ISSUE_LINK
+        type: Link
+
+      heading: 
+        heading: Issue Link
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 130
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:121:&SESSION.::&DEBUG.::P121_EMP_ID,P121_TXN_TYPE:#EMP_ID#,ISSUE_TO_EMPLOYEE'
+          page: 121 # Employee Documents Log Form
+          values: 
+            p121_emp_id: '#EMP_ID#'
+            p121_txn_type: ISSUE_TO_EMPLOYEE
+
+        link-text: '#ISSUE_LINK#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: IT_LINK =====================================
+      id: 16251695451426831
+      identification: 
+        column-name: IT_LINK
+        type: Link
+
+      heading: 
+        heading: Internal Transfer
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 140
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:121:&SESSION.::&DEBUG.::P121_EMP_ID,P121_TXN_TYPE:#EMP_ID#,INTERNAL_TRANSFER'
+          page: 121 # Employee Documents Log Form
+          values: 
+            p121_emp_id: '#EMP_ID#'
+            p121_txn_type: INTERNAL_TRANSFER
+
+        link-text: '#IT_LINK#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Company <span class="t-Badge t-Badge--success">&P120_COMPANY.</span>
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Employee ====================================
+  id: 14879944571413920
+  identification: 
+    name: Employee
+    title: Employee <span class="t-Badge t-Badge--info">&P120_RIDER.</span>
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select emp_id,
+             emp_code,
+             employee_name,
+             txn_dt as last_issue_dt,
+             issued_to,
+             handled_by,
+             purpose,
+             remarks,  '<span class="t-Icon fa fa-download"></span>'as receive_link
+      from vw_hr_doc_custody_current
+      where current_status = 'WITH_EMPLOYEE'
+      order by txn_dt desc, emp_code
+
+  layout: 
+    sequence: 60
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 14881404322413935
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 16241570135500578
+      identification: 
+        name: Primary Report
+        alias: 162416
+
+    columns: 
+    - # ====== Column: EMP_ID ======================================
+      id: 14881592317413936
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 14881624380413937
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Employee Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 14881766852413938
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LAST_ISSUE_DT ===============================
+      id: 14881833204413939
+      identification: 
+        column-name: LAST_ISSUE_DT
+        type: Plain Text
+
+      heading: 
+        heading: Transaction Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: HANDLED_BY ==================================
+      id: 14881962840413940
+      identification: 
+        column-name: HANDLED_BY
+        type: Plain Text
+
+      heading: 
+        heading: Handled By
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REMARKS =====================================
+      id: 14882006754413941
+      identification: 
+        column-name: REMARKS
+        type: Plain Text
+
+      heading: 
+        heading: Remarks
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: RECEIVE_LINK ================================
+      id: 16251508861426830
+      identification: 
+        column-name: RECEIVE_LINK
+        type: Link
+
+      heading: 
+        heading: Receive Link
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:121:&SESSION.::&DEBUG.::P121_EMP_ID,P121_TXN_TYPE:#EMP_ID#,RECEIVE_FROM_EMPLOYEE'
+          page: 121 # Employee Documents Log Form
+          values: 
+            p121_emp_id: '#EMP_ID#'
+            p121_txn_type: RECEIVE_FROM_EMPLOYEE
+
+        link-text: '#RECEIVE_LINK#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: PURPOSE =====================================
+      id: 16323984487664102
+      identification: 
+        column-name: PURPOSE
+        type: Plain Text
+
+      heading: 
+        heading: Purpose
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ISSUED_TO ===================================
+      id: 16324082548664103
+      identification: 
+        column-name: ISSUED_TO
+        type: Plain Text
+
+      heading: 
+        heading: Issued To
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Employee <span class="t-Badge t-Badge--info">&P120_RIDER.</span>
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Pending =====================================
+  id: 14880056619413921
+  identification: 
+    name: Pending
+    title: Pending <span class="t-Badge t-Badge--warning">&P120_PENDING.</span>
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select emp_id,
+             emp_code,
+             employee_name,
+             '
+         <span class="t-Icon fa fa-download"></span>'as receive_link
+      from vw_hr_doc_custody_current
+      where current_status = 'PENDING'
+      order by emp_code
+
+  layout: 
+    sequence: 70
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 14882830840413949
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 16256764703426033
+      identification: 
+        name: Primary Report
+        alias: 162568
+
+    columns: 
+    - # ====== Column: EMP_ID ======================================
+      id: 14882947587413950
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 16248619760426801
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Employee Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 16248712767426802
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: RECEIVE_LINK ================================
+      id: 16249243620426807
+      identification: 
+        column-name: RECEIVE_LINK
+        type: Link
+
+      heading: 
+        heading: Receive Link
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:121:&SESSION.::&DEBUG.::P121_EMP_ID,P121_TXN_TYPE:#EMP_ID#,RECEIVE_FROM_EMPLOYEE'
+          page: 121 # Employee Documents Log Form
+          values: 
+            p121_emp_id: '#EMP_ID#'
+            p121_txn_type: RECEIVE_FROM_EMPLOYEE
+
+        link-text: '#RECEIVE_LINK#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Pending <span class="t-Badge t-Badge--warning">&P120_PENDING.</span>
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Region display ==============================
+  id: 14880104953413922
+  identification: 
+    name: Region display
+    title: '<span style="font-weight:700; font-size:25px; color:#2F80ED;">   Employees Documents Log </span>'
+    type: Region Display Selector
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noPadding
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      mode: View Single Region
+      display-region-icons: false
+      include-'show-all': false
+      remember-selection: By User
+
+page-items: 
+- # ====== Page Item: P120_COMPANY =============================
+  id: 16248869627426803
+  identification: 
+    name: P120_COMPANY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P120_RIDER ===============================
+  id: 16248911302426804
+  identification: 
+    name: P120_RIDER
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 30
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P120_PENDING =============================
+  id: 16249019537426805
+  identification: 
+    name: P120_PENDING
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 40
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+dynamic-actions: 
+- # ====== Dynamic Action: REFRESH_AFTER_DOC_DIALOG ============
+  id: 16253080231426845
+  identification: 
+    name: REFRESH_AFTER_DOC_DIALOG
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: JavaScript Expression
+    javascript-expression: apex.gPageContext$
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 16253178970426846
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: JavaScript Expression
+      javascript-expression: location.reload();
+
+    execution: 
+      sequence: 10
+      event: REFRESH_AFTER_DOC_DIALOG # 16253080231426845
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Compute Count ==============================
+  id: 16249154971426806
+  identification: 
+    name: Compute Count
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+        select count(*)
+          into :P120_RIDER
+          from vw_hr_doc_custody_current
+         where current_status = 'WITH_EMPLOYEE';
+      
+        select count(*)
+          into :P120_COMPANY
+          from vw_hr_doc_custody_current
+         where current_status = 'WITH_COMPANY';
+      
+        select count(*)
+          into :P120_PENDING
+          from vw_hr_doc_custody_current
+         where current_status = 'PENDING';
+      
+      end;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+

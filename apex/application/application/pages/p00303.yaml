@@ -1,0 +1,738 @@
+---
+# ====== Page: Assign Bike ===================================
+id: 303
+identification: 
+  name: Assign Bike
+  alias: ASSIGN-BIKE
+  title: Assign Bike
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Drawer
+  template-options: 
+  - '#DEFAULT#'
+  - js-dialog-class-t-Drawer--pullOutEnd
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Assign Bike =================================
+  id: 17729785865086149
+  identification: 
+    name: Assign Bike
+    title: Assign Bike
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P303_BIKE_ID =============================
+  id: 17729824245086150
+  identification: 
+    name: P303_BIKE_ID
+    type: Select List
+
+  label: 
+    label: 'Plate #'
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Assign Bike # 17729785865086149
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT PLATE_NO,BIKE_ID
+      FROM VW_FLEET_BIKE_CURRENT
+      WHERE BIKE_STATUS_CODE	 = 'AVAILABLE'
+      AND PLATE_EMIRATE = :P303_CITY_ID
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P303_PLATE_NO ============================
+  id: 18035502138024901
+  identification: 
+    name: P303_PLATE_NO
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 50
+    region: Assign Bike # 17729785865086149
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P303_EMP_ID ==============================
+  id: 18035648715024902
+  identification: 
+    name: P303_EMP_ID
+    type: Popup LOV
+
+  label: 
+    label: Employee Name
+    alignment: Left
+
+  settings: 
+    display-as: Modal Dialog
+    initial-fetch: Automatic
+    manual-entry: false
+    fetch-on-search: false
+
+  search: 
+    match-type: Contains
+    case-sensitive: false
+    minimum-characters: 0
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: Assign Bike # 17729785865086149
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: FLEET.EMPLOYEE_LOV # 18130747472806310
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Always
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P303_CURRENT_STATUS ======================
+  id: 18035771236024903
+  identification: 
+    name: P303_CURRENT_STATUS
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 60
+    region: Assign Bike # 17729785865086149
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P303_ASSIGN_TS ===========================
+  id: 18035896327024904
+  identification: 
+    name: P303_ASSIGN_TS
+    type: Date Picker
+
+  label: 
+    label: Assign Date & Time
+    alignment: Left
+
+  settings: 
+    show-time: true
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 70
+    region: Assign Bike # 17729785865086149
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: 'DD-MON-YYYY HH24:MI:SS'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: cast(current_timestamp at time zone 'Asia/Dubai' as timestamp)
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P303_ISSUE_CONDITION =====================
+  id: 18035909292024905
+  identification: 
+    name: P303_ISSUE_CONDITION
+    type: Text Field
+
+  label: 
+    label: Condition
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 80
+    region: Assign Bike # 17729785865086149
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P303_REMARKS =============================
+  id: 18036037350024906
+  identification: 
+    name: P303_REMARKS
+    type: Textarea
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 90
+    region: Assign Bike # 17729785865086149
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P303_LOCATION_ID =========================
+  id: 18036191529024907
+  identification: 
+    name: P303_LOCATION_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 100
+    region: Assign Bike # 17729785865086149
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 7
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P303_BIKE_READ_ONLY ======================
+  id: 40338358754681347
+  identification: 
+    name: P303_BIKE_READ_ONLY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 110
+    region: Assign Bike # 17729785865086149
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P303_REQUEST_ID ==========================
+  id: 40338549647681349
+  identification: 
+    name: P303_REQUEST_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 120
+    region: Assign Bike # 17729785865086149
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P303_CITY_ID =============================
+  id: 40933038808733905
+  identification: 
+    name: P303_CITY_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 130
+    region: Assign Bike # 17729785865086149
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PB_CANCEL ===================================
+  id: 18036433052024910
+  identification: 
+    button-name: PB_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 10
+    region: Assign Bike # 17729785865086149
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:309:&SESSION.::&DEBUG.:::'
+      page: 309 # Bike Operations
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: PB_CREATE ===================================
+  id: 18036534776024911
+  identification: 
+    button-name: PB_CREATE
+    label: Save
+
+  layout: 
+    sequence: 10
+    region: Assign Bike # 17729785865086149
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+processes: 
+- # ====== Process: Assign Bike ================================
+  id: 18036670439024912
+  identification: 
+    name: Assign Bike
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          fleet_pkg.assign_bike(
+              p_bike_id            => :P303_BIKE_ID,
+              p_emp_id             => :P303_EMP_ID,
+              p_assign_ts          => :P303_ASSIGN_TS,
+              p_issue_condition    => :P303_ISSUE_CONDITION,
+              p_remarks            => :P303_REMARKS,
+              p_location_id        => :P303_LOCATION_ID,
+              p_request_id => :P303_REQUEST_ID
+          );
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Close Request ==============================
+  id: 40338610419681350
+  identification: 
+    name: Close Request
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      declare
+          l_assignment_id number;
+      begin
+          begin
+              select BIKE_ASSIGN_ID
+                into l_assignment_id
+                from (
+                      select BIKE_ASSIGN_ID
+                        from FLEET_bike_assignments
+                       where emp_id = :P303_EMP_ID
+                         and bike_id = :P303_BIKE_ID
+                         and return_dt is null
+                       order by assign_dt desc, BIKE_ASSIGN_ID desc
+                     )
+               where rownum = 1;
+          exception
+              when no_data_found then
+                  l_assignment_id := null;
+          end;
+      
+          hr_bike_req_pkg.close_after_assignment(
+              p_emp_id             => :P303_EMP_ID,
+              p_bike_id            => :P303_BIKE_ID,
+              p_bike_assignment_id => l_assignment_id,
+              p_request_id         => :P303_REQUEST_ID
+          );
+      end;
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+branches: 
+- # ====== Branch: Go To 309 ===================================
+  id: 18036789343024913
+  identification: 
+    name: Go To 309
+
+  execution: 
+    sequence: 10
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:309:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 309 # Bike Operations
+

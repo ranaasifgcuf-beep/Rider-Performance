@@ -1,0 +1,530 @@
+---
+# ====== Page: Jobs List =====================================
+id: 1007
+identification: 
+  name: Jobs List
+  alias: JOBS-LIST
+  title: Jobs List
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Jobs List ===================================
+  id: 13371400793440378
+  identification: 
+    name: Jobs List
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select JOB_ID,
+             JOB_NAME,
+             case when IS_OFFICE_STAFF = 'Y' then 'Yes' else 'No' end as is_office_staff,
+             case when REQUIRES_LICENSE = 'Y' then 'Yes' else 'No' end as REQUIRES_LICENSE,
+              case when bike_required_yn = 'Y' then 'Yes' else 'No' end as bike_required_yn,
+             IS_ACTIVE,
+             case
+          when is_active = 'Y' then
+            '<span class="t-Badge t-Badge--success">Active</span>'
+          else
+            '<span class="t-Badge t-Badge--danger">Inactive</span>'
+        end as is_active_disp
+        from REF_JOBS
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 13371518791440378
+    link: 
+      link-column: Link to Custom Target
+      target: 
+        url: 'f?p=&APP_ID.:1008:&APP_SESSION.::&DEBUG.:RP:P1008_JOB_ID:\#JOB_ID#\'
+        page: 1008 # Jobs Form
+        clear-cache: RP
+        values: 
+          p1008_job_id: '#JOB_ID#'
+
+      link-icon: <span role="img" aria-label="Edit" class="fa fa-edit" title="Edit"></span>
+      condition-type: Expression
+      language: PL/SQL
+      pl/sql-expression: sec_pkg.has_perm('REF_JOB_UPDATE') = 1
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 13375555992439649
+      identification: 
+        name: Primary Report
+        alias: 133756
+
+    columns: 
+    - # ====== Column: IS_ACTIVE_DISP ==============================
+      id: 12354413314729630
+      identification: 
+        column-name: IS_ACTIVE_DISP
+        type: Plain Text
+
+      heading: 
+        heading: Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 15
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: JOB_ID ======================================
+      id: 13372283844440377
+      identification: 
+        column-name: JOB_ID
+        type: Hidden
+
+      heading: 
+        heading: Job ID
+
+      layout: 
+        sequence: 0
+
+      source: 
+        primary-key: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: JOB_NAME ====================================
+      id: 13372652284440376
+      identification: 
+        column-name: JOB_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Job Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IS_OFFICE_STAFF =============================
+      id: 13373056620440376
+      identification: 
+        column-name: IS_OFFICE_STAFF
+        type: Plain Text
+
+      heading: 
+        heading: Is Office Staff?
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUIRES_LICENSE ============================
+      id: 13373480150440376
+      identification: 
+        column-name: REQUIRES_LICENSE
+        type: Plain Text
+
+      heading: 
+        heading: Requires License?
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IS_ACTIVE ===================================
+      id: 13373812532440376
+      identification: 
+        column-name: IS_ACTIVE
+        type: Hidden
+
+      heading: 
+        heading: Is Active
+
+      layout: 
+        sequence: 5
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: BIKE_REQUIRED_YN ============================
+      id: 40334904313681313
+      identification: 
+        column-name: BIKE_REQUIRED_YN
+        type: Plain Text
+
+      heading: 
+        heading: Bike Required?
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 25
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Jobs List
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+buttons: 
+- # ====== Button: CREATE ======================================
+  id: 13374322316440376
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 10
+    region: Jobs List # 13371400793440378
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:1008:&APP_SESSION.::&DEBUG.:1008::'
+      page: 1008 # Jobs Form
+      clear-cache: 1008
+
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sec_pkg.has_perm('REF_JOB_ADD') = 1
+
+dynamic-actions: 
+- # ====== Dynamic Action: Edit Report - Dialog Closed =========
+  id: 13374681262440375
+  identification: 
+    name: Edit Report - Dialog Closed
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: Jobs List # 13371400793440378
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 13375102608440375
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Jobs List # 13371400793440378
+
+    execution: 
+      sequence: 10
+      event: Edit Report - Dialog Closed # 13374681262440375
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

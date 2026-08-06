@@ -1,0 +1,2260 @@
+---
+# ====== Page: Employee List =================================
+id: 151
+identification: 
+  name: Employee List
+  alias: EMPLOYEE-LIST
+  title: Employee List
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* Employee report */
+    #employee_report .a-IRR-table {
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    
+    #employee_report .a-IRR-table th {
+        background: #f7f8fa;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+        vertical-align: middle;
+        height: 42px;
+    }
+    
+    #employee_report .a-IRR-table td {
+        font-size: 12px;
+        white-space: nowrap;
+        vertical-align: middle;
+        height: 42px;
+    }
+    
+    #employee_report .a-IRR-table tbody tr:hover td {
+        background: #f7faff;
+    }
+    
+    #employee_report .emp-name {
+        font-weight: 600;
+    }
+    
+    #employee_report .emp-code-link {
+        font-weight: 600;
+        text-decoration: none;
+    }
+    
+    #employee_report .emp-code-link:hover {
+        text-decoration: underline;
+    }
+    
+    #employee_report .t-Badge {
+        min-width: 62px;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        text-align: center;
+        white-space: nowrap;
+    }
+    
+    // filter ::cue-region
+    
+    #employee_filters .t-Region-title {
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+    
+    #employee_filters .t-Region-header {
+        padding: 10px 16px;
+    }
+    
+    #employee_filters .t-Region-body {
+        padding: 14px 16px 16px;
+    }
+    
+    #employee_filters .filter-btn {
+        min-height: 40px;
+        margin-top: 22px;
+        border-radius: 5px;
+        white-space: nowrap;
+    }
+    
+    /* =====================================================
+       FREEZE EMPLOYEE CODE - FIRST COLUMN
+       ===================================================== */
+    #employee_report .a-IRR-table th:nth-child(1),
+    #employee_report .a-IRR-table td:nth-child(1) {
+        position: sticky;
+        left: 0;
+        min-width: 85px;
+        width: 85px;
+        max-width: 85px;
+        background: #ffffff;
+        z-index: 3;
+    }
+    
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Employee Filters ============================
+  id: 40335280872681316
+  identification: 
+    name: Employee Filters
+    title: Search
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Content Block
+    template-options: 
+    - '#DEFAULT#'
+    - t-ContentBlock--h1
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: employee_filters
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Employee List ===============================
+  id: 65799937283242682
+  identification: 
+    name: Employee List
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select v.*
+      from vw_hr_employee_list v
+      where (:P151_CITY is null
+             or current_city_id = :P151_CITY)
+        and (:P151_PROJECT is null
+             or current_project_id = :P151_PROJECT)
+        and (:P151_STATUS is null
+             or CURRENT_STATUS_CODE = :P151_STATUS)
+        and (:P151_WORKER_TYPE is null
+             or worker_type = :P151_WORKER_TYPE)
+         and (:P151_EMPLOYEE IS NULL OR 
+         EMP_ID = :P151_EMPLOYEE)
+      order by emp_id desc
+    page-items-to-submit: 
+    - P151_EMPLOYEE
+    - P151_CITY
+    - P151_PROJECT
+    - P151_STATUS
+    - P151_WORKER_TYPE
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: employee_report
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 65800036001242682
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 65832669043225544
+      identification: 
+        name: Primary Report
+        alias: 158101
+
+    column-groups: 
+    - # ====== Column Group: Identity ==============================
+      id: 40336466240681328
+      identification: 
+        name: Identity
+
+      layout: 
+        sequence: 10
+
+    - # ====== Column Group: Employment ============================
+      id: 40336571342681329
+      identification: 
+        name: Employment
+
+      layout: 
+        sequence: 20
+
+    - # ====== Column Group: Status / Compliance ===================
+      id: 40336611771681330
+      identification: 
+        name: Status / Compliance
+
+      layout: 
+        sequence: 30
+
+    columns: 
+    - # ====== Column: STATUS_PROJECT_NAME =========================
+      id: 17540856375128539
+      identification: 
+        column-name: STATUS_PROJECT_NAME
+        type: Hidden
+
+      heading: 
+        heading: Status Project Name
+
+      layout: 
+        sequence: 652
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: STATUS_CITY_NAME ============================
+      id: 17540958938128540
+      identification: 
+        column-name: STATUS_CITY_NAME
+        type: Hidden
+
+      heading: 
+        heading: Status City Name
+
+      layout: 
+        sequence: 662
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CUSTODY_BADGE ===============================
+      id: 34882428116319607
+      identification: 
+        column-name: CUSTODY_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Custody
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 552
+        column-alignment: start
+        group: Status / Compliance # 40336611771681330
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: PAY_MODE_NAME ===============================
+      id: 34882504407319608
+      identification: 
+        column-name: PAY_MODE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Pay Mode
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 562
+        column-alignment: start
+        group: Employment # 40336571342681329
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: INSURANCE_BUCKET_BADGE ======================
+      id: 34882649025319609
+      identification: 
+        column-name: INSURANCE_BUCKET_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Insurance
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 572
+        column-alignment: start
+        group: Status / Compliance # 40336611771681330
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: WC_INS_BUCKET_BADGE =========================
+      id: 34882741478319610
+      identification: 
+        column-name: WC_INS_BUCKET_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: WC Insurrance
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 582
+        column-alignment: start
+        group: Status / Compliance # 40336611771681330
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: PHOTO_BLOB ==================================
+      id: 34882826727319611
+      identification: 
+        column-name: PHOTO_BLOB
+        type: Hidden
+
+      heading: 
+        heading: Photo Blob
+
+      layout: 
+        sequence: 592
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: INSURRANCE_BUCKET_TEXT ======================
+      id: 35071870022543824
+      identification: 
+        column-name: INSURRANCE_BUCKET_TEXT
+        type: Hidden
+
+      heading: 
+        heading: Health Insurrance
+
+      layout: 
+        sequence: 602
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: WC_INS_BUCKET_TEXT ==========================
+      id: 35071925421543825
+      identification: 
+        column-name: WC_INS_BUCKET_TEXT
+        type: Hidden
+
+      heading: 
+        heading: WC Inssurance
+
+      layout: 
+        sequence: 612
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_LEGAL_CODE ==========================
+      id: 35133101292790925
+      identification: 
+        column-name: CURRENT_LEGAL_CODE
+        type: Hidden
+
+      heading: 
+        heading: Current Legal Code
+
+      layout: 
+        sequence: 632
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_LEGAL_NAME ==========================
+      id: 35133204446790926
+      identification: 
+        column-name: CURRENT_LEGAL_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Legal Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 642
+        column-alignment: start
+        group: Status / Compliance # 40336611771681330
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DEAL_BY_USER_NAME ===========================
+      id: 39251671748729112
+      identification: 
+        column-name: DEAL_BY_USER_NAME
+        type: Hidden
+
+      heading: 
+        heading: Deal By User Name
+
+      layout: 
+        sequence: 672
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: STATUS_PROJECT_ID ===========================
+      id: 40336282847681326
+      identification: 
+        column-name: STATUS_PROJECT_ID
+        type: Hidden
+
+      heading: 
+        heading: Status Project Id
+
+      layout: 
+        sequence: 682
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: STATUS_CITY_ID ==============================
+      id: 40336396954681327
+      identification: 
+        column-name: STATUS_CITY_ID
+        type: Hidden
+
+      heading: 
+        heading: Status City Id
+
+      layout: 
+        sequence: 692
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_ID ======================================
+      id: 65800648871242496
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 1
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 65801034429242495
+      identification: 
+        column-name: EMP_CODE
+        type: Link
+
+      heading: 
+        heading: Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+        group: Identity # 40336466240681328
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:100:&SESSION.::&DEBUG.::P100_EMP_ID:#EMP_ID#'
+          page: 100 # Employee Profile
+          values: 
+            p100_emp_id: '#EMP_ID#'
+
+        link-text: '#EMP_CODE#'
+        link-attributes: class="emp-code-link"
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: FIRST_NAME ==================================
+      id: 65801446761242494
+      identification: 
+        column-name: FIRST_NAME
+        type: Hidden
+
+      heading: 
+        heading: First Name
+
+      layout: 
+        sequence: 72
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LAST_NAME ===================================
+      id: 65801839998242494
+      identification: 
+        column-name: LAST_NAME
+        type: Hidden
+
+      heading: 
+        heading: Last Name
+
+      layout: 
+        sequence: 82
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: FATHER_NAME =================================
+      id: 65802288212242494
+      identification: 
+        column-name: FATHER_NAME
+        type: Hidden
+
+      heading: 
+        heading: Father Name
+
+      layout: 
+        sequence: 92
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOB =========================================
+      id: 65802662186242494
+      identification: 
+        column-name: DOB
+        type: Hidden
+
+      heading: 
+        heading: Date of Birth
+
+      layout: 
+        sequence: 22
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: FULL_EMPLOYEE_NAME ==========================
+      id: 65803044411242493
+      identification: 
+        column-name: FULL_EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 12
+        column-alignment: start
+        group: Identity # 40336466240681328
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      advanced: 
+        static-id: emp-name
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_INITIALS ================================
+      id: 65803518648242493
+      identification: 
+        column-name: EMP_INITIALS
+        type: Hidden
+
+      heading: 
+        heading: Emp Initials
+
+      layout: 
+        sequence: 102
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: AGE =========================================
+      id: 65803844586242493
+      identification: 
+        column-name: AGE
+        type: Hidden
+
+      heading: 
+        heading: Age
+
+      layout: 
+        sequence: 32
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: NATIONALITY_COUNTRY_ID ======================
+      id: 65804291657242493
+      identification: 
+        column-name: NATIONALITY_COUNTRY_ID
+        type: Hidden
+
+      heading: 
+        heading: Nationality Country Id
+
+      layout: 
+        sequence: 112
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: NATIONALITY =================================
+      id: 65804717616242493
+      identification: 
+        column-name: NATIONALITY
+        type: Plain Text
+
+      heading: 
+        heading: Nationality
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 62
+        column-alignment: start
+        group: Identity # 40336466240681328
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MOBILE ======================================
+      id: 65805084442242492
+      identification: 
+        column-name: MOBILE
+        type: Plain Text
+
+      heading: 
+        heading: Mobile
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 42
+        column-alignment: start
+        group: Identity # 40336466240681328
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMAIL =======================================
+      id: 65805507514242492
+      identification: 
+        column-name: EMAIL
+        type: Plain Text
+
+      heading: 
+        heading: Email
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 52
+        column-alignment: start
+        group: Identity # 40336466240681328
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: JOIN_DATE ===================================
+      id: 65805840137242492
+      identification: 
+        column-name: JOIN_DATE
+        type: Plain Text
+
+      heading: 
+        heading: Join Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 132
+        column-alignment: start
+        group: Employment # 40336571342681329
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: AGREED_PROJECT_ID ===========================
+      id: 65806248861242492
+      identification: 
+        column-name: AGREED_PROJECT_ID
+        type: Hidden
+
+      heading: 
+        heading: Agreed Project Id
+
+      layout: 
+        sequence: 142
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: AGREED_PROJECT ==============================
+      id: 65806671468242492
+      identification: 
+        column-name: AGREED_PROJECT
+        type: Hidden
+
+      heading: 
+        heading: Agreed Project
+
+      layout: 
+        sequence: 152
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: AGREED_CITY_ID ==============================
+      id: 65807048523242491
+      identification: 
+        column-name: AGREED_CITY_ID
+        type: Hidden
+
+      heading: 
+        heading: Agreed City Id
+
+      layout: 
+        sequence: 162
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: AGREED_CITY =================================
+      id: 65807497831242491
+      identification: 
+        column-name: AGREED_CITY
+        type: Hidden
+
+      heading: 
+        heading: Agreed City
+
+      layout: 
+        sequence: 172
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: JOB_ID ======================================
+      id: 65807909695242491
+      identification: 
+        column-name: JOB_ID
+        type: Hidden
+
+      heading: 
+        heading: Job Id
+
+      layout: 
+        sequence: 182
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: JOB_NAME ====================================
+      id: 65808284274242491
+      identification: 
+        column-name: JOB_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Job Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 192
+        column-alignment: start
+        group: Employment # 40336571342681329
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REFERENCE_SOURCE ============================
+      id: 65808683279242490
+      identification: 
+        column-name: REFERENCE_SOURCE
+        type: Hidden
+
+      heading: 
+        heading: Reference Source
+
+      layout: 
+        sequence: 202
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REFERRED_BY_TEXT ============================
+      id: 65809056097242490
+      identification: 
+        column-name: REFERRED_BY_TEXT
+        type: Hidden
+
+      heading: 
+        heading: Referred By Text
+
+      layout: 
+        sequence: 212
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DEAL_BY_USER ================================
+      id: 65809506100242490
+      identification: 
+        column-name: DEAL_BY_USER
+        type: Hidden
+
+      heading: 
+        heading: Deal By User
+
+      layout: 
+        sequence: 222
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: HIRE_NOTES ==================================
+      id: 65809888415242490
+      identification: 
+        column-name: HIRE_NOTES
+        type: Hidden
+
+      heading: 
+        heading: Hire Notes
+
+      layout: 
+        sequence: 232
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: WORKER_TYPE =================================
+      id: 65810317450242490
+      identification: 
+        column-name: WORKER_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Worker Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 242
+        column-alignment: start
+        group: Employment # 40336571342681329
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: SUPPLIER_ID =================================
+      id: 65810687537242489
+      identification: 
+        column-name: SUPPLIER_ID
+        type: Hidden
+
+      heading: 
+        heading: Supplier Id
+
+      layout: 
+        sequence: 252
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: SUPPLIER_NAME ===============================
+      id: 65811100027242489
+      identification: 
+        column-name: SUPPLIER_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Supplier Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 262
+        column-alignment: start
+        group: Employment # 40336571342681329
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CONTRACT_REF ================================
+      id: 65811488865242489
+      identification: 
+        column-name: CONTRACT_REF
+        type: Hidden
+
+      heading: 
+        heading: Contract Ref
+
+      layout: 
+        sequence: 272
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: HAS_PHOTO ===================================
+      id: 65811901777242489
+      identification: 
+        column-name: HAS_PHOTO
+        type: Hidden
+
+      heading: 
+        heading: Has Photo
+
+      layout: 
+        sequence: 282
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_PROJECT_ID ==========================
+      id: 65812267893242489
+      identification: 
+        column-name: CURRENT_PROJECT_ID
+        type: Hidden
+
+      heading: 
+        heading: Current Project Id
+
+      layout: 
+        sequence: 292
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_PROJECT =============================
+      id: 65812689536242488
+      identification: 
+        column-name: CURRENT_PROJECT
+        type: Plain Text
+
+      heading: 
+        heading: Current Project
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 302
+        column-alignment: start
+        group: Employment # 40336571342681329
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: false
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_CITY_ID =============================
+      id: 65813033225242488
+      identification: 
+        column-name: CURRENT_CITY_ID
+        type: Hidden
+
+      heading: 
+        heading: Current City Id
+
+      layout: 
+        sequence: 312
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_CITY ================================
+      id: 65813478246242487
+      identification: 
+        column-name: CURRENT_CITY
+        type: Plain Text
+
+      heading: 
+        heading: Current City
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 322
+        column-alignment: start
+        group: Employment # 40336571342681329
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LAST_PROJECT_ID =============================
+      id: 65813930685242487
+      identification: 
+        column-name: LAST_PROJECT_ID
+        type: Hidden
+
+      heading: 
+        heading: Last Project Id
+
+      layout: 
+        sequence: 332
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LAST_PROJECT ================================
+      id: 65814291309242487
+      identification: 
+        column-name: LAST_PROJECT
+        type: Hidden
+
+      heading: 
+        heading: Last Project
+
+      layout: 
+        sequence: 342
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LAST_CITY_ID ================================
+      id: 65814670995242487
+      identification: 
+        column-name: LAST_CITY_ID
+        type: Hidden
+
+      heading: 
+        heading: Last City Id
+
+      layout: 
+        sequence: 352
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LAST_CITY ===================================
+      id: 65815108774242486
+      identification: 
+        column-name: LAST_CITY
+        type: Hidden
+
+      heading: 
+        heading: Last City
+
+      layout: 
+        sequence: 362
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DISPLAY_CURRENT_PROJECT =====================
+      id: 65815463839242486
+      identification: 
+        column-name: DISPLAY_CURRENT_PROJECT
+        type: Hidden
+
+      heading: 
+        heading: Working Project
+
+      layout: 
+        sequence: 372
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DISPLAY_CURRENT_CITY ========================
+      id: 65815930372242486
+      identification: 
+        column-name: DISPLAY_CURRENT_CITY
+        type: Hidden
+
+      heading: 
+        heading: Working City
+
+      layout: 
+        sequence: 382
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DISPLAY_LAST_PROJECT ========================
+      id: 65816323263242486
+      identification: 
+        column-name: DISPLAY_LAST_PROJECT
+        type: Hidden
+
+      heading: 
+        heading: Last Project
+
+      layout: 
+        sequence: 392
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DISPLAY_LAST_CITY ===========================
+      id: 65816674000242486
+      identification: 
+        column-name: DISPLAY_LAST_CITY
+        type: Hidden
+
+      heading: 
+        heading: Last City
+
+      layout: 
+        sequence: 402
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_STATUS_CODE =========================
+      id: 65817120933242485
+      identification: 
+        column-name: CURRENT_STATUS_CODE
+        type: Hidden
+
+      heading: 
+        heading: Current Status Code
+
+      layout: 
+        sequence: 412
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_STATUS_NAME =========================
+      id: 65817497110242485
+      identification: 
+        column-name: CURRENT_STATUS_NAME
+        type: Hidden
+
+      heading: 
+        heading: Working Status
+
+      layout: 
+        sequence: 422
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: STATUS_DISPLAY_TEXT =========================
+      id: 65817882402242485
+      identification: 
+        column-name: STATUS_DISPLAY_TEXT
+        type: Hidden
+
+      heading: 
+        heading: Status Display Text
+
+      layout: 
+        sequence: 432
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: STATUS_BADGE_TEXT ===========================
+      id: 65818231807242485
+      identification: 
+        column-name: STATUS_BADGE_TEXT
+        type: Plain Text
+
+      heading: 
+        heading: Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 442
+        column-alignment: start
+        group: Status / Compliance # 40336611771681330
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+page-items: 
+- # ====== Page Item: P151_EMPLOYEE ============================
+  id: 40335304663681317
+  identification: 
+    name: P151_EMPLOYEE
+    type: Popup LOV
+
+  label: 
+    label: Employee
+    alignment: Left
+
+  settings: 
+    display-as: Inline Popup
+    initial-fetch: Automatic
+    manual-entry: false
+    fetch-on-search: false
+
+  search: 
+    match-type: Contains
+    case-sensitive: false
+    minimum-characters: 0
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Employee Filters # 40335280872681316
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 4
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: HR.EMPLOYEE_LOV # 34519350958620461
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P151_STATUS ==============================
+  id: 40335493450681318
+  identification: 
+    name: P151_STATUS
+    type: Select List
+
+  label: 
+    label: Status
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: Employee Filters # 40335280872681316
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select 
+             STATUS_NAME,
+             STATUS_CODE
+      from "HR_STATUS_MASTER" a
+      where status_nature = 'EMPLOYEE'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P151_PROJECT =============================
+  id: 40335681190681320
+  identification: 
+    name: P151_PROJECT
+    type: Select List
+
+  label: 
+    label: Project
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Employee Filters # 40335280872681316
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: SECURE_PROEJECTS_LOV # 15884985584248416
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P151_WORKER_TYPE =========================
+  id: 40335798316681321
+  identification: 
+    name: P151_WORKER_TYPE
+    type: Select List
+
+  label: 
+    label: Worker Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 50
+    region: Employee Filters # 40335280872681316
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Direct;Direct,Subcontract;SUBCONTRACT'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P151_CITY ================================
+  id: 40335942694681323
+  identification: 
+    name: P151_CITY
+    type: Select List
+
+  label: 
+    label: City
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: Employee Filters # 40335280872681316
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: REF_CITIES.CITY_NAME # 13534316622988223
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: APPLY_FILTER ================================
+  id: 40336088460681324
+  identification: 
+    button-name: APPLY_FILTER
+    label: Apply Filter
+
+  layout: 
+    sequence: 80
+    region: Employee Filters # 40335280872681316
+    slot: CHANGE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    css-classes: 
+    - filter-btn
+    icon: fa-filter
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: CLEAR_FILTER ================================
+  id: 40336196015681325
+  identification: 
+    button-name: CLEAR_FILTER
+    label: Reset
+
+  layout: 
+    sequence: 90
+    region: Employee Filters # 40335280872681316
+    slot: CHANGE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    css-classes: 
+    - filter-btn
+    icon: fa-undo
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:151:&SESSION.::&DEBUG.:151::'
+      page: 151 # Employee List
+      clear-cache: 151
+
+    warn-on-unsaved-changes: Do Not Check
+
+processes: 
+- # ====== Process: Set Page Access ============================
+  id: 17666093056692944
+  identification: 
+    name: Set Page Access
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: ":P0_PERM_CODE := 'HR_EMP_VIEW';"
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+  security: 
+    authorization-scheme: HAS_PAGE_PERMISSION # 16701069731509558
+

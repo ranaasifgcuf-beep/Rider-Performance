@@ -1,0 +1,945 @@
+---
+# ====== Page: Loan Statement ================================
+id: 174
+identification: 
+  name: Loan Statement
+  alias: LOAN-STATEMENT
+  title: Loan Statement
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    .stmt-wrap {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-left: 4px solid #2563eb;
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    }
+    
+    .stmt-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+    
+    .stmt-title {
+        font-size: 22px;
+        font-weight: 800;
+        color: #0f172a;
+    }
+    
+    .stmt-sub {
+        color: #64748b;
+        font-size: 12px;
+        margin-top: 3px;
+    }
+    
+    .stmt-balance {
+        background: #fff7ed;
+        border-radius: 10px;
+        padding: 10px 14px;
+        text-align: right;
+    }
+    
+    .stmt-balance-label {
+        font-size: 11px;
+        color: #9a3412;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+    
+    .stmt-balance-value {
+        color: #9a3412;
+        font-size: 20px;
+        font-weight: 800;
+    }
+    
+    .stmt-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(130px, 1fr));
+        gap: 10px;
+    }
+    
+    .stmt-cell {
+        background: #f8fafc;
+        border: 1px solid #eef2f7;
+        border-radius: 9px;
+        padding: 10px;
+    }
+    
+    .stmt-cell span,
+    .stmt-remarks span {
+        display: block;
+        font-size: 10px;
+        text-transform: uppercase;
+        color: #64748b;
+        font-weight: 700;
+    }
+    
+    .stmt-cell b {
+        display: block;
+        margin-top: 4px;
+        font-size: 13px;
+        color: #0f172a;
+    }
+    
+    .stmt-cell.amount b {
+        color: #9a3412;
+    }
+    
+    .stmt-remarks {
+        margin-top: 12px;
+        background: #f8fafc;
+        border: 1px solid #eef2f7;
+        border-radius: 9px;
+        padding: 10px;
+    }
+    
+    #loan_statement_ledger th {
+        background: #f8fafc;
+        color: #334155;
+        font-weight: 700;
+    }
+    
+    #loan_statement_ledger td {
+        vertical-align: middle;
+    }
+    
+    @media print {
+        .t-Header,
+        .t-Body-nav,
+        .t-Button,
+        .t-Footer,
+        .a-IRR-controlGroup,
+        .u-Processing {
+            display: none !important;
+        }
+    
+        body {
+            background: #ffffff !important;
+        }
+    
+        .t-Body-content,
+        .t-Body-mainContent {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    
+        .stmt-wrap {
+            box-shadow: none !important;
+        }
+    }
+    
+    .stmt-company {
+        text-align: center;
+        margin-bottom: 16px;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 12px;
+    }
+    
+    .stmt-company-name {
+        font-size: 18px;
+        font-weight: 800;
+        color: #0f172a;
+    }
+    
+    .stmt-company-sub {
+        font-size: 12px;
+        color: #64748b;
+        margin-top: 3px;
+    }
+    
+    #loan_statement_ledger .t-Report-wrap,
+    #loan_statement_ledger .t-Report,
+    #loan_statement_ledger .t-Report-report {
+        width: 100% !important;
+    }
+    
+    #loan_statement_ledger table {
+        width: 100% !important;
+        table-layout: fixed;
+    }
+    
+    #loan_statement_ledger th,
+    #loan_statement_ledger td {
+        padding: 10px 12px !important;
+        vertical-align: middle;
+    }
+    
+    #loan_statement_ledger th {
+        background: #f8fafc !important;
+        color: #334155 !important;
+        font-weight: 700 !important;
+    }
+    
+    #loan_statement_ledger td:nth-child(5),
+    #loan_statement_ledger td:nth-child(6),
+    #loan_statement_ledger td:nth-child(7) {
+        font-weight: 700;
+        color: #9a3412;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Loan Statement Header =======================
+  id: 37246420473914244
+  identification: 
+    name: Loan Statement Header
+    type: Dynamic Content
+
+  source: 
+    language: PL/SQL
+    pl/sql-function-body-returning-a-clob: |
+      declare
+          l_html clob;
+      
+          function esc(p_text varchar2) return varchar2 is
+          begin
+              return apex_escape.html(nvl(p_text, '-'));
+          end;
+      
+          function money(p_amount number) return varchar2 is
+          begin
+              return 'AED ' || trim(to_char(nvl(p_amount,0), '999G999G999G990D00'));
+          end;
+      begin
+          for r in (
+              select loan_no,
+                     emp_code,
+                     employee_name,
+                    -- loan_type,
+                     --source_type,
+                     loan_amount,
+                     emi_amount,
+                     paid_amount,
+                     waived_amount,
+                     adjustment_amount,
+                     reversed_amount,
+                     bad_debt_amount,
+                     balance_amount,
+                     approval_status,
+                     status,
+                     issue_dt,
+                     start_month
+                    -- remarks
+                from hr_emp_loan_v
+               where loan_id = :P174_LOAN_ID
+          )
+          loop
+              l_html :=
+              '<div class="stmt-wrap">' ||
+      
+              '<div class="stmt-header">' ||
+              '  <div>' ||
+              '    <div class="stmt-title">Loan Statement</div>' ||
+              '    <div class="stmt-sub">' || esc(r.loan_no) || ' | ' ||
+                   esc(r.emp_code || ' - ' || r.employee_name) || '</div>' ||
+              '  </div>' ||
+              '  <div class="stmt-balance">' ||
+              '    <div class="stmt-balance-label">Outstanding Balance</div>' ||
+              '    <div class="stmt-balance-value">' || money(r.balance_amount) || '</div>' ||
+              '  </div>' ||
+              '</div>' ||
+      
+              '<div class="stmt-grid">' ||
+      
+            --  '<div class="stmt-cell"><span>Loan Type</span><b>' || esc(r.loan_type) || '</b></div>' ||
+           --   '<div class="stmt-cell"><span>Source</span><b>' || esc(r.source_type) || '</b></div>' ||
+              '<div class="stmt-cell"><span>Issue Date</span><b>' || esc(to_char(r.issue_dt,'DD-MON-YYYY')) || '</b></div>' ||
+              '<div class="stmt-cell"><span>Recovery Start</span><b>' || esc(to_char(r.start_month,'MON-YYYY')) || '</b></div>' ||
+      
+              '<div class="stmt-cell amount"><span>Loan Amount</span><b>' || money(r.loan_amount) || '</b></div>' ||
+              '<div class="stmt-cell amount"><span>EMI Amount</span><b>' || money(r.emi_amount) || '</b></div>' ||
+              '<div class="stmt-cell amount"><span>Paid</span><b>' || money(r.paid_amount) || '</b></div>' ||
+              '<div class="stmt-cell amount"><span>Waived</span><b>' || money(r.waived_amount) || '</b></div>' ||
+              '<div class="stmt-cell amount"><span>Adjustment</span><b>' || money(r.adjustment_amount) || '</b></div>' ||
+              '<div class="stmt-cell amount"><span>Bad Debt</span><b>' || money(r.bad_debt_amount) || '</b></div>' ||
+              '<div class="stmt-cell"><span>Approval Status</span><b>' || esc(r.approval_status) || '</b></div>' ||
+              '<div class="stmt-cell"><span>Loan Status</span><b>' || esc(r.status) || '</b></div>' ||
+      
+              '</div>';
+      
+              /*if r.remarks is not null then
+                  l_html := l_html ||
+                  '<div class="stmt-remarks">' ||
+                  '<span>Remarks</span>' ||
+                  '<div>' || esc(r.remarks) || '</div>' ||
+                  '</div>';
+              end if;*/
+      
+              l_html := l_html || '</div>';
+          end loop;
+      
+          htp.p(nvl(l_html, '<div class="stmt-wrap">Loan not found.</div>'));
+      end;
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    performance: 
+      lazy-loading: false
+
+- # ====== Region: Loan Ledger / Statement =====================
+  id: 37247089213914250
+  identification: 
+    name: Loan Ledger / Statement
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      with base as (
+          select l.loan_id,
+                 l.issue_dt txn_date,
+                 0 sort_seq,
+                 0 loan_txn_id,
+                 'LOAN_ISSUE' txn_type,
+                 'Loan Issued' description,
+                 l.loan_amount effect_amount,
+                 null reference_no,
+                 null remarks
+            from hr_emp_loans l
+           where l.loan_id = :P174_LOAN_ID
+      
+          union all
+      
+          select t.loan_id,
+                 t.txn_date,
+                 1 sort_seq,
+                 t.loan_txn_id,
+                 t.txn_type,
+                 case t.txn_type
+                     when 'MANUAL_PAYMENT' then 'Payment Received'
+                     when 'PAYROLL_DEDUCTION' then 'Payroll Deduction'
+                     when 'WAIVER' then 'Waiver'
+                     when 'ADJUSTMENT' then 'Adjustment'
+                     when 'REVERSAL' then 'Reversal'
+                     when 'BAD_DEBT_WRITE_OFF' then 'Bad Debt Write-off'
+                     else t.txn_type
+                 end description,
+      
+                 case
+                     when t.txn_type in ('MANUAL_PAYMENT','PAYROLL_DEDUCTION','WAIVER','BAD_DEBT_WRITE_OFF') then
+                          -abs(nvl(t.amount,0))
+      
+                     when t.txn_type = 'ADJUSTMENT' then
+                          nvl(t.amount,0)
+      
+                     when t.txn_type = 'REVERSAL' then
+                          case
+                              when ot.txn_type in ('MANUAL_PAYMENT','PAYROLL_DEDUCTION','WAIVER','BAD_DEBT_WRITE_OFF') then
+                                  abs(nvl(ot.amount, t.amount))
+                              when ot.txn_type = 'ADJUSTMENT' then
+                                  -nvl(ot.amount, t.amount)
+                              else
+                                  nvl(t.amount,0)
+                          end
+                 end effect_amount,
+      
+                 t.reference_no,
+                 t.remarks
+            from hr_emp_loan_txns t
+            left join hr_emp_loan_txns ot
+              on ot.loan_txn_id = t.reversal_of_txn_id
+           where t.loan_id = :P174_LOAN_ID
+             and t.approval_status = 'APPROVED'
+      )
+      select to_char(txn_date, 'DD-MON-YYYY') txn_date,
+             case txn_type
+                 when 'LOAN_ISSUE' then 'Loan Issue'
+                 when 'MANUAL_PAYMENT' then 'Payment'
+                 when 'PAYROLL_DEDUCTION' then 'Payroll Deduction'
+                 when 'WAIVER' then 'Waiver'
+                 when 'ADJUSTMENT' then 'Adjustment'
+                 when 'REVERSAL' then 'Reversal'
+                 when 'BAD_DEBT_WRITE_OFF' then 'Bad Debt Write-off'
+                 else txn_type
+             end txn_type,
+             description,
+             reference_no,
+      
+             case
+                 when effect_amount > 0 then
+                     'AED ' || trim(to_char(effect_amount, '999G999G999G990D00'))
+             end debit,
+      
+             case
+                 when effect_amount < 0 then
+                     'AED ' || trim(to_char(abs(effect_amount), '999G999G999G990D00'))
+             end credit,
+      
+             'AED ' ||
+             trim(to_char(
+                 sum(effect_amount) over (
+                     order by txn_date, sort_seq, loan_txn_id
+                     rows between unbounded preceding and current row
+                 ),
+                 '999G999G999G990D00'
+             )) running_balance,
+      
+             remarks
+      from base
+      order by txn_date, sort_seq, loan_txn_id;
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: loan_statement_ledger
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: TXN_DATE ====================================
+    id: 37294452190639601
+    identification: 
+      column-name: TXN_DATE
+      type: Plain Text
+
+    heading: 
+      heading: Date
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TXN_TYPE ====================================
+    id: 37294530784639602
+    identification: 
+      column-name: TXN_TYPE
+      type: Plain Text
+
+    heading: 
+      heading: Type
+      alignment: start
+
+    layout: 
+      sequence: 20
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DESCRIPTION =================================
+    id: 37294658287639603
+    identification: 
+      column-name: DESCRIPTION
+      type: Plain Text
+
+    heading: 
+      heading: Description
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REFERENCE_NO ================================
+    id: 37294763214639604
+    identification: 
+      column-name: REFERENCE_NO
+      type: Plain Text
+
+    heading: 
+      heading: Reference
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DEBIT =======================================
+    id: 37294827942639605
+    identification: 
+      column-name: DEBIT
+      type: Plain Text
+
+    heading: 
+      heading: Debit
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CREDIT ======================================
+    id: 37294947766639606
+    identification: 
+      column-name: CREDIT
+      type: Plain Text
+
+    heading: 
+      heading: Credit
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RUNNING_BALANCE =============================
+    id: 37295028265639607
+    identification: 
+      column-name: RUNNING_BALANCE
+      type: Plain Text
+
+    heading: 
+      heading: Balance
+      alignment: start
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REMARKS =====================================
+    id: 37295155056639608
+    identification: 
+      column-name: REMARKS
+      type: Plain Text
+
+    heading: 
+      heading: Remarks
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Company Name ================================
+  id: 37295380761639610
+  identification: 
+    name: Company Name
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div class="stmt-company">
+        <div class="stmt-company-name">AL NAJAH ALSAREEA DELIVERY SERVICES</div>
+        <div class="stmt-company-sub">Employee Loan Statement</div>
+      </div>
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P174_LOAN_ID =============================
+  id: 37246109135914241
+  identification: 
+    name: P174_LOAN_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PRINT =======================================
+  id: 37246592624914245
+  identification: 
+    button-name: PRINT
+    label: Print
+
+  layout: 
+    sequence: 30
+    region: Loan Statement Header # 37246420473914244
+    slot: ABOVE_BOX
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    horizontal-alignment: Right
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-print
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: BACK_TO_LOAN ================================
+  id: 37246961674914249
+  identification: 
+    button-name: BACK_TO_LOAN
+    label: Back To Loan
+
+  layout: 
+    sequence: 40
+    region: Loan Statement Header # 37246420473914244
+    slot: ABOVE_BOX
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    horizontal-alignment: Right
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:171:&SESSION.::&DEBUG.::P171_LOAN_ID:&P174_LOAN_ID.'
+      page: 171 # Loan Detail
+      values: 
+        p171_loan_id: '&P174_LOAN_ID.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: Print ===============================
+  id: 37246649843914246
+  identification: 
+    name: Print
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: PRINT # 37246592624914245
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 37246751705914247
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: window.print();
+
+    execution: 
+      sequence: 10
+      event: Print # 37246649843914246
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

@@ -1,0 +1,1432 @@
+---
+# ====== Page: SIM Request Worklist ==========================
+id: 329
+identification: 
+  name: SIM Request Worklist
+  alias: SIM-REQUEST-WORKLIST
+  title: SIM Request Worklist
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    .sim-action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 30px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        background: #ffffff;
+        color: #374151;
+        text-decoration: none;
+        margin-right: 4px;
+    }
+    
+    .sim-action-btn:hover {
+        background: #f3f4f6;
+        text-decoration: none;
+    }
+    
+    .sim-action-danger {
+        color: #dc2626;
+        border-color: #fecaca;
+    }
+    
+    .a-IRR-table td {
+        vertical-align: middle;
+    }
+    
+    .t-Badge {
+        font-weight: 700;
+        border-radius: 8px;
+        padding: 5px 9px;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: SIM Request Worklist ========================
+  id: 42942717692609424
+  identification: 
+    name: SIM Request Worklist
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select sr.request_id,
+             sr.emp_id,
+      
+             e.emp_code,
+             e.full_employee_name as employee_name,
+             e.job_name,
+             e.worker_type,
+             e.supplier_name,
+      
+             p.project_name as requested_project,
+             c.city_name    as requested_city,
+      
+             sr.request_type,
+             sr.request_status,
+             sr.priority,
+      
+             case sr.priority
+                 when 'URGENT' then
+                     '<span class="t-Badge t-Badge--danger">Urgent</span>'
+                 when 'HIGH' then
+                     '<span class="t-Badge t-Badge--warning">High</span>'
+                 when 'NORMAL' then
+                     '<span class="t-Badge t-Badge--success">Normal</span>'
+                 else
+                     '<span class="t-Badge t-Badge--normal">Low</span>'
+             end as priority_badge,
+      
+             case sr.request_status
+                 when 'OPEN' then
+                     '<span class="t-Badge t-Badge--warning">Open</span>'
+                 when 'IN_PROGRESS' then
+                     '<span class="t-Badge t-Badge--normal">In Progress</span>'
+                 else
+                     '<span class="t-Badge t-Badge--success">' || sr.request_status || '</span>'
+             end as status_badge,
+      
+             to_char(sr.requested_dt, 'DD-MON-YYYY HH24:MI') as requested_dt,
+             sr.requested_by,
+             to_char(sr.required_by_dt, 'DD-MON-YYYY') as required_by_dt,
+      
+             case
+                 when sr.current_sim_id is not null then
+                     cs.mobile_no
+                 else
+                     null
+             end as current_sim_no,
+      
+             sr.reason_code,
+             sr.request_remarks,
+      
+             ------------------------------------------------------------------
+             -- Action: Mark In Progress
+             ------------------------------------------------------------------
+             case
+                 when sr.request_status = 'OPEN' then
+                     '<a href="javascript:void(0);" ' ||
+                     'class="sim-action-btn js-sim-inprogress" ' ||
+                     'data-request-id="' || sr.request_id || '" ' ||
+                     'title="Mark In Progress">' ||
+                     '<span class="fa fa-play" aria-hidden="true"></span>' ||
+                     '</a>'
+                 else
+                     null
+             end as in_progress_action,
+      
+             ------------------------------------------------------------------
+             -- Action: Assign SIM
+             ------------------------------------------------------------------
+             case
+                 when sr.request_status in ('OPEN','IN_PROGRESS')
+                  and sr.request_type <> 'RETURN_REQUEST' then
+                     '<a href="' ||
+                     apex_util.prepare_url(
+                         'f?p=' || :APP_ID || ':330:' || :APP_SESSION ||
+                         '::NO::P330_REQUEST_ID,P330_EMP_ID,P330_REQUEST_TYPE,P330_RETURN_PAGE:' ||
+                         sr.request_id || ',' || sr.emp_id || ',' || sr.request_type || ',329'
+                     ) ||
+                     '" class="sim-action-btn" title="Assign SIM">' ||
+                     '<span class="fa fa-mobile" aria-hidden="true"></span>' ||
+                     '</a>'
+                 else
+                     null
+             end as assign_action,
+      
+             ------------------------------------------------------------------
+             -- Action: Return SIM
+             ------------------------------------------------------------------
+             case
+                 when sr.request_status in ('OPEN','IN_PROGRESS')
+                  and sr.request_type = 'RETURN_REQUEST' then
+                     '<a href="' ||
+                     apex_util.prepare_url(
+                         'f?p=' || :APP_ID || ':330:' || :APP_SESSION ||
+                         '::NO::P330_REQUEST_ID,P330_EMP_ID,P330_REQUEST_TYPE,P330_CURRENT_SIM_ID,P330_RETURN_PAGE:' ||
+                         sr.request_id || ',' || sr.emp_id || ',' || sr.request_type || ',' || sr.current_sim_id || ',329'
+                     ) ||
+                     '" class="sim-action-btn" title="Return SIM">' ||
+                     '<span class="fa fa-undo" aria-hidden="true"></span>' ||
+                     '</a>'
+                 else
+                     null
+             end as return_action,
+      
+             ------------------------------------------------------------------
+             -- Action: Reject
+             ------------------------------------------------------------------
+             case
+                 when sr.request_status in ('OPEN','IN_PROGRESS') then
+                     '<a href="' ||
+                     apex_util.prepare_url(
+                         'f?p=' || :APP_ID || ':332:' || :APP_SESSION ||
+                         '::NO::P332_REQUEST_ID:' || sr.request_id
+                     ) ||
+                     '" class="sim-action-btn sim-action-danger" title="Reject Request">' ||
+                     '<span class="fa fa-times" aria-hidden="true"></span>' ||
+                     '</a>'
+                 else
+                     null
+             end as reject_action
+      
+      from hr_sim_requests sr
+      
+      join vw_hr_employee_list e
+        on e.emp_id = sr.emp_id
+      
+      left join hr_projects p
+        on p.project_id = sr.requested_project_id
+      
+      left join ref_cities c
+        on c.city_id = sr.requested_city_id
+      
+      left join fleet_sims cs
+        on cs.sim_id = sr.current_sim_id
+      
+      where sr.request_status in ('OPEN','IN_PROGRESS')
+      
+      order by case sr.priority
+                   when 'URGENT' then 1
+                   when 'HIGH' then 2
+                   when 'NORMAL' then 3
+                   else 4
+               end,
+               sr.requested_dt;
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: EMPLOYEE_REQUEST_IR
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 42942815132609424
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 42963691906660771
+      identification: 
+        name: Primary Report
+        alias: 429637
+
+    columns: 
+    - # ====== Column: REQUEST_ID ==================================
+      id: 42943552932609431
+      identification: 
+        column-name: REQUEST_ID
+        type: Hidden
+
+      heading: 
+        heading: Request Id
+
+      layout: 
+        sequence: 170
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_ID ======================================
+      id: 42943999711609431
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 180
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 42944364215609432
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Emp Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 42944732387609432
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: JOB_NAME ====================================
+      id: 42945180697609433
+      identification: 
+        column-name: JOB_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Job Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 190
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: WORKER_TYPE =================================
+      id: 42945532265609433
+      identification: 
+        column-name: WORKER_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Worker Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 200
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: SUPPLIER_NAME ===============================
+      id: 42945997350609434
+      identification: 
+        column-name: SUPPLIER_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Supplier Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 210
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUESTED_PROJECT ===========================
+      id: 42946385398609434
+      identification: 
+        column-name: REQUESTED_PROJECT
+        type: Plain Text
+
+      heading: 
+        heading: Requested Project
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUESTED_CITY ==============================
+      id: 42946746711609435
+      identification: 
+        column-name: REQUESTED_CITY
+        type: Plain Text
+
+      heading: 
+        heading: Requested City
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 80
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUEST_TYPE ================================
+      id: 42947110399609435
+      identification: 
+        column-name: REQUEST_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Request Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUEST_STATUS ==============================
+      id: 42947536965609436
+      identification: 
+        column-name: REQUEST_STATUS
+        type: Hidden
+
+      heading: 
+        heading: Request Status
+
+      layout: 
+        sequence: 220
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PRIORITY ====================================
+      id: 42947938251609436
+      identification: 
+        column-name: PRIORITY
+        type: Hidden
+
+      heading: 
+        heading: Priority
+
+      layout: 
+        sequence: 230
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PRIORITY_BADGE ==============================
+      id: 42948372448609437
+      identification: 
+        column-name: PRIORITY_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Priority Badge
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: STATUS_BADGE ================================
+      id: 42948760122609437
+      identification: 
+        column-name: STATUS_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Status Badge
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: REQUESTED_DT ================================
+      id: 42949101063609437
+      identification: 
+        column-name: REQUESTED_DT
+        type: Plain Text
+
+      heading: 
+        heading: Requested Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUESTED_BY ================================
+      id: 42949572306609438
+      identification: 
+        column-name: REQUESTED_BY
+        type: Plain Text
+
+      heading: 
+        heading: Requested By
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 110
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUIRED_BY_DT ==============================
+      id: 42949926349609438
+      identification: 
+        column-name: REQUIRED_BY_DT
+        type: Plain Text
+
+      heading: 
+        heading: Required By Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_SIM_NO ==============================
+      id: 42950387771609439
+      identification: 
+        column-name: CURRENT_SIM_NO
+        type: Plain Text
+
+      heading: 
+        heading: Current Sim No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REASON_CODE =================================
+      id: 42950772195609439
+      identification: 
+        column-name: REASON_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Reason Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 240
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUEST_REMARKS =============================
+      id: 42951185790609440
+      identification: 
+        column-name: REQUEST_REMARKS
+        type: Plain Text
+
+      heading: 
+        heading: Request Remarks
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 120
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: IN_PROGRESS_ACTION ==========================
+      id: 42951581012609440
+      identification: 
+        column-name: IN_PROGRESS_ACTION
+        type: Plain Text
+
+      heading: 
+        heading: In Progress Action
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 130
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: ASSIGN_ACTION ===============================
+      id: 42951970224609441
+      identification: 
+        column-name: ASSIGN_ACTION
+        type: Plain Text
+
+      heading: 
+        heading: Assign Action
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 140
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: RETURN_ACTION ===============================
+      id: 42952367605609441
+      identification: 
+        column-name: RETURN_ACTION
+        type: Plain Text
+
+      heading: 
+        heading: Return Action
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 150
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: REJECT_ACTION ===============================
+      id: 42952785225609442
+      identification: 
+        column-name: REJECT_ACTION
+        type: Plain Text
+
+      heading: 
+        heading: Reject Action
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 160
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: SIM Request Worklist
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+page-items: 
+- # ====== Page Item: P329_SELECTED_REQUEST_ID =================
+  id: 41409500907853045
+  identification: 
+    name: P329_SELECTED_REQUEST_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: SIM Request Worklist # 42942717692609424
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: Create_REQUEST ==============================
+  id: 43070750435428307
+  identification: 
+    button-name: Create_REQUEST
+    label: Create Request
+
+  layout: 
+    sequence: 20
+    region: SIM Request Worklist # 42942717692609424
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-plus-square
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:328:&SESSION.::&DEBUG.:::'
+      page: 328 # SIM Request
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: Mark SIM Request In Progress ========
+  id: 41409676527853046
+  identification: 
+    name: Mark SIM Request In Progress
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: jQuery Selector
+    jquery-selector: .js-sim-inprogress
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 41409762930853047
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        var reqId = $(this.triggeringElement).data("request-id");
+        
+        apex.message.confirm("Mark this SIM request as In Progress?", function(ok) {
+            if (ok) {
+                apex.item("P329_SELECTED_REQUEST_ID").setValue(reqId);
+                apex.submit({ request: "SIM_IN_PROGRESS", showWait: true });
+            }
+        });
+
+    execution: 
+      sequence: 10
+      event: Mark SIM Request In Progress # 41409676527853046
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New =================================
+  id: 43071085138428310
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: jQuery Selector
+    jquery-selector: body
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 43071144418428311
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: apex.region("EMPLOYEE_REQUEST_IR").refresh();
+
+    execution: 
+      sequence: 10
+      event: New # 43071085138428310
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: SIM In Progress ============================
+  id: 41409816009853048
+  identification: 
+    name: SIM In Progress
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          hr_sim_req_pkg.mark_in_progress(
+              p_request_id => :P329_SELECTED_REQUEST_ID,
+              p_remarks    => 'Marked In Progress from SIM request worklist'
+          );
+      
+          apex_application.g_print_success_message :=
+              'SIM request marked In Progress successfully.';
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request = Value
+    value: SIM_IN_PROGRESS
+

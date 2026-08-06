@@ -1,0 +1,872 @@
+---
+# ====== Page: Employee Change Pay Method ====================
+id: 112
+identification: 
+  name: Employee Change Pay Method
+  alias: EMPLOYEE-CHANGE-PAY-METHOD
+  title: Employee Change Pay Method
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Change Status ===============================
+  id: 32155793555720815
+  identification: 
+    name: Change Status
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P112_BANK ================================
+  id: 16018411154164941
+  identification: 
+    name: P112_BANK
+    type: Text Field
+
+  label: 
+    label: Bank
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 50
+    region: Change Status # 32155793555720815
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P112_ACCOUNT =============================
+  id: 16018549911164942
+  identification: 
+    name: P112_ACCOUNT
+    type: Text Field
+
+  label: 
+    label: Title
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 60
+    region: Change Status # 32155793555720815
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P112_IBAN ================================
+  id: 16018602090164943
+  identification: 
+    name: P112_IBAN
+    type: Text Field
+
+  label: 
+    label: IBAN
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 70
+    region: Change Status # 32155793555720815
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P112_CARD ================================
+  id: 16018748682164944
+  identification: 
+    name: P112_CARD
+    type: Text Field
+
+  label: 
+    label: Card No
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 80
+    region: Change Status # 32155793555720815
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P112_REMARKS =============================
+  id: 16018892742164945
+  identification: 
+    name: P112_REMARKS
+    type: Text Field
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 90
+    region: Change Status # 32155793555720815
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P112_EMP_ID ==============================
+  id: 32157272468720807
+  identification: 
+    name: P112_EMP_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Change Status # 32155793555720815
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P112_EMP_NAME ============================
+  id: 32157308073720808
+  identification: 
+    name: P112_EMP_NAME
+    type: Display Only
+
+  label: 
+    label: Employee Name
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Change Status # 32155793555720815
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      select FULL_EMPLOYEE_NAME
+      from VW_HR_EMPLOYEE_LIST
+      where emp_id = :P112_EMP_ID
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P112_CURRENT =============================
+  id: 32157441911720809
+  identification: 
+    name: P112_CURRENT
+    type: Display Only
+
+  label: 
+    label: Current Pay Method
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Change Status # 32155793555720815
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      select m.pay_mode_name
+      from hr_emp_pay_modes p
+      join hr_pay_mode_master m
+        on m.pay_mode_code = p.pay_mode_code
+      where p.emp_id = :P112_EMP_ID
+        and p.is_primary = 'Y'
+        and p.is_active = 'Y'
+      fetch first 1 row only
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P112_NEW =================================
+  id: 32157514386720810
+  identification: 
+    name: P112_NEW
+    type: Select List
+
+  label: 
+    label: New Pay Method
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: Change Status # 32155793555720815
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select pay_mode_name d, pay_mode_code r
+      from hr_pay_mode_master
+      where is_active = 'Y'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PB_CHANGE_pay ===============================
+  id: 16139536533555882
+  identification: 
+    button-name: PB_CHANGE_pay
+    label: Change Pay Method
+
+  layout: 
+    sequence: 60
+    region: Change Status # 32155793555720815
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: PB_CANCEL ===================================
+  id: 16139934855555881
+  identification: 
+    button-name: PB_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 70
+    region: Change Status # 32155793555720815
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:101:&SESSION.::&DEBUG.:::'
+      page: 101 # Employee Management
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: Check Pay Mode ======================
+  id: 16018983063164946
+  identification: 
+    name: Check Pay Mode
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P112_NEW
+
+  client-side-condition: 
+    type: Item = Value
+    item: P112_NEW
+    value: BNK
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 16019057071164947
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P112_BANK
+      - P112_ACCOUNT
+      - P112_IBAN
+
+    execution: 
+      sequence: 10
+      event: Check Pay Mode # 16018983063164946
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 16146361944477402
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P112_BANK
+      - P112_ACCOUNT
+      - P112_IBAN
+
+    execution: 
+      sequence: 10
+      event: Check Pay Mode # 16018983063164946
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: Pay Mode C3 =========================
+  id: 16146497576477403
+  identification: 
+    name: Pay Mode C3
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P112_NEW
+
+  client-side-condition: 
+    type: Item = Value
+    item: P112_NEW
+    value: C3
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 16146549761477404
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P112_CARD
+
+    execution: 
+      sequence: 10
+      event: Pay Mode C3 # 16146497576477403
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 16146697396477405
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P112_CARD
+
+    execution: 
+      sequence: 10
+      event: Pay Mode C3 # 16146497576477403
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: Pay Mode Cash =======================
+  id: 16146732569477406
+  identification: 
+    name: Pay Mode Cash
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P112_NEW
+
+  client-side-condition: 
+    type: Item = Value
+    item: P112_NEW
+    value: CSH
+
+  actions: 
+  - # ====== Action: Hide ========================================
+    id: 16146883538477407
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P112_CARD
+      - P112_IBAN
+      - P112_ACCOUNT
+
+    execution: 
+      sequence: 10
+      event: Pay Mode Cash # 16146732569477406
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+validations: 
+- # ====== Validation: Check Current and New Pay Method ========
+  id: 16147217707477411
+  identification: 
+    name: Check Current and New Pay Method
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      declare
+        l_cnt number;
+      begin
+        select count(*)
+        into l_cnt
+        from hr_emp_pay_modes
+        where emp_id = :P112_EMP_ID
+          and is_active = 'Y'
+          and pay_mode_code = :P112_NEW;
+      
+        if l_cnt > 0 then
+          return 'This pay mode is already active for the employee.';
+        end if;
+      
+        return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+processes: 
+- # ====== Process: Change Method API ==========================
+  id: 16142086303555863
+  identification: 
+    name: Change Method API
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+        hr_pay_mode_pkg.add_pay_mode(
+          p_emp_id         => :P112_EMP_ID,
+          p_pay_mode_code  => :P112_NEW,
+          p_effective_from => sysdate,
+          p_is_primary     => 'Y',
+          p_bank_name      => :P112_BANK,
+          p_iban_no        => :P112_IBAN,
+          p_account_name   => :P112_ACCOUNT,
+          p_c3_card_no     => :P112_CARD,
+          p_remarks        => :P112_REMARKS
+        );
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Employee status updated successfully.
+
+  error: 
+    display-location: Inline in Notification
+
+branches: 
+- # ====== Branch: Go to Page 101 ==============================
+  id: 16142546930555861
+  identification: 
+    name: Go to Page 101
+
+  execution: 
+    sequence: 10
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:101:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 101 # Employee Management
+

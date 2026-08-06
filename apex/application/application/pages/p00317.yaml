@@ -1,0 +1,2913 @@
+---
+# ====== Page: Fleet Management Dashboard ====================
+id: 317
+identification: 
+  name: Fleet Management Dashboard
+  alias: FLEET-MANAGEMENT-DASHBOARD
+  title: Fleet Management Dashboard
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    .fleet-kpi-wrap {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(145px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    
+    .fleet-kpi-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px 18px;
+      box-shadow: 0 4px 14px rgba(0,0,0,.08);
+      border-left: 5px solid #d7dce2;
+      min-height: 108px;
+    }
+    
+    .fleet-kpi-title {
+      font-size: 12px;
+      color: #6b7280;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    
+    .fleet-kpi-value {
+      font-size: 30px;
+      font-weight: 900;
+      color: #111827;
+      margin-top: 8px;
+    }
+    
+    .fleet-kpi-sub {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 5px;
+    }
+    
+    .kpi-green { border-left-color: #22c55e; }
+    .kpi-blue { border-left-color: #3b82f6; }
+    .kpi-yellow { border-left-color: #f59e0b; }
+    .kpi-red { border-left-color: #ef4444; }
+    .kpi-purple { border-left-color: #8b5cf6; }
+    .kpi-gray { border-left-color: #6b7280; }
+    
+    .fleet-dash-note {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 12px 16px;
+      color: #374151;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    
+    .t-Badge {
+      border-radius: 999px;
+      font-weight: 700;
+      padding: 4px 10px;
+    }
+    
+    .fleet-alert-wrap {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    
+    .fleet-alert-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,.07);
+      border-top: 4px solid #d1d5db;
+    }
+    
+    .alert-red { border-top-color: #ef4444; }
+    .alert-yellow { border-top-color: #f59e0b; }
+    .alert-green { border-top-color: #22c55e; }
+    .alert-blue { border-top-color: #3b82f6; }
+    
+    .fleet-mini-title {
+      font-size: 12px;
+      color: #6b7280;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    
+    .fleet-mini-value {
+      font-size: 25px;
+      font-weight: 800;
+      color: #111827;
+      margin-top: 6px;
+    }
+    
+    .fleet-money {
+      font-weight: 800;
+    }
+    
+    /* Align Apply button with filter items */
+    .fleet-apply-btn {
+        height: 40px;
+        margin-top: 10px;
+        border-radius: 8px !important;
+        font-weight: 600;
+        padding: 0 18px;
+         transform: translateY(1px);
+    }
+    
+    /* Dashboard main regions */
+    .fleet-dashboard-region {
+        border: 1px solid #e5e7eb !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+        background: #ffffff;
+        margin-bottom: 16px;
+        overflow: hidden;
+    }
+    
+    .fleet-dashboard-region .t-Region-header {
+        background: #ffffff;
+        border-bottom: 1px solid #eef2f7;
+        padding: 6px 8px;
+    }
+    
+    .fleet-dashboard-region .t-Region-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #111827;
+    }
+    
+    .fleet-dashboard-region .t-Region-body {
+         padding: 12px 14px !important;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region:  Dashboard Filters ==========================
+  id: 30679320445699322
+  identification: 
+    name: ' Dashboard Filters'
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    css-classes: 
+    - fleet-dashboard-region
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: fleet_dashboard_filters
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Bike Snapshot KPI ===========================
+  id: 30679499463699323
+  identification: 
+    name: Bike Snapshot KPI
+    type: Dynamic Content
+
+  source: 
+    language: PL/SQL
+    pl/sql-function-body-returning-a-clob: |
+      declare
+          l_total        number := 0;
+          l_assigned     number := 0;
+          l_available    number := 0;
+          l_impound      number := 0;
+          l_repair       number := 0;
+          l_inactive     number := 0;
+          l_util_pct     number := 0;
+      begin
+          select count(*),
+                 sum(case when bike_status_code = 'ASSIGNED' then 1 else 0 end),
+                 sum(case when bike_status_code = 'AVAILABLE' then 1 else 0 end),
+                 sum(case when bike_status_code = 'IMPOUND' then 1 else 0 end),
+                 sum(case when bike_status_code in ('ACCIDENT','MAINTENANCE') then 1 else 0 end),
+                 sum(case when bike_status_code in ('INACTIVE','RETURNED_TO_VENDOR','SOLD') then 1 else 0 end)
+            into l_total,
+                 l_assigned,
+                 l_available,
+                 l_impound,
+                 l_repair,
+                 l_inactive
+            from vw_fleet_bike_current
+           where is_active = 'Y'
+             and (:P317_LOCATION is null or custody_location_name = :P317_LOCATION)
+             and (:P317_STATUS is null or bike_status_code = :P317_STATUS);
+      
+          l_util_pct := round(nvl(l_assigned,0) / nullif(l_total,0) * 100, 2);
+      
+          htp.p('<div class="fleet-kpi-wrap">');
+      
+          htp.p('<div class="fleet-kpi-card kpi-blue">
+                   <div class="fleet-kpi-title">Total Active Bikes</div>
+                   <div class="fleet-kpi-value">'||nvl(l_total,0)||'</div>
+                   <div class="fleet-kpi-sub">Active fleet count</div>
+                 </div>');
+      
+          htp.p('<div class="fleet-kpi-card kpi-green">
+                   <div class="fleet-kpi-title">Assigned</div>
+                   <div class="fleet-kpi-value">'||nvl(l_assigned,0)||'</div>
+                   <div class="fleet-kpi-sub">Currently with riders</div>
+                 </div>');
+      
+          htp.p('<div class="fleet-kpi-card kpi-yellow">
+                   <div class="fleet-kpi-title">Available</div>
+                   <div class="fleet-kpi-value">'||nvl(l_available,0)||'</div>
+                   <div class="fleet-kpi-sub">Ready but idle</div>
+                 </div>');
+      
+          htp.p('<div class="fleet-kpi-card kpi-red">
+                   <div class="fleet-kpi-title">Impound</div>
+                   <div class="fleet-kpi-value">'||nvl(l_impound,0)||'</div>
+                   <div class="fleet-kpi-sub">Legal blockage</div>
+                 </div>');
+      
+          htp.p('<div class="fleet-kpi-card kpi-purple">
+                   <div class="fleet-kpi-title">Accident / Repair</div>
+                   <div class="fleet-kpi-value">'||nvl(l_repair,0)||'</div>
+                   <div class="fleet-kpi-sub">Non-productive bikes</div>
+                 </div>');
+      
+          htp.p('<div class="fleet-kpi-card kpi-gray">
+                   <div class="fleet-kpi-title">Utilization</div>
+                   <div class="fleet-kpi-value">'||nvl(l_util_pct,0)||'%</div>
+                   <div class="fleet-kpi-sub">Assigned / total active</div>
+                 </div>');
+      
+          htp.p('</div>');
+      end;
+
+  layout: 
+    sequence: 30
+    parent-region: Overview # 30943973421657109
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    css-classes: 
+    - fleet-dashboard-region
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: fleet_kpi_cards
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    performance: 
+      lazy-loading: false
+
+- # ====== Region: Critical Action Summary =====================
+  id: 30753253021815226
+  identification: 
+    name: Critical Action Summary
+    type: Dynamic Content
+
+  source: 
+    language: PL/SQL
+    pl/sql-function-body-returning-a-clob: |
+      declare
+          l_impound_overdue number := 0;
+          l_open_accidents  number := 0;
+          l_repair_pending  number := 0;
+          l_idle_ready      number := 0;
+      begin
+          select count(*)
+            into l_impound_overdue
+            from fleet_bike_impounds
+           where status_code = 'ACTIVE'
+             and release_ts is null
+             and expected_release_ts is not null
+             and expected_release_ts < systimestamp;
+      
+          select count(*)
+            into l_open_accidents
+            from fleet_bike_accidents
+           where status_code = 'OPEN';
+      
+          select count(*)
+            into l_repair_pending
+            from fleet_bike_accidents
+           where status_code = 'UNDER_REPAIR';
+      
+          select count(*)
+            into l_idle_ready
+            from vw_fleet_bike_current
+           where is_active = 'Y'
+             and bike_status_code = 'AVAILABLE';
+      
+          htp.p('<div class="fleet-alert-wrap">');
+      
+          htp.p('<div class="fleet-alert-card alert-red">
+                   <div class="fleet-mini-title">Impound Overdue</div>
+                   <div class="fleet-mini-value">'||nvl(l_impound_overdue,0)||'</div>
+                 </div>');
+      
+          htp.p('<div class="fleet-alert-card alert-red">
+                   <div class="fleet-mini-title">Open Accidents</div>
+                   <div class="fleet-mini-value">'||nvl(l_open_accidents,0)||'</div>
+                 </div>');
+      
+          htp.p('<div class="fleet-alert-card alert-yellow">
+                   <div class="fleet-mini-title">Repair Pending</div>
+                   <div class="fleet-mini-value">'||nvl(l_repair_pending,0)||'</div>
+                 </div>');
+      
+          htp.p('<div class="fleet-alert-card alert-blue">
+                   <div class="fleet-mini-title">Available / Idle Ready > 3days </div>
+                   <div class="fleet-mini-value">'||nvl(l_idle_ready,0)||'</div>
+                 </div>');
+      
+          htp.p('</div>');
+      end;
+
+  layout: 
+    sequence: 40
+    parent-region: Overview # 30943973421657109
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    css-classes: 
+    - fleet-dashboard-region
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    performance: 
+      lazy-loading: false
+
+- # ====== Region: Fleet Status Distribution ===================
+  id: 30753313710815227
+  identification: 
+    name: Fleet Status Distribution
+    type: Chart
+
+  source: 
+    location: None
+    page-items-to-submit: 
+    - P317_FROM_DT
+    - P317_TO_DT
+    - P317_CITY_ID
+    - P317_PROJECT_ID
+    - P317_SUPPLIER_ID
+
+  layout: 
+    sequence: 50
+    parent-region: Overview # 30943973421657109
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    css-classes: 
+    - fleet-dashboard-region
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  security: 
+    escape-special-characters: true
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 30753424690815228
+    chart: 
+      type: Donut
+
+    layout: 
+      height: 400
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    settings: 
+      pie-selection-effect: Highlight
+
+    value: 
+      pie-chart-other-threshold: 0
+      format: Decimal
+      decimal-places: 0
+      format-scaling: None
+
+    animation: 
+      on-display: Automatic
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: true
+      show-value: true
+
+    legend: 
+      show: true
+      position: Automatic
+      hide-and-show-behavior: Rescale
+
+    series: 
+    - # ====== Series: Fleet Statis ================================
+      id: 30753536225815229
+      identification: 
+        name: Fleet Statis
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Local Database
+        type: SQL Query
+        sql-query: |
+          select
+                 bike_status_name as label,
+                 count(*)         as value
+          from vw_fleet_bike_current
+          where is_active = 'Y'
+          group by bike_status_name,
+                   bike_status_code
+          order by case upper(bike_status_code)
+                        when 'ASSIGNED'  then 1
+                        when 'AVAILABLE' then 2
+                        when 'IMPOUND'   then 3
+                        when 'ACCIDENT'  then 4
+                        when 'REPAIR'    then 5
+                        else 99
+                   end;
+
+      order-by: 
+        type: None
+
+      column-mapping: 
+        series-name: LABEL
+        label: LABEL
+        value: VALUE
+
+      label: 
+        show: true
+        position: Center
+        display-as: Label - Value
+
+- # ====== Region: City / Location Wise Allocation =============
+  id: 30753804383815232
+  identification: 
+    name: City / Location Wise Allocation
+    title: City Wise Fleet Allocation
+    type: Chart
+
+  source: 
+    location: None
+
+  layout: 
+    sequence: 60
+    parent-region: Overview # 30943973421657109
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    css-classes: 
+    - fleet-dashboard-region
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  security: 
+    escape-special-characters: true
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 30754610477815240
+    chart: 
+      type: Bar
+
+    appearance: 
+      orientation: Vertical
+      stack: true
+      stack-label: false
+
+    layout: 
+      height: 400
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    multi-series-chart-data: 
+      fill-gaps-in-chart-data: true
+      sort-order: Label - Ascending
+      render-gap-as-zero: true
+
+    settings: 
+      zoom-and-scroll: No
+
+    animation: 
+      on-display: Automatic
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: true
+      show-group-name: true
+      show-value: true
+
+    legend: 
+      show: true
+      position: Automatic
+      hide-and-show-behavior: Rescale
+
+    series: 
+    - # ====== Series: Assigned Bikes ==============================
+      id: 30754799723815241
+      identification: 
+        name: Assigned Bikes
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Local Database
+        type: SQL Query
+        sql-query: |
+          select nvl(b.city_name,'No Location') label,
+                 sum(case when bike_status_code = 'ASSIGNED' then 1 else 0 end) assigned_bikes,
+                 sum(case when bike_status_code = 'AVAILABLE' then 1 else 0 end) available_bikes,
+                 sum(case when bike_status_code in ('IMPOUND','ACCIDENT','MAINTENANCE') then 1 else 0 end) problem_bikes
+          from vw_fleet_bike_current a
+          join REF_CITIES b
+          on b.city_id = a.plate_emirate
+          where a.is_active = 'Y'
+          group by nvl(b.city_name,'No Location')
+          order by nvl(b.city_name,'No Location')
+
+      order-by: 
+        type: None
+
+      column-mapping: 
+        label: LABEL
+        value: ASSIGNED_BIKES
+
+      appearance: 
+        assigned-to-y2-axis: false
+
+      label: 
+        show: true
+        position: Center
+
+    - # ====== Series: Available Bikes =============================
+      id: 30755068084815244
+      identification: 
+        name: Available Bikes
+
+      execution: 
+        sequence: 20
+
+      source: 
+        location: Local Database
+        type: SQL Query
+        sql-query: |
+          select nvl(b.city_name,'No Location') label,
+                 sum(case when bike_status_code = 'ASSIGNED' then 1 else 0 end) assigned_bikes,
+                 sum(case when bike_status_code = 'AVAILABLE' then 1 else 0 end) available_bikes,
+                 sum(case when bike_status_code in ('IMPOUND','ACCIDENT','MAINTENANCE') then 1 else 0 end) problem_bikes
+          from vw_fleet_bike_current a
+          join REF_CITIES b
+          on b.city_id = a.plate_emirate
+          where a.is_active = 'Y'
+          group by nvl(b.city_name,'No Location')
+          order by nvl(b.city_name,'No Location')
+
+      order-by: 
+        type: None
+
+      column-mapping: 
+        label: LABEL
+        value: AVAILABLE_BIKES
+
+      appearance: 
+        assigned-to-y2-axis: false
+
+      label: 
+        show: true
+        position: Center
+
+    - # ====== Series: Problem Bikes ===============================
+      id: 30755105428815245
+      identification: 
+        name: Problem Bikes
+
+      execution: 
+        sequence: 30
+
+      source: 
+        location: Local Database
+        type: SQL Query
+        sql-query: |
+          select nvl(b.city_name,'No Location') label,
+                 sum(case when bike_status_code = 'ASSIGNED' then 1 else 0 end) assigned_bikes,
+                 sum(case when bike_status_code = 'AVAILABLE' then 1 else 0 end) available_bikes,
+                 sum(case when bike_status_code in ('IMPOUND','ACCIDENT','MAINTENANCE') then 1 else 0 end) problem_bikes
+          from vw_fleet_bike_current a
+          join REF_CITIES b
+          on b.city_id = a.plate_emirate
+          where a.is_active = 'Y'
+          group by nvl(b.city_name,'No Location')
+          order by nvl(b.city_name,'No Location')
+
+      order-by: 
+        type: None
+
+      column-mapping: 
+        label: LABEL
+        value: PROBLEM_BIKES
+
+      appearance: 
+        assigned-to-y2-axis: false
+
+      label: 
+        show: true
+        position: Center
+
+    axes: 
+    - # ====== Axis: x =============================================
+      id: 30754813718815242
+      identification: 
+        name: x
+        show-axis: true
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+
+      major-ticks: 
+        show: Yes
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+        rotation: true
+        position: Outside
+
+    - # ====== Axis: y =============================================
+      id: 30754963260815243
+      identification: 
+        name: y
+        show-axis: true
+
+      value: 
+        format: Decimal
+        decimal-places: 0
+        format-scaling: None
+        baseline-scaling: Zero
+        scale: Linear
+
+      appearance: 
+        position: Automatic
+
+      major-ticks: 
+        show: Yes
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+
+- # ====== Region: Action Required / Critical Fleet Cases ======
+  id: 30755265588815246
+  identification: 
+    name: Action Required / Critical Fleet Cases
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select *
+      from (
+          select
+              b.bike_code,
+              b.plate_no,
+              'IMPOUND OVERDUE' issue_type,
+              trunc(sysdate) - trunc(cast(i.expected_release_ts as date)) days_pending,
+              i.emp_id,
+              v.employee_name,
+              v.emp_code,
+              v.current_project,
+              hr_charges_pkg.get_charge_balance(i.emp_charge_id) pending_amount,
+              '<span class="t-Badge t-Badge--danger">IMPOUND OVERDUE</span>' issue_badge,
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 312,
+                  p_items  => 'P312_IMPOUND_ID',
+                  p_values => i.impound_id
+              ) || '" class="js-dialog-link">' ||
+              '<span class="fa fa-unlock" title="Release Impound"></span></a>' action_link
+          from fleet_bike_impounds i
+          join fleet_bikes b on b.bike_id = i.bike_id
+          left join vw_fleet_bike_current v on v.bike_id = i.bike_id
+          where i.status_code = 'ACTIVE'
+            and i.release_ts is null
+            and i.expected_release_ts is not null
+            and i.expected_release_ts < systimestamp
+      
+          union all
+      
+          select
+              b.bike_code,
+              b.plate_no,
+              'ACCIDENT OPEN' issue_type,
+              trunc(sysdate) - a.accident_dt days_pending,
+              a.emp_id,
+              EMP.FULL_employee_name,
+              EMP.emp_code,
+              EMP.current_project,
+              hr_charges_pkg.get_charge_balance(a.emp_charge_id) pending_amount,
+              '<span class="t-Badge t-Badge--danger">ACCIDENT OPEN</span>' issue_badge,
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 315,
+                  p_items  => 'P315_ACCIDENT_ID',
+                  p_values => a.accident_id
+              ) || '" class="js-dialog-link">' ||
+              '<span class="fa fa-wrench" title="Start Repair"></span></a>' action_link
+          from fleet_bike_accidents a
+          join fleet_bikes b on b.bike_id = a.bike_id
+          left join vw_fleet_bike_current v on v.bike_id = a.bike_id
+          LEFT JOIN VW_HR_EMPLOYEE_LIST EMP
+          ON EMP.EMP_ID = A.EMP_ID
+          where a.status_code = 'OPEN'
+            and (trunc(sysdate) - a.accident_dt >= 3 Or trunc(sysdate) - a.accident_dt <0)
+      
+          union all
+      
+          select
+              b.bike_code,
+              b.plate_no,
+              'REPAIR PENDING' issue_type,
+              trunc(sysdate) - a.repair_start_dt days_pending,
+              a.emp_id,
+              v.employee_name,
+              v.emp_code,
+              v.current_project,
+              hr_charges_pkg.get_charge_balance(a.emp_charge_id) pending_amount,
+              '<span class="t-Badge t-Badge--warning">REPAIR PENDING</span>' issue_badge,
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 316,
+                  p_items  => 'P316_ACCIDENT_ID',
+                  p_values => a.accident_id
+              ) || '" class="js-dialog-link">' ||
+              '<span class="fa fa-check" title="Close Accident"></span></a>' action_link
+          from fleet_bike_accidents a
+          join fleet_bikes b on b.bike_id = a.bike_id
+          left join vw_fleet_bike_current v on v.bike_id = a.bike_id
+          where a.status_code = 'UNDER_REPAIR'
+            and a.repair_start_dt is not null
+            and trunc(sysdate) - a.repair_start_dt >= 3
+      
+          union all
+      
+          select
+              v.bike_code,
+              v.plate_no,
+              'AVAILABLE IDLE' issue_type,
+              nvl(trunc(sysdate) - trunc(cast(v.status_from_dt as date)),0) days_pending,
+              null emp_id,
+              null employee_name,
+              null emp_code,
+              v.current_project,
+              null pending_amount,
+              '<span class="t-Badge t-Badge--warning">IDLE READY</span>' issue_badge,
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 303,
+                  p_items  => 'P303_BIKE_ID',
+                  p_values => v.bike_id
+              ) || '" class="js-dialog-link">' ||
+              '<span class="fa fa-key" title="Assign Bike"></span></a>' action_link
+          from vw_fleet_bike_current v
+          where v.is_active = 'Y'
+            and v.bike_status_code = 'AVAILABLE'
+            and (nvl(trunc(sysdate) - trunc(cast(v.status_from_dt as date)),0) >= 3 or
+            nvl(trunc(sysdate) - trunc(cast(v.status_from_dt as date)),0) < 0)
+      )
+      order by days_pending desc
+      fetch first 20 rows only
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - js-showMaximizeButton
+    - t-Region--scrollBody
+    css-classes: 
+    - fleet-dashboard-region
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: critical_fleet_cases_ir
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 30755328388815247
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: true
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 30953071403655145
+      identification: 
+        name: Primary Report
+        alias: 309531
+
+    columns: 
+    - # ====== Column: BIKE_CODE ===================================
+      id: 30755453999815248
+      identification: 
+        column-name: BIKE_CODE
+        type: Hidden
+
+      heading: 
+        heading: Bike Code
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PLATE_NO ====================================
+      id: 30755502085815249
+      identification: 
+        column-name: PLATE_NO
+        type: Plain Text
+
+      heading: 
+        heading: Plate No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ISSUE_TYPE ==================================
+      id: 30755665435815250
+      identification: 
+        column-name: ISSUE_TYPE
+        type: Hidden
+
+      heading: 
+        heading: Issue Type
+
+      layout: 
+        sequence: 30
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DAYS_PENDING ================================
+      id: 30943173791657101
+      identification: 
+        column-name: DAYS_PENDING
+        type: Plain Text
+
+      heading: 
+        heading: Days Pending
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_ID ======================================
+      id: 30943208491657102
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 50
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 30943309706657103
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 30943448508657104
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Emp Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_PROJECT =============================
+      id: 30943543244657105
+      identification: 
+        column-name: CURRENT_PROJECT
+        type: Plain Text
+
+      heading: 
+        heading: Current Project
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 80
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PENDING_AMOUNT ==============================
+      id: 30943684746657106
+      identification: 
+        column-name: PENDING_AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Pending Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ISSUE_BADGE =================================
+      id: 30943723483657107
+      identification: 
+        column-name: ISSUE_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Issue Badge
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: ACTION_LINK =================================
+      id: 30943858977657108
+      identification: 
+        column-name: ACTION_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Action Link
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 110
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Overview ====================================
+  id: 30943973421657109
+  identification: 
+    name: Overview
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Region Display ==============================
+  id: 30944001089657110
+  identification: 
+    name: Region Display
+    type: Region Display Selector
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Tabs Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-TabsRegion-mod--fillLabels
+    - t-TabsRegion-mod--pill
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      mode: View Single Region
+      display-region-icons: true
+      include-'show-all': false
+      remember-selection: By User
+
+- # ====== Region: Expiry Alerts ===============================
+  id: 30944144673657111
+  identification: 
+    name: Expiry Alerts
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+          b.bike_code,
+          b.plate_no,
+      
+          d.mulkiya_expiry_dt,
+          case
+            when d.mulkiya_expiry_dt < trunc(sysdate) then
+              '<span class="t-Badge t-Badge--danger">MULKIYA EXPIRED</span>'
+            when d.mulkiya_expiry_dt <= trunc(sysdate) + 30 then
+              '<span class="t-Badge t-Badge--warning">MULKIYA NEAR EXPIRY</span>'
+          end as mulkiya_badge,
+      
+          d.insurance_expiry_dt,
+          case
+            when d.insurance_expiry_dt < trunc(sysdate) then
+              '<span class="t-Badge t-Badge--danger">INSURANCE EXPIRED</span>'
+            when d.insurance_expiry_dt <= trunc(sysdate) + 30 then
+              '<span class="t-Badge t-Badge--warning">INSURANCE NEAR EXPIRY</span>'
+          end as insurance_badge
+      
+      from fleet_bikes b
+      left join VW_FLEET_BIKE_CURRENT d
+        on d.bike_id = b.bike_id
+      where b.is_active = 'Y'
+        and (
+             d.mulkiya_expiry_dt <= trunc(sysdate) + 30
+          or d.insurance_expiry_dt <= trunc(sysdate) + 30
+        )
+      order by least(
+          nvl(d.mulkiya_expiry_dt, date '2999-12-31'),
+          nvl(d.insurance_expiry_dt, date '2999-12-31')
+      )
+
+  layout: 
+    sequence: 50
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: fleet_expiry_alerts_ir
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 30944389968657113
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 30969259101416047
+      identification: 
+        name: Primary Report
+        alias: 309693
+
+    columns: 
+    - # ====== Column: BIKE_CODE ===================================
+      id: 30944457907657114
+      identification: 
+        column-name: BIKE_CODE
+        type: Hidden
+
+      heading: 
+        heading: Bike Code
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PLATE_NO ====================================
+      id: 30944542485657115
+      identification: 
+        column-name: PLATE_NO
+        type: Plain Text
+
+      heading: 
+        heading: Plate No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MULKIYA_EXPIRY_DT ===========================
+      id: 30944681560657116
+      identification: 
+        column-name: MULKIYA_EXPIRY_DT
+        type: Plain Text
+
+      heading: 
+        heading: Mulkiya Expiry Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MULKIYA_BADGE ===============================
+      id: 30944703361657117
+      identification: 
+        column-name: MULKIYA_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Mulkiya Badge
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: INSURANCE_EXPIRY_DT =========================
+      id: 30944880243657118
+      identification: 
+        column-name: INSURANCE_EXPIRY_DT
+        type: Plain Text
+
+      heading: 
+        heading: Insurance Expiry Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: INSURANCE_BADGE =============================
+      id: 30944900827657119
+      identification: 
+        column-name: INSURANCE_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Insurance Badge
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Utilization =================================
+  id: 30945093179657120
+  identification: 
+    name: Utilization
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      with p as (
+          select 
+                 cast(:P317_FROM_DT as timestamp) as from_ts,
+                 cast(:P317_TO_DT as timestamp) + interval '1' day as to_ts,
+                 cast(:P317_TO_DT as date) - cast(:P317_FROM_DT as date) + 1 as total_days
+            from dual
+      ),
+      x as (
+          select
+              s.bike_id,
+              s.bike_status_code,
+              greatest(s.from_dt, p.from_ts) as eff_from,
+              least(nvl(s.to_dt, p.to_ts), p.to_ts) as eff_to,
+              p.total_days
+          from fleet_bike_status_txns s
+          cross join p
+          where s.from_dt < p.to_ts
+            and nvl(s.to_dt, p.to_ts) > p.from_ts
+      )
+      select
+          b.bike_code,
+          b.plate_no,
+      
+          round(sum(
+              case when x.bike_status_code = 'ASSIGNED'
+              then cast(x.eff_to as date) - cast(x.eff_from as date)
+              else 0 end
+          ),2) assigned_days,
+      
+          round(sum(
+              case when x.bike_status_code = 'AVAILABLE'
+              then cast(x.eff_to as date) - cast(x.eff_from as date)
+              else 0 end
+          ),2) available_days,
+      
+          round(sum(
+              case when x.bike_status_code = 'IMPOUND'
+              then cast(x.eff_to as date) - cast(x.eff_from as date)
+              else 0 end
+          ),2) impound_days,
+      
+          round(sum(
+              case when x.bike_status_code = 'ACCIDENT'
+              then cast(x.eff_to as date) - cast(x.eff_from as date)
+              else 0 end
+          ),2) accident_days,
+      
+          round(sum(
+              case when x.bike_status_code = 'MAINTENANCE'
+              then cast(x.eff_to as date) - cast(x.eff_from as date)
+              else 0 end
+          ),2) repair_days,
+      
+          round(
+              sum(
+                  case when x.bike_status_code = 'ASSIGNED'
+                  then cast(x.eff_to as date) - cast(x.eff_from as date)
+                  else 0 end
+              ) / nullif(max(x.total_days),0) * 100,
+              2
+          ) as utilization_pct,
+      
+          case
+            when round(
+              sum(
+                  case when x.bike_status_code = 'ASSIGNED'
+                  then cast(x.eff_to as date) - cast(x.eff_from as date)
+                  else 0 end
+              ) / nullif(max(x.total_days),0) * 100,
+              2
+            ) >= 80 then '<span class="t-Badge t-Badge--success">GOOD</span>'
+      
+            when round(
+              sum(
+                  case when x.bike_status_code = 'ASSIGNED'
+                  then cast(x.eff_to as date) - cast(x.eff_from as date)
+                  else 0 end
+              ) / nullif(max(x.total_days),0) * 100,
+              2
+            ) >= 60 then '<span class="t-Badge t-Badge--warning">AVERAGE</span>'
+      
+            else '<span class="t-Badge t-Badge--danger">LOW</span>'
+          end as utilization_badge
+      
+      from x
+      join fleet_bikes b
+        on b.bike_id = x.bike_id
+      group by b.bike_code, b.plate_no
+      order by utilization_pct desc nulls last;
+
+  layout: 
+    sequence: 60
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 30945118394657121
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 30997093104646918
+      identification: 
+        name: Primary Report
+        alias: 309971
+
+    columns: 
+    - # ====== Column: BIKE_CODE ===================================
+      id: 30945228672657122
+      identification: 
+        column-name: BIKE_CODE
+        type: Hidden
+
+      heading: 
+        heading: Bike Code
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PLATE_NO ====================================
+      id: 30945355970657123
+      identification: 
+        column-name: PLATE_NO
+        type: Plain Text
+
+      heading: 
+        heading: Plate No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ASSIGNED_DAYS ===============================
+      id: 30945450813657124
+      identification: 
+        column-name: ASSIGNED_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Assigned Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: AVAILABLE_DAYS ==============================
+      id: 30945519991657125
+      identification: 
+        column-name: AVAILABLE_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Available Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IMPOUND_DAYS ================================
+      id: 30945698516657126
+      identification: 
+        column-name: IMPOUND_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Impound Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ACCIDENT_DAYS ===============================
+      id: 30945752230657127
+      identification: 
+        column-name: ACCIDENT_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Accident Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REPAIR_DAYS =================================
+      id: 30945841370657128
+      identification: 
+        column-name: REPAIR_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Repair Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: UTILIZATION_PCT =============================
+      id: 30945923880657129
+      identification: 
+        column-name: UTILIZATION_PCT
+        type: Plain Text
+
+      heading: 
+        heading: Utilization Pct
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 80
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: UTILIZATION_BADGE ===========================
+      id: 30946084261657130
+      identification: 
+        column-name: UTILIZATION_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Utilization Badge
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+page-items: 
+- # ====== Page Item: P317_FROM_DT =============================
+  id: 30681475172699343
+  identification: 
+    name: P317_FROM_DT
+    type: Date Picker
+
+  label: 
+    label: From Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 10
+    region: ' Dashboard Filters' # 30679320445699322
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: trunc(sysdate, 'MM')
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P317_TO_DT ===============================
+  id: 30681569537699344
+  identification: 
+    name: P317_TO_DT
+    type: Date Picker
+
+  label: 
+    label: To Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 20
+    region: ' Dashboard Filters' # 30679320445699322
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sysdate
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P317_CITY_ID =============================
+  id: 30752823960815222
+  identification: 
+    name: P317_CITY_ID
+    type: Text Field
+
+  label: 
+    label: City / Emirates
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 30
+    region: ' Dashboard Filters' # 30679320445699322
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P317_PROJECT_ID ==========================
+  id: 30752936595815223
+  identification: 
+    name: P317_PROJECT_ID
+    type: Text Field
+
+  label: 
+    label: Project
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 40
+    region: ' Dashboard Filters' # 30679320445699322
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P317_SUPPLIER_ID =========================
+  id: 30753018552815224
+  identification: 
+    name: P317_SUPPLIER_ID
+    type: Text Field
+
+  label: 
+    label: Supplier
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 50
+    region: ' Dashboard Filters' # 30679320445699322
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 3
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PB_APPLY ====================================
+  id: 30753116579815225
+  identification: 
+    button-name: PB_APPLY
+    label: Apply
+
+  layout: 
+    sequence: 60
+    region: ' Dashboard Filters' # 30679320445699322
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 1
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--large
+    - t-Button--iconLeft
+    css-classes: 
+    - fleet-apply-btn
+    icon: fa-search-plus
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: PRINT_TEST ==================================
+  id: 30947599777657145
+  identification: 
+    button-name: PRINT_TEST
+    label: Print Test
+
+  layout: 
+    sequence: 70
+    region: ' Dashboard Filters' # 30679320445699322
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: New =================================
+  id: 30947671064657146
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: PRINT_TEST # 30947599777657145
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 30947743457657147
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: 'window.open("f?p=&APP_ID.:0:&SESSION.:PRINT_REPORT=RQ_TEST_DOCGEN","_blank");'
+
+    execution: 
+      sequence: 10
+      event: New # 30947671064657146
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

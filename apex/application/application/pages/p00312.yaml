@@ -1,0 +1,1127 @@
+---
+# ====== Page: Release  Impound ==============================
+id: 312
+identification: 
+  name: Release  Impound
+  alias: RELEASE-IMPOUND
+  title: Release  Impound
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  width: 1000
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Release  Impound ============================
+  id: 60729652814085421
+  identification: 
+    name: Release  Impound
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    - margin-top-none
+    - margin-bottom-none
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Impound Info ================================
+  id: 60733805395085462
+  identification: 
+    name: Impound Info
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Release  Impound # 60729652814085421
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    - margin-bottom-none
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Impound Release Detail ======================
+  id: 60733862402085463
+  identification: 
+    name: Impound Release Detail
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: Release  Impound # 60729652814085421
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    - margin-top-none
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P312_RELEASE_TS ==========================
+  id: 30215049859810149
+  identification: 
+    name: P312_RELEASE_TS
+    type: Date Picker
+
+  label: 
+    label: Release Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 10
+    region: Impound Release Detail # 60733862402085463
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: SYSDATE
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P312_NEXT_STATUS =========================
+  id: 30215108913810150
+  identification: 
+    name: P312_NEXT_STATUS
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: Impound Release Detail # 60733862402085463
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: AVAILABLE
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P312_IMPOUND_ID ==========================
+  id: 60731368108085408
+  identification: 
+    name: P312_IMPOUND_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: Release  Impound # 60729652814085421
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P312_REMARKS =============================
+  id: 60733355605085417
+  identification: 
+    name: P312_REMARKS
+    type: Text Field
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 60
+    region: Impound Release Detail # 60733862402085463
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P312_BIKE_ID =============================
+  id: 60734016773085402
+  identification: 
+    name: P312_BIKE_ID
+    type: Display Only
+
+  label: 
+    label: Plate Number
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Display Value of List of Values
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Impound Info # 60733805395085462
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select  plate_no d,
+             bike_id r
+      from vw_fleet_bike_current
+      order by bike_code
+    display-extra-values: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P312_EMP_ID ==============================
+  id: 60734100469085403
+  identification: 
+    name: P312_EMP_ID
+    type: Display Only
+
+  label: 
+    label: Employee
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Display Value of List of Values
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Impound Info # 60733805395085462
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: FLEET.EMPLOYEE_LOV # 18130747472806310
+    display-extra-values: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P312_CURRENT_STATUS ======================
+  id: 60735414371085416
+  identification: 
+    name: P312_CURRENT_STATUS
+    type: Display Only
+
+  label: 
+    label: Current Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 50
+    region: Impound Info # 60733805395085462
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P312_CURRENT_CUSTODY =====================
+  id: 60735476604085417
+  identification: 
+    name: P312_CURRENT_CUSTODY
+    type: Display Only
+
+  label: 
+    label: Current Custody
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 60
+    region: Impound Info # 60733805395085462
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P312_IMPOUND_START_TS ====================
+  id: 60735811872085401
+  identification: 
+    name: P312_IMPOUND_START_TS
+    type: Display Only
+
+  label: 
+    label: Impound Start
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Impound Info # 60733805395085462
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P312_EXPECTED_RELEASE_TS =================
+  id: 60735946046085402
+  identification: 
+    name: P312_EXPECTED_RELEASE_TS
+    type: Display Only
+
+  label: 
+    label: Expected Release Ts
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 40
+    region: Impound Info # 60733805395085462
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P312_NEXT_CUSTODY ========================
+  id: 60736023462085403
+  identification: 
+    name: P312_NEXT_CUSTODY
+    type: Select List
+
+  label: 
+    label: Next Custody
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Impound Release Detail # 60733862402085463
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select custody_type_name d,
+             custody_type_code r
+      from fleet_ref_custody_types
+      where is_active = 'Y'
+      order by nvl(seq_no,9999), custody_type_name
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P312_NEXT_LOCATION_ID ====================
+  id: 60736111668085404
+  identification: 
+    name: P312_NEXT_LOCATION_ID
+    type: Select List
+
+  label: 
+    label: Next Location
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: Impound Release Detail # 60733862402085463
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select location_name d,
+             location_id r
+      from fleet_ref_custody_locations
+      where is_active = 'Y'
+        and custody_type_code = :P312_NEXT_CUSTODY
+      order by nvl(seq_no,9999), location_name
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P312_NEXT_CUSTODY
+    items-to-submit: 
+    - P312_NEXT_CUSTODY
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PBN_SAVE ====================================
+  id: 30519751859275302
+  identification: 
+    button-name: PBN_SAVE
+    label: Save
+
+  layout: 
+    sequence: 170
+    region: Release  Impound # 60729652814085421
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-save
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: PB_CANCEL ===================================
+  id: 30520128399275302
+  identification: 
+    button-name: PB_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 180
+    region: Release  Impound # 60729652814085421
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-times-circle
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:309:&SESSION.::&DEBUG.:::'
+      page: 309 # Bike Operations
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: Show/Hide charge fields =============
+  id: 30528318944275275
+  identification: 
+    name: Show/Hide charge fields
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P312_CREATE_CHARGE_YN
+
+  client-side-condition: 
+    type: Item = Value
+    item: P312_CREATE_CHARGE_YN
+    value: Y
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 30528876698275274
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P312_CHARGE_TO_EMPLOYEE_YN
+      - P312_IMPOUND_COST
+      - P312_CHARGE_DUE_DT
+
+    execution: 
+      sequence: 10
+      event: Show/Hide charge fields # 30528318944275275
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Set Value ===================================
+    id: 30529301809275273
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: Y
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P312_CHARGE_TO_EMPLOYEE_YN
+
+    execution: 
+      sequence: 20
+      event: Show/Hide charge fields # 30528318944275275
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Hide ========================================
+    id: 30529856311275273
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P312_CHARGE_TO_EMPLOYEE_YN
+      - P312_IMPOUND_COST
+      - P312_CHARGE_DUE_DT
+
+    execution: 
+      sequence: 10
+      event: Show/Hide charge fields # 30528318944275275
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+validations: 
+- # ====== Validation: VAL_P312_IMPOUND_REQUIRED ===============
+  id: 30539625737223601
+  identification: 
+    name: VAL_P312_IMPOUND_REQUIRED
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return :P312_IMPOUND_ID is not null;'
+    always-execute: false
+
+  error: 
+    error-message: Impound case is required.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: VAL_P312_RELEASE_DATE_REQUIRED ==========
+  id: 30539755917223602
+  identification: 
+    name: VAL_P312_RELEASE_DATE_REQUIRED
+
+  execution: 
+    sequence: 20
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return :P312_RELEASE_TS is not null;'
+    always-execute: false
+
+  error: 
+    error-message: Actual Release Date is required.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: VAL_P312_RELEASE_DATE_VALID =============
+  id: 30539850251223603
+  identification: 
+    name: VAL_P312_RELEASE_DATE_VALID
+
+  execution: 
+    sequence: 30
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return :P312_RELEASE_TS >= :P312_IMPOUND_START_TS;'
+    always-execute: false
+
+  error: 
+    error-message: Actual Release Date cannot be earlier than Impound Start Date.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: VAL_P312_NEXT_STATUS_REQUIRED ===========
+  id: 30539915298223604
+  identification: 
+    name: VAL_P312_NEXT_STATUS_REQUIRED
+
+  execution: 
+    sequence: 40
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return :P312_NEXT_STATUS is not null;'
+    always-execute: false
+
+  error: 
+    error-message: Next Status is required.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: VAL_P312_NEXT_CUSTODY_REQUIRED ==========
+  id: 30540095118223605
+  identification: 
+    name: VAL_P312_NEXT_CUSTODY_REQUIRED
+
+  execution: 
+    sequence: 50
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return :P312_NEXT_CUSTODY is not null;'
+    always-execute: false
+
+  error: 
+    error-message: Next Custody is required.
+    display-location: Inline with Field and in Notification
+
+processes: 
+- # ====== Process: FETCH_P312_IMPOUND_DETAILS =================
+  id: 30527528117275277
+  identification: 
+    name: FETCH_P312_IMPOUND_DETAILS
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          select 
+                 b.bike_id,
+                 i.emp_id,
+                 i.impound_start_ts,
+                 i.expected_release_ts,
+                 v.bike_status_name,
+                 v.custody_type_name
+            into :P312_BIKE_ID,
+            :P312_EMP_ID,
+                 :P312_IMPOUND_START_TS,
+                 :P312_EXPECTED_RELEASE_TS,
+                 :P312_CURRENT_STATUS,
+                 :P312_CURRENT_CUSTODY
+            from fleet_bike_impounds i
+            join fleet_bikes b
+              on b.bike_id = i.bike_id
+            left join vw_fleet_bike_current v
+              on v.bike_id = i.bike_id
+           where i.impound_id = :P312_IMPOUND_ID;
+      exception
+          when no_data_found then
+              raise_application_error(-20001, 'Impound case not found.');
+      end;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: RELEASE_BIKE_IMPOUND =======================
+  id: 30527921163275276
+  identification: 
+    name: RELEASE_BIKE_IMPOUND
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          fleet_pkg.release_bike_impound(
+              p_impound_id       => :P312_IMPOUND_ID,
+              p_release_ts       => :P312_RELEASE_TS,
+              p_next_status      => :P312_NEXT_STATUS,
+              p_next_custody     => :P312_NEXT_CUSTODY,
+              p_next_location_id => :P312_NEXT_LOCATION_ID,
+              p_remarks          => :P312_REMARKS
+          );
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: PBN_SAVE # 30519751859275302
+
+branches: 
+- # ====== Branch: Go to Page 309 ==============================
+  id: 30530340843275272
+  identification: 
+    name: Go to Page 309
+
+  execution: 
+    sequence: 10
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:309:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 309 # Bike Operations
+

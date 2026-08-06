@@ -1,0 +1,44 @@
+---
+- # ====== Authentication: Oracle APEX Accounts ================
+  id: 9721323341336315
+  identification: 
+    name: Oracle APEX Accounts
+
+  subscription: 
+    version-number: 39900337080508
+
+  settings: 
+    type: Oracle APEX Accounts
+
+  session-not-valid: 
+    redirect-to: Login Page
+
+  login-processing: 
+    switch-in-session: false
+
+  real-application-security: 
+    ras-mode: Disabled
+
+- # ====== Authentication: APEX_AUTH_FN ========================
+  id: 9737381191346400
+  identification: 
+    name: APEX_AUTH_FN
+
+  subscription: 
+    version-number: 39900337708296
+
+  settings: 
+    type: Custom
+    authentication-function-name: apex_auth_fn
+    enable-legacy-authentication-attributes: false
+
+  session-not-valid: 
+    redirect-to: Login Page
+
+  login-processing: 
+    post-authentication-procedure-name: wksp_alnajah.SEC_AUTH_PKG.POST_LOGIN
+    switch-in-session: false
+
+  real-application-security: 
+    ras-mode: Disabled
+

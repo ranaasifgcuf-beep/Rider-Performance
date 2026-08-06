@@ -1,0 +1,1176 @@
+---
+# ====== Page: Employees Current Documents Record ============
+id: 152
+identification: 
+  name: Employees Current Documents Record
+  alias: EMPLOYEES-CURRENT-DOCUMENTS-RECORD
+  title: Employees Current Documents Record
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Employees Current Documents Record ==========
+  id: 17674897285544549
+  identification: 
+    name: Employees Current Documents Record
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      with doc_latest as (
+          select d.emp_id,
+                 upper(d.doc_type) as doc_type,
+                 d.doc_no,
+                 d.issue_dt,
+                 d.expiry_dt,
+                 row_number() over (
+                     partition by d.emp_id, upper(d.doc_type)
+                     order by nvl(d.is_current_record,'N') desc,
+                              nvl(d.expiry_dt, date '1900-01-01') desc
+                 ) as rn
+            from hr_emp_docs d
+           where upper(d.doc_type) in (
+                    'PASSPORT',
+                    'EID',
+                    'DL',
+                    'VISA',
+                    'LABOUR CARD'
+                 )
+      )
+      select e.emp_id,
+             e.emp_code,
+             e.first_name || ' ' || e.last_name as full_name,
+             e.current_project as working_project,
+             e.current_city as working_city,
+             e.current_status_name,
+      
+             max(case when dl.doc_type = 'PASSPORT' then dl.doc_no end) as passport_no,
+             max(case when dl.doc_type = 'PASSPORT' then dl.expiry_dt end) as passport_expiry,
+             max(case when dl.doc_type = 'PASSPORT' then
+                  case
+                      when dl.expiry_dt is null then
+                          '<span class="u-warning-text">No Expiry</span>'
+                      when trunc(dl.expiry_dt) < trunc(sysdate) then
+                          '<span class="u-danger-text u-bold">'
+                          || abs(trunc(dl.expiry_dt) - trunc(sysdate)) || ' days ago</span>'
+                      when trunc(dl.expiry_dt) <= trunc(sysdate) + 30 then
+                          '<span class="u-warning-text u-bold">'
+                          || (trunc(dl.expiry_dt) - trunc(sysdate)) || ' days</span>'
+                      else
+                          '<span class="u-success-text u-bold">'
+                          || (trunc(dl.expiry_dt) - trunc(sysdate)) || ' days</span>'
+                  end
+             end) as passport_days_left,
+      
+             max(case when dl.doc_type = 'EID' then dl.doc_no end) as eid_no,
+             max(case when dl.doc_type = 'EID' then dl.expiry_dt end) as eid_expiry,
+             max(case when dl.doc_type = 'EID' then
+                  case
+                      when dl.expiry_dt is null then
+                          '<span class="u-warning-text">No Expiry</span>'
+                      when trunc(dl.expiry_dt) < trunc(sysdate) then
+                          '<span class="u-danger-text u-bold">'
+                          || abs(trunc(dl.expiry_dt) - trunc(sysdate)) || ' days ago</span>'
+                      when trunc(dl.expiry_dt) <= trunc(sysdate) + 30 then
+                          '<span class="u-warning-text u-bold">'
+                          || (trunc(dl.expiry_dt) - trunc(sysdate)) || ' days</span>'
+                      else
+                          '<span class="u-success-text u-bold">'
+                          || (trunc(dl.expiry_dt) - trunc(sysdate)) || ' days</span>'
+                  end
+             end) as eid_days_left,
+      
+             max(case when dl.doc_type = 'DL' then dl.doc_no end) as dl_no,
+             max(case when dl.doc_type = 'DL' then dl.expiry_dt end) as dl_expiry,
+             max(case when dl.doc_type = 'DL' then
+                  case
+                      when dl.expiry_dt is null then
+                          '<span class="u-warning-text">No Expiry</span>'
+                      when trunc(dl.expiry_dt) < trunc(sysdate) then
+                          '<span class="u-danger-text u-bold">'
+                          || abs(trunc(dl.expiry_dt) - trunc(sysdate)) || ' days ago</span>'
+                      when trunc(dl.expiry_dt) <= trunc(sysdate) + 30 then
+                          '<span class="u-warning-text u-bold">'
+                          || (trunc(dl.expiry_dt) - trunc(sysdate)) || ' days</span>'
+                      else
+                          '<span class="u-success-text u-bold">'
+                          || (trunc(dl.expiry_dt) - trunc(sysdate)) || ' days</span>'
+                  end
+             end) as dl_days_left,
+      
+             max(case when dl.doc_type = 'VISA' then dl.doc_no end) as visa_no,
+             max(case when dl.doc_type = 'VISA' then dl.expiry_dt end) as visa_expiry,
+             max(case when dl.doc_type = 'VISA' then
+                  case
+                      when dl.expiry_dt is null then
+                          '<span class="u-warning-text">No Expiry</span>'
+                      when trunc(dl.expiry_dt) < trunc(sysdate) then
+                          '<span class="u-danger-text u-bold">'
+                          || abs(trunc(dl.expiry_dt) - trunc(sysdate)) || ' days ago</span>'
+                      when trunc(dl.expiry_dt) <= trunc(sysdate) + 30 then
+                          '<span class="u-warning-text u-bold">'
+                          || (trunc(dl.expiry_dt) - trunc(sysdate)) || ' days</span>'
+                      else
+                          '<span class="u-success-text u-bold">'
+                          || (trunc(dl.expiry_dt) - trunc(sysdate)) || ' days</span>'
+                  end
+             end) as visa_days_left,
+      
+             max(case when dl.doc_type = 'LABOUR CARD' then dl.doc_no end) as labour_card_no,
+             max(case when dl.doc_type = 'LABOUR CARD' then dl.expiry_dt end) as labour_card_expiry,
+             max(case when dl.doc_type = 'LABOUR CARD' then
+                  case
+                      when dl.expiry_dt is null then
+                          '<span class="u-warning-text">No Expiry</span>'
+                      when trunc(dl.expiry_dt) < trunc(sysdate) then
+                          '<span class="u-danger-text u-bold">'
+                          || abs(trunc(dl.expiry_dt) - trunc(sysdate)) || ' days ago</span>'
+                      when trunc(dl.expiry_dt) <= trunc(sysdate) + 30 then
+                          '<span class="u-warning-text u-bold">'
+                          || (trunc(dl.expiry_dt) - trunc(sysdate)) || ' days</span>'
+                      else
+                          '<span class="u-success-text u-bold">'
+                          || (trunc(dl.expiry_dt) - trunc(sysdate)) || ' days</span>'
+                  end
+             end) as labour_card_days_left
+      
+      from vw_hr_employee_list e
+      left join doc_latest dl
+             on dl.emp_id = e.emp_id
+            and dl.rn = 1
+      group by e.emp_id,
+               e.emp_code,
+               e.first_name || ' ' || e.last_name,
+               e.current_project,
+               e.current_city,
+               e.current_status_name
+      order by e.emp_code desc;
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 17674990024544549
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 17682046700543553
+      identification: 
+        name: Primary Report
+        alias: 176821
+
+    column-groups: 
+    - # ====== Column Group: Passport ==============================
+      id: 17541527961128546
+      identification: 
+        name: Passport
+
+      layout: 
+        sequence: 10
+
+    columns: 
+    - # ====== Column: PASSPORT_DAYS_LEFT ==========================
+      id: 17541025222128541
+      identification: 
+        column-name: PASSPORT_DAYS_LEFT
+        type: Plain Text
+
+      heading: 
+        heading: Passport Days Left
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 18
+        column-alignment: start
+        group: Passport # 17541527961128546
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: EID_DAYS_LEFT ===============================
+      id: 17541190449128542
+      identification: 
+        column-name: EID_DAYS_LEFT
+        type: Plain Text
+
+      heading: 
+        heading: EID Days Left
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 118
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: DL_DAYS_LEFT ================================
+      id: 17541210303128543
+      identification: 
+        column-name: DL_DAYS_LEFT
+        type: Plain Text
+
+      heading: 
+        heading: DLDays Left
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 128
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: VISA_DAYS_LEFT ==============================
+      id: 17541301673128544
+      identification: 
+        column-name: VISA_DAYS_LEFT
+        type: Plain Text
+
+      heading: 
+        heading: Visa Days Left
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 138
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: LABOUR_CARD_DAYS_LEFT =======================
+      id: 17541442059128545
+      identification: 
+        column-name: LABOUR_CARD_DAYS_LEFT
+        type: Plain Text
+
+      heading: 
+        heading: LC Days Left
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 148
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: EMP_ID ======================================
+      id: 17675609851544545
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 1
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 17676055952544544
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Emp Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: FULL_NAME ===================================
+      id: 17676450371544544
+      identification: 
+        column-name: FULL_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Full Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: WORKING_PROJECT =============================
+      id: 17676827446544543
+      identification: 
+        column-name: WORKING_PROJECT
+        type: Plain Text
+
+      heading: 
+        heading: Working Project
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: WORKING_CITY ================================
+      id: 17677259918544543
+      identification: 
+        column-name: WORKING_CITY
+        type: Plain Text
+
+      heading: 
+        heading: Working City
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 5
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_STATUS_NAME =========================
+      id: 17677624322544542
+      identification: 
+        column-name: CURRENT_STATUS_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Current Status Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 6
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PASSPORT_NO =================================
+      id: 17678037998544542
+      identification: 
+        column-name: PASSPORT_NO
+        type: Plain Text
+
+      heading: 
+        heading: Passport No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 7
+        column-alignment: start
+        group: Passport # 17541527961128546
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PASSPORT_EXPIRY =============================
+      id: 17678492197544541
+      identification: 
+        column-name: PASSPORT_EXPIRY
+        type: Plain Text
+
+      heading: 
+        heading: Passport Expiry
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 8
+        column-alignment: start
+        group: Passport # 17541527961128546
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EID_NO ======================================
+      id: 17678853916544541
+      identification: 
+        column-name: EID_NO
+        type: Plain Text
+
+      heading: 
+        heading: EID No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 28
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EID_EXPIRY ==================================
+      id: 17679285755544540
+      identification: 
+        column-name: EID_EXPIRY
+        type: Plain Text
+
+      heading: 
+        heading: EID Expiry
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 38
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DL_NO =======================================
+      id: 17679630381544540
+      identification: 
+        column-name: DL_NO
+        type: Plain Text
+
+      heading: 
+        heading: DL No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 48
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DL_EXPIRY ===================================
+      id: 17680060352544540
+      identification: 
+        column-name: DL_EXPIRY
+        type: Plain Text
+
+      heading: 
+        heading: DL Expiry
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 58
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: VISA_NO =====================================
+      id: 17680491020544539
+      identification: 
+        column-name: VISA_NO
+        type: Plain Text
+
+      heading: 
+        heading: Visa No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 68
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: VISA_EXPIRY =================================
+      id: 17680818541544539
+      identification: 
+        column-name: VISA_EXPIRY
+        type: Plain Text
+
+      heading: 
+        heading: Visa Expiry
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 78
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LABOUR_CARD_NO ==============================
+      id: 17681272701544538
+      identification: 
+        column-name: LABOUR_CARD_NO
+        type: Plain Text
+
+      heading: 
+        heading: Labour Card No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 88
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LABOUR_CARD_EXPIRY ==========================
+      id: 17681689262544538
+      identification: 
+        column-name: LABOUR_CARD_EXPIRY
+        type: Plain Text
+
+      heading: 
+        heading: Labour Card Expiry
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 98
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Employees Current Documents Record
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+

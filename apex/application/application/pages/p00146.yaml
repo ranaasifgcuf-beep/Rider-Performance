@@ -1,0 +1,1474 @@
+---
+# ====== Page: Approval Rule Form ============================
+id: 146
+identification: 
+  name: Approval Rule Form
+  alias: APPROVAL-RULE-FORM
+  title: Approval Rule Form
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Modal Dialog
+  template-options: 
+  - '#DEFAULT#'
+  - ui-dialog--stretch
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Rule Detail =================================
+  id: 34526137925673620
+  identification: 
+    name: Rule Detail
+    type: Interactive Grid
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select rule_step_id,
+             rule_id,
+             step_seq,
+             step_name,
+             approver_type,
+             approver_user_name,
+             approver_role_code
+      from hr_approval_rule_steps
+      where rule_id = :P146_RULE_ID
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P146_RULE_ID
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 34526221696673621
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+      add-row-if-empty: true
+
+    performance: 
+      lazy-loading: false
+
+    appearance: 
+      select-first-row: true
+      fixed-row-height: true
+
+    pagination: 
+      type: Scroll
+      show-total-count: true
+
+    toolbar: 
+      show: true
+      controls: 
+      - Search Column Selection
+      - Search Field
+      - Actions Menu
+      - Reset Button
+      - Save Button
+
+    enable-users-to: 
+      save-public-report: false
+      flashback: true
+      define-chart-view: true
+      download: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 34609018740180258
+      identification: 
+        name: Primary Report
+        alias: 346091
+
+  columns: 
+  - # ====== Column: RULE_STEP_ID ================================
+    id: 34526321178673622
+    identification: 
+      column-name: RULE_STEP_ID
+      type: Hidden
+
+    settings: 
+      value-protected: false
+
+    layout: 
+      sequence: 30
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: RULE_STEP_ID
+      data-type: NUMBER
+      query-only: false
+      primary-key: true
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: RULE_ID =====================================
+    id: 34526434526673623
+    identification: 
+      column-name: RULE_ID
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 40
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: RULE_ID
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      type: Item
+      item: P146_RULE_ID
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: STEP_SEQ ====================================
+    id: 34526531934673624
+    identification: 
+      column-name: STEP_SEQ
+      type: Number Field
+
+    heading: 
+      heading: Sequance No
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 50
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    source: 
+      type: Database Column
+      database-column: STEP_SEQ
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: STEP_NAME ===================================
+    id: 34526692385673625
+    identification: 
+      column-name: STEP_NAME
+      type: Text Field
+
+    heading: 
+      heading: Step Name
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 150
+
+    source: 
+      type: Database Column
+      database-column: STEP_NAME
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: APPROVER_TYPE ===============================
+    id: 34526741018673626
+    identification: 
+      column-name: APPROVER_TYPE
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 70
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: APPROVER_TYPE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      type: Static
+      static-value: USER
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: APPROVER_USER_NAME ==========================
+    id: 34526858630673627
+    identification: 
+      column-name: APPROVER_USER_NAME
+      type: Select List
+
+    heading: 
+      heading: Approver User Name
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    list-of-values: 
+      type: SQL Query
+      sql-query: |
+        select user_name d,
+               user_name r
+        from vw_sec_apex_users
+        order by user_name
+      display-extra-values: true
+      display-null-value: true
+
+    source: 
+      type: Database Column
+      database-column: APPROVER_USER_NAME
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: APPROVER_ROLE_CODE ==========================
+    id: 34526958597673628
+    identification: 
+      column-name: APPROVER_ROLE_CODE
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 90
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: APPROVER_ROLE_CODE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: APEX$ROW_ACTION =============================
+    id: 34527035000673629
+    identification: 
+      column-name: APEX$ROW_ACTION
+      type: Actions Menu
+
+    layout: 
+      sequence: 20
+
+  - # ====== Column: APEX$ROW_SELECTOR ===========================
+    id: 34527106049673630
+    identification: 
+      column-name: APEX$ROW_SELECTOR
+      type: Row Selector
+
+    settings: 
+      enable-multi-select: true
+      show-select-all: true
+      hide-control: false
+
+    layout: 
+      sequence: 10
+
+  printing: 
+    page: 
+      size: Letter
+      orientation: Landscape
+      units: Inches
+      width: 11
+      height: 8.5
+      border-width: 0.5
+      border-color: '#666666'
+
+    page-header: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+    column-headings: 
+      font: Helvetica
+      font-weight: Bold
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#EEEEEE'
+
+    columns: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#FFFFFF'
+
+    page-footer: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+- # ====== Region: Approval Rule Form ==========================
+  id: 34584684877054438
+  identification: 
+    name: Approval Rule Form
+    type: Form
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_APPROVAL_RULES
+    include-rowid-column: false
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+page-items: 
+- # ====== Page Item: P146_RULE_ID =============================
+  id: 34584902479054438
+  identification: 
+    name: P146_RULE_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Approval Rule Form # 34584684877054438
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Approval Rule Form # 34584684877054438
+    column: RULE_ID
+    data-type: NUMBER
+    query-only: true
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P146_MODULE_CODE =========================
+  id: 34585350339054440
+  identification: 
+    name: P146_MODULE_CODE
+    type: Select List
+
+  label: 
+    label: Module Code
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 50
+    region: Approval Rule Form # 34584684877054438
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: HR_APPROVAL_MODULES.MODULE_NAME # 34585435058054440
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Approval Rule Form # 34584684877054438
+    column: MODULE_CODE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P146_TXN_TYPE_CODE =======================
+  id: 34586049083054441
+  identification: 
+    name: P146_TXN_TYPE_CODE
+    type: Select List
+
+  label: 
+    label: Transaction Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 60
+    region: Approval Rule Form # 34584684877054438
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select deal_type_name d,
+             deal_type_code r
+      from hr_pro_deal_type_master
+      where is_active = 'Y'
+      order by seq_no
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Approval Rule Form # 34584684877054438
+    column: TXN_TYPE_CODE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P146_ORG_ID ==============================
+  id: 34586491198054441
+  identification: 
+    name: P146_ORG_ID
+    type: Select List
+
+  label: 
+    label: Organization
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 70
+    region: Approval Rule Form # 34584684877054438
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: HR_ORGS.ORG_CODE # 34389172366944418
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Approval Rule Form # 34584684877054438
+    column: ORG_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P146_MIN_AMOUNT ==========================
+  id: 34586807014054442
+  identification: 
+    name: P146_MIN_AMOUNT
+    type: Number Field
+
+  label: 
+    label: Min Amount
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 80
+    region: Approval Rule Form # 34584684877054438
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Approval Rule Form # 34584684877054438
+    column: MIN_AMOUNT
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P146_MAX_AMOUNT ==========================
+  id: 34587268107054442
+  identification: 
+    name: P146_MAX_AMOUNT
+    type: Number Field
+
+  label: 
+    label: Max Amount
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 90
+    region: Approval Rule Form # 34584684877054438
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Approval Rule Form # 34584684877054438
+    column: MAX_AMOUNT
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P146_RULE_NAME ===========================
+  id: 34587699134054442
+  identification: 
+    name: P146_RULE_NAME
+    type: Text Field
+
+  label: 
+    label: Rule Name
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 20
+    region: Approval Rule Form # 34584684877054438
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: true
+    maximum-length: 200
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Approval Rule Form # 34584684877054438
+    column: RULE_NAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P146_IS_ACTIVE ===========================
+  id: 34588008560054442
+  identification: 
+    name: P146_IS_ACTIVE
+    type: Switch
+
+  label: 
+    label: Is Active
+    alignment: Left
+
+  settings: 
+    use-defaults: false
+    on-value: Y
+    on-label: Yes
+    off-value: N
+    off-label: No
+
+  layout: 
+    sequence: 30
+    region: Approval Rule Form # 34584684877054438
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Approval Rule Form # 34584684877054438
+    column: IS_ACTIVE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: Y
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P146_SEQ_NO ==============================
+  id: 34588455397054443
+  identification: 
+    name: P146_SEQ_NO
+    type: Number Field
+
+  label: 
+    label: Sequance No
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 40
+    region: Approval Rule Form # 34584684877054438
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Approval Rule Form # 34584684877054438
+    column: SEQ_NO
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P146_CREATED_BY ==========================
+  id: 34588803808054443
+  identification: 
+    name: P146_CREATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 110
+    region: Approval Rule Form # 34584684877054438
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Approval Rule Form # 34584684877054438
+    column: CREATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P146_CREATED_DT ==========================
+  id: 34589214741054443
+  identification: 
+    name: P146_CREATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 120
+    region: Approval Rule Form # 34584684877054438
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Approval Rule Form # 34584684877054438
+    column: CREATED_DT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P146_UPDATED_BY ==========================
+  id: 34590007810054444
+  identification: 
+    name: P146_UPDATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 130
+    region: Approval Rule Form # 34584684877054438
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Approval Rule Form # 34584684877054438
+    column: UPDATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P146_UPDATED_DT ==========================
+  id: 34590438184054444
+  identification: 
+    name: P146_UPDATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 140
+    region: Approval Rule Form # 34584684877054438
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Approval Rule Form # 34584684877054438
+    column: UPDATED_DT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: CANCEL ======================================
+  id: 34595130403054448
+  identification: 
+    button-name: CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 10
+    region: Approval Rule Form # 34584684877054438
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:145:&APP_SESSION.::&DEBUG.:::'
+      page: 145 # Approval Rule Workbench
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: DELETE ======================================
+  id: 34595745327054449
+  identification: 
+    button-name: DELETE
+    label: Delete
+
+  layout: 
+    sequence: 20
+    region: Approval Rule Form # 34584684877054438
+    slot: DELETE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: false
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL DELETE action
+
+  confirmation: 
+    message: '&APP_TEXT$DELETE_MSG!RAW.'
+    style: Danger
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P146_RULE_ID
+
+- # ====== Button: SAVE ========================================
+  id: 34596171364054449
+  identification: 
+    button-name: SAVE
+    label: Apply Changes
+
+  layout: 
+    sequence: 30
+    region: Approval Rule Form # 34584684877054438
+    slot: CHANGE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P146_RULE_ID
+
+- # ====== Button: CREATE ======================================
+  id: 34596517296054449
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 40
+    region: Approval Rule Form # 34584684877054438
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P146_RULE_ID
+
+validations: 
+- # ====== Validation: P146_CREATED_DT must be timestamp =======
+  id: 34589723979054444
+  identification: 
+    name: P146_CREATED_DT must be timestamp
+
+  execution: 
+    sequence: 100
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P146_CREATED_DT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P146_CREATED_DT # 34589214741054443
+
+- # ====== Validation: P146_UPDATED_DT must be timestamp =======
+  id: 34590919202054445
+  identification: 
+    name: P146_UPDATED_DT must be timestamp
+
+  execution: 
+    sequence: 120
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P146_UPDATED_DT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P146_UPDATED_DT # 34590438184054444
+
+processes: 
+- # ====== Process: Rule Detail - Save Interactive Grid Data ===
+  id: 34527214271673631
+  identification: 
+    name: Rule Detail - Save Interactive Grid Data
+    type: Interactive Grid - Automatic Row Processing (DML)
+    execution-chain: None
+    editable-region: Rule Detail # 34526137925673620
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    execution-scope: For Created and Modified Rows
+
+- # ====== Process: Initialize form Approval Rule Form =========
+  id: 34597356286054451
+  identification: 
+    name: Initialize form Approval Rule Form
+    type: Form - Initialization
+    execution-chain: None
+    form-region: Approval Rule Form # 34584684877054438
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Process form Approval Rule Form ============
+  id: 34597790545054451
+  identification: 
+    name: Process form Approval Rule Form
+    type: Form - Automatic Row Processing (DML)
+    execution-chain: None
+    form-region: Approval Rule Form # 34584684877054438
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+branches: 
+- # ====== Branch: Go To Page 145 ==============================
+  id: 34596843421054449
+  identification: 
+    name: Go To Page 145
+
+  execution: 
+    sequence: 1
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:145:&APP_SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 145 # Approval Rule Workbench
+

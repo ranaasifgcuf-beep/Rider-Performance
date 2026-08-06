@@ -1,0 +1,1098 @@
+---
+# ====== Page: Employees Documents of Record =================
+id: 105
+identification: 
+  name: Employees Documents of Record
+  alias: EMPLOYEES-DOCUMENTS-OF-RECORD
+  title: Employees Documents of Record
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Employees Documents of Record ===============
+  id: 16005963097176511
+  identification: 
+    name: Employees Documents of Record
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select doc_id,
+             emp_id,
+      
+             doc_type,
+             doc_type_name as document,
+      
+             doc_no as document_number,
+      
+             case is_current_record
+                 when 'Y' then '<span class="t-Badge t-Badge--success">Yes</span>'
+                 else '<span class="t-Badge">No</span>'
+             end as is_current_record,
+      
+             issue_dt,
+             expiry_dt,
+      
+             remarks,
+             expiry_in_days,
+      
+             case expiry_status
+                 when 'NO_EXPIRY' then
+                     '<span class="t-Badge">No Expiry</span>'
+                 when 'EXPIRED' then
+                     '<span class="t-Badge t-Badge--danger">Expired</span>'
+                 when 'EXPIRING_SOON' then
+                     '<span class="t-Badge t-Badge--warning">Near Expiry</span>'
+                 when 'VALID' then
+                     '<span class="t-Badge t-Badge--success">Active</span>'
+                 else
+                     '<span class="t-Badge">' || apex_escape.html(expiry_status) || '</span>'
+             end as expiry_status,
+      
+             case
+                 when file_name is not null then
+                     '<span class="fa fa-paperclip" title="' ||
+                     apex_escape.html_attribute(file_name) ||
+                     '"></span> ' ||
+                     apex_escape.html(file_name)
+                 when file_ref is not null then
+                     '<span class="fa fa-link" title="External File Reference"></span>'
+                 else
+                     null
+             end as file_info,
+      
+             file_ref,
+             file_name,
+             mime_type,
+             file_size,
+      
+             created_by,
+             created_dt,
+             updated_by,
+             updated_dt,
+             case
+          when file_name is not null then
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page    => 105,
+                  p_request => 'APPLICATION_PROCESS=DOWNLOAD_EMP_DOC',
+                  p_items   => 'P105_DOWNLOAD_DOC_ID',
+                  p_values  => doc_id
+              ) ||
+              '" title="Download Document">' ||
+              '<span class="fa fa-download"></span></a>'
+          when file_ref is not null then
+              '<a href="' || apex_escape.html_attribute(file_ref) || '" target="_blank" title="Open File Reference">' ||
+              '<span class="fa fa-external-link"></span></a>'
+          else
+              null
+      end as download_link
+      
+      from hr_emp_docs_v
+      where emp_id = :P105_EMP_ID
+      order by 
+             case is_current_record when 'Y' then 1 else 2 end,
+             case expiry_status
+                 when 'EXPIRED' then 1
+                 when 'EXPIRING_SOON' then 2
+                 when 'VALID' then 3
+                 else 4
+             end,
+             doc_id desc;
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 16006020089176511
+    link: 
+      link-column: Link to Custom Target
+      target: 
+        url: 'f?p=&APP_ID.:111:&APP_SESSION.::&DEBUG.:RP:P111_DOC_ID:\#DOC_ID#\'
+        page: 111 # Documents of Record Form
+        clear-cache: RP
+        values: 
+          p111_doc_id: '#DOC_ID#'
+
+      link-icon: <span role="img" aria-label="Edit" class="fa fa-edit" title="Edit"></span>
+      condition-type: Expression
+      language: PL/SQL
+      pl/sql-expression: sec_pkg.has_perm('HR_EDOC_UPDATE') = 1
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 16013650676175965
+      identification: 
+        name: Primary Report
+        alias: 160137
+
+    columns: 
+    - # ====== Column: DOC_ID ======================================
+      id: 16006756684176510
+      identification: 
+        column-name: DOC_ID
+        type: Hidden
+
+      heading: 
+        heading: Doc ID
+
+      layout: 
+        sequence: 0
+
+      source: 
+        primary-key: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOC_TYPE ====================================
+      id: 16007545957176510
+      identification: 
+        column-name: DOC_TYPE
+        type: Hidden
+
+      heading: 
+        heading: Document
+
+      layout: 
+        sequence: 3
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ISSUE_DT ====================================
+      id: 16008363942176509
+      identification: 
+        column-name: ISSUE_DT
+        type: Plain Text
+
+      heading: 
+        heading: Issue Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 43
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_DT ===================================
+      id: 16008763583176509
+      identification: 
+        column-name: EXPIRY_DT
+        type: Plain Text
+
+      heading: 
+        heading: Expiry Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 53
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IS_CURRENT_RECORD ===========================
+      id: 16009100011176509
+      identification: 
+        column-name: IS_CURRENT_RECORD
+        type: Plain Text
+
+      heading: 
+        heading: Is Current Record
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 33
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: FILE_REF ====================================
+      id: 16009904875176508
+      identification: 
+        column-name: FILE_REF
+        type: Hidden
+
+      heading: 
+        heading: File Ref
+
+      layout: 
+        sequence: 73
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REMARKS =====================================
+      id: 16010330660176508
+      identification: 
+        column-name: REMARKS
+        type: Plain Text
+
+      heading: 
+        heading: Remarks
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 83
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_BY ==================================
+      id: 16010762483176508
+      identification: 
+        column-name: CREATED_BY
+        type: Hidden
+
+      heading: 
+        heading: Created By
+
+      layout: 
+        sequence: 93
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_DT ==================================
+      id: 16011115970176508
+      identification: 
+        column-name: CREATED_DT
+        type: Hidden
+
+      heading: 
+        heading: Created Dt
+
+      layout: 
+        sequence: 103
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: UPDATED_BY ==================================
+      id: 16011533267176508
+      identification: 
+        column-name: UPDATED_BY
+        type: Hidden
+
+      heading: 
+        heading: Updated By
+
+      layout: 
+        sequence: 113
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: UPDATED_DT ==================================
+      id: 16011941412176507
+      identification: 
+        column-name: UPDATED_DT
+        type: Hidden
+
+      heading: 
+        heading: Updated Dt
+
+      layout: 
+        sequence: 123
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_ID ======================================
+      id: 16014461394164901
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 133
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_IN_DAYS ==============================
+      id: 16014997151164906
+      identification: 
+        column-name: EXPIRY_IN_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Expiry In Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 143
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: EXPIRY_STATUS ===============================
+      id: 16015085849164907
+      identification: 
+        column-name: EXPIRY_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Expiry Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 153
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: DOCUMENT ====================================
+      id: 37298982783639646
+      identification: 
+        column-name: DOCUMENT
+        type: Plain Text
+
+      heading: 
+        heading: Document
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 13
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOCUMENT_NUMBER =============================
+      id: 37299046772639647
+      identification: 
+        column-name: DOCUMENT_NUMBER
+        type: Plain Text
+
+      heading: 
+        heading: Document Number
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 23
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: FILE_INFO ===================================
+      id: 37299132936639648
+      identification: 
+        column-name: FILE_INFO
+        type: Hidden
+
+      heading: 
+        heading: File Info
+
+      layout: 
+        sequence: 163
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: FILE_NAME ===================================
+      id: 37299249549639649
+      identification: 
+        column-name: FILE_NAME
+        type: Download BLOB
+
+      heading: 
+        heading: File Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 173
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        view-file-as: Attachment
+
+      blob-attributes: 
+        table-owner: Parsing Schema
+        table-name: HR_EMP_DOCS
+        blob-column: FILE_BLOB
+        primary-key-column-1: DOC_ID
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: MIME_TYPE ===================================
+      id: 37299317709639650
+      identification: 
+        column-name: MIME_TYPE
+        type: Hidden
+
+      heading: 
+        heading: Mime Type
+
+      layout: 
+        sequence: 183
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: FILE_SIZE ===================================
+      id: 37589352464478601
+      identification: 
+        column-name: FILE_SIZE
+        type: Hidden
+
+      heading: 
+        heading: File Size
+
+      layout: 
+        sequence: 193
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOWNLOAD_LINK ===============================
+      id: 37589596649478603
+      identification: 
+        column-name: DOWNLOAD_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Download
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 203
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Employees Documents of Record
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+page-items: 
+- # ====== Page Item: P105_EMP_ID ==============================
+  id: 15895287799110450
+  identification: 
+    name: P105_EMP_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Employees Documents of Record # 16005963097176511
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P105_DOWNLOAD_DOC_ID =====================
+  id: 37589400581478602
+  identification: 
+    name: P105_DOWNLOAD_DOC_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 20
+    region: Employees Documents of Record # 16005963097176511
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: CREATE ======================================
+  id: 16012465811176507
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 10
+    region: Employees Documents of Record # 16005963097176511
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:111:&SESSION.::&DEBUG.:111:P111_EMP_ID:&P105_EMP_ID.'
+      page: 111 # Documents of Record Form
+      clear-cache: 111
+      values: 
+        p111_emp_id: '&P105_EMP_ID.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sec_pkg.has_perm('HR_EDOC_ADD') = 1
+
+- # ====== Button: PB_CANCEL ===================================
+  id: 16014647676164903
+  identification: 
+    button-name: PB_CANCEL
+    label: Back
+
+  layout: 
+    sequence: 20
+    region: Employees Documents of Record # 16005963097176511
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: Edit Report - Dialog Closed =========
+  id: 16012720749176507
+  identification: 
+    name: Edit Report - Dialog Closed
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: Employees Documents of Record # 16005963097176511
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 16013289651176506
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Employees Documents of Record # 16005963097176511
+
+    execution: 
+      sequence: 10
+      event: Edit Report - Dialog Closed # 16012720749176507
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Close Dialog ========================
+  id: 38205958865256228
+  identification: 
+    name: Close Dialog
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: PB_CANCEL # 16014647676164903
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 38206011438256229
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        if (document.referrer && document.referrer !== window.location.href) {
+            window.history.back();
+        } else {
+            apex.navigation.redirect("f?p=&APP_ID.:101:&SESSION.::NO:::");
+        }
+
+    execution: 
+      sequence: 10
+      event: Close Dialog # 38205958865256228
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

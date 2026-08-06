@@ -1,0 +1,155 @@
+---
+- # ====== Application Process: FORCE_PASSWORD_CHANGE ==========
+  id: 9747312086878615
+  identification: 
+    name: FORCE_PASSWORD_CHANGE
+    type: NATIVE_PLSQL
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      declare
+        l_must_change char(1);
+      begin
+        -- Only if user is authenticated
+        if v('APP_USER') is null or lower(v('APP_USER')) = 'nobody' then
+          return;
+        end if;
+      
+        -- Don't loop on change password page
+        if :APP_PAGE_ID = 901 then
+          return;
+        end if;
+      
+        -- Check must_change flag
+        select must_change
+          into l_must_change
+          from sec_users
+         where username = upper(v('APP_USER'))
+           and is_active = 'Y';
+      
+        if l_must_change = 'Y' then
+          apex_util.redirect_url(
+        apex_page.get_url(p_page => 901)
+      );
+        end if;
+      
+      exception
+        when no_data_found then
+          null;
+      end;
+
+  execution: 
+    sequence: 1
+    point: Before Header
+
+  server-side-condition: 
+    type: Always
+
+  subscription: 
+    version-number: 39900341803612
+
+- # ====== Application Process: GET_EMP_PHOTO ==================
+  id: 17125600796999409
+  identification: 
+    name: GET_EMP_PHOTO
+    type: NATIVE_PLSQL
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      declare
+          l_blob      blob;
+          l_mime_type varchar2(100);
+      begin
+          select photo_blob,
+                 nvl(photo_mime_type, 'image/jpeg')
+            into l_blob,
+                 l_mime_type
+            from hr_employees
+           where emp_id = to_number(apex_application.g_x01);
+      
+          owa_util.mime_header(l_mime_type, false);
+          htp.p('Content-length: ' || dbms_lob.getlength(l_blob));
+          htp.p('Cache-Control: max-age=86400');
+          owa_util.http_header_close;
+          wpg_docload.download_file(l_blob);
+      
+      exception
+          when no_data_found then
+              owa_util.status_line(404, 'Not Found');
+              owa_util.http_header_close;
+      end;
+
+  execution: 
+    sequence: 1
+    point: Ajax Callback
+
+  security: 
+    authorization-scheme: Must Not Be Public User
+
+  subscription: 
+    version-number: 39904149431152
+
+- # ====== Application Process: DOWNLOAD_EMP_DOC ===============
+  id: 37617045081745353
+  identification: 
+    name: DOWNLOAD_EMP_DOC
+    type: NATIVE_PLSQL
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      declare
+          l_blob      blob;
+          l_mime_type varchar2(255);
+          l_file_name varchar2(500);
+      begin
+          select file_blob,
+                 nvl(mime_type, 'application/octet-stream'),
+                 nvl(file_name, 'employee_document')
+            into l_blob,
+                 l_mime_type,
+                 l_file_name
+            from hr_emp_docs
+           where doc_id = to_number(v('P105_DOWNLOAD_DOC_ID'));
+      
+          if l_blob is null then
+              raise_application_error(-20001, 'No file is attached with this document.');
+          end if;
+      
+          sys.htp.init;
+      
+          owa_util.mime_header(l_mime_type, false);
+      
+          htp.p('Content-Length: ' || dbms_lob.getlength(l_blob));
+          htp.p(
+              'Content-Disposition: attachment; filename="' ||
+              replace(l_file_name, '"', '') ||
+              '"'
+          );
+      
+          owa_util.http_header_close;
+      
+          wpg_docload.download_file(l_blob);
+      
+          apex_application.stop_apex_engine;
+      
+      exception
+          when no_data_found then
+              raise_application_error(-20002, 'Document file not found.');
+      end;
+
+  execution: 
+    sequence: 1
+    point: Ajax Callback
+
+  security: 
+    authorization-scheme: Must Not Be Public User
+
+  subscription: 
+    version-number: 39909755921742
+

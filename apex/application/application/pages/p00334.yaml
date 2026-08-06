@@ -1,0 +1,1749 @@
+---
+# ====== Page: SIM Request History ===========================
+id: 334
+identification: 
+  name: SIM Request History
+  alias: SIM-REQUEST-HISTORY
+  title: SIM Request History
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    #sim_history_filters {
+        margin-bottom: 10px;
+    }
+    
+    #sim_history_filters .col {
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+    }
+    
+    #sim_history_filters .t-Form-fieldContainer {
+        margin-bottom: 0 !important;
+    }
+    
+    #sim_history_filters .filter-btn {
+        margin-top: 16px !important;
+        height: 38px !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+    
+    #sim_history_filters .t-Button-label {
+        white-space: nowrap;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Filter ======================================
+  id: 43071762049428317
+  identification: 
+    name: Filter
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: sim_history_filters
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Breadcrumb ==================================
+  id: 43120310849325631
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 9721609352336316
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: SIM Request History =========================
+  id: 43121072477325634
+  identification: 
+    name: SIM Request History
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select sr.request_id,
+             sr.emp_id,
+      
+             e.emp_code,
+             e.full_employee_name as employee_name,
+             e.job_name,
+             e.worker_type,
+             e.supplier_name,
+      
+             sr.request_type,
+             sr.request_status,
+      
+             case sr.request_status
+                 when 'ASSIGNED' then
+                     '<span class="t-Badge t-Badge--success">Assigned</span>'
+                 when 'REJECTED' then
+                     '<span class="t-Badge t-Badge--danger">Rejected</span>'
+                 when 'CANCELLED' then
+                     '<span class="t-Badge t-Badge--normal">Cancelled</span>'
+                 when 'CLOSED' then
+                     '<span class="t-Badge t-Badge--success">Closed</span>'
+                 else
+                     '<span class="t-Badge t-Badge--warning">' || sr.request_status || '</span>'
+             end as status_badge,
+      
+             sr.priority,
+      
+             p.project_name as requested_project,
+             c.city_name    as requested_city,
+      
+             sr.requested_by,
+             to_char(sr.requested_dt, 'DD-MON-YYYY HH24:MI') as requested_dt,
+             to_char(sr.required_by_dt, 'DD-MON-YYYY') as required_by_dt,
+      
+             fs1.mobile_no as current_sim_no,
+             fs2.mobile_no as assigned_sim_no,
+      
+             sr.reason_code,
+             sr.request_remarks,
+             sr.rejection_reason,
+             sr.cancellation_reason,
+      
+             sr.closed_by,
+             to_char(sr.closed_dt, 'DD-MON-YYYY HH24:MI') as closed_dt,
+      
+             sr.sim_assign_id,
+      
+             '<a href="' ||
+             apex_util.prepare_url(
+                 'f?p=' || :APP_ID || ':335:' || :APP_SESSION ||
+                 '::NO::P335_REQUEST_ID:' || sr.request_id
+             ) ||
+             '" class="sim-action-btn" title="View Request Log">' ||
+             '<span class="fa fa-history" aria-hidden="true"></span>' ||
+             '</a>' as history_action
+      
+      from hr_sim_requests sr
+      
+      join vw_hr_employee_list e
+        on e.emp_id = sr.emp_id
+      
+      left join hr_projects p
+        on p.project_id = sr.requested_project_id
+      
+      left join ref_cities c
+        on c.city_id = sr.requested_city_id
+      
+      left join fleet_sims fs1
+        on fs1.sim_id = sr.current_sim_id
+      
+      left join fleet_sims fs2
+        on fs2.sim_id = sr.assigned_sim_id
+      
+      where sr.request_status not in ('OPEN','IN_PROGRESS')
+      
+        and (
+              :P334_STATUS is null
+           or :P334_STATUS = 'CLOSED_ONLY'
+              and sr.request_status in ('ASSIGNED','REJECTED','CANCELLED','CLOSED')
+           or :P334_STATUS = 'ASSIGNED'
+              and sr.request_status = 'ASSIGNED'
+           or :P334_STATUS = 'REJECTED'
+              and sr.request_status = 'REJECTED'
+           or :P334_STATUS = 'CANCELLED'
+              and sr.request_status = 'CANCELLED'
+           or :P334_STATUS = 'ALL_HISTORY'
+            )
+      
+      and (
+            v('P334_FROM_DT') is null
+            or sr.closed_dt >= to_date(v('P334_FROM_DT'), 'DD-MON-YYYY')
+          )
+      
+      and (
+            v('P334_TO_DT') is null
+            or sr.closed_dt < to_date(v('P334_TO_DT'), 'DD-MON-YYYY') + 1
+          )
+      
+        and (
+              :P334_EMP_ID is null
+              or sr.emp_id = :P334_EMP_ID
+            )
+      
+      order by sr.closed_dt desc nulls last,
+               sr.request_id desc;
+    page-items-to-submit: 
+    - P334_STATUS
+    - P334_FROM_DT
+    - P334_TO_DT
+    - P334_EMP_ID
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: sim_request_history
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 43121159248325634
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 43134792684349658
+      identification: 
+        name: Primary Report
+        alias: 431348
+
+    columns: 
+    - # ====== Column: REQUEST_ID ==================================
+      id: 43121831568325637
+      identification: 
+        column-name: REQUEST_ID
+        type: Plain Text
+
+      heading: 
+        heading: 'Request #'
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 1
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_ID ======================================
+      id: 43122284130325638
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 2
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 43122602841325638
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Employee Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 43123083197325639
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: JOB_NAME ====================================
+      id: 43123462429325639
+      identification: 
+        column-name: JOB_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Job Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 5
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: WORKER_TYPE =================================
+      id: 43123810366325640
+      identification: 
+        column-name: WORKER_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Worker Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 6
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: SUPPLIER_NAME ===============================
+      id: 43124263731325640
+      identification: 
+        column-name: SUPPLIER_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Supplier Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 7
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUEST_TYPE ================================
+      id: 43124683368325641
+      identification: 
+        column-name: REQUEST_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Request Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 8
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUEST_STATUS ==============================
+      id: 43125095652325641
+      identification: 
+        column-name: REQUEST_STATUS
+        type: Hidden
+
+      heading: 
+        heading: Request Status
+
+      layout: 
+        sequence: 9
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: STATUS_BADGE ================================
+      id: 43125490380325642
+      identification: 
+        column-name: STATUS_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: PRIORITY ====================================
+      id: 43125886200325642
+      identification: 
+        column-name: PRIORITY
+        type: Plain Text
+
+      heading: 
+        heading: Priority
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 11
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUESTED_PROJECT ===========================
+      id: 43126273380325642
+      identification: 
+        column-name: REQUESTED_PROJECT
+        type: Plain Text
+
+      heading: 
+        heading: Requested Project
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 12
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUESTED_CITY ==============================
+      id: 43126630194325643
+      identification: 
+        column-name: REQUESTED_CITY
+        type: Plain Text
+
+      heading: 
+        heading: Requested City
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 13
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUESTED_BY ================================
+      id: 43127010751325643
+      identification: 
+        column-name: REQUESTED_BY
+        type: Plain Text
+
+      heading: 
+        heading: Requested By
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 14
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUESTED_DT ================================
+      id: 43127406217325644
+      identification: 
+        column-name: REQUESTED_DT
+        type: Plain Text
+
+      heading: 
+        heading: Requested Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 15
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUIRED_BY_DT ==============================
+      id: 43127806551325644
+      identification: 
+        column-name: REQUIRED_BY_DT
+        type: Hidden
+
+      heading: 
+        heading: Required By Dt
+
+      layout: 
+        sequence: 16
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_SIM_NO ==============================
+      id: 43128290457325645
+      identification: 
+        column-name: CURRENT_SIM_NO
+        type: Hidden
+
+      heading: 
+        heading: Current Sim No
+
+      layout: 
+        sequence: 17
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ASSIGNED_SIM_NO =============================
+      id: 43128662700325645
+      identification: 
+        column-name: ASSIGNED_SIM_NO
+        type: Plain Text
+
+      heading: 
+        heading: Assigned Sim No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 18
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REASON_CODE =================================
+      id: 43129073151325646
+      identification: 
+        column-name: REASON_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Reason Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 19
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REQUEST_REMARKS =============================
+      id: 43129406768325646
+      identification: 
+        column-name: REQUEST_REMARKS
+        type: Plain Text
+
+      heading: 
+        heading: Request Remarks
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REJECTION_REASON ============================
+      id: 43129867648325647
+      identification: 
+        column-name: REJECTION_REASON
+        type: Plain Text
+
+      heading: 
+        heading: Rejection Reason
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 21
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CANCELLATION_REASON =========================
+      id: 43130206927325647
+      identification: 
+        column-name: CANCELLATION_REASON
+        type: Plain Text
+
+      heading: 
+        heading: Cancellation Reason
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 22
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CLOSED_BY ===================================
+      id: 43130653590325648
+      identification: 
+        column-name: CLOSED_BY
+        type: Plain Text
+
+      heading: 
+        heading: Closed By
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 23
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CLOSED_DT ===================================
+      id: 43131089502325648
+      identification: 
+        column-name: CLOSED_DT
+        type: Plain Text
+
+      heading: 
+        heading: Closed Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 24
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: SIM_ASSIGN_ID ===============================
+      id: 43131454991325649
+      identification: 
+        column-name: SIM_ASSIGN_ID
+        type: Hidden
+
+      heading: 
+        heading: Sim Assign Id
+
+      layout: 
+        sequence: 25
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: HISTORY_ACTION ==============================
+      id: 43131894156325649
+      identification: 
+        column-name: HISTORY_ACTION
+        type: Hidden
+
+      heading: 
+        heading: History Action
+
+      layout: 
+        sequence: 26
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: SIM Request History
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+page-items: 
+- # ====== Page Item: P334_STATUS ==============================
+  id: 43071885278428318
+  identification: 
+    name: P334_STATUS
+    type: Select List
+
+  label: 
+    label: Status
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Filter # 43071762049428317
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 3
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select 'Closed / Rejected / Assigned' d, 'CLOSED_ONLY' r from dual
+      union all
+      select 'Assigned' d, 'ASSIGNED' r from dual
+      union all
+      select 'Rejected' d, 'REJECTED' r from dual
+      union all
+      select 'Cancelled' d, 'CANCELLED' r from dual
+      union all
+      select 'All History' d, 'ALL_HISTORY' r from dual;
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: CLOSED_ONLY
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P334_FROM_DT =============================
+  id: 43072002641428320
+  identification: 
+    name: P334_FROM_DT
+    type: Date Picker
+
+  label: 
+    label: From Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 20
+    region: Filter # 43071762049428317
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: trunc(sysdate) - 30
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P334_TO_DT ===============================
+  id: 43072171750428321
+  identification: 
+    name: P334_TO_DT
+    type: Date Picker
+
+  label: 
+    label: To Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 30
+    region: Filter # 43071762049428317
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: trunc(sysdate)
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P334_EMP_ID ==============================
+  id: 43072252495428322
+  identification: 
+    name: P334_EMP_ID
+    type: Popup LOV
+
+  label: 
+    label: Employee
+    alignment: Left
+
+  settings: 
+    display-as: Inline Popup
+    initial-fetch: Automatic
+    manual-entry: false
+    fetch-on-search: false
+
+  search: 
+    match-type: Contains
+    case-sensitive: false
+    minimum-characters: 0
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: Filter # 43071762049428317
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 3
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: HR.EMPLOYEE_LOV # 34519350958620461
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: APPLY_FILTER ================================
+  id: 43072321259428323
+  identification: 
+    button-name: APPLY_FILTER
+    label: Search
+
+  layout: 
+    sequence: 50
+    region: Filter # 43071762049428317
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    css-classes: 
+    - filter-btn
+    icon: fa-search
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: RESET_FILTER ================================
+  id: 43072632702428326
+  identification: 
+    button-name: RESET_FILTER
+    label: Reset
+
+  layout: 
+    sequence: 60
+    region: Filter # 43071762049428317
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    - t-Button--padBottom
+    css-classes: 
+    - filter-btn
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: Apply History Filters ===============
+  id: 43072419346428324
+  identification: 
+    name: Apply History Filters
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: APPLY_FILTER # 43072321259428323
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 43072577785428325
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: SIM Request History # 43121072477325634
+
+    execution: 
+      sequence: 10
+      event: Apply History Filters # 43072419346428324
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New =================================
+  id: 43072708969428327
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: RESET_FILTER # 43072632702428326
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 43072803017428328
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        apex.item("P334_STATUS").setValue("CLOSED_ONLY");
+        apex.item("P334_FROM_DT").setValue("");
+        apex.item("P334_TO_DT").setValue("");
+        apex.item("P334_EMP_ID").setValue("");
+        
+        apex.region("YOUR_REGION_STATIC_ID").refresh();apex.item("P334_STATUS").setValue("CLOSED_ONLY");
+        apex.item("P334_FROM_DT").setValue("");
+        apex.item("P334_TO_DT").setValue("");
+        apex.item("P334_EMP_ID").setValue("");
+        
+        apex.region("YOUR_REGION_STATIC_ID").refresh();
+
+    execution: 
+      sequence: 10
+      event: New # 43072708969428327
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

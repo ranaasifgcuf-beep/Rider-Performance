@@ -1,0 +1,1528 @@
+---
+# ====== Page: Loan Workbench ================================
+id: 170
+identification: 
+  name: Loan Workbench
+  alias: LOAN-WORKBENCH
+  title: Loan Workbench
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    #loan_workbench td.loan-actions-cell,
+    #loan_workbench td[headers="QUICK_ACTIONS"] {
+        white-space: nowrap !important;
+        min-width: 170px !important;
+        width: 170px !important;
+    }
+    
+    #loan_workbench .loan-actions {
+        display: inline-flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 4px !important;
+        align-items: center !important;
+        justify-content: center !important;
+        white-space: nowrap !important;
+        width: max-content !important;
+    }
+    
+    #loan_workbench .loan-actions .t-Button {
+        flex: 0 0 auto !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 28px !important;
+        width: 28px !important;
+        height: 26px !important;
+        padding: 3px 6px !important;
+        margin: 0 !important;
+    }
+    
+    #loan_workbench .loan-actions .fa {
+        margin: 0 !important;
+    }
+    
+    #loan_workbench .loan-actions .is-disabled {
+        opacity: 0.35;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Breadcrumb ==================================
+  id: 35704267030664264
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 9721609352336316
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: Loan Workbench ==============================
+  id: 35704960382664270
+  identification: 
+    name: Loan Workbench
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select v.loan_id,
+             v.loan_no,
+             v.emp_code,
+             v.employee_name,
+             v.loan_type,
+             v.source_type,
+             v.loan_amount,
+             v.agreed_advance_amount,
+             v.emi_amount,
+             v.paid_amount,
+             v.waived_amount,
+             v.adjustment_amount,
+             v.reversed_amount,
+             v.bad_debt_amount,
+             v.balance_amount,
+             case v.approval_status
+                 when 'DRAFT' then '<span class="t-Badge">Draft</span>'
+                 when 'SUBMITTED' then '<span class="t-Badge t-Badge--warning">Submitted</span>'
+                 when 'APPROVED' then '<span class="t-Badge t-Badge--success">Approved</span>'
+                 when 'REJECTED' then '<span class="t-Badge t-Badge--danger">Rejected</span>'
+                 when 'CANCELLED' then '<span class="t-Badge">Cancelled</span>'
+                 else '<span class="t-Badge">' || apex_escape.html(v.approval_status) || '</span>'
+             end approval_status,
+      
+             case v.status
+                 when 'ACTIVE' then '<span class="t-Badge t-Badge--success">Active</span>'
+                 when 'COMPLETED' then '<span class="t-Badge t-Badge--info">Completed</span>'
+                 when 'CANCELLED' then '<span class="t-Badge t-Badge--danger">Cancelled</span>'
+                 else '<span class="t-Badge">' || apex_escape.html(v.status) || '</span>'
+             end loan_status,
+      
+             to_char(v.issue_dt, 'DD-MON-YYYY') issue_dt,
+             to_char(v.start_month, 'MON-YYYY') start_month,
+      
+             '<a href="' ||
+             apex_page.get_url(
+                 p_page        => 171,
+                 p_items       => 'P171_LOAN_ID',
+                 p_values      => v.loan_id,
+                 p_clear_cache => '171'
+             ) ||
+             '" title="View Loan">' ||
+             '<span class="fa fa-eye"></span></a>' view_link,
+            case
+          when v.source_type = 'MANUAL'
+           and v.approval_status in ('DRAFT','REJECTED')
+          then
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page        => 173,
+                  p_items       => 'P173_LOAN_ID',
+                  p_values      => v.loan_id,
+                  p_clear_cache => '173'
+              ) ||
+              '" title="Edit / Submit Draft Loan">' ||
+              '<span class="fa fa-edit"></span></a>'
+          else
+              null
+      end Edit_link,
+      
+             '<a href="' ||
+             apex_page.get_url(
+                 p_page        => 174,
+                 p_items       => 'P174_LOAN_ID',
+                 p_values      => v.loan_id,
+                 p_clear_cache => '174'
+             ) ||
+             '" title="Print Statement">' ||
+             '<span class="fa fa-print"></span></a>' print_link,
+      
+             '<div class="loan-actions">' ||
+      
+             /* Receive Payment */
+             case
+                 when v.approval_status = 'APPROVED'
+                  and v.status = 'ACTIVE'
+                  and nvl(v.balance_amount,0) > 0
+                 then
+                     '<a href="' ||
+                     apex_page.get_url(
+                         p_page        => 172,
+                         p_items       => 'P172_LOAN_ID,P172_TXN_TYPE',
+                         p_values      => v.loan_id || ',MANUAL_PAYMENT',
+                         p_clear_cache => '172'
+                     ) ||
+                     '" class="t-Button t-Button--tiny t-Button--success t-Button--noLabel" title="Receive Payment">' ||
+                     '<span class="fa fa-money"></span></a>'
+                 else
+                     '<span class="t-Button t-Button--tiny t-Button--noLabel is-disabled" title="Payment not allowed">' ||
+                     '<span class="fa fa-money"></span></span>'
+             end ||
+      
+             /* Waiver */
+             case
+                 when v.approval_status = 'APPROVED'
+                  and v.status = 'ACTIVE'
+                  and nvl(v.balance_amount,0) > 0
+                 then
+                     '<a href="' ||
+                     apex_page.get_url(
+                         p_page        => 172,
+                         p_items       => 'P172_LOAN_ID,P172_TXN_TYPE',
+                         p_values      => v.loan_id || ',WAIVER',
+                         p_clear_cache => '172'
+                     ) ||
+                     '" class="t-Button t-Button--tiny t-Button--warning t-Button--noLabel" title="Request Waiver">' ||
+                     '<span class="fa fa-gift"></span></a>'
+                 else
+                     '<span class="t-Button t-Button--tiny t-Button--noLabel is-disabled" title="Waiver not allowed">' ||
+                     '<span class="fa fa-gift"></span></span>'
+             end ||
+      
+             /* Adjustment */
+             case
+                 when v.approval_status = 'APPROVED'
+                  and v.status = 'ACTIVE'
+                 then
+                     '<a href="' ||
+                     apex_page.get_url(
+                         p_page        => 172,
+                         p_items       => 'P172_LOAN_ID,P172_TXN_TYPE',
+                         p_values      => v.loan_id || ',ADJUSTMENT',
+                         p_clear_cache => '172'
+                     ) ||
+                     '" class="t-Button t-Button--tiny t-Button--warning t-Button--noLabel" title="Request Adjustment">' ||
+                     '<span class="fa fa-sliders"></span></a>'
+                 else
+                     '<span class="t-Button t-Button--tiny t-Button--noLabel is-disabled" title="Adjustment not allowed">' ||
+                     '<span class="fa fa-sliders"></span></span>'
+             end ||
+      
+             /* Reversal */
+             case
+                 when v.approval_status = 'APPROVED'
+                  and v.status = 'ACTIVE'
+                 then
+                     '<a href="' ||
+                     apex_page.get_url(
+                         p_page        => 172,
+                         p_items       => 'P172_LOAN_ID,P172_TXN_TYPE',
+                         p_values      => v.loan_id || ',REVERSAL',
+                         p_clear_cache => '172'
+                     ) ||
+                     '" class="t-Button t-Button--tiny t-Button--warning t-Button--noLabel" title="Request Reversal">' ||
+                     '<span class="fa fa-undo"></span></a>'
+                 else
+                     '<span class="t-Button t-Button--tiny t-Button--noLabel is-disabled" title="Reversal not allowed">' ||
+                     '<span class="fa fa-undo"></span></span>'
+             end ||
+      
+             /* Bad Debt Write-off */
+             case
+                 when v.approval_status = 'APPROVED'
+                  and v.status = 'ACTIVE'
+                  and nvl(v.balance_amount,0) > 0
+                 then
+                     '<a href="' ||
+                     apex_page.get_url(
+                         p_page        => 172,
+                         p_items       => 'P172_LOAN_ID,P172_TXN_TYPE',
+                         p_values      => v.loan_id || ',BAD_DEBT_WRITE_OFF',
+                         p_clear_cache => '172'
+                     ) ||
+                     '" class="t-Button t-Button--tiny t-Button--danger t-Button--noLabel" title="Request Bad Debt Write-off">' ||
+                     '<span class="fa fa-warning"></span></a>'
+                 else
+                     '<span class="t-Button t-Button--tiny t-Button--noLabel is-disabled" title="Bad debt not allowed">' ||
+                     '<span class="fa fa-warning"></span></span>'
+             end ||
+      
+             '</div>' as quick_actions,
+             '<a href="' ||
+      apex_page.get_url(
+          p_page        => 175,
+          p_items       => 'P175_LOAN_ID,P175_LOAN_TXN_ID',
+          p_values      => v.loan_id || ',',
+          p_clear_cache => '175'
+      ) ||
+      '" title="Loan History">' ||
+      '<span class="fa fa-history"></span></a>' history_link
+      
+      from hr_emp_loan_v v
+      order by v.loan_id desc;
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: loan_workbench
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 35705093330664270
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 35715005015668819
+      identification: 
+        name: Primary Report
+        alias: 357151
+
+    columns: 
+    - # ====== Column: LOAN_ID =====================================
+      id: 35705750810664275
+      identification: 
+        column-name: LOAN_ID
+        type: Hidden
+
+      heading: 
+        heading: Loan Id
+
+      layout: 
+        sequence: 1
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LOAN_NO =====================================
+      id: 35706172226664276
+      identification: 
+        column-name: LOAN_NO
+        type: Plain Text
+
+      heading: 
+        heading: Loan No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 35706500767664276
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Employee Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 35706937252664277
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LOAN_TYPE ===================================
+      id: 35707362749664277
+      identification: 
+        column-name: LOAN_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Loan Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 5
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: SOURCE_TYPE =================================
+      id: 35707784421664277
+      identification: 
+        column-name: SOURCE_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Source Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 6
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LOAN_AMOUNT =================================
+      id: 35708173896664277
+      identification: 
+        column-name: LOAN_AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Loan Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 7
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G990D00
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMI_AMOUNT ==================================
+      id: 35708588250664278
+      identification: 
+        column-name: EMI_AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: EMI Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 8
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G990D00
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PAID_AMOUNT =================================
+      id: 35708907117664278
+      identification: 
+        column-name: PAID_AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Paid Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 9
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G990D00
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: WAIVED_AMOUNT ===============================
+      id: 35709395316664278
+      identification: 
+        column-name: WAIVED_AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Waived Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G990D00
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ADJUSTMENT_AMOUNT ===========================
+      id: 35709701702664278
+      identification: 
+        column-name: ADJUSTMENT_AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Adjustment Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 11
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G990D00
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REVERSED_AMOUNT =============================
+      id: 35710126000664279
+      identification: 
+        column-name: REVERSED_AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Reversed Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 12
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G990D00
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: BAD_DEBT_AMOUNT =============================
+      id: 35710532256664279
+      identification: 
+        column-name: BAD_DEBT_AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Bad Debt Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 13
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G990D00
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: BALANCE_AMOUNT ==============================
+      id: 35710957544664279
+      identification: 
+        column-name: BALANCE_AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Balance Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 14
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G990D00
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: APPROVAL_STATUS =============================
+      id: 35711346072664280
+      identification: 
+        column-name: APPROVAL_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Approval Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 28
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: LOAN_STATUS =================================
+      id: 35711771538664280
+      identification: 
+        column-name: LOAN_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Loan Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 38
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: ISSUE_DT ====================================
+      id: 35712108239664280
+      identification: 
+        column-name: ISSUE_DT
+        type: Plain Text
+
+      heading: 
+        heading: Issue Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 17
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: START_MONTH =================================
+      id: 35712523903664281
+      identification: 
+        column-name: START_MONTH
+        type: Plain Text
+
+      heading: 
+        heading: Start Month
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 18
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: VIEW_LINK ===================================
+      id: 35712940614664281
+      identification: 
+        column-name: VIEW_LINK
+        type: Link
+
+      heading: 
+        heading: View
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 48
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:171:&SESSION.::&DEBUG.:171:P171_LOAN_ID:#LOAN_ID#'
+          page: 171 # Loan Detail
+          clear-cache: 171
+          values: 
+            p171_loan_id: '#LOAN_ID#'
+
+        link-text: '#VIEW_LINK#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: PRINT_LINK ==================================
+      id: 35713389509664282
+      identification: 
+        column-name: PRINT_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Print Link
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 58
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: QUICK_ACTIONS ===============================
+      id: 35842949634830014
+      identification: 
+        column-name: QUICK_ACTIONS
+        type: Plain Text
+
+      heading: 
+        heading: Quick Actions
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 68
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      advanced: 
+        static-id: loan-actions-cell
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: EDIT_LINK ===================================
+      id: 35846454984830049
+      identification: 
+        column-name: EDIT_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Edit Link
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 78
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: HISTORY_LINK ================================
+      id: 37245751733914237
+      identification: 
+        column-name: HISTORY_LINK
+        type: Plain Text
+
+      heading: 
+        heading: History Link
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 88
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: AGREED_ADVANCE_AMOUNT =======================
+      id: 37298739711639644
+      identification: 
+        column-name: AGREED_ADVANCE_AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Agreed Advance Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 98
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Loan Workbench
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+buttons: 
+- # ====== Button: NEW_MANUAL_LOAN =============================
+  id: 35845986574830044
+  identification: 
+    button-name: NEW_MANUAL_LOAN
+    label: New Manual Loan
+
+  layout: 
+    sequence: 10
+    region: Loan Workbench # 35704960382664270
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-cash-register
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:173:&SESSION.::&DEBUG.:::'
+      page: 173 # Manual Loan Request
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: Refresh Loan List After Dialog Close 
+  id: 37242142898914201
+  identification: 
+    name: Refresh Loan List After Dialog Close
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: JavaScript Expression
+    javascript-expression: document
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 37242238279914202
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Loan Workbench # 35704960382664270
+
+    execution: 
+      sequence: 10
+      event: Refresh Loan List After Dialog Close # 37242142898914201
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

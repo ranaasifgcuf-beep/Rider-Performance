@@ -1,0 +1,1364 @@
+---
+# ====== Page: Open impound ==================================
+id: 311
+identification: 
+  name: Open impound
+  alias: OPEN-IMPOUND
+  title: Open impound
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  width: 1000
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Open Impound ================================
+  id: 30210525176810104
+  identification: 
+    name: Open Impound
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    - margin-top-none
+    - margin-bottom-none
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Bike Info ===================================
+  id: 30214677757810145
+  identification: 
+    name: Bike Info
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Open Impound # 30210525176810104
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    - margin-bottom-none
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Impound Detail ==============================
+  id: 30214734764810146
+  identification: 
+    name: Impound Detail
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: Open Impound # 30210525176810104
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    - margin-top-none
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Impound Charges =============================
+  id: 30214800990810147
+  identification: 
+    name: Impound Charges
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: Open Impound # 30210525176810104
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P311_IMPOUND_ID ==========================
+  id: 30210856230810107
+  identification: 
+    name: P311_IMPOUND_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: Open Impound # 30210525176810104
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_BIKE_ID =============================
+  id: 30210981276810108
+  identification: 
+    name: P311_BIKE_ID
+    type: Select List
+
+  label: 
+    label: Plate Number
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Bike Info # 30214677757810145
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 4
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select  plate_no d,
+             bike_id r
+      from vw_fleet_bike_current
+      where bike_status_code <> 'IMPOUND'
+      order by bike_code
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P311_BIKE_ID
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_EMP_ID ==============================
+  id: 30211064972810109
+  identification: 
+    name: P311_EMP_ID
+    type: Popup LOV
+
+  label: 
+    label: Employee
+    alignment: Left
+
+  settings: 
+    display-as: Inline Popup
+    initial-fetch: Automatic
+    manual-entry: false
+    fetch-on-search: false
+
+  search: 
+    match-type: Contains
+    case-sensitive: false
+    minimum-characters: 0
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: Bike Info # 30214677757810145
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 8
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: FLEET.EMPLOYEE_LOV # 18130747472806310
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P311_EMP_ID
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_IMPOUND_START_TS ====================
+  id: 30211127946810110
+  identification: 
+    name: P311_IMPOUND_START_TS
+    type: Date Picker
+
+  label: 
+    label: Impound Start
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 10
+    region: Impound Detail # 30214734764810146
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_EXPECTED_RELEASE_TS =================
+  id: 30211262120810111
+  identification: 
+    name: P311_EXPECTED_RELEASE_TS
+    type: Date Picker
+
+  label: 
+    label: Expected Release Ts
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 10
+    region: Impound Detail # 30214734764810146
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_IMPOUND_CUSTODY_CODE ================
+  id: 30211339536810112
+  identification: 
+    name: P311_IMPOUND_CUSTODY_CODE
+    type: Select List
+
+  label: 
+    label: Impound Custody Code
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Impound Detail # 30214734764810146
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select custody_type_name d,
+             custody_type_code r
+      from fleet_ref_custody_types
+      where is_active = 'Y'
+      order by nvl(seq_no,9999), custody_type_name
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_IMPOUND_LOCATION_ID =================
+  id: 30211427742810113
+  identification: 
+    name: P311_IMPOUND_LOCATION_ID
+    type: Select List
+
+  label: 
+    label: Impound Location Id
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Impound Detail # 30214734764810146
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select location_name d,
+             location_id r
+      from fleet_ref_custody_locations
+      where is_active = 'Y'
+        and custody_type_code = :P311_IMPOUND_CUSTODY_CODE
+      order by nvl(seq_no,9999), location_name
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P311_IMPOUND_CUSTODY_CODE
+    items-to-submit: 
+    - P311_IMPOUND_CUSTODY_CODE
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_IMPOUND_REASON ======================
+  id: 30211624801810115
+  identification: 
+    name: P311_IMPOUND_REASON
+    type: Text Field
+
+  label: 
+    label: Impound Reason
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 10
+    region: Impound Detail # 30214734764810146
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_IMPOUND_COST ========================
+  id: 30211884229810117
+  identification: 
+    name: P311_IMPOUND_COST
+    type: Number Field
+
+  label: 
+    label: Impound Cost
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 30
+    region: Impound Charges # 30214800990810147
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_CHARGE_TO_EMPLOYEE_YN ===============
+  id: 30211976059810118
+  identification: 
+    name: P311_CHARGE_TO_EMPLOYEE_YN
+    type: Switch
+
+  label: 
+    label: Charge To Employee Yn
+    alignment: Left
+
+  settings: 
+    use-defaults: true
+
+  layout: 
+    sequence: 20
+    region: Impound Charges # 30214800990810147
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_CREATE_CHARGE_YN ====================
+  id: 30212076834810119
+  identification: 
+    name: P311_CREATE_CHARGE_YN
+    type: Switch
+
+  label: 
+    label: Create Charge Yn
+    alignment: Left
+
+  settings: 
+    use-defaults: true
+
+  layout: 
+    sequence: 10
+    region: Impound Charges # 30214800990810147
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_CHARGE_DUE_DT =======================
+  id: 30212195409810120
+  identification: 
+    name: P311_CHARGE_DUE_DT
+    type: Date Picker
+
+  label: 
+    label: Charge Due Dt
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 50
+    region: Impound Charges # 30214800990810147
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_REMARKS =============================
+  id: 30212244594810121
+  identification: 
+    name: P311_REMARKS
+    type: Text Field
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 60
+    region: Impound Charges # 30214800990810147
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_CURRENT_STATUS ======================
+  id: 30212378874810122
+  identification: 
+    name: P311_CURRENT_STATUS
+    type: Display Only
+
+  label: 
+    label: Current Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Bike Info # 30214677757810145
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P311_CURRENT_CUSTODY =====================
+  id: 30212441107810123
+  identification: 
+    name: P311_CURRENT_CUSTODY
+    type: Display Only
+
+  label: 
+    label: Current Custody
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 40
+    region: Bike Info # 30214677757810145
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PBN_SAVE ====================================
+  id: 30213428885810133
+  identification: 
+    button-name: PBN_SAVE
+    label: Save
+
+  layout: 
+    sequence: 170
+    region: Open Impound # 30210525176810104
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-save
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: PB_CANCEL ===================================
+  id: 30213519193810134
+  identification: 
+    button-name: PB_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 180
+    region: Open Impound # 30210525176810104
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-times-circle
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:309:&SESSION.::&DEBUG.:::'
+      page: 309 # Bike Operations
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: Show/Hide charge fields =============
+  id: 30212603440810125
+  identification: 
+    name: Show/Hide charge fields
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P311_CREATE_CHARGE_YN
+
+  client-side-condition: 
+    type: Item = Value
+    item: P311_CREATE_CHARGE_YN
+    value: Y
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 30212783177810126
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P311_CHARGE_TO_EMPLOYEE_YN
+      - P311_IMPOUND_COST
+      - P311_CHARGE_DUE_DT
+
+    execution: 
+      sequence: 10
+      event: Show/Hide charge fields # 30212603440810125
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 30212803960810127
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P311_CHARGE_TO_EMPLOYEE_YN
+      - P311_IMPOUND_COST
+      - P311_CHARGE_DUE_DT
+
+    execution: 
+      sequence: 10
+      event: Show/Hide charge fields # 30212603440810125
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+  - # ====== Action: Set Value ===================================
+    id: 30212947313810128
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: Y
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P311_CHARGE_TO_EMPLOYEE_YN
+
+    execution: 
+      sequence: 20
+      event: Show/Hide charge fields # 30212603440810125
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+validations: 
+- # ====== Validation: VAL_P311_EXPECTED_RELEASE ===============
+  id: 30213081131810129
+  identification: 
+    name: VAL_P311_EXPECTED_RELEASE
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      return :P311_EXPECTED_RELEASE_TS is null
+          or :P311_EXPECTED_RELEASE_TS >= :P311_IMPOUND_START_TS;
+    always-execute: false
+
+  error: 
+    error-message: Expected Release Date cannot be earlier than Impound Start Date.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: VAL_P311_COST_REQUIRED_IF_CHARGE ========
+  id: 30213169822810130
+  identification: 
+    name: VAL_P311_COST_REQUIRED_IF_CHARGE
+
+  execution: 
+    sequence: 20
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return nvl(:P311_IMPOUND_COST,0) > 0;'
+    always-execute: false
+
+  error: 
+    error-message: Impound cost is required when creating employee charge.
+    display-location: Inline with Field and in Notification
+
+  server-side-condition: 
+    type: Item = Value
+    item: P311_CREATE_CHARGE_YN
+    value: Y
+
+- # ====== Validation: VAL_P311_DUE_DT_IF_CHARGE ===============
+  id: 30213220769810131
+  identification: 
+    name: VAL_P311_DUE_DT_IF_CHARGE
+
+  execution: 
+    sequence: 30
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return :P311_CHARGE_DUE_DT is not null;'
+    always-execute: false
+
+  error: 
+    error-message: Charge Due Date is required when creating employee charge.
+    display-location: Inline with Field and in Notification
+
+  server-side-condition: 
+    type: Item = Value
+    item: P311_CREATE_CHARGE_YN
+    value: Y
+
+processes: 
+- # ====== Process: FETCH_P311_BIKE_INFO =======================
+  id: 30212538138810124
+  identification: 
+    name: FETCH_P311_BIKE_INFO
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          select 
+                 bike_status_name,
+                 custody_type_name,
+                 current_emp_id
+            into 
+                 :P311_CURRENT_STATUS,
+                 :P311_CURRENT_CUSTODY,
+                 :P311_EMP_ID
+            from vw_fleet_bike_current
+           where bike_id = :P311_BIKE_ID;
+      exception
+          when no_data_found then
+              raise_application_error(-20001, 'Bike information not found.');
+      end;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P311_BIKE_ID
+
+- # ====== Process: OPEN_BIKE_IMPOUND ==========================
+  id: 30213615288810135
+  identification: 
+    name: OPEN_BIKE_IMPOUND
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      declare
+          l_impound_id number;
+      begin
+          fleet_pkg.open_bike_impound(
+              p_bike_id                 => :P311_BIKE_ID,
+              p_emp_id                  => :P311_EMP_ID,
+              p_impound_start_ts        => :P311_IMPOUND_START_TS,
+              p_expected_release_ts     => :P311_EXPECTED_RELEASE_TS,
+              p_impound_custody_code    => :P311_IMPOUND_CUSTODY_CODE,
+              p_impound_location_id     => :P311_IMPOUND_LOCATION_ID,
+              p_impound_location_text   => :P311_IMPOUND_LOCATION_TEXT,
+              p_impound_reason          => :P311_IMPOUND_REASON,
+              p_impound_cost            => :P311_IMPOUND_COST,
+              p_charge_to_employee_yn   => :P311_CHARGE_TO_EMPLOYEE_YN,
+              p_excluded_from_charge_yn => :P311_EXCLUDED_FROM_CHARGE_YN,
+              p_create_charge_yn        => :P311_CREATE_CHARGE_YN,
+              p_charge_due_dt           => :P311_CHARGE_DUE_DT,
+              p_remarks                 => :P311_REMARKS,
+              p_impound_id              => l_impound_id
+          );
+      
+          :P311_IMPOUND_ID := l_impound_id;
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: PBN_SAVE # 30213428885810133
+
+branches: 
+- # ====== Branch: Go to Page 309 ==============================
+  id: 30214915417810148
+  identification: 
+    name: Go to Page 309
+
+  execution: 
+    sequence: 10
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:309:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 309 # Bike Operations
+

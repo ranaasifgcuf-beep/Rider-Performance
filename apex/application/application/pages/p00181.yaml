@@ -1,0 +1,3098 @@
+---
+# ====== Page: Document Expiry Dashboard =====================
+id: 181
+identification: 
+  name: Document Expiry Dashboard
+  alias: DOCUMENT-EXPIRY-DASHBOARD
+  title: Document Expiry Dashboard
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* ------------------------------
+       Filter bar
+    --------------------------------*/
+    #doc_filters .t-Region-body {
+        padding: 12px 14px !important;
+    }
+    
+    #doc_filters .t-Form-fieldContainer {
+        margin-bottom: 0 !important;
+    }
+    
+    #doc_filters .t-Form-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #475569;
+    }
+    
+    #doc_filters select,
+    #doc_filters input {
+        min-height: 36px;
+    }
+    
+    /* ------------------------------
+       KPI Cards
+    --------------------------------*/
+    .doc-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(140px, 1fr));
+        gap: 12px;
+    }
+    
+    .doc-kpi-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-left: 4px solid #2563eb;
+        border-radius: 10px;
+        padding: 12px 14px;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+        min-height: 82px;
+    }
+    
+    .doc-kpi-card.success {
+        border-left-color: #15803d;
+    }
+    
+    .doc-kpi-card.warning {
+        border-left-color: #d97706;
+    }
+    
+    .doc-kpi-card.danger {
+        border-left-color: #dc2626;
+    }
+    
+    .doc-kpi-label {
+        font-size: 10px;
+        text-transform: uppercase;
+        color: #334155;
+        font-weight: 800;
+        letter-spacing: .03em;
+    }
+    
+    .doc-kpi-value {
+        font-size: 25px;
+        font-weight: 900;
+        color: #0f172a;
+        margin-top: 5px;
+        line-height: 1;
+    }
+    
+    .doc-kpi-card.success .doc-kpi-value {
+        color: #15803d;
+    }
+    
+    .doc-kpi-card.warning .doc-kpi-value {
+        color: #d97706;
+    }
+    
+    .doc-kpi-card.danger .doc-kpi-value {
+        color: #dc2626;
+    }
+    
+    .doc-kpi-sub {
+        font-size: 10px;
+        color: #64748b;
+        margin-top: 6px;
+    }
+    
+    /* ------------------------------
+       Tabs
+    --------------------------------*/
+    #doc_monitor_tabs {
+        margin-top: 14px;
+    }
+    
+    #doc_monitor_tabs .t-Tabs-link {
+        font-weight: 700;
+    }
+    
+    /* ------------------------------
+       Reports
+    --------------------------------*/
+    #doc_expired_docs th,
+    #doc_expiring_docs th,
+    #doc_missing_docs th,
+    #doc_all_monitor th {
+        background: #f8fafc !important;
+        color: #334155 !important;
+        font-weight: 800 !important;
+        font-size: 12px;
+    }
+    
+    #doc_expired_docs td,
+    #doc_expiring_docs td,
+    #doc_missing_docs td,
+    #doc_all_monitor td {
+        padding: 9px 10px !important;
+        vertical-align: middle;
+    }
+    
+    #doc_expired_docs .fa-folder-open,
+    #doc_expiring_docs .fa-folder-open,
+    #doc_missing_docs .fa-folder-open,
+    #doc_all_monitor .fa-folder-open {
+        font-size: 15px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .doc-kpi-grid {
+            grid-template-columns: repeat(3, minmax(140px, 1fr));
+        }
+    }
+    
+    @media (max-width: 700px) {
+        .doc-kpi-grid {
+            grid-template-columns: repeat(1, minmax(140px, 1fr));
+        }
+    }
+    
+    #btn_reset_filters {
+        margin-top: 15px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #doc_filters .t-Form-fieldContainer {
+        margin-bottom: 0 !important;
+    }
+    
+    #doc_filters .t-ButtonRegion {
+        margin-top: 0 !important;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Filters =====================================
+  id: 37590802814478616
+  identification: 
+    name: Filters
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: doc_filters
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Summary =====================================
+  id: 37591353977478621
+  identification: 
+    name: Summary
+    type: Dynamic Content
+
+  source: 
+    language: PL/SQL
+    pl/sql-function-body-returning-a-clob: |
+      declare
+          l_expired        number := 0;
+          l_expiring_soon  number := 0;
+          l_missing        number := 0;
+          l_current_docs   number := 0;
+          l_total_emp      number := 0;
+          l_no_file        number := 0;
+          l_days           number := nvl(to_number(:P181_DAYS),30);
+          l_html           clob;
+      begin
+          select count(*)
+            into l_expired
+            from hr_emp_docs_v
+           where is_current_record = 'Y'
+             and expiry_status = 'EXPIRED'
+             and (:P181_DOC_GROUP is null or doc_group = :P181_DOC_GROUP)
+             and (:P181_DOC_TYPE is null or doc_type = :P181_DOC_TYPE);
+      
+          select count(*)
+            into l_expiring_soon
+            from hr_emp_docs_v
+           where is_current_record = 'Y'
+             and expiry_dt is not null
+             and trunc(expiry_dt) >= trunc(cast(systimestamp at time zone 'Asia/Dubai' as date))
+             and trunc(expiry_dt) <= trunc(cast(systimestamp at time zone 'Asia/Dubai' as date)) + l_days
+             and (:P181_DOC_GROUP is null or doc_group = :P181_DOC_GROUP)
+             and (:P181_DOC_TYPE is null or doc_type = :P181_DOC_TYPE);
+      
+          select count(*)
+            into l_current_docs
+            from hr_emp_docs_v
+           where is_current_record = 'Y'
+             and (:P181_DOC_GROUP is null or doc_group = :P181_DOC_GROUP)
+             and (:P181_DOC_TYPE is null or doc_type = :P181_DOC_TYPE);
+      
+          select count(*)
+            into l_no_file
+            from hr_emp_docs_v
+           where is_current_record = 'Y'
+             and file_name is null
+             and file_ref is null
+             and (:P181_DOC_GROUP is null or doc_group = :P181_DOC_GROUP)
+             and (:P181_DOC_TYPE is null or doc_type = :P181_DOC_TYPE);
+      
+          select count(*)
+            into l_total_emp
+            from hr_employees;
+      
+          select count(*)
+            into l_missing
+            from (
+                  select e.emp_id,
+                         t.doc_type_code
+                    from hr_employees e
+                    join hr_doc_type_master t
+                      on nvl(t.is_active,'Y') = 'Y'
+                     and nvl(t.is_mandatory,'N') = 'Y'
+                   where (:P181_DOC_GROUP is null or t.doc_group = :P181_DOC_GROUP)
+                     and (:P181_DOC_TYPE is null or t.doc_type_code = :P181_DOC_TYPE)
+                     and not exists (
+                          select 1
+                            from hr_emp_docs d
+                           where d.emp_id = e.emp_id
+                             and d.doc_type = t.doc_type_code
+                             and d.is_current_record = 'Y'
+                     )
+                 );
+      
+          l_html :=
+          '<div class="doc-kpi-grid">' ||
+      
+          '<div class="doc-kpi-card danger">' ||
+          '<div class="doc-kpi-label">Expired Documents</div>' ||
+          '<div class="doc-kpi-value">' || l_expired || '</div>' ||
+          '<div class="doc-kpi-sub">Current records expired</div>' ||
+          '</div>' ||
+      
+          '<div class="doc-kpi-card warning">' ||
+          '<div class="doc-kpi-label">Expiring Soon</div>' ||
+          '<div class="doc-kpi-value">' || l_expiring_soon || '</div>' ||
+          '<div class="doc-kpi-sub">Within ' || l_days || ' days</div>' ||
+          '</div>' ||
+      
+          '<div class="doc-kpi-card danger">' ||
+          '<div class="doc-kpi-label">Missing Mandatory</div>' ||
+          '<div class="doc-kpi-value">' || l_missing || '</div>' ||
+          '<div class="doc-kpi-sub">Required docs missing</div>' ||
+          '</div>' ||
+      
+          '<div class="doc-kpi-card success">' ||
+          '<div class="doc-kpi-label">Current Documents</div>' ||
+          '<div class="doc-kpi-value">' || l_current_docs || '</div>' ||
+          '<div class="doc-kpi-sub">Current active records</div>' ||
+          '</div>' ||
+      
+          '<div class="doc-kpi-card">' ||
+          '<div class="doc-kpi-label">Employee Base</div>' ||
+          '<div class="doc-kpi-value">' || l_total_emp || '</div>' ||
+          '<div class="doc-kpi-sub">Total employees</div>' ||
+          '</div>' ||
+      
+          '<div class="doc-kpi-card warning">' ||
+          '<div class="doc-kpi-label">No File</div>' ||
+          '<div class="doc-kpi-value">' || l_no_file || '</div>' ||
+          '<div class="doc-kpi-sub">Current docs without file</div>' ||
+          '</div>' ||
+      
+          '</div>';
+      
+          return l_html;
+      end;
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: doc_kpi_summary
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    performance: 
+      lazy-loading: false
+
+- # ====== Region: Document Monitor ============================
+  id: 37591436998478622
+  identification: 
+    name: Document Monitor
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Tabs Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-TabsRegion-mod--simple
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Expired Documents ===========================
+  id: 37591562834478623
+  identification: 
+    name: Expired Documents
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select emp_code,
+             employee_name,
+             doc_type_name document,
+             doc_no document_number,
+             to_char(issue_dt, 'DD-MON-YYYY') issue_date,
+             to_char(expiry_dt, 'DD-MON-YYYY') expiry_date,
+             expiry_in_days,
+             '<span class="t-Badge t-Badge--danger">Expired</span>' expiry_status,
+             case
+                 when file_name is not null or file_ref is not null then
+                     '<span class="t-Badge t-Badge--success">Attached</span>'
+                 else
+                     '<span class="t-Badge t-Badge--warning">No File</span>'
+             end file_status,
+             '<a href="' ||
+             apex_page.get_url(
+                 p_page        => 105,
+                 p_items       => 'P105_EMP_ID',
+                 p_values      => emp_id,
+                 p_clear_cache => '105'
+             ) ||
+             '" title="Open Employee Documents"><span class="fa fa-folder-open"></span></a>' open_docs
+      from hr_emp_docs_v
+      where is_current_record = 'Y'
+        and expiry_status = 'EXPIRED'
+        and (:P181_DOC_GROUP is null or doc_group = :P181_DOC_GROUP)
+        and (:P181_DOC_TYPE is null or doc_type = :P181_DOC_TYPE)
+      order by expiry_dt
+    page-items-to-submit: 
+    - P181_DAYS
+    - P181_DOC_GROUP
+    - P181_DOC_TYPE
+
+  layout: 
+    sequence: 10
+    parent-region: Document Monitor # 37591436998478622
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: doc_expired_docs
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 37591646752478624
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 38221082256350939
+      identification: 
+        name: Primary Report
+        alias: 382211
+
+    columns: 
+    - # ====== Column: EMP_CODE ====================================
+      id: 37591729870478625
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Emp Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 37591893168478626
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOCUMENT ====================================
+      id: 37591928757478627
+      identification: 
+        column-name: DOCUMENT
+        type: Plain Text
+
+      heading: 
+        heading: Document
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOCUMENT_NUMBER =============================
+      id: 37592092361478628
+      identification: 
+        column-name: DOCUMENT_NUMBER
+        type: Plain Text
+
+      heading: 
+        heading: Document Number
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ISSUE_DATE ==================================
+      id: 37592174808478629
+      identification: 
+        column-name: ISSUE_DATE
+        type: Plain Text
+
+      heading: 
+        heading: Issue Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_DATE =================================
+      id: 37592278112478630
+      identification: 
+        column-name: EXPIRY_DATE
+        type: Plain Text
+
+      heading: 
+        heading: Expiry Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_IN_DAYS ==============================
+      id: 37592347706478631
+      identification: 
+        column-name: EXPIRY_IN_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Expiry In Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_STATUS ===============================
+      id: 37592404171478632
+      identification: 
+        column-name: EXPIRY_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Expiry Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 80
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: FILE_STATUS =================================
+      id: 37592582769478633
+      identification: 
+        column-name: FILE_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: File Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: OPEN_DOCS ===================================
+      id: 37592648786478634
+      identification: 
+        column-name: OPEN_DOCS
+        type: Plain Text
+
+      heading: 
+        heading: Open Docs
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Expiring Soon ===============================
+  id: 37592760326478635
+  identification: 
+    name: Expiring Soon
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select emp_code,
+             employee_name,
+             doc_type_name document,
+             doc_no document_number,
+             to_char(issue_dt, 'DD-MON-YYYY') issue_date,
+             to_char(expiry_dt, 'DD-MON-YYYY') expiry_date,
+             expiry_in_days,
+             case
+                 when expiry_in_days <= 7 then
+                     '<span class="t-Badge t-Badge--danger">Critical</span>'
+                 else
+                     '<span class="t-Badge t-Badge--warning">Near Expiry</span>'
+             end expiry_status,
+             case
+                 when file_name is not null or file_ref is not null then
+                     '<span class="t-Badge t-Badge--success">Attached</span>'
+                 else
+                     '<span class="t-Badge t-Badge--warning">No File</span>'
+             end file_status,
+             '<a href="' ||
+             apex_page.get_url(
+                 p_page        => 105,
+                 p_items       => 'P105_EMP_ID',
+                 p_values      => emp_id,
+                 p_clear_cache => '105'
+             ) ||
+             '" title="Open Employee Documents"><span class="fa fa-folder-open"></span></a>' open_docs
+      from hr_emp_docs_v
+      where is_current_record = 'Y'
+        and expiry_dt is not null
+        and trunc(expiry_dt) >= trunc(cast(systimestamp at time zone 'Asia/Dubai' as date))
+        and trunc(expiry_dt) <= trunc(cast(systimestamp at time zone 'Asia/Dubai' as date)) + nvl(to_number(:P181_DAYS),30)
+        and (:P181_DOC_GROUP is null or doc_group = :P181_DOC_GROUP)
+        and (:P181_DOC_TYPE is null or doc_type = :P181_DOC_TYPE)
+      order by expiry_dt
+    page-items-to-submit: 
+    - P181_DAYS
+    - P181_DOC_GROUP
+    - P181_DOC_TYPE
+
+  layout: 
+    sequence: 20
+    parent-region: Document Monitor # 37591436998478622
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: doc_expiring_docs
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 37592897359478636
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 38221518439350958
+      identification: 
+        name: Primary Report
+        alias: 382216
+
+    columns: 
+    - # ====== Column: EMP_CODE ====================================
+      id: 37592983890478637
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Emp Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 37593018352478638
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOCUMENT ====================================
+      id: 37593168690478639
+      identification: 
+        column-name: DOCUMENT
+        type: Plain Text
+
+      heading: 
+        heading: Document
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOCUMENT_NUMBER =============================
+      id: 37593277334478640
+      identification: 
+        column-name: DOCUMENT_NUMBER
+        type: Plain Text
+
+      heading: 
+        heading: Document Number
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ISSUE_DATE ==================================
+      id: 37593364412478641
+      identification: 
+        column-name: ISSUE_DATE
+        type: Plain Text
+
+      heading: 
+        heading: Issue Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_DATE =================================
+      id: 37593456598478642
+      identification: 
+        column-name: EXPIRY_DATE
+        type: Plain Text
+
+      heading: 
+        heading: Expiry Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_IN_DAYS ==============================
+      id: 37593545650478643
+      identification: 
+        column-name: EXPIRY_IN_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Expiry In Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_STATUS ===============================
+      id: 37593688261478644
+      identification: 
+        column-name: EXPIRY_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Expiry Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 80
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: FILE_STATUS =================================
+      id: 37593700378478645
+      identification: 
+        column-name: FILE_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: File Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: OPEN_DOCS ===================================
+      id: 37593822643478646
+      identification: 
+        column-name: OPEN_DOCS
+        type: Plain Text
+
+      heading: 
+        heading: Open Docs
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Missing Mandatory ===========================
+  id: 37593938215478647
+  identification: 
+    name: Missing Mandatory
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select e.emp_code,
+             trim(e.first_name || ' ' || e.last_name) employee_name,
+             t.doc_type_name missing_document,
+             t.doc_group,
+             '<span class="t-Badge t-Badge--danger">Missing</span>' status,
+             '<a href="' ||
+             apex_page.get_url(
+                 p_page        => 105,
+                 p_items       => 'P105_EMP_ID',
+                 p_values      => e.emp_id,
+                 p_clear_cache => '105'
+             ) ||
+             '" title="Open Employee Documents"><span class="fa fa-folder-open"></span></a>' open_docs
+      from hr_employees e
+      join hr_doc_type_master t
+        on t.is_active = 'Y'
+       and t.is_mandatory = 'Y'
+      where 1=1--nvl(e.is_active,'Y') = 'Y'
+        and (:P181_DOC_GROUP is null or t.doc_group = :P181_DOC_GROUP)
+        and (:P181_DOC_TYPE is null or t.doc_type_code = :P181_DOC_TYPE)
+        and not exists (
+              select 1
+                from hr_emp_docs d
+               where d.emp_id = e.emp_id
+                 and d.doc_type = t.doc_type_code
+                 and d.is_current_record = 'Y'
+            )
+      order by e.emp_code, t.seq_no
+    page-items-to-submit: 
+    - P181_DAYS
+    - P181_DOC_GROUP
+    - P181_DOC_TYPE
+
+  layout: 
+    sequence: 30
+    parent-region: Document Monitor # 37591436998478622
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: doc_missing_docs
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 37594048737478648
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 38222164933350962
+      identification: 
+        name: Primary Report
+        alias: 382222
+
+    columns: 
+    - # ====== Column: EMP_CODE ====================================
+      id: 37594119739478649
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Emp Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 37594266306478650
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MISSING_DOCUMENT ============================
+      id: 38203283958256201
+      identification: 
+        column-name: MISSING_DOCUMENT
+        type: Plain Text
+
+      heading: 
+        heading: Missing Document
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOC_GROUP ===================================
+      id: 38203374199256202
+      identification: 
+        column-name: DOC_GROUP
+        type: Plain Text
+
+      heading: 
+        heading: Doc Group
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: STATUS ======================================
+      id: 38203448095256203
+      identification: 
+        column-name: STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: OPEN_DOCS ===================================
+      id: 38203587655256204
+      identification: 
+        column-name: OPEN_DOCS
+        type: Plain Text
+
+      heading: 
+        heading: Open Docs
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: All Documents ===============================
+  id: 38203657948256205
+  identification: 
+    name: All Documents
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select emp_code,
+             employee_name,
+             doc_type_name document,
+             doc_no document_number,
+             to_char(issue_dt, 'DD-MON-YYYY') issue_date,
+             to_char(expiry_dt, 'DD-MON-YYYY') expiry_date,
+             expiry_in_days,
+             case expiry_status
+                 when 'NO_EXPIRY' then '<span class="t-Badge">No Expiry</span>'
+                 when 'EXPIRED' then '<span class="t-Badge t-Badge--danger">Expired</span>'
+                 when 'EXPIRING_SOON' then '<span class="t-Badge t-Badge--warning">Near Expiry</span>'
+                 when 'VALID' then '<span class="t-Badge t-Badge--success">Active</span>'
+                 else '<span class="t-Badge">' || apex_escape.html(expiry_status) || '</span>'
+             end expiry_status,
+             case
+                 when file_name is not null or file_ref is not null then
+                     '<span class="t-Badge t-Badge--success">Attached</span>'
+                 else
+                     '<span class="t-Badge t-Badge--warning">No File</span>'
+             end file_status,
+             case is_current_record
+                 when 'Y' then '<span class="t-Badge t-Badge--success">Yes</span>'
+                 else '<span class="t-Badge">No</span>'
+             end current_record,
+             '<a href="' ||
+             apex_page.get_url(
+                 p_page        => 105,
+                 p_items       => 'P105_EMP_ID',
+                 p_values      => emp_id,
+                 p_clear_cache => '105'
+             ) ||
+             '" title="Open Employee Documents"><span class="fa fa-folder-open"></span></a>' open_docs
+      from hr_emp_docs_v
+      where is_current_record = 'Y'
+        and (:P181_DOC_GROUP is null or doc_group = :P181_DOC_GROUP)
+        and (:P181_DOC_TYPE is null or doc_type = :P181_DOC_TYPE)
+      order by
+             case expiry_status
+                 when 'EXPIRED' then 1
+                 when 'EXPIRING_SOON' then 2
+                 when 'VALID' then 3
+                 else 4
+             end,
+             expiry_dt nulls last,
+             emp_code
+    page-items-to-submit: 
+    - P181_DAYS
+    - P181_DOC_GROUP
+    - P181_DOC_TYPE
+
+  layout: 
+    sequence: 40
+    parent-region: Document Monitor # 37591436998478622
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: doc_all_monitor
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 38203712984256206
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 38222727196350967
+      identification: 
+        name: Primary Report
+        alias: 382228
+
+    columns: 
+    - # ====== Column: EMP_CODE ====================================
+      id: 38203883074256207
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Emp Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 38203947795256208
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOCUMENT ====================================
+      id: 38204035953256209
+      identification: 
+        column-name: DOCUMENT
+        type: Plain Text
+
+      heading: 
+        heading: Document
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOCUMENT_NUMBER =============================
+      id: 38204162627256210
+      identification: 
+        column-name: DOCUMENT_NUMBER
+        type: Plain Text
+
+      heading: 
+        heading: Document Number
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ISSUE_DATE ==================================
+      id: 38204210447256211
+      identification: 
+        column-name: ISSUE_DATE
+        type: Plain Text
+
+      heading: 
+        heading: Issue Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_DATE =================================
+      id: 38204324762256212
+      identification: 
+        column-name: EXPIRY_DATE
+        type: Plain Text
+
+      heading: 
+        heading: Expiry Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_IN_DAYS ==============================
+      id: 38204451045256213
+      identification: 
+        column-name: EXPIRY_IN_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Expiry In Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_STATUS ===============================
+      id: 38204542174256214
+      identification: 
+        column-name: EXPIRY_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Expiry Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 80
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: FILE_STATUS =================================
+      id: 38204616932256215
+      identification: 
+        column-name: FILE_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: File Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CURRENT_RECORD ==============================
+      id: 38204703773256216
+      identification: 
+        column-name: CURRENT_RECORD
+        type: Plain Text
+
+      heading: 
+        heading: Current Record
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: OPEN_DOCS ===================================
+      id: 38204853583256217
+      identification: 
+        column-name: OPEN_DOCS
+        type: Plain Text
+
+      heading: 
+        heading: Open Docs
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 110
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+page-items: 
+- # ====== Page Item: P181_DAYS ================================
+  id: 37590992796478617
+  identification: 
+    name: P181_DAYS
+    type: Select List
+
+  label: 
+    label: Expiring Within
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Filters # 37590802814478616
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:15;15,30;30,60;60,90;90'
+    display-extra-values: false
+    display-null-value: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 30
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P181_DOC_GROUP ===========================
+  id: 37591163136478619
+  identification: 
+    name: P181_DOC_GROUP
+    type: Select List
+
+  label: 
+    label: Document Group
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: Filters # 37590802814478616
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select distinct doc_group d,
+             doc_group r
+      from hr_doc_type_master
+      where is_active = 'Y'
+        and doc_group is not null
+      order by doc_group
+    display-extra-values: false
+    display-null-value: true
+    null-display-value: All Groups
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P181_DOC_TYPE ============================
+  id: 37591237325478620
+  identification: 
+    name: P181_DOC_TYPE
+    type: Select List
+
+  label: 
+    label: Document Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Filters # 37590802814478616
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select doc_type_name d,
+             doc_type_code r
+      from hr_doc_type_master
+      where is_active = 'Y'
+        and (:P181_DOC_GROUP is null or doc_group = :P181_DOC_GROUP)
+      order by seq_no, doc_type_name
+    display-extra-values: false
+    display-null-value: true
+    null-display-value: All Documents
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P181_DOC_GROUP
+    items-to-submit: 
+    - P181_DOC_GROUP
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PB_RESET ====================================
+  id: 38205634310256225
+  identification: 
+    button-name: PB_RESET
+    label: Reset Filters
+
+  layout: 
+    sequence: 40
+    region: Filters # 37590802814478616
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    css-classes: 
+    - doc-reset-button
+    icon: fa-refresh
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+  advanced: 
+    static-id: btn_reset_filters
+
+dynamic-actions: 
+- # ====== Dynamic Action: Refresh Document Dashboard ==========
+  id: 38204958968256218
+  identification: 
+    name: Refresh Document Dashboard
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P181_DAYS
+    - P181_DOC_GROUP
+    - P181_DOC_TYPE
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 38205066396256219
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Summary # 37591353977478621
+
+    execution: 
+      sequence: 10
+      event: Refresh Document Dashboard # 38204958968256218
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 38205152742256220
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: All Documents # 38203657948256205
+
+    execution: 
+      sequence: 20
+      event: Refresh Document Dashboard # 38204958968256218
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 38205310867256222
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Expired Documents # 37591562834478623
+
+    execution: 
+      sequence: 30
+      event: Refresh Document Dashboard # 38204958968256218
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 38205417172256223
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Expiring Soon # 37592760326478635
+
+    execution: 
+      sequence: 40
+      event: Refresh Document Dashboard # 38204958968256218
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 38205533255256224
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Missing Mandatory # 37593938215478647
+
+    execution: 
+      sequence: 50
+      event: Refresh Document Dashboard # 38204958968256218
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New =================================
+  id: 38205726402256226
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: PB_RESET # 38205634310256225
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 38205857916256227
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        apex.item("P181_DAYS").setValue("30");
+        apex.item("P181_DOC_GROUP").setValue("");
+        apex.item("P181_DOC_TYPE").setValue("");
+        
+        apex.region("doc_kpi_summary").refresh();
+        apex.region("doc_expired_docs").refresh();
+        apex.region("doc_expiring_docs").refresh();
+        apex.region("doc_missing_docs").refresh();
+        apex.region("doc_all_monitor").refresh();
+
+    execution: 
+      sequence: 10
+      event: New # 38205726402256226
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

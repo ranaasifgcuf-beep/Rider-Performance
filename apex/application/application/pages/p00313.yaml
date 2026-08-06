@@ -1,0 +1,1212 @@
+---
+# ====== Page: Accident List =================================
+id: 313
+identification: 
+  name: Accident List
+  alias: ACCIDENT-LIST
+  title: Accident List
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Breadcrumb ==================================
+  id: 30708838254380129
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 9721609352336316
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: Accident List ===============================
+  id: 30709525980380126
+  identification: 
+    name: Accident List
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+          a.accident_id,
+      
+          case
+            when a.status_code = 'OPEN'
+            then
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 315,
+                  p_items  => 'P315_ACCIDENT_ID',
+                  p_values => a.accident_id
+              ) || '" class="js-dialog-link">' ||
+              '<span class="fa fa-wrench" title="Start Repair"></span></a>'
+              else '<span class="fa fa-wrench" style="color:#cfcfcf; opacity:.55;" title="Not Available"></span>'
+          end as start_repair_link,
+      
+          case
+            when a.status_code in ('OPEN','UNDER_REPAIR')
+            then
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 316,
+                  p_items  => 'P316_ACCIDENT_ID',
+                  p_values => a.accident_id
+              ) || '" class="js-dialog-link">' ||
+              '<span class="fa fa-check" title="Close Accident"></span></a>'
+              else
+              '<span class="fa fa-check" style="color:#cfcfcf; opacity:.55;" title="Not Available"></span>'
+          end as close_accident_link,
+      
+          case
+            when a.emp_charge_id is not null
+            then
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 320,
+                  p_items  => 'P320_EMP_CHARGE_ID,P320_MODE',
+                  p_values => a.emp_charge_id|| ',READ'
+                   ) || '" class="js-dialog-link">' ||
+              '<span class="fa fa-money" title="View Charge"></span></a>'
+              else
+              '<span class="fa fa-money" style="color:#cfcfcf; opacity:.55;" title="Not Available"></span>'
+          end as charge_link,
+      
+          a.bike_id,
+          b.bike_code,
+          b.plate_no,
+      
+          a.emp_id,
+          a.accident_dt,
+          a.repair_start_dt,
+          a.repair_end_dt,
+      
+          a.accident_location,
+          a.police_report_no,
+      
+          case a.fault_type
+            when 'EMPLOYEE' then '<span class="t-Badge t-Badge--danger">EMPLOYEE</span>'
+            when 'COMPANY' then '<span class="t-Badge t-Badge--info">COMPANY</span>'
+            when 'THIRD_PARTY' then '<span class="t-Badge t-Badge--warning">THIRD PARTY</span>'
+            else '<span class="t-Badge t-Badge--default">N/A</span>'
+          end as fault_badge,
+      
+          case a.accident_severity
+            when 'MINOR' then '<span class="t-Badge t-Badge--info">MINOR</span>'
+            when 'MAJOR' then '<span class="t-Badge t-Badge--warning">MAJOR</span>'
+            when 'TOTAL_LOSS' then '<span class="t-Badge t-Badge--danger">TOTAL LOSS</span>'
+            else '<span class="t-Badge t-Badge--default">N/A</span>'
+          end as severity_badge,
+      
+          a.estimated_cost,
+          a.actual_cost,
+      
+          case
+            when a.emp_charge_id is null then
+              '<span class="t-Badge t-Badge--default">NO CHARGE</span>'
+            when hr_charges_pkg.get_charge_balance(a.emp_charge_id) = 0 then
+              '<span class="t-Badge t-Badge--success">RECOVERED/CLOSED</span>'
+            else
+              '<span class="t-Badge t-Badge--warning">RECOVERY PENDING</span>'
+          end as recovery_badge,
+      
+          case a.status_code
+            when 'OPEN' then '<span class="t-Badge t-Badge--danger">OPEN</span>'
+            when 'UNDER_REPAIR' then '<span class="t-Badge t-Badge--warning">UNDER REPAIR</span>'
+            when 'CLOSED' then '<span class="t-Badge t-Badge--success">CLOSED</span>'
+          end as status_badge,
+      
+          case
+            when a.repair_end_dt is not null then a.repair_end_dt - a.accident_dt
+            else trunc(sysdate) - a.accident_dt
+          end as accident_days,
+      
+          case
+            when a.repair_start_dt is not null and a.repair_end_dt is not null
+            then a.repair_end_dt - a.repair_start_dt
+            when a.repair_start_dt is not null
+            then trunc(sysdate) - a.repair_start_dt
+          end as repair_days,
+      
+          a.emp_charge_id,
+          a.remarks,
+          a.created_by,
+          a.created_dt
+      
+      from fleet_bike_accidents a
+      join fleet_bikes b
+        on b.bike_id = a.bike_id
+      order by a.accident_dt desc, a.accident_id desc
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 30709662908380126
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 30723292561372766
+      identification: 
+        name: Primary Report
+        alias: 307233
+
+    columns: 
+    - # ====== Column: ACCIDENT_ID =================================
+      id: 30710374710380121
+      identification: 
+        column-name: ACCIDENT_ID
+        type: Hidden
+
+      heading: 
+        heading: Accident Id
+
+      layout: 
+        sequence: 1
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: START_REPAIR_LINK ===========================
+      id: 30710715344380119
+      identification: 
+        column-name: START_REPAIR_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Start Repair
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CLOSE_ACCIDENT_LINK =========================
+      id: 30711131473380119
+      identification: 
+        column-name: CLOSE_ACCIDENT_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Close Accident
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CHARGE_LINK =================================
+      id: 30711507074380118
+      identification: 
+        column-name: CHARGE_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Charge Details
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: BIKE_ID =====================================
+      id: 30711919833380118
+      identification: 
+        column-name: BIKE_ID
+        type: Hidden
+
+      heading: 
+        heading: Bike Id
+
+      layout: 
+        sequence: 5
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: BIKE_CODE ===================================
+      id: 30712383342380117
+      identification: 
+        column-name: BIKE_CODE
+        type: Hidden
+
+      heading: 
+        heading: Bike Code
+
+      layout: 
+        sequence: 6
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PLATE_NO ====================================
+      id: 30712702963380117
+      identification: 
+        column-name: PLATE_NO
+        type: Plain Text
+
+      heading: 
+        heading: Plate No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 7
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_ID ======================================
+      id: 30713171674380116
+      identification: 
+        column-name: EMP_ID
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: FLEET.EMPLOYEE_LOV # 18130747472806310
+
+      heading: 
+        heading: Employee
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 8
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: ACCIDENT_DT =================================
+      id: 30713525121380116
+      identification: 
+        column-name: ACCIDENT_DT
+        type: Plain Text
+
+      heading: 
+        heading: Accident Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 9
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REPAIR_START_DT =============================
+      id: 30713935855380115
+      identification: 
+        column-name: REPAIR_START_DT
+        type: Plain Text
+
+      heading: 
+        heading: Repair Start Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REPAIR_END_DT ===============================
+      id: 30714322559380115
+      identification: 
+        column-name: REPAIR_END_DT
+        type: Plain Text
+
+      heading: 
+        heading: Repair End Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 11
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ACCIDENT_LOCATION ===========================
+      id: 30714714719380114
+      identification: 
+        column-name: ACCIDENT_LOCATION
+        type: Plain Text
+
+      heading: 
+        heading: Accident Location
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 12
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: POLICE_REPORT_NO ============================
+      id: 30715169257380114
+      identification: 
+        column-name: POLICE_REPORT_NO
+        type: Plain Text
+
+      heading: 
+        heading: Police Report No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 13
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: FAULT_BADGE =================================
+      id: 30715599996380113
+      identification: 
+        column-name: FAULT_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Faulty Party
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 14
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: SEVERITY_BADGE ==============================
+      id: 30715902245380113
+      identification: 
+        column-name: SEVERITY_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Severity
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 15
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: ESTIMATED_COST ==============================
+      id: 30716391197380112
+      identification: 
+        column-name: ESTIMATED_COST
+        type: Plain Text
+
+      heading: 
+        heading: Repair Cost
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 16
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ACTUAL_COST =================================
+      id: 30716749283380112
+      identification: 
+        column-name: ACTUAL_COST
+        type: Hidden
+
+      heading: 
+        heading: Actual Cost
+
+      layout: 
+        sequence: 17
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: RECOVERY_BADGE ==============================
+      id: 30717183926380111
+      identification: 
+        column-name: RECOVERY_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Charge Recovery
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 18
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: STATUS_BADGE ================================
+      id: 30717539117380111
+      identification: 
+        column-name: STATUS_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: 'Status '
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 19
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: ACCIDENT_DAYS ===============================
+      id: 30717904274380110
+      identification: 
+        column-name: ACCIDENT_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Accident Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REPAIR_DAYS =================================
+      id: 30718386942380110
+      identification: 
+        column-name: REPAIR_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Repair Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 21
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CHARGE_ID ===============================
+      id: 30718796826380109
+      identification: 
+        column-name: EMP_CHARGE_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Charge Id
+
+      layout: 
+        sequence: 22
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REMARKS =====================================
+      id: 30719187977380109
+      identification: 
+        column-name: REMARKS
+        type: Plain Text
+
+      heading: 
+        heading: Remarks
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 23
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_BY ==================================
+      id: 30719548652380109
+      identification: 
+        column-name: CREATED_BY
+        type: Hidden
+
+      heading: 
+        heading: Created By
+
+      layout: 
+        sequence: 24
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_DT ==================================
+      id: 30719934371380108
+      identification: 
+        column-name: CREATED_DT
+        type: Hidden
+
+      heading: 
+        heading: Created Dt
+
+      layout: 
+        sequence: 25
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Accident List
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+

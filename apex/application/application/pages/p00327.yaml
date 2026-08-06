@@ -1,0 +1,1285 @@
+---
+# ====== Page: Fleet Asset Risk Control ======================
+id: 327
+identification: 
+  name: Fleet Asset Risk Control
+  alias: FLEET-ASSET-RISK
+  title: Fleet Asset Risk Control
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    .fleet-risk-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 18px;
+    }
+    
+    .fleet-risk-kpi-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 18px 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+        min-height: 92px;
+    }
+    
+    .fleet-risk-kpi-card.total {
+        border-left: 5px solid #2563eb;
+    }
+    
+    .fleet-risk-kpi-card.high {
+        border-left: 5px solid #dc2626;
+    }
+    
+    .fleet-risk-kpi-card.pending {
+        border-left: 5px solid #f59e0b;
+    }
+    
+    .fleet-risk-kpi-card.recovery {
+        border-left: 5px solid #7c3aed;
+    }
+    
+    .fleet-risk-kpi-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: #f3f4f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+    
+    .fleet-risk-kpi-value {
+        font-size: 28px;
+        font-weight: 800;
+        line-height: 1;
+        color: #111827;
+    }
+    
+    .fleet-risk-kpi-label {
+        margin-top: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #6b7280;
+    }
+    
+    .a-IRR-table td {
+        vertical-align: middle;
+    }
+    
+    .a-IRR-table th {
+        white-space: normal;
+    }
+    
+    .t-Badge {
+        font-weight: 700;
+        border-radius: 8px;
+        padding: 5px 9px;
+    }
+    
+    .fleet-action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 30px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        background: #ffffff;
+        color: #374151;
+        text-decoration: none;
+        margin-right: 4px;
+    }
+    
+    .fleet-action-btn:hover {
+        background: #f3f4f6;
+        text-decoration: none;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Risk Summary ================================
+  id: 41406337221853013
+  identification: 
+    name: Risk Summary
+    type: Dynamic Content
+
+  source: 
+    language: PL/SQL
+    pl/sql-function-body-returning-a-clob: |
+      declare
+          l_total_risk       number;
+          l_high_risk        number;
+          l_pending_active   number;
+          l_accident_recover number;
+      begin
+          select count(*)
+            into l_total_risk
+            from vw_hr_emp_asset_control
+           where has_bike_yn = 'Y'
+             and actually_working_yn = 'N';
+      
+          select count(*)
+            into l_high_risk
+            from vw_hr_emp_asset_control
+           where has_bike_yn = 'Y'
+             and actually_working_yn = 'N'
+             and asset_risk_code in (
+                  'BIKE_RECOVERY_PENDING',
+                  'BIKE_RECOVERY_REQUIRED',
+                  'BIKE_CLEARANCE_PENDING',
+                  'BIKE_RETURN_REQUIRED'
+             );
+      
+          select count(*)
+            into l_pending_active
+            from vw_hr_emp_asset_control
+           where has_bike_yn = 'Y'
+             and actually_working_yn = 'N'
+             and asset_risk_code = 'BIKE_WITH_PENDING_ACTIVE';
+      
+          select count(*)
+            into l_accident_recover
+            from vw_hr_emp_asset_control
+           where has_bike_yn = 'Y'
+             and actually_working_yn = 'N'
+             and asset_risk_code in (
+                  'BIKE_RECOVERY_PENDING',
+                  'BIKE_RECOVERY_REQUIRED'
+             );
+      
+          htp.p('<div class="fleet-risk-kpi-grid">');
+      
+          htp.p('<div class="fleet-risk-kpi-card total">');
+          htp.p('  <div class="fleet-risk-kpi-icon"><span class="fa fa-exclamation-triangle"></span></div>');
+          htp.p('  <div class="fleet-risk-kpi-content">');
+          htp.p('    <div class="fleet-risk-kpi-value">' || l_total_risk || '</div>');
+          htp.p('    <div class="fleet-risk-kpi-label">Total Asset Risk</div>');
+          htp.p('  </div>');
+          htp.p('</div>');
+      
+          htp.p('<div class="fleet-risk-kpi-card high">');
+          htp.p('  <div class="fleet-risk-kpi-icon"><span class="fa fa-warning"></span></div>');
+          htp.p('  <div class="fleet-risk-kpi-content">');
+          htp.p('    <div class="fleet-risk-kpi-value">' || l_high_risk || '</div>');
+          htp.p('    <div class="fleet-risk-kpi-label">High Risk</div>');
+          htp.p('  </div>');
+          htp.p('</div>');
+      
+          htp.p('<div class="fleet-risk-kpi-card pending">');
+          htp.p('  <div class="fleet-risk-kpi-icon"><span class="fa fa-hourglass-half"></span></div>');
+          htp.p('  <div class="fleet-risk-kpi-content">');
+          htp.p('    <div class="fleet-risk-kpi-value">' || l_pending_active || '</div>');
+          htp.p('    <div class="fleet-risk-kpi-label">Pending Active With Bike</div>');
+          htp.p('  </div>');
+          htp.p('</div>');
+      
+          htp.p('<div class="fleet-risk-kpi-card recovery">');
+          htp.p('  <div class="fleet-risk-kpi-icon"><span class="fa fa-ambulance"></span></div>');
+          htp.p('  <div class="fleet-risk-kpi-content">');
+          htp.p('    <div class="fleet-risk-kpi-value">' || l_accident_recover || '</div>');
+          htp.p('    <div class="fleet-risk-kpi-label">Accident / Recovery</div>');
+          htp.p('  </div>');
+          htp.p('</div>');
+      
+          htp.p('</div>');
+      end;
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    performance: 
+      lazy-loading: false
+
+- # ====== Region: Breadcrumb ==================================
+  id: 41429924474189815
+  identification: 
+    name: Breadcrumb
+    title: Bike Asset Risk
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 9721609352336316
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: Employees Having Bike But Not Working =======
+  id: 41430693084189819
+  identification: 
+    name: Employees Having Bike But Not Working
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select ac.emp_id,
+             ac.emp_code,
+             ac.full_employee_name as employee_name,
+      
+             ac.current_status_name,
+             ac.current_legal_name,
+      
+             ac.job_name,
+             ac.worker_type,
+             ac.supplier_name,
+      
+             ac.current_bike_badge as bike_no,
+      
+             to_char(ac.current_bike_assign_dt, 'DD-MON-YYYY') as bike_assign_date,
+      
+             case
+                 when ac.current_bike_assign_dt is not null then
+                     trunc(sysdate) - trunc(ac.current_bike_assign_dt)
+             end as bike_with_days,
+      
+             ac.active_assignment_yn,
+             ac.actually_working_yn,
+      
+             ac.asset_risk_badge as asset_risk,
+      
+             case ac.asset_risk_code
+                 when 'BIKE_WITH_PENDING_ACTIVE' then
+                     '<span class="t-Badge t-Badge--warning">Start duty or return bike</span>'
+      
+                 when 'BIKE_ASSIGNED_BEFORE_ACTIVE' then
+                     '<span class="t-Badge t-Badge--warning">Move Pending Active or return bike</span>'
+      
+                 when 'BIKE_RETURN_REQUIRED' then
+                     '<span class="t-Badge t-Badge--danger">Return bike before vacation</span>'
+      
+                 when 'BIKE_CLEARANCE_PENDING' then
+                     '<span class="t-Badge t-Badge--danger">Bike clearance required</span>'
+      
+                 when 'BIKE_RECOVERY_REQUIRED' then
+                     '<span class="t-Badge t-Badge--danger">Accident recovery follow-up</span>'
+      
+                 when 'BIKE_RECOVERY_PENDING' then
+                     '<span class="t-Badge t-Badge--danger">Recovery / legal follow-up</span>'
+      
+                 else
+                     '<span class="t-Badge t-Badge--danger">Bike with non-working employee</span>'
+             end as action_required,
+      
+             case
+                 when ac.open_bike_request_id is not null then
+                     '<span class="t-Badge t-Badge--warning">Bike Request Open</span>'
+                 else
+                     '<span class="t-Badge t-Badge--normal">No Open Request</span>'
+             end as request_status,
+      
+             case
+                 when ac.active_assignment_yn = 'Y'
+                  and ac.actually_working_yn = 'N' then
+                     '<span class="t-Badge t-Badge--warning">Assignment Exists But Not Active</span>'
+      
+                 when ac.active_assignment_yn = 'Y' then
+                     '<span class="t-Badge t-Badge--success">Assignment Exists</span>'
+      
+                 else
+                     '<span class="t-Badge t-Badge--normal">No Active Assignment</span>'
+             end as assignment_status,
+      
+             case
+                 when ac.asset_risk_code in (
+                          'BIKE_RECOVERY_PENDING',
+                          'BIKE_RECOVERY_REQUIRED',
+                          'BIKE_CLEARANCE_PENDING',
+                          'BIKE_RETURN_REQUIRED'
+                      )
+                 then
+                     '<span class="t-Badge t-Badge--danger">High</span>'
+      
+                 when ac.asset_risk_code in (
+                          'BIKE_ASSIGNED_BEFORE_ACTIVE',
+                          'BIKE_WITH_PENDING_ACTIVE'
+                      )
+                 then
+                     '<span class="t-Badge t-Badge--warning">Medium</span>'
+      
+                 else
+                     '<span class="t-Badge t-Badge--normal">Review</span>'
+             end as risk_level,
+      /*
+             '<a href="' ||
+             apex_util.prepare_url(
+                 'f?p=' || :APP_ID || ':107:' || :APP_SESSION ||
+                 '::NO::P107_EMP_ID,P107_FROM_PAGE:' ||
+                 ac.emp_id || ',327'
+             ) ||
+             '" title="Open Status Change">' ||
+             '<span class="fa fa-edit" aria-hidden="true"></span>' ||
+             '</a>' as status_action,*/
+      
+             '<a href="' ||
+             apex_util.prepare_url(
+                 'f?p=' || :APP_ID || ':309:' || :APP_SESSION ||
+                 '::NO::P309_EMP_ID:' || ac.emp_id
+             ) ||
+             '" title="Open Bike Assignment / Return">' ||
+             '<span class="fa fa-motorcycle" aria-hidden="true"></span>' ||
+             '</a>' as bike_action
+      
+      from vw_hr_emp_asset_control ac
+      
+      where ac.has_bike_yn = 'Y'
+        and ac.actually_working_yn = 'N'
+      
+      order by case ac.asset_risk_code
+                   when 'BIKE_RECOVERY_PENDING' then 1
+                   when 'BIKE_RECOVERY_REQUIRED' then 2
+                   when 'BIKE_CLEARANCE_PENDING' then 3
+                   when 'BIKE_RETURN_REQUIRED' then 4
+                   when 'BIKE_ASSIGNED_BEFORE_ACTIVE' then 5
+                   when 'BIKE_WITH_PENDING_ACTIVE' then 6
+                   else 9
+               end,
+               ac.current_bike_assign_dt;
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 41430745592189819
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 41442449681195225
+      identification: 
+        name: Primary Report
+        alias: 414425
+
+    columns: 
+    - # ====== Column: EMP_ID ======================================
+      id: 41431410839189824
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 1
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 41431861166189825
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Employee Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 41432290534189826
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_STATUS_NAME =========================
+      id: 41432657054189826
+      identification: 
+        column-name: CURRENT_STATUS_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_LEGAL_NAME ==========================
+      id: 41433087136189827
+      identification: 
+        column-name: CURRENT_LEGAL_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Legal Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 5
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: JOB_NAME ====================================
+      id: 41433409950189827
+      identification: 
+        column-name: JOB_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Job Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 6
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: WORKER_TYPE =================================
+      id: 41433872146189828
+      identification: 
+        column-name: WORKER_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Worker Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 7
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: SUPPLIER_NAME ===============================
+      id: 41434279253189829
+      identification: 
+        column-name: SUPPLIER_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Supplier Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 8
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: BIKE_NO =====================================
+      id: 41434652907189829
+      identification: 
+        column-name: BIKE_NO
+        type: Plain Text
+
+      heading: 
+        heading: Bike No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 9
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: BIKE_ASSIGN_DATE ============================
+      id: 41435021039189830
+      identification: 
+        column-name: BIKE_ASSIGN_DATE
+        type: Plain Text
+
+      heading: 
+        heading: Assigned Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: BIKE_WITH_DAYS ==============================
+      id: 41435404692189830
+      identification: 
+        column-name: BIKE_WITH_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Days With Bike
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 11
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ACTIVE_ASSIGNMENT_YN ========================
+      id: 41435802116189830
+      identification: 
+        column-name: ACTIVE_ASSIGNMENT_YN
+        type: Hidden
+
+      heading: 
+        heading: Active Assignment Yn
+
+      layout: 
+        sequence: 12
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ACTUALLY_WORKING_YN =========================
+      id: 41436251202189831
+      identification: 
+        column-name: ACTUALLY_WORKING_YN
+        type: Hidden
+
+      heading: 
+        heading: Actually Working Yn
+
+      layout: 
+        sequence: 13
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ASSET_RISK ==================================
+      id: 41436638751189831
+      identification: 
+        column-name: ASSET_RISK
+        type: Plain Text
+
+      heading: 
+        heading: Asset Risk
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 14
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: ACTION_REQUIRED =============================
+      id: 41437036191189832
+      identification: 
+        column-name: ACTION_REQUIRED
+        type: Plain Text
+
+      heading: 
+        heading: Action Required
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 15
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: REQUEST_STATUS ==============================
+      id: 41437491326189832
+      identification: 
+        column-name: REQUEST_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Request Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 16
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: ASSIGNMENT_STATUS ===========================
+      id: 41437878155189833
+      identification: 
+        column-name: ASSIGNMENT_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Assignment
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 17
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: RISK_LEVEL ==================================
+      id: 41438217130189833
+      identification: 
+        column-name: RISK_LEVEL
+        type: Plain Text
+
+      heading: 
+        heading: Risk
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 18
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: BIKE_ACTION =================================
+      id: 41439047059189834
+      identification: 
+        column-name: BIKE_ACTION
+        type: Plain Text
+
+      heading: 
+        heading: Bike
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Fleet Asset Risk
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+

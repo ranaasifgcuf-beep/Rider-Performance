@@ -1,0 +1,1111 @@
+---
+# ====== Page: Status Master Setup ===========================
+id: 185
+identification: 
+  name: Status Master Setup
+  alias: STATUS-MASTER-SETUP
+  title: Status Master Setup
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* Wrap Interactive Grid column headings */
+    #STATUS_MASTER_IG .a-GV-headerLabel {
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: unset !important;
+        line-height: 1.2;
+    }
+    
+    /* Increase heading-row height */
+    #STATUS_MASTER_IG .a-GV-header {
+        height: 48px !important;
+        vertical-align: middle;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Breadcrumb ==================================
+  id: 40213533784742422
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 9721609352336316
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: Status Master Setup =========================
+  id: 40214271876742428
+  identification: 
+    name: Status Master Setup
+    type: Interactive Grid
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select status_code,
+             status_name,
+             is_active,
+             seq_no,
+             status_type,
+             user_changeable,
+             status_nature,
+             requires_reason_yn,
+             requires_project_yn,
+             requires_city_yn,
+             allow_assignment_yn,
+             is_final_yn,
+             badge_class,
+             remarks
+      from hr_status_master
+      order by  seq_no, status_name;
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: STATUS_MASTER_IG
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 40214701740742429
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      lost-update-type: Row Values
+      add-row-if-empty: true
+
+    performance: 
+      lazy-loading: false
+
+    appearance: 
+      select-first-row: true
+      fixed-row-height: true
+
+    pagination: 
+      type: Scroll
+      show-total-count: true
+
+    toolbar: 
+      show: true
+      controls: 
+      - Search Column Selection
+      - Search Field
+      - Actions Menu
+      - Reset Button
+      - Save Button
+
+    enable-users-to: 
+      save-public-report: false
+      flashback: true
+      define-chart-view: true
+      download: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - PDF
+      - Excel
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 40215168137742431
+      identification: 
+        name: Primary Report
+        alias: 402152
+
+  columns: 
+  - # ====== Column: APEX$ROW_ACTION =============================
+    id: 39251719829729113
+    identification: 
+      column-name: APEX$ROW_ACTION
+      type: Actions Menu
+
+    layout: 
+      sequence: 20
+
+  - # ====== Column: APEX$ROW_SELECTOR ===========================
+    id: 39251828171729114
+    identification: 
+      column-name: APEX$ROW_SELECTOR
+      type: Row Selector
+
+    settings: 
+      enable-multi-select: true
+      show-select-all: true
+      hide-control: false
+
+    layout: 
+      sequence: 10
+
+  - # ====== Column: STATUS_CODE =================================
+    id: 40215549212742437
+    identification: 
+      column-name: STATUS_CODE
+      type: Text Field
+
+    heading: 
+      heading: Status Code
+      alignment: end
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: Upper
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 30
+
+    source: 
+      type: Database Column
+      database-column: STATUS_CODE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: true
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+    read-only: 
+      type: Expression
+      language: PL/SQL
+      pl/sql-expression: ':STATUS_CODE IS NOT NULL'
+      execute: For Each Row
+
+  - # ====== Column: STATUS_NAME =================================
+    id: 40216576406742439
+    identification: 
+      column-name: STATUS_NAME
+      type: Text Field
+
+    heading: 
+      heading: Status Name
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 100
+
+    source: 
+      type: Database Column
+      database-column: STATUS_NAME
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: IS_ACTIVE ===================================
+    id: 40217587210742440
+    identification: 
+      column-name: IS_ACTIVE
+      type: Text Field
+
+    heading: 
+      heading: Is Active
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 1
+
+    source: 
+      type: Database Column
+      database-column: IS_ACTIVE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: SEQ_NO ======================================
+    id: 40218554969742441
+    identification: 
+      column-name: SEQ_NO
+      type: Number Field
+
+    heading: 
+      heading: Seq No
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 60
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: SEQ_NO
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: STATUS_TYPE =================================
+    id: 40219527144742441
+    identification: 
+      column-name: STATUS_TYPE
+      type: Select List
+
+    heading: 
+      heading: Status Type
+      alignment: start
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC:SYSTEM;SYSTEM,USER;USER'
+      display-extra-values: false
+      display-null-value: false
+
+    source: 
+      type: Database Column
+      database-column: STATUS_TYPE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: USER_CHANGEABLE =============================
+    id: 40220535086742442
+    identification: 
+      column-name: USER_CHANGEABLE
+      type: Select List
+
+    heading: 
+      heading: User Changeable
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC:Yes;Y,No;N'
+      display-extra-values: false
+      display-null-value: false
+
+    source: 
+      type: Database Column
+      database-column: USER_CHANGEABLE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: STATUS_NATURE ===============================
+    id: 40221506024742443
+    identification: 
+      column-name: STATUS_NATURE
+      type: Select List
+
+    heading: 
+      heading: Status Category
+      alignment: start
+
+    layout: 
+      sequence: 90
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC:Employee;EMPLOYEE,Legal;LEGAL'
+      display-extra-values: false
+      display-null-value: false
+
+    source: 
+      type: Database Column
+      database-column: STATUS_NATURE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: REQUIRES_REASON_YN ==========================
+    id: 40222523695742443
+    identification: 
+      column-name: REQUIRES_REASON_YN
+      type: Select List
+
+    heading: 
+      heading: Requires Reason
+      alignment: start
+
+    layout: 
+      sequence: 100
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC:Yes;Y,No;N'
+      display-extra-values: false
+      display-null-value: false
+
+    source: 
+      type: Database Column
+      database-column: REQUIRES_REASON_YN
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: REQUIRES_PROJECT_YN =========================
+    id: 40223526785742444
+    identification: 
+      column-name: REQUIRES_PROJECT_YN
+      type: Select List
+
+    heading: 
+      heading: Requires Project
+      alignment: start
+
+    layout: 
+      sequence: 110
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC:Yes;Y,No;N'
+      display-extra-values: false
+      display-null-value: false
+
+    source: 
+      type: Database Column
+      database-column: REQUIRES_PROJECT_YN
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: REQUIRES_CITY_YN ============================
+    id: 40224539235742445
+    identification: 
+      column-name: REQUIRES_CITY_YN
+      type: Select List
+
+    heading: 
+      heading: Requires City
+      alignment: start
+
+    layout: 
+      sequence: 120
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC:Yes;Y,No;N'
+      display-extra-values: false
+      display-null-value: false
+
+    source: 
+      type: Database Column
+      database-column: REQUIRES_CITY_YN
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: ALLOW_ASSIGNMENT_YN =========================
+    id: 40225552600742445
+    identification: 
+      column-name: ALLOW_ASSIGNMENT_YN
+      type: Select List
+
+    heading: 
+      heading: Allow Assignment
+      alignment: start
+
+    layout: 
+      sequence: 130
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC:Yes;Y,No;N'
+      display-extra-values: false
+      display-null-value: false
+
+    source: 
+      type: Database Column
+      database-column: ALLOW_ASSIGNMENT_YN
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: IS_FINAL_YN =================================
+    id: 40226563849742446
+    identification: 
+      column-name: IS_FINAL_YN
+      type: Select List
+
+    heading: 
+      heading: Is Final
+      alignment: start
+
+    layout: 
+      sequence: 140
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC:Yes;Y,No;N'
+      display-extra-values: false
+      display-null-value: false
+
+    source: 
+      type: Database Column
+      database-column: IS_FINAL_YN
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: BADGE_CLASS =================================
+    id: 40227552130742447
+    identification: 
+      column-name: BADGE_CLASS
+      type: Text Field
+
+    heading: 
+      heading: Badge Class
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 150
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 100
+
+    source: 
+      type: Database Column
+      database-column: BADGE_CLASS
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: REMARKS =====================================
+    id: 40228588449742447
+    identification: 
+      column-name: REMARKS
+      type: Textarea
+
+    heading: 
+      heading: Remarks
+      alignment: start
+
+    settings: 
+      resizable: true
+      auto-height: false
+      character-counter: false
+      trim-spaces: Leading and Trailing
+
+    layout: 
+      sequence: 160
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: REMARKS
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  printing: 
+    page: 
+      size: Letter
+      orientation: Landscape
+      units: Inches
+      width: 11
+      height: 8.5
+      border-width: 0.5
+      border-color: '#666666'
+
+    page-header: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+      page-header-text: Status Master Setup
+
+    column-headings: 
+      font: Helvetica
+      font-weight: Bold
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#EEEEEE'
+
+    columns: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#FFFFFF'
+
+    page-footer: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+validations: 
+- # ====== Validation: Validate Status Code Format =============
+  id: 39252093166729116
+  identification: 
+    name: Validate Status Code Format
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if :STATUS_CODE <> upper(:STATUS_CODE) then
+              return 'Status Code must be uppercase.';
+          end if;
+      
+          if instr(:STATUS_CODE, ' ') > 0 then
+              return 'Status Code cannot contain spaces. Use underscore instead.';
+          end if;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+processes: 
+- # ====== Process: Status Master Setup - Save Interactive Grid 
+  id: 39251906579729115
+  identification: 
+    name: Status Master Setup - Save Interactive Grid Data
+    type: Interactive Grid - Automatic Row Processing (DML)
+    execution-chain: None
+    editable-region: Status Master Setup # 40214271876742428
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    execution-scope: For Created and Modified Rows
+

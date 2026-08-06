@@ -1,0 +1,738 @@
+---
+# ====== Page: Users Management ==============================
+id: 910
+identification: 
+  name: Users Management
+  alias: USERS-MANAGEMENT
+  title: Users Management
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* Base icon button */
+    .sec-actions .sec-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      margin-right: 6px;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    
+    /* Hover animation */
+    .sec-actions .sec-icon:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+    }
+    
+    /* Edit = Blue */
+    .sec-actions .sec-edit {
+      background: linear-gradient(135deg, #4f8cff, #2f6bff);
+    }
+    .sec-actions .sec-edit:hover {
+      background: linear-gradient(135deg, #2f6bff, #1e55d6);
+    }
+    
+    /* Reset Password = Orange */
+    .sec-actions .sec-reset {
+      background: linear-gradient(135deg, #ff9f43, #ff7a18);
+    }
+    .sec-actions .sec-reset:hover {
+      background: linear-gradient(135deg, #ff7a18, #e65c00);
+    }
+    
+    /* Manage Access = Purple */
+    .sec-actions .sec-access {
+      background: linear-gradient(135deg, #9b59b6, #7d3c98);
+    }
+    .sec-actions .sec-access:hover {
+      background: linear-gradient(135deg, #7d3c98, #5e3370);
+    }
+    
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Breadcrumb ==================================
+  id: 9753043953484282
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 9721609352336316
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: Users Management ============================
+  id: 9753744628484286
+  identification: 
+    name: Users Management
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select USER_ID,
+             USERNAME,
+       FULL_NAME,
+             EMAIL,
+             IS_ACTIVE,
+             case
+          when is_active = 'Y' then
+            '<span class="t-Badge t-Badge--success">Active</span>'
+          else
+            '<span class="t-Badge t-Badge--danger">Inactive</span>'
+        end as is_active_disp,
+             LAST_LOGIN_ON,
+             null as Actions,
+             apex_page.get_url(
+          p_page  => 911,
+          p_items => 'P911_USER_ID',
+          p_values=> user_id
+        ) as edit_url,
+      
+        apex_page.get_url(
+          p_page  => 913,
+          p_items => 'P913_USERNAME',
+          p_values=> username
+        ) as reset_url,
+      
+          apex_page.get_url(
+          p_page  => 912,
+          p_items => 'P912_USER_ID',
+          p_values=> user_id
+        )  as access_url
+        from SEC_USERS
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 9753846071484286
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 9759408984486791
+      identification: 
+        name: Primary Report
+        alias: 97595
+
+    columns: 
+    - # ====== Column: IS_ACTIVE_DISP ==============================
+      id: 9739790040536814
+      identification: 
+        column-name: IS_ACTIVE_DISP
+        type: Plain Text
+
+      heading: 
+        heading: Status
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 22
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: ACTIONS =====================================
+      id: 9740280049536819
+      identification: 
+        column-name: ACTIONS
+        type: Plain Text
+
+      heading: 
+        heading: Actions
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 32
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      column-formatting: 
+        html-expression: |
+          <span class="u-nowrap sec-actions">
+            <a href="javascript:void(0);" onclick="apex.navigation.dialog('#EDIT_URL#',{title:'Edit User',width:'720'});" class="sec-icon sec-edit" title="Edit">
+              <span class="fa fa-edit"></span>
+            </a>
+          
+            <a href="javascript:void(0);" onclick="apex.navigation.dialog('#RESET_URL#',{title:'Reset Password',width:'640'});" class="sec-icon sec-reset" title="Reset Password">
+              <span class="fa fa-key"></span>
+            </a>
+          
+            <a href="javascript:void(0);" onclick="apex.navigation.dialog('#ACCESS_URL#',{title:'Manage Access',width:'900'});" class="sec-icon sec-access" title="Manage Access">
+              <span class="fa fa-shield"></span>
+            </a>
+          </span>
+          
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: EDIT_URL ====================================
+      id: 9740380439536820
+      identification: 
+        column-name: EDIT_URL
+        type: Hidden
+
+      heading: 
+        heading: Edit Url
+
+      layout: 
+        sequence: 42
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: RESET_URL ===================================
+      id: 9740493277536821
+      identification: 
+        column-name: RESET_URL
+        type: Hidden
+
+      heading: 
+        heading: Reset Url
+
+      layout: 
+        sequence: 52
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ACCESS_URL ==================================
+      id: 9740538258536822
+      identification: 
+        column-name: ACCESS_URL
+        type: Hidden
+
+      heading: 
+        heading: Access Url
+
+      layout: 
+        sequence: 62
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: USER_ID =====================================
+      id: 9754429870484397
+      identification: 
+        column-name: USER_ID
+        type: Hidden
+
+      heading: 
+        heading: User ID
+
+      layout: 
+        sequence: 0
+
+      source: 
+        primary-key: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: USERNAME ====================================
+      id: 9754864194484399
+      identification: 
+        column-name: USERNAME
+        type: Plain Text
+
+      heading: 
+        heading: Username
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMAIL =======================================
+      id: 9755219752484399
+      identification: 
+        column-name: EMAIL
+        type: Plain Text
+
+      heading: 
+        heading: Email
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: FULL_NAME ===================================
+      id: 9755669740484400
+      identification: 
+        column-name: FULL_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Full Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IS_ACTIVE ===================================
+      id: 9756002474484400
+      identification: 
+        column-name: IS_ACTIVE
+        type: Hidden
+
+      heading: 
+        heading: Status
+
+      layout: 
+        sequence: 5
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: LAST_LOGIN_ON ===============================
+      id: 9758801803484402
+      identification: 
+        column-name: LAST_LOGIN_ON
+        type: Plain Text
+
+      heading: 
+        heading: Last Login On
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 12
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Users Management
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+buttons: 
+- # ====== Button: BTN_CREATE ==================================
+  id: 9739835946536815
+  identification: 
+    button-name: BTN_CREATE
+    label: Create User
+
+  layout: 
+    sequence: 10
+    region: Users Management # 9753744628484286
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-user
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:911:&SESSION.::&DEBUG.:::'
+      page: 911 # User Form
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: DA_REFRESH_USERS_IR =================
+  id: 9740019712536817
+  identification: 
+    name: DA_REFRESH_USERS_IR
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: Users Management # 9753744628484286
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 9740191121536818
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Users Management # 9753744628484286
+
+    execution: 
+      sequence: 10
+      event: DA_REFRESH_USERS_IR # 9740019712536817
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

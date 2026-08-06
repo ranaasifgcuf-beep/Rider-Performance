@@ -1,0 +1,1727 @@
+---
+# ====== Page: Employee Documents Log Form ===================
+id: 121
+identification: 
+  name: Employee Documents Log Form
+  alias: EMPLOYEE-DOCUMENTS-LOG-FORM
+  title: Employee Documents Log Form
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Employee Documents Log Form =================
+  id: 16266263396312857
+  identification: 
+    name: Employee Documents Log Form
+    type: Form
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_DOC_CUSTODY_LOG
+    include-rowid-column: false
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+- # ====== Region: Buttons =====================================
+  id: 16280533269312845
+  identification: 
+    name: Buttons
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: Text (escape special characters)
+      show-line-breaks: true
+
+page-items: 
+- # ====== Page Item: P121_EMP_NAME ============================
+  id: 16249355874426808
+  identification: 
+    name: P121_EMP_NAME
+    type: Display Only
+
+  label: 
+    label: Employee Name
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      select first_name || ' ' || last_name
+      from hr_employees
+      where emp_id = :P121_EMP_ID
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_LOG_ID ==============================
+  id: 16266541331312856
+  identification: 
+    name: P121_LOG_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: LOG_ID
+    data-type: NUMBER
+    query-only: true
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_EMP_ID ==============================
+  id: 16266946114312855
+  identification: 
+    name: P121_EMP_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: EMP_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_DOC_TYPE ============================
+  id: 16267362527312853
+  identification: 
+    name: P121_DOC_TYPE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 40
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: DOC_TYPE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: PASSPORT
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_RELATED_DOC_ID ======================
+  id: 16267702383312853
+  identification: 
+    name: P121_RELATED_DOC_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 50
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: RELATED_DOC_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_TXN_TYPE ============================
+  id: 16268163400312852
+  identification: 
+    name: P121_TXN_TYPE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 60
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: TXN_TYPE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_TXN_DT ==============================
+  id: 16268583021312852
+  identification: 
+    name: P121_TXN_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 70
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: TXN_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sysdate
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_EXTERNAL_STATUS =====================
+  id: 16268961966312852
+  identification: 
+    name: P121_EXTERNAL_STATUS
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 80
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: EXTERNAL_STATUS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_HOLDER_TYPE =========================
+  id: 16269341670312852
+  identification: 
+    name: P121_HOLDER_TYPE
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 90
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: HOLDER_TYPE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_HOLDER_USER =========================
+  id: 16269757501312851
+  identification: 
+    name: P121_HOLDER_USER
+    type: Select List
+
+  label: 
+    label: Holder User
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 100
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select username d, user_id r
+      from sec_users
+      where is_active = 'Y'
+      order by username
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: HOLDER_USER
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ':APP_USER'
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_HOLDER_DEPT =========================
+  id: 16270160323312851
+  identification: 
+    name: P121_HOLDER_DEPT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 110
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: HOLDER_DEPT
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_RECEIVED_FROM =======================
+  id: 16270510521312851
+  identification: 
+    name: P121_RECEIVED_FROM
+    type: Text Field
+
+  label: 
+    label: Received From
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 120
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 200
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: RECEIVED_FROM
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_ISSUED_TO ===========================
+  id: 16270935037312851
+  identification: 
+    name: P121_ISSUED_TO
+    type: Text Field
+
+  label: 
+    label: Issued To
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 130
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 200
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: ISSUED_TO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_PURPOSE =============================
+  id: 16271382892312851
+  identification: 
+    name: P121_PURPOSE
+    type: Textarea
+
+  label: 
+    label: Purpose
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 140
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+    height: 4
+
+  validation: 
+    value-required: false
+    maximum-length: 500
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: PURPOSE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_EXPECTED_RETURN_DT ==================
+  id: 16271739653312850
+  identification: 
+    name: P121_EXPECTED_RETURN_DT
+    type: Date Picker
+
+  label: 
+    label: Expected Return Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 150
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: EXPECTED_RETURN_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_REMARKS =============================
+  id: 16272194154312850
+  identification: 
+    name: P121_REMARKS
+    type: Textarea
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 160
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+    height: 4
+
+  validation: 
+    value-required: false
+    maximum-length: 1000
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: REMARKS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_HANDLED_BY ==========================
+  id: 16272552562312850
+  identification: 
+    name: P121_HANDLED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 170
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: HANDLED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ':APP_USER'
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_CREATED_BY ==========================
+  id: 16272994136312850
+  identification: 
+    name: P121_CREATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 180
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: CREATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_CREATED_DT ==========================
+  id: 16273354284312849
+  identification: 
+    name: P121_CREATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 190
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: CREATED_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_UPDATED_BY ==========================
+  id: 16273783287312849
+  identification: 
+    name: P121_UPDATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 200
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: UPDATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P121_UPDATED_DT ==========================
+  id: 16274117243312849
+  identification: 
+    name: P121_UPDATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 210
+    region: Employee Documents Log Form # 16266263396312857
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Employee Documents Log Form # 16266263396312857
+    column: UPDATED_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: CANCEL ======================================
+  id: 16280958434312845
+  identification: 
+    button-name: CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 10
+    region: Buttons # 16280533269312845
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: DELETE ======================================
+  id: 16282308487312842
+  identification: 
+    button-name: DELETE
+    label: Delete
+
+  layout: 
+    sequence: 20
+    region: Buttons # 16280533269312845
+    slot: DELETE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: false
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL DELETE action
+
+  confirmation: 
+    message: '&APP_TEXT$DELETE_MSG!RAW.'
+    style: Danger
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P121_LOG_ID
+
+- # ====== Button: SAVE ========================================
+  id: 16282734972312842
+  identification: 
+    button-name: SAVE
+    label: Apply Changes
+
+  layout: 
+    sequence: 30
+    region: Buttons # 16280533269312845
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P121_LOG_ID
+
+- # ====== Button: CREATE ======================================
+  id: 16283197151312842
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 40
+    region: Buttons # 16280533269312845
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P121_LOG_ID
+
+dynamic-actions: 
+- # ====== Dynamic Action: DA_SET_TXN_BEHAVIOR =================
+  id: 16249419495426809
+  identification: 
+    name: DA_SET_TXN_BEHAVIOR
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P121_TXN_TYPE
+
+  client-side-condition: 
+    type: Item = Value
+    item: P121_TXN_TYPE
+    value: RECEIVE_FROM_EMPLOYEE
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 16249544428426810
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: WITH_COMPANY
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_EXTERNAL_STATUS
+
+    execution: 
+      sequence: 10
+      event: DA_SET_TXN_BEHAVIOR # 16249419495426809
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Set Value ===================================
+    id: 16249669282426811
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: COMPANY_DEPT
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_HOLDER_TYPE
+
+    execution: 
+      sequence: 20
+      event: DA_SET_TXN_BEHAVIOR # 16249419495426809
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Show ========================================
+    id: 16249990535426814
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_RECEIVED_FROM
+
+    execution: 
+      sequence: 30
+      event: DA_SET_TXN_BEHAVIOR # 16249419495426809
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 16250011145426815
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_PURPOSE
+
+    execution: 
+      sequence: 40
+      event: DA_SET_TXN_BEHAVIOR # 16249419495426809
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 16250100428426816
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_ISSUED_TO
+
+    execution: 
+      sequence: 50
+      event: DA_SET_TXN_BEHAVIOR # 16249419495426809
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 16250276929426817
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_EXPECTED_RETURN_DT
+
+    execution: 
+      sequence: 60
+      event: DA_SET_TXN_BEHAVIOR # 16249419495426809
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: DA_SET_TXN_BEHAVIOR_1 ===============
+  id: 16250847521426823
+  identification: 
+    name: DA_SET_TXN_BEHAVIOR_1
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P121_TXN_TYPE
+
+  client-side-condition: 
+    type: Item = Value
+    item: P121_TXN_TYPE
+    value: ISSUE_TO_EMPLOYEE
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 16250902902426824
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: WITH_EMPLOYEE
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_EXTERNAL_STATUS
+
+    execution: 
+      sequence: 10
+      event: DA_SET_TXN_BEHAVIOR_1 # 16250847521426823
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Set Value ===================================
+    id: 16251097076426825
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: EMPLOYEE
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_HOLDER_TYPE
+
+    execution: 
+      sequence: 20
+      event: DA_SET_TXN_BEHAVIOR_1 # 16250847521426823
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Hide ========================================
+    id: 16251123955426826
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_RECEIVED_FROM
+
+    execution: 
+      sequence: 30
+      event: DA_SET_TXN_BEHAVIOR_1 # 16250847521426823
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Show ========================================
+    id: 16251295146426827
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_PURPOSE
+
+    execution: 
+      sequence: 50
+      event: DA_SET_TXN_BEHAVIOR_1 # 16250847521426823
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Show ========================================
+    id: 16251346842426828
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_ISSUED_TO
+
+    execution: 
+      sequence: 60
+      event: DA_SET_TXN_BEHAVIOR_1 # 16250847521426823
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Show ========================================
+    id: 16251406941426829
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_EXPECTED_RETURN_DT
+
+    execution: 
+      sequence: 70
+      event: DA_SET_TXN_BEHAVIOR_1 # 16250847521426823
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 16252844772426843
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_HOLDER_USER
+
+    execution: 
+      sequence: 40
+      event: DA_SET_TXN_BEHAVIOR_1 # 16250847521426823
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: DA_SET_TXN_BEHAVIOR_1_1 =============
+  id: 16251731007426832
+  identification: 
+    name: DA_SET_TXN_BEHAVIOR_1_1
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P121_TXN_TYPE
+
+  client-side-condition: 
+    type: Item = Value
+    item: P121_TXN_TYPE
+    value: INTERNAL_TRANSFER
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 16251874891426833
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: WITH_COMPANY
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_EXTERNAL_STATUS
+
+    execution: 
+      sequence: 10
+      event: DA_SET_TXN_BEHAVIOR_1_1 # 16251731007426832
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Set Value ===================================
+    id: 16251963008426834
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: COMPANY_USER
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_HOLDER_TYPE
+
+    execution: 
+      sequence: 20
+      event: DA_SET_TXN_BEHAVIOR_1_1 # 16251731007426832
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Hide ========================================
+    id: 16252008601426835
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_RECEIVED_FROM
+
+    execution: 
+      sequence: 30
+      event: DA_SET_TXN_BEHAVIOR_1_1 # 16251731007426832
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Show ========================================
+    id: 16252154400426836
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_PURPOSE
+
+    execution: 
+      sequence: 40
+      event: DA_SET_TXN_BEHAVIOR_1_1 # 16251731007426832
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 16252237794426837
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_ISSUED_TO
+
+    execution: 
+      sequence: 50
+      event: DA_SET_TXN_BEHAVIOR_1_1 # 16251731007426832
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Show ========================================
+    id: 16252330177426838
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P121_EXPECTED_RETURN_DT
+
+    execution: 
+      sequence: 60
+      event: DA_SET_TXN_BEHAVIOR_1_1 # 16251731007426832
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: Cancel Dialog =======================
+  id: 16281014581312845
+  identification: 
+    name: Cancel Dialog
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 16280958434312845
+
+  actions: 
+  - # ====== Action: Cancel Dialog ===============================
+    id: 16281870537312843
+    identification: 
+      action: Cancel Dialog
+
+    execution: 
+      sequence: 10
+      event: Cancel Dialog # 16281014581312845
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations: 
+- # ====== Validation: Check Required Columns ==================
+  id: 16252719269426842
+  identification: 
+    name: Check Required Columns
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      declare
+          l_issued_to  varchar2(240);
+          l_purpose varchar2(240);
+          l_TXN_TYPE varchar2(240);
+      begin
+          l_issued_to  := :P121_ISSUED_TO;
+          l_purpose := :P121_PURPOSE;
+          l_TXN_TYPE := :P121_TXN_TYPE;
+      
+      IF l_TXN_TYPE = 'ISSUE_TO_EMPLOYEE' THEN 
+          if  l_issued_to is NULL  then
+              return 'Issued to is required.';
+          end if;
+      
+           if  l_purpose is NULL  then
+              return 'Purpose to is required.';
+              end if;
+       elsif l_TXN_TYPE  = 'INTERNAL_TRANSFER' then 
+       if  l_purpose is NULL  then
+              return 'Purpose to is required.';
+          end if;
+      
+         END IF;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+processes: 
+- # ====== Process: Initialize form Employee Documents Log Form 
+  id: 16283545952312842
+  identification: 
+    name: Initialize form Employee Documents Log Form
+    type: Form - Initialization
+    execution-chain: None
+    form-region: Employee Documents Log Form # 16266263396312857
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Process form Employee Documents Log Form ===
+  id: 16283904974312841
+  identification: 
+    name: Process form Employee Documents Log Form
+    type: Form - Automatic Row Processing (DML)
+    execution-chain: None
+    form-region: Employee Documents Log Form # 16266263396312857
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Close Dialog ===============================
+  id: 16284359347312841
+  identification: 
+    name: Close Dialog
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 50
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request is contained in Value
+    value: CREATE,SAVE,DELETE
+
+branches: 
+- # ====== Branch: Go To Page 120 ==============================
+  id: 16252913558426844
+  identification: 
+    name: Go To Page 120
+
+  execution: 
+    sequence: 10
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:120:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 120 # HR Employee Docs Log
+

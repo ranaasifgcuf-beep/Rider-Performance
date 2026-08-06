@@ -1,0 +1,1253 @@
+---
+# ====== Page: Employee Profile ==============================
+id: 100.1
+identification: 
+  name: Employee Profile
+  alias: EMPLOYEE-PROFILE1
+  title: Employee Profile
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    #emp_avatar .t-Avatar img {
+        border-radius: 50%;         
+        /*border: 3px solid #2c7be5;*/
+        padding: 20px 20px;
+        background: #fff;
+    }
+    
+    .emp-hero{
+      background:#ffffff;
+      border:1px solid #e5e7eb;
+      border-radius:18px;
+      padding:20px 24px;
+      box-shadow:0 4px 14px rgba(0,0,0,.05);
+    }
+    
+    .emp-hero__name{
+      font-size:26px;
+      font-weight:800;
+      color:#0f172a;
+      margin-bottom:12px;
+    }
+    
+    .emp-hero__chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:12px;
+    }
+    
+    .emp-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      background:#f8fafc;
+      border:1px solid #e5e7eb;
+      border-radius:999px;
+      padding:6px 12px;
+      font-size:12px;
+    }
+    
+    .emp-chip__label{
+      color:#6b7280;
+      font-weight:600;
+    }
+    
+    .emp-chip__value{
+      color:#111827;
+      font-weight:700;
+    }
+    
+    /* STATUS COLORS */
+    .emp-chip--success{
+      background:#ecfdf5;
+      border:1px solid #bbf7d0;
+      color:#065f46;
+    }
+    
+    .emp-chip--warning{
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#92400e;
+    }
+    
+    .emp-chip--danger{
+      background:#fef2f2;
+      border:1px solid #fecaca;
+      color:#991b1b;
+    }
+    
+    .emp-hero__info{
+      display:flex;
+      flex-wrap:wrap;
+      gap:24px;
+      margin-bottom:12px;
+    }
+    
+    .emp-info{
+      display:flex;
+      gap:6px;
+      font-size:14px;
+    }
+    
+    .emp-info__label{
+      color:#6b7280;
+      font-weight:600;
+    }
+    
+    .emp-info__value{
+      color:#111827;
+      font-weight:700;
+    }
+    
+    .emp-hero__docs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-top:6px;
+    }
+    
+    /* DOCUMENT ICON COLORS */
+    .doc-ind{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:14px;
+      font-weight:600;
+    }
+    
+    .doc-ind.ok{
+      color:#15803d;
+    }
+    
+    .doc-ind.no{
+      color:#b91c1c;
+    }
+    
+    .doc-ind .fa{
+      font-size:16px;
+    }
+    
+    /* parent row */
+    .snap-row{
+      margin-top:12px;
+    }
+    
+    /* each card region column */
+    .snap-col{
+      padding-left:6px !important;
+      padding-right:6px !important;
+      margin-bottom:0 !important;
+    }
+    
+    /* remove extra apex region padding/background */
+    .snap-col.t-Region,
+    .snap-col .t-Region{
+      background:transparent !important;
+      border:none !important;
+      box-shadow:none !important;
+    }
+    
+    .snap-col .t-Region-header{
+      display:none !important;
+    }
+    
+    .snap-col .t-Region-bodyWrap,
+    .snap-col .t-Region-body{
+      padding:0 !important;
+    }
+    
+    /* main card */
+    .snap-card{
+      background:#ffffff;
+      border:1px solid #e5e7eb;
+      border-radius:18px;
+      padding:18px 18px;
+      box-shadow:0 4px 14px rgba(0,0,0,.05);
+      min-height:220px;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+    }
+    
+    /* titles */
+    .snap-card__title{
+      font-size:12px;
+      font-weight:700;
+      color:#64748b;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      margin-bottom:18px;
+    }
+    
+    /* main text */
+    .snap-card__main{
+      font-size:20px;
+      font-weight:800;
+      color:#0f172a;
+      margin-bottom:12px;
+      line-height:1.2;
+    }
+    
+    /* sub text */
+    .snap-card__sub{
+      font-size:13px;
+      color:#334155;
+      margin-bottom:10px;
+      line-height:1.45;
+    }
+    
+    /* footer pinned lower */
+    .snap-card__foot{
+      font-size:12px;
+      color:#64748b;
+      margin-top:auto;
+      padding-top:10px;
+    }
+    
+    /* spacing for badges inside sub lines */
+    .snap-card__sub .t-Badge{
+      margin-left:6px;
+    }
+    
+    /* top colors per card */
+    .snap-assignment .snap-card{
+      border-top:4px solid #2563eb;
+    }
+    
+    .snap-pay .snap-card{
+      border-top:4px solid #16a34a;
+    }
+    
+    .snap-insurance .snap-card{
+      border-top:4px solid #f59e0b;
+    }
+    
+    .snap-custody .snap-card{
+      border-top:4px solid #dc2626;
+    }
+    
+    /*.snapshot-wrap{
+      margin-top:14px;
+    }
+    
+    .snapshot-region{
+      margin-bottom:12px;
+    }
+    
+    .snap-card{
+      background:#ffffff;
+      border:1px solid #e5e7eb;
+      border-radius:18px;
+      padding:18px 18px;
+      box-shadow:0 4px 14px rgba(0,0,0,.05);
+      min-height:165px;
+    }
+    
+    .snap-card__title{
+      font-size:12px;
+      font-weight:700;
+      color:#6b7280;
+      text-transform:uppercase;
+      letter-spacing:.4px;
+      margin-bottom:14px;
+    }
+    
+    .snap-card__main{
+      font-size:20px;
+      font-weight:800;
+      color:#0f172a;
+      margin-bottom:10px;
+      line-height:1.25;
+    }
+    
+    .snap-card__sub{
+      font-size:13px;
+      color:#374151;
+      margin-bottom:8px;
+    }
+    
+    .snap-card__foot{
+      font-size:12px;
+      color:#6b7280;
+      margin-top:10px;
+    }*/
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Profile Picture =============================
+  id: 34202952059081358
+  identification: 
+    name: Profile Picture
+    type: Avatar
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select EMP_ID,
+             PHOTO_BLOB,
+             PHOTO_FILENAME,
+             PHOTO_MIME_TYPE,
+             PHOTO_CHARSET,
+             PHOTO_LASTUPD
+        from HR_EMPLOYEES
+      WHERE EMP_ID = :P100.1_EMP_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 2
+
+  appearance: 
+    template: None
+    render-components: Above Content
+
+  advanced: 
+    static-id: emp_avatar
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      display: Single (Partial)
+
+    settings: 
+      type: Image
+      image: 
+        blob-column: PHOTO_BLOB
+        filename-column: PHOTO_FILENAME
+        mime-type-column: PHOTO_MIME_TYPE
+        last-updated-column: PHOTO_LASTUPD
+
+      shape: Circular
+      size: Extra Extra Large
+
+    performance: 
+      lazy-loading: false
+
+  columns: 
+  - # ====== Column: EMP_ID ======================================
+    id: 34203073211081359
+    identification: 
+      name: EMP_ID
+
+    layout: 
+      sequence: 10
+
+    source: 
+      type: Database Column
+      database-column: EMP_ID
+      data-type: NUMBER
+      primary-key: true
+
+    appearance: 
+      group: false
+
+  - # ====== Column: PHOTO_BLOB ==================================
+    id: 34487406122636934
+    identification: 
+      name: PHOTO_BLOB
+
+    layout: 
+      sequence: 260
+
+    source: 
+      type: Database Column
+      database-column: PHOTO_BLOB
+      data-type: BLOB
+
+  - # ====== Column: PHOTO_FILENAME ==============================
+    id: 34487499334636935
+    identification: 
+      name: PHOTO_FILENAME
+
+    layout: 
+      sequence: 270
+
+    source: 
+      type: Database Column
+      database-column: PHOTO_FILENAME
+      data-type: VARCHAR2
+      primary-key: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: PHOTO_MIME_TYPE =============================
+    id: 34487552799636936
+    identification: 
+      name: PHOTO_MIME_TYPE
+
+    layout: 
+      sequence: 280
+
+    source: 
+      type: Database Column
+      database-column: PHOTO_MIME_TYPE
+      data-type: VARCHAR2
+      primary-key: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: PHOTO_CHARSET ===============================
+    id: 34487709214636937
+    identification: 
+      name: PHOTO_CHARSET
+
+    layout: 
+      sequence: 290
+
+    source: 
+      type: Database Column
+      database-column: PHOTO_CHARSET
+      data-type: VARCHAR2
+      primary-key: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: PHOTO_LASTUPD ===============================
+    id: 34487744973636938
+    identification: 
+      name: PHOTO_LASTUPD
+
+    layout: 
+      sequence: 300
+
+    source: 
+      type: Database Column
+      database-column: PHOTO_LASTUPD
+      data-type: TIMESTAMP
+      primary-key: false
+
+    appearance: 
+      group: false
+
+- # ====== Region: Employee Hero ===============================
+  id: 34488390390636944
+  identification: 
+    name: Employee Hero
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+          '<div class="emp-hero">'
+      
+       ||   '<div class="emp-hero__name">' || full_name || '</div>'
+      
+       ||   '<div class="emp-hero__chips">'
+       ||     '<span class="emp-chip"><span class="emp-chip__label">Code</span><span class="emp-chip__value">' || nvl(emp_code,'-') || '</span></span>'
+       ||     '<span class="emp-chip"><span class="emp-chip__label">Nationality</span><span class="emp-chip__value">' || nvl(nationality_name,'-') || '</span></span>'
+       ||     '<span class="emp-chip"><span class="emp-chip__label">Type</span><span class="emp-chip__value">' || nvl(worker_type,'-') || '</span></span>'
+       ||     '<span class="emp-chip"><span class="emp-chip__label">Project</span><span class="emp-chip__value">' || nvl(agreed_project,'-') || '</span></span>'
+       ||     '<span class="emp-chip"><span class="emp-chip__label">City</span><span class="emp-chip__value">' || nvl(agreed_city,'-') || '</span></span>'
+       ||     status_chip
+       ||   '</div>'
+      
+       ||   '<div class="emp-hero__info">'
+       ||     '<div class="emp-info"><span class="emp-info__label">Mobile:</span><span class="emp-info__value">' || nvl(mobile,'-') || '</span></div>'
+       ||     '<div class="emp-info"><span class="emp-info__label">Email:</span><span class="emp-info__value">' || nvl(email,'-') || '</span></div>'
+       ||     '<div class="emp-info"><span class="emp-info__label">Join Date:</span><span class="emp-info__value">' || nvl(join_date,'-') || '</span></div>'
+       ||   '</div>'
+      
+       ||   '<div class="emp-hero__docs">'
+       ||     passport_badge || ' '
+       ||     eid_badge || ' '
+       ||     dl_badge
+       ||   '</div>'
+      
+       || '</div>' as profile_html
+      
+      from (
+          select e.emp_id,
+                 e.emp_code,
+                 trim(e.first_name || ' ' || nvl(e.last_name,'')) as full_name,
+                 e.mobile,
+                 e.email,
+                 to_char(e.join_date,'DD-MON-YYYY') as join_date,
+                 e.worker_type,
+                 e.agreed_project,
+                 e.agreed_city,
+                 e.nationality as nationality_name,
+                 e.status_badge_text,
+      
+                 case
+                   when upper(nvl(e.status_badge_text,'X')) = 'ACTIVE' then
+                     '<span class="emp-chip emp-chip--success"><span class="emp-chip__label">Status</span><span class="emp-chip__value">' || e.status_badge_text || '</span></span>'
+                   when upper(nvl(e.status_badge_text,'X')) in ('PIPELINE','VACATION') then
+                     '<span class="emp-chip emp-chip--warning"><span class="emp-chip__label">Status</span><span class="emp-chip__value">' || e.status_badge_text || '</span></span>'
+                   else
+                     '<span class="emp-chip emp-chip--danger"><span class="emp-chip__label">Status</span><span class="emp-chip__value">' || nvl(e.status_badge_text,'-') || '</span></span>'
+                 end as status_chip,
+      
+                 case
+                   when exists (
+                        select 1
+                          from hr_emp_docs d
+                         where d.emp_id = e.emp_id
+                           and upper(d.doc_type) = 'PASSPORT'
+                           and nvl(d.is_current_record,'Y') = 'Y'
+                           and d.doc_no is not null
+                   )
+                   then '<span class="doc-ind ok"><span class="fa fa-check-circle"></span> Passport</span>'
+                   else '<span class="doc-ind no"><span class="fa fa-times-circle"></span> Passport</span>'
+                 end as passport_badge,
+      
+                 case
+                   when exists (
+                        select 1
+                          from hr_emp_docs d
+                         where d.emp_id = e.emp_id
+                           and upper(d.doc_type) = 'EID'
+                           and nvl(d.is_current_record,'Y') = 'Y'
+                           and d.doc_no is not null
+                   )
+                   then '<span class="doc-ind ok"><span class="fa fa-check-circle"></span> EID</span>'
+                   else '<span class="doc-ind no"><span class="fa fa-times-circle"></span> EID</span>'
+                 end as eid_badge,
+      
+                 case
+                   when exists (
+                        select 1
+                          from hr_emp_docs d
+                         where d.emp_id = e.emp_id
+                           and upper(d.doc_type) in ('DL','DRIVING LICENSE','DRIVING_LICENSE')
+                           and nvl(d.is_current_record,'Y') = 'Y'
+                           and d.doc_no is not null
+                   )
+                   then '<span class="doc-ind ok"><span class="fa fa-check-circle"></span> Driving License</span>'
+                   else '<span class="doc-ind no"><span class="fa fa-times-circle"></span> Driving License</span>'
+                 end as dl_badge
+      
+            from vw_hr_employee_list e
+           where e.emp_id = :P100.1_EMP_ID
+      )
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 10
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    - margin-top-none
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: emp-profile-region
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+      - t-Report--noBorders
+      - t-Report--hideNoPagination
+
+    pagination: 
+      type: No Pagination (Show All Rows)
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: PROFILE_HTML ================================
+    id: 17284025439860691
+    identification: 
+      column-name: PROFILE_HTML
+      type: Plain Text
+
+    heading: 
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: false
+
+- # ====== Region: Current Snapshot ============================
+  id: 34512882942487315
+  identification: 
+    name: Current Snapshot
+    type: Static Content
+
+  layout: 
+    sequence: 50
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - snap-col
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Current Assignment ==========================
+  id: 34513010208487316
+  identification: 
+    name: Current Assignment
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+          '<div class="snap-card">'
+       ||   '<div class="snap-card__title">Current Assignment</div>'
+       ||   '<div class="snap-card__main">' || nvl(display_current_project,'-') || '</div>'
+       ||   '<div class="snap-card__sub">City: ' || nvl(display_current_city,'-') || '</div>'
+       ||   '<div class="snap-card__sub">Last Project: ' || nvl(display_last_project,'-') || '</div>'
+       ||   '<div class="snap-card__foot">Last City: ' || nvl(display_last_city,'-') || '</div>'
+       || '</div>' as card_html
+      from vw_hr_employee_list
+      where emp_id = :P100.1_EMP_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: Current Snapshot # 34512882942487315
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 3
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - snap-col
+    - snap-assignment
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+      - t-Report--noBorders
+
+    pagination: 
+      type: No Pagination (Show All Rows)
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: CARD_HTML ===================================
+    id: 17280863800860694
+    identification: 
+      column-name: CARD_HTML
+      type: Plain Text
+
+    heading: 
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: false
+
+- # ====== Region: Pay Method ==================================
+  id: 34513095312487317
+  identification: 
+    name: Pay Method
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+          '<div class="snap-card">'
+       ||   '<div class="snap-card__title">Pay Method</div>'
+       ||   '<div class="snap-card__main">' ||pay_mode_name || '</div>'
+       ||   '<div class="snap-card__sub">Current active payment method</div>'
+       ||   '<div class="snap-card__foot">From employee pay setup</div>'
+       || '</div>' as card_html
+      from vw_hr_employee_list
+      where emp_id = :P100.1_EMP_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 20
+    parent-region: Current Snapshot # 34512882942487315
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 3
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - snap-col
+    - snap-pay
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+      - t-Report--noBorders
+
+    pagination: 
+      type: No Pagination (Show All Rows)
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: CARD_HTML ===================================
+    id: 17281635844860693
+    identification: 
+      column-name: CARD_HTML
+      type: Plain Text
+
+    heading: 
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: false
+
+- # ====== Region: Insurance ===================================
+  id: 34513196286487318
+  identification: 
+    name: Insurance
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+          '<div class="snap-card">'
+       ||   '<div class="snap-card__title">Insurance</div>'
+       ||   '<div class="snap-card__sub">Health: ' || nvl(insurance_bucket_badge,'<span class="t-Badge t-Badge--info">Pending</span>') || '</div>'
+       ||   '<div class="snap-card__sub">WC: ' || nvl(wc_ins_bucket_badge,'<span class="t-Badge t-Badge--info">Pending</span>') || '</div>'
+       ||   '<div class="snap-card__foot">Current coverage status</div>'
+       || '</div>' as card_html
+      from vw_hr_employee_list
+      where emp_id = :P100.1_EMP_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 30
+    parent-region: Current Snapshot # 34512882942487315
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 3
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - snap-col
+    - snap-insurance
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+      - t-Report--noBorders
+
+    pagination: 
+      type: No Pagination (Show All Rows)
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: CARD_HTML ===================================
+    id: 17282486954860692
+    identification: 
+      column-name: CARD_HTML
+      type: Plain Text
+
+    heading: 
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: false
+
+- # ====== Region: Custody / Status ============================
+  id: 34513275404487319
+  identification: 
+    name: Custody / Status
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+          '<div class="snap-card">'
+       ||   '<div class="snap-card__title">Custody / Status</div>'
+       ||   '<div class="snap-card__sub">Status: ' || nvl(status_badge_text,'<span class="t-Badge t-Badge--subtle">N/A</span>') || '</div>'
+       ||   '<div class="snap-card__sub">Custody: ' || nvl(custody_badge,'<span class="t-Badge t-Badge--danger">Pending</span>') || '</div>'
+       ||   '<div class="snap-card__foot">Current employee standing</div>'
+       || '</div>' as card_html
+      from vw_hr_employee_list
+      where emp_id = :P100.1_EMP_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 40
+    parent-region: Current Snapshot # 34512882942487315
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 3
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - snap-col
+    - snap-custody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+      - t-Report--noBorders
+
+    pagination: 
+      type: No Pagination (Show All Rows)
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: CARD_HTML ===================================
+    id: 17283290001860692
+    identification: 
+      column-name: CARD_HTML
+      type: Plain Text
+
+    heading: 
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    column-formatting: 
+      css-classes: 
+      - snapshot-region
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: false
+
+page-items: 
+- # ====== Page Item: P100_1_EMP_ID ============================
+  id: 34210264182081332
+  identification: 
+    name: P100_1_EMP_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 40
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Always, replacing any existing value in session state
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+

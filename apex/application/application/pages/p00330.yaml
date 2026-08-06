@@ -1,0 +1,1155 @@
+---
+# ====== Page: SIM Operation =================================
+id: 330
+identification: 
+  name: SIM Operation
+  alias: SIM-OPERATION
+  title: SIM Operation
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Sim Operations ==============================
+  id: 41409997307853049
+  identification: 
+    name: Sim Operations
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--noUI
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P330_REQUEST_ID ==========================
+  id: 41410083596853050
+  identification: 
+    name: P330_REQUEST_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Sim Operations # 41409997307853049
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P330_EMP_ID ==============================
+  id: 43008748031045401
+  identification: 
+    name: P330_EMP_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: Sim Operations # 41409997307853049
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P330_REQUEST_TYPE ========================
+  id: 43008878332045402
+  identification: 
+    name: P330_REQUEST_TYPE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 30
+    region: Sim Operations # 41409997307853049
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P330_CURRENT_SIM_ID ======================
+  id: 43008942202045403
+  identification: 
+    name: P330_CURRENT_SIM_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 40
+    region: Sim Operations # 41409997307853049
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P330_SIM_ID ==============================
+  id: 43009062632045404
+  identification: 
+    name: P330_SIM_ID
+    type: Select List
+
+  label: 
+    label: Sim Id
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 50
+    region: Sim Operations # 41409997307853049
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select mobile_no || ' - ' || operator_name || ' - ' || ownership_type as d,
+             sim_id as r
+        from vw_fleet_sim_inventory
+       where sim_status_code = 'AVAILABLE'
+       order by mobile_no;
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P330_ASSIGN_DT ===========================
+  id: 43009107113045405
+  identification: 
+    name: P330_ASSIGN_DT
+    type: Text Field
+
+  label: 
+    label: Assign Date
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 60
+    region: Sim Operations # 41409997307853049
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P330_ASSIGN_REASON =======================
+  id: 43009234897045406
+  identification: 
+    name: P330_ASSIGN_REASON
+    type: Select List
+
+  label: 
+    label: Assign Reason
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 70
+    region: Sim Operations # 41409997307853049
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select d, r
+      from (
+          select 'New Issue'      d, 'NEW_ISSUE'      r, 10 seq_no from dual union all
+          select 'Additional SIM' d, 'ADDITIONAL_SIM' r, 20 seq_no from dual union all
+          select 'Replacement'    d, 'REPLACEMENT'    r, 30 seq_no from dual union all
+          select 'Project Change' d, 'PROJECT_CHANGE' r, 40 seq_no from dual union all
+          select 'Temporary'      d, 'TEMPORARY'      r, 50 seq_no from dual union all
+          select 'Other'          d, 'OTHER'          r, 99 seq_no from dual
+      )
+      order by seq_no;
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P330_ASSIGN_REMARKS ======================
+  id: 43009320855045407
+  identification: 
+    name: P330_ASSIGN_REMARKS
+    type: Textarea
+
+  label: 
+    label: Assign Remarks
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 80
+    region: Sim Operations # 41409997307853049
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P330_RETURN_DT ===========================
+  id: 43009406152045408
+  identification: 
+    name: P330_RETURN_DT
+    type: Text Field
+
+  label: 
+    label: Return Date
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 90
+    region: Sim Operations # 41409997307853049
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P330_RETURN_REASON =======================
+  id: 43009537712045409
+  identification: 
+    name: P330_RETURN_REASON
+    type: Select List
+
+  label: 
+    label: Return Reason
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 100
+    region: Sim Operations # 41409997307853049
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select d, r
+      from (
+          select 'Normal Return'  d, 'NORMAL_RETURN' r, 10 seq_no from dual union all
+          select 'Lost'           d, 'LOST'          r, 20 seq_no from dual union all
+          select 'Damaged'        d, 'DAMAGED'       r, 30 seq_no from dual union all
+          select 'Cancelled'      d, 'CANCELLED'     r, 40 seq_no from dual union all
+          select 'Employee Exit'  d, 'EMPLOYEE_EXIT' r, 50 seq_no from dual union all
+          select 'Other'          d, 'OTHER'         r, 99 seq_no from dual
+      )
+      order by seq_no;
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P330_RETURN_CONDITION ====================
+  id: 43009666020045410
+  identification: 
+    name: P330_RETURN_CONDITION
+    type: Select List
+
+  label: 
+    label: Return Condition
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 110
+    region: Sim Operations # 41409997307853049
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select d, r
+      from (
+          select 'Good'      d, 'GOOD'      r, 10 seq_no from dual union all
+          select 'Damaged'   d, 'DAMAGED'   r, 20 seq_no from dual union all
+          select 'Lost'      d, 'LOST'      r, 30 seq_no from dual union all
+          select 'Blocked'   d, 'BLOCKED'   r, 40 seq_no from dual union all
+          select 'Cancelled' d, 'CANCELLED' r, 50 seq_no from dual union all
+          select 'Unknown'   d, 'UNKNOWN'   r, 99 seq_no from dual
+      )
+      order by seq_no;
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P330_RETURN_REMARKS ======================
+  id: 43009758156045411
+  identification: 
+    name: P330_RETURN_REMARKS
+    type: Textarea
+
+  label: 
+    label: Return Remarks
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 120
+    region: Sim Operations # 41409997307853049
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P330_RETURN_PAGE =========================
+  id: 43009819747045412
+  identification: 
+    name: P330_RETURN_PAGE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 130
+    region: Sim Operations # 41409997307853049
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: ASSIGN_SIM ==================================
+  id: 43010292783045416
+  identification: 
+    button-name: ASSIGN_SIM
+    label: Assign Sim
+
+  layout: 
+    sequence: 140
+    region: Sim Operations # 41409997307853049
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-plus-square
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Item != Value
+    item: P330_REQUEST_TYPE
+    value: RETURN_REQUEST
+
+- # ====== Button: RETURN_SIM ==================================
+  id: 43010323878045417
+  identification: 
+    button-name: RETURN_SIM
+    label: Return
+
+  layout: 
+    sequence: 150
+    region: Sim Operations # 41409997307853049
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-undo
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Item = Value
+    item: P330_REQUEST_TYPE
+    value: RETURN_REQUEST
+
+- # ====== Button: CANCEL ======================================
+  id: 43010494367045418
+  identification: 
+    button-name: CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 160
+    region: Sim Operations # 41409997307853049
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: Show Assign Return Sections =========
+  id: 43010053958045414
+  identification: 
+    name: Show Assign Return Sections
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 43010194590045415
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        var reqType = apex.item("P330_REQUEST_TYPE").getValue();
+        var isReturn = reqType === "RETURN_REQUEST";
+        
+        var assignItems = [
+            "P330_SIM_ID",
+            "P330_ASSIGN_DT",
+            "P330_ASSIGN_REASON",
+            "P330_ASSIGN_REMARKS"
+        ];
+        
+        var returnItems = [
+            "P330_RETURN_DT",
+            "P330_RETURN_REASON",
+            "P330_RETURN_CONDITION",
+            "P330_RETURN_REMARKS"
+        ];
+        
+        assignItems.forEach(function(i){
+            if (isReturn) {
+                apex.item(i).hide();
+            } else {
+                apex.item(i).show();
+            }
+        });
+        
+        returnItems.forEach(function(i){
+            if (isReturn) {
+                apex.item(i).show();
+            } else {
+                apex.item(i).hide();
+            }
+        });
+
+    execution: 
+      sequence: 10
+      event: Show Assign Return Sections # 43010053958045414
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Cancel ==============================
+  id: 43010503617045419
+  identification: 
+    name: Cancel
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 43010494367045418
+
+  actions: 
+  - # ====== Action: Close Dialog ================================
+    id: 43010635023045420
+    identification: 
+      action: Close Dialog
+
+    execution: 
+      sequence: 10
+      event: Cancel # 43010503617045419
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations: 
+- # ====== Validation: SIM Required ============================
+  id: 43010742611045421
+  identification: 
+    name: SIM Required
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if :P330_SIM_ID is null then
+              return 'Please select SIM to assign.';
+          end if;
+      
+          if :P330_EMP_ID is null then
+              return 'Employee is missing.';
+          end if;
+      
+          if :P330_REQUEST_ID is null then
+              return 'SIM request is missing.';
+          end if;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+  server-side-condition: 
+    when-button-pressed: ASSIGN_SIM # 43010292783045416
+
+- # ====== Validation: Return Details Required =================
+  id: 43010828653045422
+  identification: 
+    name: Return Details Required
+
+  execution: 
+    sequence: 20
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if :P330_CURRENT_SIM_ID is null then
+              return 'Current SIM is missing for return.';
+          end if;
+      
+          if :P330_RETURN_REASON is null then
+              return 'Return reason is required.';
+          end if;
+      
+          if :P330_RETURN_CONDITION is null then
+              return 'Return condition is required.';
+          end if;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+  server-side-condition: 
+    when-button-pressed: RETURN_SIM # 43010323878045417
+
+processes: 
+- # ====== Process:  Default SIM Operation Values ==============
+  id: 43009960233045413
+  identification: 
+    name: ' Default SIM Operation Values'
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          :P330_ASSIGN_DT := nvl(:P330_ASSIGN_DT, cast(systimestamp at time zone 'Asia/Dubai' as date));
+          :P330_RETURN_DT := nvl(:P330_RETURN_DT, cast(systimestamp at time zone 'Asia/Dubai' as date));
+      
+          if :P330_ASSIGN_REASON is null then
+              :P330_ASSIGN_REASON :=
+                  case
+                      when :P330_REQUEST_TYPE = 'ADDITIONAL_SIM' then 'ADDITIONAL_SIM'
+                      when :P330_REQUEST_TYPE like 'REPLACEMENT%' then 'REPLACEMENT'
+                      when :P330_REQUEST_TYPE = 'TEMPORARY_REPLACEMENT' then 'TEMPORARY'
+                      else 'NEW_ISSUE'
+                  end;
+          end if;
+      
+          if :P330_RETURN_REASON is null then
+              :P330_RETURN_REASON := 'NORMAL_RETURN';
+          end if;
+      
+          if :P330_RETURN_CONDITION is null then
+              :P330_RETURN_CONDITION := 'GOOD';
+          end if;
+      end;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Assign SIM =================================
+  id: 43010987596045423
+  identification: 
+    name: Assign SIM
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      declare
+          l_sim_assign_id number;
+      begin
+          insert into hr_sim_assignments (
+              sim_id,
+              emp_id,
+              assign_dt,
+              assign_reason,
+              assign_remarks
+          )
+          values (
+              :P330_SIM_ID,
+              :P330_EMP_ID,
+              nvl(:P330_ASSIGN_DT, cast(systimestamp at time zone 'Asia/Dubai' as date)),
+              :P330_ASSIGN_REASON,
+              :P330_ASSIGN_REMARKS
+          )
+          returning sim_assign_id into l_sim_assign_id;
+      
+          hr_sim_req_pkg.close_after_assignment(
+              p_emp_id        => :P330_EMP_ID,
+              p_sim_id        => :P330_SIM_ID,
+              p_sim_assign_id => l_sim_assign_id,
+              p_request_id    => :P330_REQUEST_ID
+          );
+      
+          apex_application.g_print_success_message :=
+              'SIM assigned successfully.';
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: ASSIGN_SIM # 43010292783045416
+
+- # ====== Process: Return SIM =================================
+  id: 43011021578045424
+  identification: 
+    name: Return SIM
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          update hr_sim_assignments
+             set return_dt        = nvl(:P330_RETURN_DT, cast(systimestamp at time zone 'Asia/Dubai' as date)),
+                 return_reason    = :P330_RETURN_REASON,
+                 return_condition = :P330_RETURN_CONDITION,
+                 return_remarks   = :P330_RETURN_REMARKS
+           where emp_id = :P330_EMP_ID
+             and sim_id = :P330_CURRENT_SIM_ID
+             and return_dt is null;
+      
+          if sql%rowcount = 0 then
+              raise_application_error(
+                  -20001,
+                  'No active SIM assignment found for this employee and SIM.'
+              );
+          end if;
+      
+          hr_sim_req_pkg.close_after_return(
+              p_emp_id     => :P330_EMP_ID,
+              p_sim_id     => :P330_CURRENT_SIM_ID,
+              p_request_id => :P330_REQUEST_ID,
+              p_remarks    => :P330_RETURN_REMARKS
+          );
+      
+          apex_application.g_print_success_message :=
+              'SIM returned successfully.';
+      end;
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: RETURN_SIM # 43010323878045417
+
+- # ====== Process: Close Dialog ===============================
+  id: 43011142262045425
+  identification: 
+    name: Close Dialog
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

@@ -1,0 +1,103 @@
+---
+- # ====== Authorization: Administration Rights ================
+  id: 9726929037336371
+  identification: 
+    name: Administration Rights
+
+  subscription: 
+    version-number: 39900337080881
+
+  authorization-scheme: 
+    type: PL/SQL Function Returning Boolean
+
+  settings: 
+    pl/sql-function-body: return true;
+
+  server-cache: 
+    evaluation-point: Once per Page View
+
+  error: 
+    error-message: Insufficient privileges, user is not an Administrator
+
+- # ====== Authorization: AUTH_IG_ADD ==========================
+  id: 9993779001807624
+  identification: 
+    name: AUTH_IG_ADD
+
+  subscription: 
+    version-number: 39900577717541
+
+  authorization-scheme: 
+    type: PL/SQL Function Returning Boolean
+
+  settings: 
+    pl/sql-function-body: 'return sec_pkg.has_perm(:G_IG_PERM_ADD) = 1;'
+
+  server-cache: 
+    evaluation-point: Always (No Caching)
+
+  error: 
+    error-message: You are not allowed for this action.
+
+- # ====== Authorization: AUTH_IG_UPDATE =======================
+  id: 9993943233810314
+  identification: 
+    name: AUTH_IG_UPDATE
+
+  subscription: 
+    version-number: 39904112870898
+
+  authorization-scheme: 
+    type: PL/SQL Function Returning Boolean
+
+  settings: 
+    pl/sql-function-body: 'return sec_pkg.has_perm(:G_IG_PERM_UPD) = 1;'
+
+  server-cache: 
+    evaluation-point: Always (No Caching)
+
+  error: 
+    error-message: You are not allowed for this action.
+
+- # ====== Authorization: AUTH_IG_DELETE =======================
+  id: 9994264908817843
+  identification: 
+    name: AUTH_IG_DELETE
+
+  subscription: 
+    version-number: 39904087819256
+
+  authorization-scheme: 
+    type: PL/SQL Function Returning Boolean
+
+  settings: 
+    pl/sql-function-body: 'return sec_pkg.has_perm(:G_IG_PERM_DEL) = 1;'
+
+  server-cache: 
+    evaluation-point: Always (No Caching)
+
+  error: 
+    error-message: You are not allowed for this action.
+
+- # ====== Authorization: HAS_PAGE_PERMISSION ==================
+  id: 16701069731509558
+  identification: 
+    name: HAS_PAGE_PERMISSION
+
+  subscription: 
+    version-number: 39904113302370
+
+  authorization-scheme: 
+    type: PL/SQL Function Returning Boolean
+
+  settings: 
+    pl/sql-function-body: |
+      return nvl(sec_pkg.has_perm(:P0_PERM_CODE),0) = 1;
+      
+
+  server-cache: 
+    evaluation-point: Always (No Caching)
+
+  error: 
+    error-message: You are not allowed for this action.
+

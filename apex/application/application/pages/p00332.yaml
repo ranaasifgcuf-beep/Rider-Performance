@@ -1,0 +1,394 @@
+---
+# ====== Page: Reject SIM Request ============================
+id: 332
+identification: 
+  name: Reject SIM Request
+  alias: REJECT-SIM-REQUEST
+  title: Reject SIM Request
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Reject SIM Request ==========================
+  id: 43011297287045426
+  identification: 
+    name: Reject SIM Request
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P332_REQUEST_ID ==========================
+  id: 43011384522045427
+  identification: 
+    name: P332_REQUEST_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: Reject SIM Request # 43011297287045426
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P332_REQUEST_INFO ========================
+  id: 43011497441045428
+  identification: 
+    name: P332_REQUEST_INFO
+    type: Display Only
+
+  label: 
+    label: Request Info
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Reject SIM Request # 43011297287045426
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      select 'Request #' || sr.request_id ||
+             ' | ' || e.emp_code ||
+             ' - ' || e.full_employee_name ||
+             ' | Type: ' || sr.request_type ||
+             ' | Status: ' || sr.request_status
+        from hr_sim_requests sr
+        join vw_hr_employee_list e
+          on e.emp_id = sr.emp_id
+       where sr.request_id = :P332_REQUEST_ID
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P332_REJECTION_REASON ====================
+  id: 43011675091045430
+  identification: 
+    name: P332_REJECTION_REASON
+    type: Textarea
+
+  label: 
+    label: Rejection Reason
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 30
+    region: Reject SIM Request # 43011297287045426
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: REJECT ======================================
+  id: 43012018835045434
+  identification: 
+    button-name: REJECT
+    label: Reject Request
+
+  layout: 
+    sequence: 40
+    region: Reject SIM Request # 43011297287045426
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--danger
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: CANCEL ======================================
+  id: 43012182919045435
+  identification: 
+    button-name: CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 40
+    region: Reject SIM Request # 43011297287045426
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: Close Dialog ========================
+  id: 43012255670045436
+  identification: 
+    name: Close Dialog
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 43012182919045435
+
+  actions: 
+  - # ====== Action: Close Dialog ================================
+    id: 43012366327045437
+    identification: 
+      action: Close Dialog
+
+    execution: 
+      sequence: 10
+      event: Close Dialog # 43012255670045436
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations: 
+- # ====== Validation: Rejection Reason Required ===============
+  id: 43011732264045431
+  identification: 
+    name: Rejection Reason Required
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if :P332_REJECTION_REASON is null then
+              return 'Rejection reason is required.';
+          end if;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+  server-side-condition: 
+    when-button-pressed: REJECT # 43012018835045434
+
+processes: 
+- # ====== Process:  Reject SIM Reques =========================
+  id: 43012672227045440
+  identification: 
+    name: ' Reject SIM Reques'
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          hr_sim_req_pkg.reject_request(
+              p_request_id => :P332_REQUEST_ID,
+              p_reason     => :P332_REJECTION_REASON
+          );
+      
+          apex_application.g_print_success_message :=
+              'SIM request rejected successfully.';
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: REJECT # 43012018835045434
+
+- # ====== Process: Close Dialog ===============================
+  id: 43012741381045441
+  identification: 
+    name: Close Dialog
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

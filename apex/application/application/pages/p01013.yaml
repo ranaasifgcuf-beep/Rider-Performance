@@ -1,0 +1,499 @@
+---
+# ====== Page: HR Pay Mode List ==============================
+id: 1013
+identification: 
+  name: HR Pay Mode List
+  alias: HR-PAY-MODE-LIST
+  title: HR Pay Mode List
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: HR Pay Mode List ============================
+  id: 16127033190626342
+  identification: 
+    name: HR Pay Mode List
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select PAY_MODE_CODE,
+             PAY_MODE_NAME,
+             IS_ACTIVE,
+             SEQ_NO,
+             CREATED_BY,
+             CREATED_DT,
+             UPDATED_BY,
+             UPDATED_DT,
+             case 
+        when is_active = 'Y' then 
+          '<span class="t-Badge t-Badge--success">Active</span>'
+        else 
+          '<span class="t-Badge t-Badge--danger">Inactive</span>'
+      end as is_active_display
+        from HR_PAY_MODE_MASTER
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 16127126012626342
+    link: 
+      link-column: Link to Custom Target
+      target: 
+        url: 'f?p=&APP_ID.:1014:&APP_SESSION.::&DEBUG.:RP:P1014_PAY_MODE_CODE:\#PAY_MODE_CODE#\'
+        page: 1014 # HR Pay Mode Form
+        clear-cache: RP
+        values: 
+          p1014_pay_mode_code: '#PAY_MODE_CODE#'
+
+      link-icon: <span role="img" aria-label="Edit" class="fa fa-edit" title="Edit"></span>
+      condition-type: Expression
+      language: PL/SQL
+      pl/sql-expression: sec_pkg.has_perm('HR_PAY_METHOD_UPDATE') = 1
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 16132567075613731
+      identification: 
+        name: Primary Report
+        alias: 161326
+
+    columns: 
+    - # ====== Column: IS_ACTIVE_DISPLAY ===========================
+      id: 16018325468164940
+      identification: 
+        column-name: IS_ACTIVE_DISPLAY
+        type: Plain Text
+
+      heading: 
+        heading: Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 18
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: PAY_MODE_CODE ===============================
+      id: 16127820496626341
+      identification: 
+        column-name: PAY_MODE_CODE
+        type: Hidden
+
+      heading: 
+        heading: Code
+
+      layout: 
+        sequence: 0
+
+      source: 
+        primary-key: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PAY_MODE_NAME ===============================
+      id: 16128279234626341
+      identification: 
+        column-name: PAY_MODE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Pay Mode Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IS_ACTIVE ===================================
+      id: 16128684484626340
+      identification: 
+        column-name: IS_ACTIVE
+        type: Hidden
+
+      heading: 
+        heading: Is Active
+
+      layout: 
+        sequence: 3
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: SEQ_NO ======================================
+      id: 16129068885626340
+      identification: 
+        column-name: SEQ_NO
+        type: Hidden
+
+      heading: 
+        heading: Seq No
+
+      layout: 
+        sequence: 4
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_BY ==================================
+      id: 16129436719626340
+      identification: 
+        column-name: CREATED_BY
+        type: Hidden
+
+      heading: 
+        heading: Created By
+
+      layout: 
+        sequence: 5
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_DT ==================================
+      id: 16129812279626339
+      identification: 
+        column-name: CREATED_DT
+        type: Hidden
+
+      heading: 
+        heading: Created Dt
+
+      layout: 
+        sequence: 6
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: UPDATED_BY ==================================
+      id: 16130216362626339
+      identification: 
+        column-name: UPDATED_BY
+        type: Hidden
+
+      heading: 
+        heading: Updated By
+
+      layout: 
+        sequence: 7
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: UPDATED_DT ==================================
+      id: 16130671559626339
+      identification: 
+        column-name: UPDATED_DT
+        type: Hidden
+
+      heading: 
+        heading: Updated Dt
+
+      layout: 
+        sequence: 8
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: HR Pay Mode List
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+buttons: 
+- # ====== Button: CREATE ======================================
+  id: 16131142536626339
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 10
+    region: HR Pay Mode List # 16127033190626342
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:1014:&APP_SESSION.::&DEBUG.:1014::'
+      page: 1014 # HR Pay Mode Form
+      clear-cache: 1014
+
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sec_pkg.has_perm('HR_PAY_METHOD_ADD') = 1
+
+dynamic-actions: 
+- # ====== Dynamic Action: Edit Report - Dialog Closed =========
+  id: 16131439524626339
+  identification: 
+    name: Edit Report - Dialog Closed
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: HR Pay Mode List # 16127033190626342
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 16131940824626338
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: HR Pay Mode List # 16127033190626342
+
+    execution: 
+      sequence: 10
+      event: Edit Report - Dialog Closed # 16131439524626339
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

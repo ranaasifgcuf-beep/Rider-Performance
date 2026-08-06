@@ -1,0 +1,1212 @@
+---
+# ====== Page: Fleet Bikes List ==============================
+id: 301
+identification: 
+  name: Fleet Bikes List
+  alias: FLEET-BIKES-LIST
+  title: Fleet Bikes List
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Fleet Bikes List ============================
+  id: 17738933846981762
+  identification: 
+    name: Fleet Bikes List
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+          v.bike_id,
+      
+          '<a href="' ||
+          apex_page.get_url(
+              p_page   => 302,
+              p_items  => 'P302_BIKE_ID',
+              p_values => v.bike_id
+          ) || '">' ||
+          '<span class="fa fa-edit" title="Edit Bike"></span></a>' as edit_link,
+      
+          '<a href="' ||
+          apex_page.get_url(
+              p_page   => 307,
+              p_items  => 'P307_BIKE_ID',
+              p_values => v.bike_id
+          ) || '">' ||
+          '<span class="fa fa-file" title="Bike Documents"></span></a>' as docs_link,
+      
+          v.bike_code,
+          v.plate_no,
+          v.plate_emirate,
+          v.model_name,
+          v.model_year_label,
+          v.color_name,
+          v.ownership_type,
+          v.vendor_name,
+          v.current_monthly_rent,
+      
+          case
+            when v.bike_status_code = 'AVAILABLE' then
+              '<span class="t-Badge t-Badge--success">AVAILABLE</span>'
+            when v.bike_status_code = 'ASSIGNED' then
+              '<span class="t-Badge t-Badge--info">ASSIGNED</span>'
+            when v.bike_status_code in ('ACCIDENT','MAINTENANCE') then
+              '<span class="t-Badge t-Badge--warning">' || v.bike_status_name || '</span>'
+            when v.bike_status_code in ('IMPOUND','POLICE_CUSTODY') then
+              '<span class="t-Badge t-Badge--danger">' || v.bike_status_name || '</span>'
+            else
+              '<span class="t-Badge t-Badge--default">' || nvl(v.bike_status_name,'N/A') || '</span>'
+          end as bike_status_badge,
+      
+          v.custody_type_name,
+          v.custody_location_name,
+      
+          v.mulkiya_expiry_dt,
+          case
+            when v.mulkiya_bucket = 'NO_DATE' then
+              '<span class="t-Badge t-Badge--default">NO DATE</span>'
+            when v.mulkiya_bucket = 'EXPIRED' then
+              '<span class="t-Badge t-Badge--danger">EXPIRED</span>'
+            when v.mulkiya_bucket = 'DUE_SOON' then
+              '<span class="t-Badge t-Badge--warning">DUE SOON</span>'
+            else
+              '<span class="t-Badge t-Badge--success">VALID</span>'
+          end as mulkiya_badge,
+      
+          v.insurance_expiry_dt,
+          case
+            when v.insurance_bucket = 'NO_DATE' then
+              '<span class="t-Badge t-Badge--default">NO DATE</span>'
+            when v.insurance_bucket = 'EXPIRED' then
+              '<span class="t-Badge t-Badge--danger">EXPIRED</span>'
+            when v.insurance_bucket = 'DUE_SOON' then
+              '<span class="t-Badge t-Badge--warning">DUE SOON</span>'
+            else
+              '<span class="t-Badge t-Badge--success">VALID</span>'
+          end as insurance_badge,
+      
+          case
+            when v.is_active = 'Y' then
+              '<span class="t-Badge t-Badge--success">Active</span>'
+            else
+              '<span class="t-Badge t-Badge--danger">In Active</span>'
+          end as active_badge,
+          v.bike_status_code,
+          v.mulkiya_bucket,
+          v.insurance_bucket,
+          v.is_active,
+          v.remarks
+      from vw_fleet_bike_current v
+      order by v.bike_id desc;
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: vw_fleet_bike_current
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 17739045014981762
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 17764142069956687
+      identification: 
+        name: Primary Report
+        alias: 177642
+
+    columns: 
+    - # ====== Column: MULKIYA_EXPIRY_DT ===========================
+      id: 16324239362664105
+      identification: 
+        column-name: MULKIYA_EXPIRY_DT
+        type: Plain Text
+
+      heading: 
+        heading: Mulkiya Expiry Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 106
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MULKIYA_BUCKET ==============================
+      id: 16324349093664106
+      identification: 
+        column-name: MULKIYA_BUCKET
+        type: Hidden
+
+      heading: 
+        heading: Mulkiya Bucket
+
+      layout: 
+        sequence: 116
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: INSURANCE_EXPIRY_DT =========================
+      id: 16324478049664107
+      identification: 
+        column-name: INSURANCE_EXPIRY_DT
+        type: Plain Text
+
+      heading: 
+        heading: Insurance Expiry Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 126
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: INSURANCE_BUCKET ============================
+      id: 16324547119664108
+      identification: 
+        column-name: INSURANCE_BUCKET
+        type: Hidden
+
+      heading: 
+        heading: Insurance Bucket
+
+      layout: 
+        sequence: 136
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EDIT_LINK ===================================
+      id: 17728406492086136
+      identification: 
+        column-name: EDIT_LINK
+        type: Link
+
+      heading: 
+        heading: Edit
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 56
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:302:&SESSION.::&DEBUG.::P302_BIKE_ID,P302_MODE:#BIKE_ID#,EDIT'
+          page: 302 # Fleet Bike Form
+          values: 
+            p302_bike_id: '#BIKE_ID#'
+            p302_mode: EDIT
+
+        link-text: '#EDIT_LINK#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: BIKE_ID =====================================
+      id: 17739760094981756
+      identification: 
+        column-name: BIKE_ID
+        type: Hidden
+
+      heading: 
+        heading: Bike Id
+
+      layout: 
+        sequence: 1
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: BIKE_CODE ===================================
+      id: 17740111231981755
+      identification: 
+        column-name: BIKE_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Bike Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PLATE_NO ====================================
+      id: 17740507705981755
+      identification: 
+        column-name: PLATE_NO
+        type: Plain Text
+
+      heading: 
+        heading: Plate No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PLATE_EMIRATE ===============================
+      id: 17740999051981755
+      identification: 
+        column-name: PLATE_EMIRATE
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: REF_CITIES.CITY_NAME # 13534316622988223
+
+      heading: 
+        heading: Emirate
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: MODEL_NAME ==================================
+      id: 17742536508981753
+      identification: 
+        column-name: MODEL_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Model
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 8
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MODEL_YEAR_LABEL ============================
+      id: 17743315926981753
+      identification: 
+        column-name: MODEL_YEAR_LABEL
+        type: Hidden
+
+      heading: 
+        heading: Model Year Label
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: COLOR_NAME ==================================
+      id: 17744198963981752
+      identification: 
+        column-name: COLOR_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Color
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 12
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: OWNERSHIP_TYPE ==============================
+      id: 17744560837981752
+      identification: 
+        column-name: OWNERSHIP_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Ownership
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 13
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: VENDOR_NAME =================================
+      id: 17745344066981751
+      identification: 
+        column-name: VENDOR_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Vendor
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 15
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_MONTHLY_RENT ========================
+      id: 17746992852981750
+      identification: 
+        column-name: CURRENT_MONTHLY_RENT
+        type: Plain Text
+
+      heading: 
+        heading: Monthly Rent
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 19
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REMARKS =====================================
+      id: 17748154984981750
+      identification: 
+        column-name: REMARKS
+        type: Plain Text
+
+      heading: 
+        heading: Remarks
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 22
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IS_ACTIVE ===================================
+      id: 17748559762981749
+      identification: 
+        column-name: IS_ACTIVE
+        type: Hidden
+
+      heading: 
+        heading: Is Active?
+
+      layout: 
+        sequence: 23
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: BIKE_STATUS_CODE ============================
+      id: 17749354672981749
+      identification: 
+        column-name: BIKE_STATUS_CODE
+        type: Hidden
+
+      heading: 
+        heading: Bike Status Code
+
+      layout: 
+        sequence: 25
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CUSTODY_TYPE_NAME ===========================
+      id: 17752599359981747
+      identification: 
+        column-name: CUSTODY_TYPE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Custody Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 33
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CUSTODY_LOCATION_NAME =======================
+      id: 17753398003981746
+      identification: 
+        column-name: CUSTODY_LOCATION_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Current Location
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 35
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOCS_LINK ===================================
+      id: 18039982240024945
+      identification: 
+        column-name: DOCS_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Docs Link
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 146
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: BIKE_STATUS_BADGE ===========================
+      id: 18040049649024946
+      identification: 
+        column-name: BIKE_STATUS_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Bike Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 156
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: MULKIYA_BADGE ===============================
+      id: 18040101579024947
+      identification: 
+        column-name: MULKIYA_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Mulkiya Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 166
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: INSURANCE_BADGE =============================
+      id: 18040266548024948
+      identification: 
+        column-name: INSURANCE_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Insurance Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 176
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: ACTIVE_BADGE ================================
+      id: 18040343350024949
+      identification: 
+        column-name: ACTIVE_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Is Active?
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 186
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Fleet Bikes List
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+buttons: 
+- # ====== Button: PB_CREATE ===================================
+  id: 17728835642086140
+  identification: 
+    button-name: PB_CREATE
+    label: Create
+
+  layout: 
+    sequence: 10
+    region: Fleet Bikes List # 17738933846981762
+    slot: ABOVE_BOX
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    horizontal-alignment: Right
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:302:&SESSION.::&DEBUG.:::'
+      page: 302 # Fleet Bike Form
+
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sec_pkg.has_perm('FLEET_LIST_ADD') = 1
+

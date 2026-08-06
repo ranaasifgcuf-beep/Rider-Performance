@@ -1,0 +1,1015 @@
+---
+- # ====== List of Values: SEC_MODULES.MODULE_CODE =============
+  id: 9885395839729064
+  identification: 
+    name: SEC_MODULES.MODULE_CODE
+
+  subscription: 
+    version-number: 39900423030999
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: SEC_MODULES
+
+  column-mapping: 
+    return: MODULE_ID
+    display: MODULE_CODE
+    default-sort: MODULE_CODE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: SEC_MENU.LABEL ======================
+  id: 9962559621188691
+  identification: 
+    name: SEC_MENU.LABEL
+
+  subscription: 
+    version-number: 39900491023485
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: SEC_MENU
+
+  column-mapping: 
+    return: MENU_ID
+    display: LABEL
+    default-sort: LABEL
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: REF_COUNTRIES.COUNTRY_CODE ==========
+  id: 13331444176708110
+  identification: 
+    name: REF_COUNTRIES.COUNTRY_CODE
+
+  subscription: 
+    version-number: 39903580378020
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: REF_COUNTRIES
+
+  column-mapping: 
+    return: COUNTRY_ID
+    display: COUNTRY_NAME
+    default-sort: COUNTRY_NAME
+    sort-direction: Ascending (Nulls Last)
+
+  columns: 
+  - # ====== Column: COUNTRY_ID ==================================
+    id: 13344147000689179
+    identification: 
+      column-name: COUNTRY_ID
+      show: false
+
+    layout: 
+      sequence: 10
+
+    source: 
+      data-type: NUMBER
+
+    advanced: 
+      searchable: false
+
+  - # ====== Column: COUNTRY_NAME ================================
+    id: 13344567696689179
+    identification: 
+      column-name: COUNTRY_NAME
+      show: true
+
+    heading: 
+      heading: Country Name
+
+    layout: 
+      sequence: 20
+
+    source: 
+      data-type: VARCHAR2
+
+    advanced: 
+      searchable: true
+
+  - # ====== Column: COUNTRY_CODE ================================
+    id: 13344940265689179
+    identification: 
+      column-name: COUNTRY_CODE
+      show: true
+
+    heading: 
+      heading: Country Code
+
+    layout: 
+      sequence: 30
+
+    source: 
+      data-type: VARCHAR2
+
+    advanced: 
+      searchable: true
+
+- # ====== List of Values: HR_PROJECTS.PROJECT_CODE ============
+  id: 13533642402988221
+  identification: 
+    name: HR_PROJECTS.PROJECT_CODE
+
+  subscription: 
+    version-number: 39903580319315
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_PROJECTS
+
+  column-mapping: 
+    return: PROJECT_ID
+    display: PROJECT_NAME
+    default-sort: PROJECT_CODE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: REF_CITIES.CITY_NAME ================
+  id: 13534316622988223
+  identification: 
+    name: REF_CITIES.CITY_NAME
+
+  subscription: 
+    version-number: 39903228214050
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: REF_CITIES
+
+  column-mapping: 
+    return: CITY_ID
+    display: CITY_NAME
+    default-sort: CITY_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: REF_JOBS.JOB_NAME ===================
+  id: 13535095115988223
+  identification: 
+    name: REF_JOBS.JOB_NAME
+
+  subscription: 
+    version-number: 39903228214050
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: REF_JOBS
+
+  column-mapping: 
+    return: JOB_ID
+    display: JOB_NAME
+    default-sort: JOB_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: FIN_SUPPLIERS.SUPPLIER_NAME =========
+  id: 13537762223988225
+  identification: 
+    name: FIN_SUPPLIERS.SUPPLIER_NAME
+
+  subscription: 
+    version-number: 39903228214051
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: FIN_SUPPLIERS
+
+  column-mapping: 
+    return: SUPPLIER_ID
+    display: SUPPLIER_NAME
+    default-sort: SUPPLIER_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: HR_EMPLOYEES.EMP_CODE ===============
+  id: 15861135033356817
+  identification: 
+    name: HR_EMPLOYEES.EMP_CODE
+
+  subscription: 
+    version-number: 39903797998105
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_EMPLOYEES
+
+  column-mapping: 
+    return: EMP_ID
+    display: EMP_CODE
+    default-sort: EMP_CODE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: SECURE_PROEJECTS_LOV ================
+  id: 15884985584248416
+  identification: 
+    name: SECURE_PROEJECTS_LOV
+
+  subscription: 
+    version-number: 39903795563677
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select p.project_name PROJECT_NAME,
+             p.project_id   PROJECT_ID
+        from hr_projects p
+       where p.is_active = 'Y'
+         and exists (
+              select 1
+                from sec_user_projects up
+               where up.user_id    = sec_ctx.user_id
+                 and up.project_id = p.project_id
+         )
+       order by p.project_name
+
+  column-mapping: 
+    return: PROJECT_ID
+    display: PROJECT_NAME
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: HR_EMP_IDENTIFIERS.ID_TYPE ==========
+  id: 15993548640176520
+  identification: 
+    name: HR_EMP_IDENTIFIERS.ID_TYPE
+
+  subscription: 
+    version-number: 39903811932503
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_EMP_IDENTIFIERS
+
+  column-mapping: 
+    return: ID_REC_ID
+    display: ID_TYPE
+    default-sort: ID_TYPE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: SEC_ROLES.ROLE_NAME =================
+  id: 16100829223804593
+  identification: 
+    name: SEC_ROLES.ROLE_NAME
+
+  subscription: 
+    version-number: 39903940490512
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT ROLE_NAME, ROLE_ID
+      FROM SEC_ROLES
+
+  column-mapping: 
+    return: ROLE_ID
+    display: ROLE_NAME
+    default-sort: ROLE_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: FLEET_MODE ==========================
+  id: 17738090188049018
+  identification: 
+    name: FLEET_MODE
+
+  subscription: 
+    version-number: 39904582297873
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select model_name d, model_id r
+      from fleet_ref_models
+      where is_active = 'Y'
+      order by nvl(seq_no,9999), model_name
+
+  column-mapping: 
+    return: R
+    display: D
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: FLEET_BIKE_COLOR ====================
+  id: 17738241555040509
+  identification: 
+    name: FLEET_BIKE_COLOR
+
+  subscription: 
+    version-number: 39904582362541
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select model_name d, model_id r
+      from fleet_ref_models
+      where is_active = 'Y'
+      order by nvl(seq_no,9999), model_name
+
+  column-mapping: 
+    return: R
+    display: D
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: FLEET_BIKE_YEAR =====================
+  id: 17738488427035994
+  identification: 
+    name: FLEET_BIKE_YEAR
+
+  subscription: 
+    version-number: 39904582390913
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select year_label d, year_no r
+      from core_years
+      where is_active = 'Y'
+      order by year_no desc
+
+  column-mapping: 
+    return: R
+    display: D
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: FLEET.EMPLOYEE_LOV ==================
+  id: 18130747472806310
+  identification: 
+    name: FLEET.EMPLOYEE_LOV
+
+  subscription: 
+    version-number: 39906722731264
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT e.FULL_EMPLOYEE_NAME || ' (' || e.emp_code || ')' AS EMP_NAME, 
+      e.EMP_ID,
+      e.EMP_CODE,
+      e.NATIONALITY
+      FROM VW_HR_EMPLOYEE_LIST e
+      ORDER BY EMP_ID DESC
+
+  column-mapping: 
+    return: EMP_ID
+    display: EMP_NAME
+    default-sort: Use Order By from Query
+
+  columns: 
+  - # ====== Column: EMP_ID ======================================
+    id: 18133093277755624
+    identification: 
+      column-name: EMP_ID
+      show: false
+
+    layout: 
+      sequence: 10
+
+    source: 
+      data-type: NUMBER
+
+    advanced: 
+      searchable: false
+
+  - # ====== Column: EMP_CODE ====================================
+    id: 18133321469755624
+    identification: 
+      column-name: EMP_CODE
+      show: true
+
+    layout: 
+      sequence: 20
+
+    source: 
+      data-type: VARCHAR2
+
+    advanced: 
+      searchable: true
+
+  - # ====== Column: EMP_NAME ====================================
+    id: 18133778914755623
+    identification: 
+      column-name: EMP_NAME
+      show: true
+
+    layout: 
+      sequence: 10
+
+    source: 
+      data-type: VARCHAR2
+
+    advanced: 
+      searchable: true
+
+  - # ====== Column: NATIONALITY =================================
+    id: 18134111125755623
+    identification: 
+      column-name: NATIONALITY
+      show: true
+
+    layout: 
+      sequence: 30
+
+    source: 
+      data-type: VARCHAR2
+
+    advanced: 
+      searchable: true
+
+- # ====== List of Values: FLEET_BIKES.BIKE_CODE ===============
+  id: 19357351506338808
+  identification: 
+    name: FLEET_BIKES.BIKE_CODE
+
+  subscription: 
+    version-number: 39906068819155
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: FLEET_BIKES
+
+  column-mapping: 
+    return: BIKE_ID
+    display: PLATE_NO
+    default-sort: BIKE_ID
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: HR_ORGS.ORG_CODE ====================
+  id: 34389172366944418
+  identification: 
+    name: HR_ORGS.ORG_CODE
+
+  subscription: 
+    version-number: 39908354481265
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_ORGS
+
+  column-mapping: 
+    return: ORG_ID
+    display: ORG_NAME
+    default-sort: ORG_ID
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: HR_PRO_DEAL_TYPE_MASTER.DEAL_TYPE_NAM
+  id: 34389893952944419
+  identification: 
+    name: HR_PRO_DEAL_TYPE_MASTER.DEAL_TYPE_NAME
+
+  subscription: 
+    version-number: 39908327091158
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_PRO_DEAL_TYPE_MASTER
+
+  column-mapping: 
+    return: DEAL_TYPE_CODE
+    display: DEAL_TYPE_NAME
+    default-sort: DEAL_TYPE_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: HR.EMPLOYEE_LOV =====================
+  id: 34519350958620461
+  identification: 
+    name: HR.EMPLOYEE_LOV
+
+  subscription: 
+    version-number: 39908354339893
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT e.FULL_EMPLOYEE_NAME || ' (' || e.emp_code || ')' AS EMP_NAME, 
+      e.EMP_ID,
+      e.EMP_CODE,
+      e.NATIONALITY
+      FROM VW_HR_EMPLOYEE_LIST e
+      ORDER BY EMP_ID DESC
+
+  column-mapping: 
+    return: EMP_ID
+    display: EMP_NAME
+    default-sort: Use Order By from Query
+
+  columns: 
+  - # ====== Column: EMP_ID ======================================
+    id: 34519646699620465
+    identification: 
+      column-name: EMP_ID
+      show: false
+
+    layout: 
+      sequence: 10
+
+    source: 
+      data-type: NUMBER
+
+    advanced: 
+      searchable: false
+
+  - # ====== Column: EMP_CODE ====================================
+    id: 34520042993620466
+    identification: 
+      column-name: EMP_CODE
+      show: true
+
+    layout: 
+      sequence: 20
+
+    source: 
+      data-type: VARCHAR2
+
+    advanced: 
+      searchable: true
+
+  - # ====== Column: EMP_NAME ====================================
+    id: 34520484444620466
+    identification: 
+      column-name: EMP_NAME
+      show: true
+
+    layout: 
+      sequence: 10
+
+    source: 
+      data-type: VARCHAR2
+
+    advanced: 
+      searchable: true
+
+  - # ====== Column: NATIONALITY =================================
+    id: 34520879143620466
+    identification: 
+      column-name: NATIONALITY
+      show: true
+
+    layout: 
+      sequence: 30
+
+    source: 
+      data-type: VARCHAR2
+
+    advanced: 
+      searchable: true
+
+- # ====== List of Values: HR_APPROVAL_MODULES.MODULE_NAME =====
+  id: 34585435058054440
+  identification: 
+    name: HR_APPROVAL_MODULES.MODULE_NAME
+
+  subscription: 
+    version-number: 39908357672105
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_APPROVAL_MODULES
+
+  column-mapping: 
+    return: MODULE_CODE
+    display: MODULE_NAME
+    default-sort: MODULE_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: UNIFIED_TASK_LIST.LOV.DUE ===========
+  id: 34641387301298757
+  identification: 
+    name: UNIFIED_TASK_LIST.LOV.DUE
+
+  subscription: 
+    version-number: 39908359476732
+
+  source: 
+    location: Static Values
+
+  entries: 
+  - # ====== Entry: Overdue ======================================
+    id: 34641632406298757
+    entry: 
+      sequence: 1
+      display: Overdue
+      return: '|0'
+
+  - # ====== Entry: Next hour ====================================
+    id: 34642077290298758
+    entry: 
+      sequence: 2
+      display: Next hour
+      return: 0|1
+
+  - # ====== Entry: Next 24 hours ================================
+    id: 34642482085298758
+    entry: 
+      sequence: 3
+      display: Next 24 hours
+      return: 1|24
+
+  - # ====== Entry: Next 7 days ==================================
+    id: 34642892347298759
+    entry: 
+      sequence: 4
+      display: Next 7 days
+      return: 24|168
+
+  - # ====== Entry: Next 30 days =================================
+    id: 34643203731298759
+    entry: 
+      sequence: 5
+      display: Next 30 days
+      return: 168|720
+
+  - # ====== Entry: More than 30 days ============================
+    id: 34643667368298759
+    entry: 
+      sequence: 6
+      display: More than 30 days
+      return: 720|
+
+- # ====== List of Values: UNIFIED_TASK_LIST.LOV.TYPE ==========
+  id: 34644463324298760
+  identification: 
+    name: UNIFIED_TASK_LIST.LOV.TYPE
+
+  subscription: 
+    version-number: 39908359476734
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select disp,
+             val
+        from table ( apex_human_task.get_lov_type )
+       order by insert_order
+
+  column-mapping: 
+    return: VAL
+    display: DISP
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: UNIFIED_TASK_LIST.LOV.PRIORITY ======
+  id: 34645593231298760
+  identification: 
+    name: UNIFIED_TASK_LIST.LOV.PRIORITY
+
+  subscription: 
+    version-number: 39908359476735
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select disp,
+             val
+        from table ( apex_human_task.get_lov_priority )
+       order by insert_order
+
+  column-mapping: 
+    return: VAL
+    display: DISP
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: UNIFIED_TASK_LIST.LOV.STATE =========
+  id: 34646289021298761
+  identification: 
+    name: UNIFIED_TASK_LIST.LOV.STATE
+
+  subscription: 
+    version-number: 39908359476736
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select disp,
+             val
+        from table ( apex_human_task.get_lov_state )
+       order by insert_order
+
+  column-mapping: 
+    return: VAL
+    display: DISP
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: UNIFIED_TASK_LIST.LOV.INITIATED =====
+  id: 34648112558298762
+  identification: 
+    name: UNIFIED_TASK_LIST.LOV.INITIATED
+
+  subscription: 
+    version-number: 39908359476742
+
+  source: 
+    location: Static Values
+
+  entries: 
+  - # ====== Entry: Last hour ====================================
+    id: 34648469706298762
+    entry: 
+      sequence: 1
+      display: Last hour
+      return: '|1'
+
+  - # ====== Entry: Last 24 hours ================================
+    id: 34648867979298762
+    entry: 
+      sequence: 2
+      display: Last 24 hours
+      return: 1|24
+
+  - # ====== Entry: Last 7 days ==================================
+    id: 34649213398298763
+    entry: 
+      sequence: 3
+      display: Last 7 days
+      return: 24|168
+
+  - # ====== Entry: Last 30 days =================================
+    id: 34649692311298763
+    entry: 
+      sequence: 4
+      display: Last 30 days
+      return: 168|720
+
+  - # ====== Entry: Older than 30 days ===========================
+    id: 34650072435298763
+    entry: 
+      sequence: 5
+      display: Older than 30 days
+      return: 720|
+
+- # ====== List of Values: WORKFLOW_CONSOLE.LOV.WORKFLOW_STATE =
+  id: 34721704861330545
+  identification: 
+    name: WORKFLOW_CONSOLE.LOV.WORKFLOW_STATE
+
+  subscription: 
+    version-number: 39908359693643
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select disp,
+             val
+        from table ( apex_workflow.get_lov_workflow_state )
+       order by insert_order
+
+  column-mapping: 
+    return: VAL
+    display: DISP
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: WORKFLOW_CONSOLE.LOV.INITIATED ======
+  id: 34723211958330546
+  identification: 
+    name: WORKFLOW_CONSOLE.LOV.INITIATED
+
+  subscription: 
+    version-number: 39908359693685
+
+  source: 
+    location: Static Values
+
+  entries: 
+  - # ====== Entry: Last hour ====================================
+    id: 34723536266330546
+    entry: 
+      sequence: 1
+      display: Last hour
+      return: '|1'
+
+  - # ====== Entry: Last 24 hours ================================
+    id: 34723989457330546
+    entry: 
+      sequence: 2
+      display: Last 24 hours
+      return: 1|24
+
+  - # ====== Entry: Last 7 days ==================================
+    id: 34724303145330546
+    entry: 
+      sequence: 3
+      display: Last 7 days
+      return: 24|168
+
+  - # ====== Entry: Last 30 days =================================
+    id: 34724785068330547
+    entry: 
+      sequence: 4
+      display: Last 30 days
+      return: 168|720
+
+  - # ====== Entry: Older than 30 days ===========================
+    id: 34725111327330547
+    entry: 
+      sequence: 5
+      display: Older than 30 days
+      return: 720|
+
+- # ====== List of Values: WORKFLOW_CHARTS.LOV.TIME_UNIT =======
+  id: 34759960543330572
+  identification: 
+    name: WORKFLOW_CHARTS.LOV.TIME_UNIT
+
+  subscription: 
+    version-number: 39908359693691
+
+  source: 
+    location: Static Values
+
+  entries: 
+  - # ====== Entry: Seconds ======================================
+    id: 34760275648330572
+    entry: 
+      sequence: 1
+      display: Seconds
+      return: SEC
+
+  - # ====== Entry: Minutes ======================================
+    id: 34760641636330573
+    entry: 
+      sequence: 2
+      display: Minutes
+      return: MIN
+
+  - # ====== Entry: Hours ========================================
+    id: 34761066763330573
+    entry: 
+      sequence: 3
+      display: Hours
+      return: HOUR
+
+  - # ====== Entry: Days =========================================
+    id: 34761471518330573
+    entry: 
+      sequence: 4
+      display: Days
+      return: DAY
+
+- # ====== List of Values: LOV_LOAN_TYPE =======================
+  id: 35702989263648833
+  identification: 
+    name: LOV_LOAN_TYPE
+
+  subscription: 
+    version-number: 39908519071370
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select 'PRO / Visa Deal Loan' d, 'PRO_DEAL' r from dual
+      union all
+      select 'Manual Long-Term Loan' d, 'LONG_TERM' r from dual
+      union all
+      select 'Other Long-Term Loan' d, 'OTHER_LONG_TERM' r from dual;
+
+  column-mapping: 
+    return: R
+    display: D
+    default-sort: D
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: LOV_LOAN_TXN_TYPE ===================
+  id: 35703154212651929
+  identification: 
+    name: LOV_LOAN_TXN_TYPE
+
+  subscription: 
+    version-number: 39908519090683
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select 'Manual Payment' d, 'MANUAL_PAYMENT' r from dual
+      union all
+      select 'Waiver' d, 'WAIVER' r from dual
+      union all
+      select 'Adjustment' d, 'ADJUSTMENT' r from dual
+      union all
+      select 'Reversal' d, 'REVERSAL' r from dual
+      union all
+      select 'Bad Debt Write-off' d, 'BAD_DEBT_WRITE_OFF' r from dual;
+
+  column-mapping: 
+    return: R
+    display: D
+    default-sort: D
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: LOV_LOAN_PAY_MODE ===================
+  id: 35703320948655153
+  identification: 
+    name: LOV_LOAN_PAY_MODE
+
+  subscription: 
+    version-number: 39908519111295
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select 'Cash' d, 'CASH' r from dual
+      union all
+      select 'Bank Transfer' d, 'BANK' r from dual
+      union all
+      select 'C3 Card' d, 'C3' r from dual
+      union all
+      select 'Exchange' d, 'EXCHANGE' r from dual
+      union all
+      select 'Other' d, 'OTHER' r from dual;
+
+  column-mapping: 
+    return: R
+    display: D
+    default-sort: D
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: HR_EMP_DOCS.DOC_TYPE ================
+  id: 38636999874010999
+  identification: 
+    name: HR_EMP_DOCS.DOC_TYPE
+
+  subscription: 
+    version-number: 39910083638427
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_EMP_DOCS
+
+  column-mapping: 
+    return: DOC_ID
+    display: DOC_TYPE
+    default-sort: DOC_TYPE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: FLEET_SIM_OPERATORS.OPERATOR_NAME ===
+  id: 43046845095367505
+  identification: 
+    name: FLEET_SIM_OPERATORS.OPERATOR_NAME
+
+  subscription: 
+    version-number: 39912138439133
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: FLEET_SIM_OPERATORS
+
+  column-mapping: 
+    return: OPERATOR_CODE
+    display: OPERATOR_NAME
+    default-sort: OPERATOR_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: FLEET_SIM_STATUS_MASTER.SIM_STATUS_NA
+  id: 43047576783367509
+  identification: 
+    name: FLEET_SIM_STATUS_MASTER.SIM_STATUS_NAME
+
+  subscription: 
+    version-number: 39912138439139
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: FLEET_SIM_STATUS_MASTER
+
+  column-mapping: 
+    return: SIM_STATUS_CODE
+    display: SIM_STATUS_NAME
+    default-sort: SIM_STATUS_NAME
+    sort-direction: Ascending (Nulls Last)
+

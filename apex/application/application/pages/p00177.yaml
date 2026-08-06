@@ -1,0 +1,1470 @@
+---
+# ====== Page: Loan Dashboard ================================
+id: 177
+identification: 
+  name: Loan Dashboard
+  alias: LOAN-DASHBOARD
+  title: Loan Dashboard
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    .loan-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(180px, 1fr));
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+    
+    .loan-kpi-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-left: 4px solid #2563eb;
+        border-radius: 12px;
+        padding: 14px 16px;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    }
+    
+    .loan-kpi-card.amount {
+        border-left-color: #9a3412;
+    }
+    
+    .loan-kpi-card.success {
+        border-left-color: #15803d;
+    }
+    
+    .loan-kpi-card.warning {
+        border-left-color: #d97706;
+    }
+    
+    .loan-kpi-card.danger {
+        border-left-color: #dc2626;
+    }
+    
+    .loan-kpi-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: #64748b;
+        font-weight: 800;
+    }
+    
+    .loan-kpi-value {
+        font-size: 22px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-top: 6px;
+    }
+    
+    .loan-kpi-card.amount .loan-kpi-value,
+    .loan-kpi-card.danger .loan-kpi-value {
+        color: #9a3412;
+    }
+    
+    .loan-kpi-card.success .loan-kpi-value {
+        color: #15803d;
+    }
+    
+    .loan-kpi-card.warning .loan-kpi-value {
+        color: #d97706;
+    }
+    
+    .loan-kpi-sub {
+        font-size: 11px;
+        color: #64748b;
+        margin-top: 4px;
+    }
+    
+    @media (max-width: 1100px) {
+        .loan-kpi-grid {
+            grid-template-columns: repeat(2, minmax(180px, 1fr));
+        }
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Summary =====================================
+  id: 37295478525639611
+  identification: 
+    name: Summary
+    type: Dynamic Content
+
+  source: 
+    language: PL/SQL
+    pl/sql-function-body-returning-a-clob: |
+      declare
+          l_active_loans       number := 0;
+          l_total_loan_amount  number := 0;
+          l_total_balance      number := 0;
+          l_paid_this_month    number := 0;
+          l_pending_loans      number := 0;
+          l_pending_txns       number := 0;
+          l_bad_debt_amount    number := 0;
+          l_waived_amount      number := 0;
+      
+          function money(p_amount number) return varchar2 is
+          begin
+              return 'AED ' || trim(to_char(nvl(p_amount,0), '999G999G999G990D00'));
+          end;
+      begin
+          select count(*),
+                 nvl(sum(loan_amount),0),
+                 nvl(sum(balance_amount),0),
+                 nvl(sum(bad_debt_amount),0),
+                 nvl(sum(waived_amount),0)
+            into l_active_loans,
+                 l_total_loan_amount,
+                 l_total_balance,
+                 l_bad_debt_amount,
+                 l_waived_amount
+            from hr_emp_loan_v
+           where approval_status = 'APPROVED'
+             and status = 'ACTIVE';
+      
+          select nvl(sum(amount),0)
+            into l_paid_this_month
+            from hr_emp_loan_txns
+           where approval_status = 'APPROVED'
+             and txn_type in ('MANUAL_PAYMENT','PAYROLL_DEDUCTION')
+             and txn_date >= trunc(cast(systimestamp at time zone 'Asia/Dubai' as date), 'MM')
+             and txn_date <  add_months(trunc(cast(systimestamp at time zone 'Asia/Dubai' as date), 'MM'), 1);
+      
+          select count(*)
+            into l_pending_loans
+            from hr_emp_loans
+           where approval_status = 'SUBMITTED';
+      
+          select count(*)
+            into l_pending_txns
+            from hr_emp_loan_txns
+           where approval_status = 'SUBMITTED';
+      
+          htp.p(
+          '<div class="loan-kpi-grid">' ||
+      
+          '<div class="loan-kpi-card">' ||
+          '<div class="loan-kpi-label">Active Loans</div>' ||
+          '<div class="loan-kpi-value">' || l_active_loans || '</div>' ||
+          '<div class="loan-kpi-sub">Approved and active</div>' ||
+          '</div>' ||
+      
+          '<div class="loan-kpi-card amount">' ||
+          '<div class="loan-kpi-label">Total Loan Amount</div>' ||
+          '<div class="loan-kpi-value">' || money(l_total_loan_amount) || '</div>' ||
+          '<div class="loan-kpi-sub">Approved active loans</div>' ||
+          '</div>' ||
+      
+          '<div class="loan-kpi-card danger">' ||
+          '<div class="loan-kpi-label">Outstanding Balance</div>' ||
+          '<div class="loan-kpi-value">' || money(l_total_balance) || '</div>' ||
+          '<div class="loan-kpi-sub">Amount still recoverable</div>' ||
+          '</div>' ||
+      
+          '<div class="loan-kpi-card success">' ||
+          '<div class="loan-kpi-label">Paid This Month</div>' ||
+          '<div class="loan-kpi-value">' || money(l_paid_this_month) || '</div>' ||
+          '<div class="loan-kpi-sub">Manual + payroll payments</div>' ||
+          '</div>' ||
+      
+          '<div class="loan-kpi-card warning">' ||
+          '<div class="loan-kpi-label">Pending Loan Approvals</div>' ||
+          '<div class="loan-kpi-value">' || l_pending_loans || '</div>' ||
+          '<div class="loan-kpi-sub">Manual loan requests</div>' ||
+          '</div>' ||
+      
+          '<div class="loan-kpi-card warning">' ||
+          '<div class="loan-kpi-label">Pending Txn Approvals</div>' ||
+          '<div class="loan-kpi-value">' || l_pending_txns || '</div>' ||
+          '<div class="loan-kpi-sub">Payment / waiver / adjustment</div>' ||
+          '</div>' ||
+      
+          '<div class="loan-kpi-card">' ||
+          '<div class="loan-kpi-label">Waived Amount</div>' ||
+          '<div class="loan-kpi-value">' || money(l_waived_amount) || '</div>' ||
+          '<div class="loan-kpi-sub">Approved active loans</div>' ||
+          '</div>' ||
+      
+          '<div class="loan-kpi-card danger">' ||
+          '<div class="loan-kpi-label">Bad Debt Write-off</div>' ||
+          '<div class="loan-kpi-value">' || money(l_bad_debt_amount) || '</div>' ||
+          '<div class="loan-kpi-sub">Management write-off</div>' ||
+          '</div>' ||
+      
+          '</div>'
+          );
+      end;
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: loan_kpi_summary
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    performance: 
+      lazy-loading: false
+
+- # ====== Region: Pending Approvals ===========================
+  id: 37295534110639612
+  identification: 
+    name: Pending Approvals
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select 'Loan Creation' request_type,
+             v.loan_no,
+             v.emp_code,
+             v.employee_name,
+             'AED ' || trim(to_char(nvl(v.loan_amount,0), '999G999G999G990D00')) amount,
+             case approval_status
+          when 'SUBMITTED' then '<span class="t-Badge t-Badge--warning">Submitted</span>'
+          when 'APPROVED' then '<span class="t-Badge t-Badge--success">Approved</span>'
+          when 'REJECTED' then '<span class="t-Badge t-Badge--danger">Rejected</span>'
+          else '<span class="t-Badge">' || apex_escape.html(approval_status) || '</span>'
+      end approval_status,
+             to_char(v.issue_dt, 'DD-MON-YYYY') request_date,
+             '<a href="' ||
+             apex_page.get_url(
+                 p_page        => 175,
+                 p_items       => 'P175_LOAN_ID',
+                 p_values      => v.loan_id,
+                 p_clear_cache => '175'
+             ) ||
+             '" title="View History"><span class="fa fa-history"></span></a>' history_link
+      from hr_emp_loan_v v
+      where v.approval_status = 'SUBMITTED'
+      
+      union all
+      
+      select case t.txn_type
+                 when 'MANUAL_PAYMENT' then 'Payment'
+                 when 'WAIVER' then 'Waiver'
+                 when 'ADJUSTMENT' then 'Adjustment'
+                 when 'REVERSAL' then 'Reversal'
+                 when 'BAD_DEBT_WRITE_OFF' then 'Bad Debt Write-off'
+                 else t.txn_type
+             end request_type,
+             v.loan_no,
+             v.emp_code,
+             v.employee_name,
+             'AED ' || trim(to_char(nvl(t.amount,0), '999G999G999G990D00')) amount,
+             t.approval_status,
+             to_char(t.txn_date, 'DD-MON-YYYY') request_date,
+             '<a href="' ||
+             apex_page.get_url(
+                 p_page        => 175,
+                 p_items       => 'P175_LOAN_ID,P175_LOAN_TXN_ID',
+                 p_values      => t.loan_id || ',' || t.loan_txn_id,
+                 p_clear_cache => '175'
+             ) ||
+             '" title="View History"><span class="fa fa-history"></span></a>' history_link
+      from hr_emp_loan_txns t
+      join hr_emp_loan_v v
+        on v.loan_id = t.loan_id
+      where t.approval_status = 'SUBMITTED'
+      order by request_date desc;
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: REQUEST_TYPE ================================
+    id: 37295615160639613
+    identification: 
+      column-name: REQUEST_TYPE
+      type: Plain Text
+
+    heading: 
+      heading: Request Type
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LOAN_NO =====================================
+    id: 37295750100639614
+    identification: 
+      column-name: LOAN_NO
+      type: Plain Text
+
+    heading: 
+      heading: Loan No
+      alignment: start
+
+    layout: 
+      sequence: 20
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EMP_CODE ====================================
+    id: 37295819702639615
+    identification: 
+      column-name: EMP_CODE
+      type: Plain Text
+
+    heading: 
+      heading: Emp Code
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EMPLOYEE_NAME ===============================
+    id: 37295943290639616
+    identification: 
+      column-name: EMPLOYEE_NAME
+      type: Plain Text
+
+    heading: 
+      heading: Employee Name
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: AMOUNT ======================================
+    id: 37296006929639617
+    identification: 
+      column-name: AMOUNT
+      type: Plain Text
+
+    heading: 
+      heading: Amount
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: APPROVAL_STATUS =============================
+    id: 37296111960639618
+    identification: 
+      column-name: APPROVAL_STATUS
+      type: Plain Text
+
+    heading: 
+      heading: Approval Status
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: false
+
+  - # ====== Column: REQUEST_DATE ================================
+    id: 37296285550639619
+    identification: 
+      column-name: REQUEST_DATE
+      type: Plain Text
+
+    heading: 
+      heading: Request Date
+      alignment: start
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: HISTORY_LINK ================================
+    id: 37296361023639620
+    identification: 
+      column-name: HISTORY_LINK
+      type: Plain Text
+
+    heading: 
+      heading: History
+      alignment: center
+
+    layout: 
+      sequence: 80
+      column-alignment: center
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: false
+
+- # ====== Region: Top Outstanding Loans =======================
+  id: 37296451952639621
+  identification: 
+    name: Top Outstanding Loans
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select loan_no,
+             emp_code,
+             employee_name,
+             loan_type,
+             source_type,
+             'AED ' || trim(to_char(nvl(loan_amount,0), '999G999G999G990D00')) loan_amount,
+             'AED ' || trim(to_char(nvl(paid_amount,0), '999G999G999G990D00')) paid_amount,
+             'AED ' || trim(to_char(nvl(balance_amount,0), '999G999G999G990D00')) balance_amount,
+             '<a href="' ||
+             apex_page.get_url(
+                 p_page        => 171,
+                 p_items       => 'P171_LOAN_ID',
+                 p_values      => loan_id,
+                 p_clear_cache => '171'
+             ) ||
+             '" title="Open Loan"><span class="fa fa-eye"></span></a>' view_link
+      from hr_emp_loan_v
+      where approval_status = 'APPROVED'
+        and status = 'ACTIVE'
+        and nvl(balance_amount,0) > 0
+      order by balance_amount desc
+      fetch first 10 rows only;
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: LOAN_NO =====================================
+    id: 37296538498639622
+    identification: 
+      column-name: LOAN_NO
+      type: Plain Text
+
+    heading: 
+      heading: Loan No
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EMP_CODE ====================================
+    id: 37296692037639623
+    identification: 
+      column-name: EMP_CODE
+      type: Plain Text
+
+    heading: 
+      heading: Emp Code
+      alignment: start
+
+    layout: 
+      sequence: 20
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EMPLOYEE_NAME ===============================
+    id: 37296708396639624
+    identification: 
+      column-name: EMPLOYEE_NAME
+      type: Plain Text
+
+    heading: 
+      heading: Employee Name
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LOAN_TYPE ===================================
+    id: 37296801657639625
+    identification: 
+      column-name: LOAN_TYPE
+      type: Plain Text
+
+    heading: 
+      heading: Loan Type
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SOURCE_TYPE =================================
+    id: 37296928442639626
+    identification: 
+      column-name: SOURCE_TYPE
+      type: Plain Text
+
+    heading: 
+      heading: Source Type
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LOAN_AMOUNT =================================
+    id: 37297029503639627
+    identification: 
+      column-name: LOAN_AMOUNT
+      type: Plain Text
+
+    heading: 
+      heading: Loan Amount
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PAID_AMOUNT =================================
+    id: 37297182987639628
+    identification: 
+      column-name: PAID_AMOUNT
+      type: Plain Text
+
+    heading: 
+      heading: Paid Amount
+      alignment: start
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: BALANCE_AMOUNT ==============================
+    id: 37297284223639629
+    identification: 
+      column-name: BALANCE_AMOUNT
+      type: Plain Text
+
+    heading: 
+      heading: Balance Amount
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: VIEW_LINK ===================================
+    id: 37297396629639630
+    identification: 
+      column-name: VIEW_LINK
+      type: Plain Text
+
+    heading: 
+      heading: View
+      alignment: center
+
+    layout: 
+      sequence: 90
+      column-alignment: center
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: false
+
+- # ====== Region: Recent Transactions =========================
+  id: 37297413074639631
+  identification: 
+    name: Recent Transactions
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select to_char(t.txn_date, 'DD-MON-YYYY') txn_date,
+             v.loan_no,
+             v.emp_code,
+             v.employee_name,
+             case t.txn_type
+                 when 'MANUAL_PAYMENT' then 'Payment'
+                 when 'PAYROLL_DEDUCTION' then 'Payroll Deduction'
+                 when 'WAIVER' then 'Waiver'
+                 when 'ADJUSTMENT' then 'Adjustment'
+                 when 'REVERSAL' then 'Reversal'
+                 when 'BAD_DEBT_WRITE_OFF' then 'Bad Debt Write-off'
+                 else t.txn_type
+             end txn_type,
+             'AED ' || trim(to_char(nvl(t.amount,0), '999G999G999G990D00')) amount,
+             t.pay_mode,
+             t.reference_no,
+             t.created_by,
+             to_char(t.created_dt, 'DD-MON-YYYY HH24:MI') created_dt
+      from hr_emp_loan_txns t
+      join hr_emp_loan_v v
+        on v.loan_id = t.loan_id
+      where t.approval_status = 'APPROVED'
+      order by t.created_dt desc
+      fetch first 10 rows only;
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: TXN_DATE ====================================
+    id: 37297533108639632
+    identification: 
+      column-name: TXN_DATE
+      type: Plain Text
+
+    heading: 
+      heading: Date
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LOAN_NO =====================================
+    id: 37297675034639633
+    identification: 
+      column-name: LOAN_NO
+      type: Plain Text
+
+    heading: 
+      heading: Loan No
+      alignment: start
+
+    layout: 
+      sequence: 20
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EMP_CODE ====================================
+    id: 37297713540639634
+    identification: 
+      column-name: EMP_CODE
+      type: Plain Text
+
+    heading: 
+      heading: Emp Code
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EMPLOYEE_NAME ===============================
+    id: 37297808557639635
+    identification: 
+      column-name: EMPLOYEE_NAME
+      type: Plain Text
+
+    heading: 
+      heading: Employee Name
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TXN_TYPE ====================================
+    id: 37297956120639636
+    identification: 
+      column-name: TXN_TYPE
+      type: Plain Text
+
+    heading: 
+      heading: Type
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: AMOUNT ======================================
+    id: 37298076715639637
+    identification: 
+      column-name: AMOUNT
+      type: Plain Text
+
+    heading: 
+      heading: Amount
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PAY_MODE ====================================
+    id: 37298110753639638
+    identification: 
+      column-name: PAY_MODE
+      type: Plain Text
+
+    heading: 
+      heading: Pay Mode
+      alignment: start
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REFERENCE_NO ================================
+    id: 37298265401639639
+    identification: 
+      column-name: REFERENCE_NO
+      type: Plain Text
+
+    heading: 
+      heading: Reference No
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CREATED_BY ==================================
+    id: 37298341068639640
+    identification: 
+      column-name: CREATED_BY
+      type: Plain Text
+
+    heading: 
+      heading: Created By
+      alignment: start
+
+    layout: 
+      sequence: 90
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CREATED_DT ==================================
+    id: 37298498604639641
+    identification: 
+      column-name: CREATED_DT
+      type: Plain Text
+
+    heading: 
+      heading: Created Date
+      alignment: start
+
+    layout: 
+      sequence: 100
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+

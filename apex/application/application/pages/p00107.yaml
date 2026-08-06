@@ -1,0 +1,1001 @@
+---
+# ====== Page: Employee Change Status ========================
+id: 107
+identification: 
+  name: Employee Change Status
+  alias: CHANGE-STATUS
+  title: Change Status
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Change Status ===============================
+  id: 16016812592164925
+  identification: 
+    name: Change Status
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P107_EMP_ID ==============================
+  id: 16016969544164926
+  identification: 
+    name: P107_EMP_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: Change Status # 16016812592164925
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P107_EMP_NAME ============================
+  id: 16017005149164927
+  identification: 
+    name: P107_EMP_NAME
+    type: Display Only
+
+  label: 
+    label: Employee Name
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Change Status # 16016812592164925
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      select FULL_EMPLOYEE_NAME
+      from VW_HR_EMPLOYEE_LIST
+      where emp_id = :P107_EMP_ID
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P107_CURRENT_STATUS ======================
+  id: 16017138987164928
+  identification: 
+    name: P107_CURRENT_STATUS
+    type: Display Only
+
+  label: 
+    label: Current Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Change Status # 16016812592164925
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      select sm.status_name
+      from hr_emp_status_hist h
+      join hr_status_master sm on sm.status_code = h.status_code
+      where h.emp_id = :P107_EMP_ID
+        and h.effective_to is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P107_NEW_STATUS ==========================
+  id: 16017211462164929
+  identification: 
+    name: P107_NEW_STATUS
+    type: Display Only
+
+  label: 
+    label: New Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 40
+    region: Change Status # 16016812592164925
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select distinct sm.status_name d,
+             sm.status_code r
+      from hr_status_master sm
+      join hr_status_acl acl
+        on acl.status_code = sm.status_code
+      where sm.is_active = 'Y'
+        and acl.can_set = 'Y'
+        and acl.is_active = 'Y'
+        and sec_pkg.has_role(acl.role_code) = 1
+    display-extra-values: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P107_REASON ==============================
+  id: 16017488715164931
+  identification: 
+    name: P107_REASON
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 50
+    region: Change Status # 16016812592164925
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: SYSTEM
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P107_PROJECT =============================
+  id: 17488507946097942
+  identification: 
+    name: P107_PROJECT
+    type: Select List
+
+  label: 
+    label: Project To Onbaord
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 60
+    region: Change Status # 16016812592164925
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: SECURE_PROEJECTS_LOV # 15884985584248416
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P107_CITY ================================
+  id: 17488619838097943
+  identification: 
+    name: P107_CITY
+    type: Select List
+
+  label: 
+    label: City to Onboard
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 70
+    region: Change Status # 16016812592164925
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT 
+      CITY_NAME, CITY_ID 
+      FROm REF_CITIES 
+      WHERE 
+      COUNTRY_ID = 1
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P107_LEAVE_START =========================
+  id: 17488784029097944
+  identification: 
+    name: P107_LEAVE_START
+    type: Date Picker
+
+  label: 
+    label: Start Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 80
+    region: Change Status # 16016812592164925
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P107_END_DATE ============================
+  id: 17488890621097945
+  identification: 
+    name: P107_END_DATE
+    type: Date Picker
+
+  label: 
+    label: End Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 90
+    region: Change Status # 16016812592164925
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P107_LEAVE_TYPE ==========================
+  id: 17488982163097946
+  identification: 
+    name: P107_LEAVE_TYPE
+    type: Select List
+
+  label: 
+    label: Leave Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 100
+    region: Change Status # 16016812592164925
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Annaual Leave;ANNUAL,Sick Leave;SICK'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PB_CHANGE_STATUS ============================
+  id: 16017545324164932
+  identification: 
+    button-name: PB_CHANGE_STATUS
+    label: Change Status
+
+  layout: 
+    sequence: 60
+    region: Change Status # 16016812592164925
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: PB_CANCEL ===================================
+  id: 16017610640164933
+  identification: 
+    button-name: PB_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 70
+    region: Change Status # 16016812592164925
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:108:&SESSION.::&DEBUG.:::'
+      page: 108 # Assignment Operations Dashboard
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: Check Ready =========================
+  id: 17489135818097948
+  identification: 
+    name: Check Ready
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P107_NEW_STATUS
+
+  client-side-condition: 
+    type: Item = Value
+    item: P107_NEW_STATUS
+    value: READY_TO_ONBOARD
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 17489239996097949
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P107_PROJECT
+      - P107_CITY
+
+    execution: 
+      sequence: 10
+      event: Check Ready # 17489135818097948
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 17537131133128502
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P107_PROJECT
+      - P107_CITY
+
+    execution: 
+      sequence: 10
+      event: Check Ready # 17489135818097948
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: Check Vacation ======================
+  id: 17489351837097950
+  identification: 
+    name: Check Vacation
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P107_NEW_STATUS
+
+  client-side-condition: 
+    type: Item = Value
+    item: P107_NEW_STATUS
+    value: VACATION
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 17537030703128501
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P107_LEAVE_START
+      - P107_END_DATE
+      - P107_LEAVE_TYPE
+
+    execution: 
+      sequence: 10
+      event: Check Vacation # 17489351837097950
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 17537289335128503
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P107_LEAVE_START
+      - P107_END_DATE
+      - P107_LEAVE_TYPE
+
+    execution: 
+      sequence: 10
+      event: Check Vacation # 17489351837097950
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+validations: 
+- # ====== Validation: Planned Project =========================
+  id: 17538916157128520
+  identification: 
+    name: Planned Project
+
+  execution: 
+    sequence: 20
+
+  validation: 
+    type: Item is NOT NULL
+    item: P107_PROJECT
+    always-execute: false
+
+  error: 
+    error-message: Planned Project is required!
+    display-location: Inline with Field and in Notification
+    associated-item: P107_PROJECT # 17488507946097942
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ":P107_NEW_STATUS = 'READY_TO_ONBOARD'"
+
+- # ====== Validation: Planned City ============================
+  id: 17539020244128521
+  identification: 
+    name: Planned City
+
+  execution: 
+    sequence: 30
+
+  validation: 
+    type: Item is NOT NULL
+    item: P107_CITY
+    always-execute: false
+
+  error: 
+    error-message: Planned City is required!
+    display-location: Inline with Field and in Notification
+    associated-item: P107_CITY # 17488619838097943
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ":P107_NEW_STATUS = 'READY_TO_ONBOARD'"
+
+- # ====== Validation: Start Date ==============================
+  id: 17539111062128522
+  identification: 
+    name: Start Date
+
+  execution: 
+    sequence: 40
+
+  validation: 
+    type: Item is NOT NULL
+    item: P107_LEAVE_START
+    always-execute: false
+
+  error: 
+    error-message: Start date is required!
+    display-location: Inline with Field and in Notification
+    associated-item: P107_LEAVE_START # 17488784029097944
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ":P107_NEW_STATUS = 'VACATION'"
+
+- # ====== Validation: End Date ================================
+  id: 17539211786128523
+  identification: 
+    name: End Date
+
+  execution: 
+    sequence: 50
+
+  validation: 
+    type: Item is NOT NULL
+    item: P107_END_DATE
+    always-execute: false
+
+  error: 
+    error-message: End date is required!
+    display-location: Inline with Field and in Notification
+    associated-item: P107_END_DATE # 17488890621097945
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ":P107_NEW_STATUS = 'VACATION'"
+
+- # ====== Validation: LEAVE TYPE ==============================
+  id: 17539305696128524
+  identification: 
+    name: LEAVE TYPE
+
+  execution: 
+    sequence: 60
+
+  validation: 
+    type: Item is NOT NULL
+    item: P107_LEAVE_TYPE
+    always-execute: false
+
+  error: 
+    error-message: Leave Type is required!
+    display-location: Inline with Field and in Notification
+    associated-item: P107_LEAVE_TYPE # 17488982163097946
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ":P107_NEW_STATUS = 'VACATION'"
+
+- # ====== Validation: Block Vacation If Bike Assigned =========
+  id: 40937100824733946
+  identification: 
+    name: Block Vacation If Bike Assigned
+
+  execution: 
+    sequence: 70
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      declare
+          l_bike_count number;
+      begin
+          if :P107_NEW_STATUS = 'VACATION' then
+      
+              select count(*)
+                into l_bike_count
+                from vw_hr_emp_current_bike
+               where emp_id = :P107_EMP_ID;
+      
+              if l_bike_count > 0 then
+                  return 'Bike is currently assigned to this employee. Please return bike before marking Vacation.';
+              end if;
+      
+          end if;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+processes: 
+- # ====== Process: change_ststus_api ==========================
+  id: 17488399281097940
+  identification: 
+    name: change_ststus_api
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+      hr_status_pkg.set_status(
+          p_emp_id => :P107_EMP_ID,
+          p_status_code => :P107_NEW_STATUS,
+          p_effective_from => SYSDATE,
+          p_reason => :P107_REASON,
+          p_remarks => NULL,
+          p_project_id => :P107_PROJECT,
+          P_CITY_ID => :P107_CITY,
+          P_LEAVE_START => :P107_LEAVE_START,
+      P_LEAVE_END => :P107_END_DATE,
+      P_LEAVE_TYPE => :P107_LEAVE_TYPE
+        );
+      end;
+
+  execution: 
+    sequence: 10
+    point: After Submit
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+branches: 
+- # ====== Branch: Go to Page 108 ==============================
+  id: 16018217231164939
+  identification: 
+    name: Go to Page 108
+
+  execution: 
+    sequence: 10
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:108:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 108 # Assignment Operations Dashboard
+

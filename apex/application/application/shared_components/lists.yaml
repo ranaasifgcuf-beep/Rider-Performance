@@ -1,0 +1,500 @@
+---
+- # ====== List: Navigation Menu ===============================
+  id: 9722128633336320
+  identification: 
+    name: Navigation Menu
+
+  subscription: 
+    version-number: 39900422817110
+
+  source: 
+    type: Static Values
+
+  entries: 
+  - # ====== Entry: Home =========================================
+    id: 9733835210336399
+    label: 
+      label: Home
+
+    icon: 
+      image/icon-css-classes: fa-home
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1:&APP_SESSION.::&DEBUG.:::'
+        page: 1 # Home
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Application Modules ==========================
+    id: 9861561737701849
+    label: 
+      label: Application Modules
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 20
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 902
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:902:&APP_SESSION.::&DEBUG.:::'
+        page: 902 # Application Modules
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+- # ====== List: Navigation Bar ================================
+  id: 9723311746336345
+  identification: 
+    name: Navigation Bar
+
+  subscription: 
+    version-number: 39900492702380
+
+  source: 
+    type: Static Values
+
+  entries: 
+  - # ====== Entry: &APP_USER. ===================================
+    id: 9735378550336416
+    label: 
+      label: '&APP_USER.'
+
+    icon: 
+      image/icon-css-classes: fa-user
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: '#'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      2.: has-username
+
+  - # ====== Entry: --- ==========================================
+    id: 9735806253336417
+    label: 
+      label: '---'
+
+    layout: 
+      sequence: 20
+      parent-entry: '&APP_USER.' # 9735378550336416
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: separator
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    server-side-condition: 
+      type: User is Authenticated (not public)
+
+  - # ====== Entry: Sign Out =====================================
+    id: 9736220480336418
+    label: 
+      label: Sign Out
+
+    icon: 
+      image/icon-css-classes: fa-sign-out
+
+    layout: 
+      sequence: 30
+      parent-entry: '&APP_USER.' # 9735378550336416
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: '&LOGOUT_URL.'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    server-side-condition: 
+      type: User is Authenticated (not public)
+
+  - # ====== Entry: Install App ==================================
+    id: 9974920984391820
+    label: 
+      label: Install App
+
+    icon: 
+      image/icon-css-classes: fa-cloud-download
+
+    layout: 
+      sequence: 1
+
+    is-current: 
+      type: Never
+
+    link: 
+      target: '#action$a-pwa-install'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      2.: a-pwaInstall
+
+- # ====== List: Custom Menu ===================================
+  id: 9973498614382754
+  identification: 
+    name: Custom Menu
+
+  subscription: 
+    version-number: 39912187191457
+
+  source: 
+    type: SQL Query
+    sql-query: |
+      with permitted as (
+        select m.*,
+               case
+                 when sec_pkg.has_perm(m.perm_code) = 1 then 1
+                 else 0
+               end as is_allowed
+          from sec_menu m
+         where m.is_active = 'Y'
+      ),
+      menu_scope as (
+        -- allowed nodes + all ancestors (so parent shows if any child allowed)
+        select distinct menu_id
+          from permitted
+         start with menu_id in (select menu_id from permitted where is_allowed = 1)
+       connect by prior parent_menu_id = menu_id
+      ),
+      tree_nodes as (
+        select p.*
+          from permitted p
+          join menu_scope s on s.menu_id = p.menu_id
+      )
+      select
+      level,
+        t.label as label,
+        case
+          when t.target_url is not null then t.target_url
+          when t.page_id is not null then
+            'f?p='||nvl(t.app_id, :APP_ID)||':'||t.page_id||':'||v('APP_SESSION')
+          else
+            null
+        end as target,
+        t.parent_menu_id as parent_id,
+        t.icon_css as icon,
+        t.menu_id as id,
+        null as is_current,
+        nvl(t.display_order, 9999) as display_sequence
+      from tree_nodes t
+      start with t.parent_menu_id is null
+      connect by prior t.menu_id = t.parent_menu_id
+      order siblings by nvl(t.display_order, 9999), upper(t.label);
+      
+
+  entries: 
+  - # ====== Entry: Accident List ================================
+    id: 30708410708380138
+    label: 
+      label: Accident List
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 313
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:313:&APP_SESSION.::&DEBUG.:::'
+        page: 313 # Accident List
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: PRO Deal Workbech ============================
+    id: 34377995639933993
+    label: 
+      label: PRO Deal Workbech
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 20
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 140
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:140:&APP_SESSION.::&DEBUG.:::'
+        page: 140 # PRO Deal Workbech
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Deal Setup Type ==============================
+    id: 34559707018974294
+    label: 
+      label: Deal Setup Type
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 30
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 142
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:142:&APP_SESSION.::&DEBUG.:::'
+        page: 142 # Deal Setup Type
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Deal Inclusion Setup =========================
+    id: 34571595448995698
+    label: 
+      label: Deal Inclusion Setup
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 40
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 143
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:143:&APP_SESSION.::&DEBUG.:::'
+        page: 143 # Deal Inclusion Setup
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Loan Workbench ===============================
+    id: 35703876378664261
+    label: 
+      label: Loan Workbench
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 50
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 170
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:170:&APP_SESSION.::&DEBUG.:::'
+        page: 170 # Loan Workbench
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Legal Profile List ===========================
+    id: 38612662557985393
+    label: 
+      label: Legal Profile List
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 60
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 182
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:182:&APP_SESSION.::&DEBUG.:::'
+        page: 182 # Legal Profile List
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Status Master Setup ==========================
+    id: 40213152624742412
+    label: 
+      label: Status Master Setup
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 70
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 185
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:185:&APP_SESSION.::&DEBUG.:::'
+        page: 185 # Status Master Setup
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Fleet Asset Risk =============================
+    id: 41429596241189805
+    label: 
+      label: Fleet Asset Risk
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 80
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 327
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:327:&APP_SESSION.::&DEBUG.:::'
+        page: 327 # Fleet Asset Risk Control
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: SIM Inventory ================================
+    id: 43032236566318977
+    label: 
+      label: SIM Inventory
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 90
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 331
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:331:&APP_SESSION.::&DEBUG.:::'
+        page: 331 # SIM Inventory
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: SIM Request History ==========================
+    id: 43119916598325627
+    label: 
+      label: SIM Request History
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 100
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 334
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:334:&APP_SESSION.::&DEBUG.:::'
+        page: 334 # SIM Request History
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+

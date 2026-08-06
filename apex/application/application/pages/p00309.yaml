@@ -1,0 +1,1365 @@
+---
+# ====== Page: Bike Operations ===============================
+id: 309
+identification: 
+  name: Bike Operations
+  alias: BIKE-OPERATIONS
+  title: Bike Operations
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Bike Operations =============================
+  id: 16326999806664132
+  identification: 
+    name: Bike Operations
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+          v.bike_id,
+      
+         /*case
+        when v.bike_status_code = 'AVAILABLE'
+         and v.current_bike_assign_id is null
+        then
+          '<a href="' ||
+          apex_page.get_url(
+              p_page   => 303,
+              p_items  => 'P303_BIKE_ID,P303_BIKE_READ_ONLY',
+              p_values => v.bike_id||',Y'
+          ) || '" class="js-dialog-link">' ||
+         '<span class="fa fa-key" style="color:#28a745; font-size:16px;" title="Assign Bike"></span></a>'
+       when v.current_bike_assign_id is not null
+            then
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 304,
+                  p_items  => 'P304_BIKE_ASSIGN_ID',
+                  p_values => v.current_bike_assign_id 
+              ) || '" class="js-dialog-link">' ||
+              '<span class="fa fa-undo" style="color:#dc3545; font-size:16px;" title="Return Bike"></span></a>'
+          else '<span class="fa fa-key" style="color:#cfcfcf; opacity:.55;" title="Not Available"></span>'
+      end as assign_link,*/
+      case
+          when v.current_bike_assign_id is not null then
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 304,
+                  p_items  => 'P304_BIKE_ASSIGN_ID',
+                  p_values => v.current_bike_assign_id
+              ) ||
+              '" class="js-dialog-link">' ||
+              '<span class="fa fa-undo"
+                     style="color:#dc3545; font-size:16px;"
+                     title="Return Bike"></span>' ||
+              '</a>'
+      
+          else
+              '<span class="fa fa-undo"
+                     style="color:#cfcfcf; font-size:16px; opacity:.55; cursor:not-allowed;"
+                     title="Bike Not Assigned"></span>'
+      end as assign_link,
+      /*
+          case
+            when v.current_bike_assign_id is not null
+            then
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 304,
+                  p_items  => 'P304_BIKE_ASSIGN_ID',
+                  p_values => v.current_bike_assign_id 
+              ) || '" class="js-dialog-link">' ||
+              '<span class="fa fa-undo" style="color:#dc3545; font-size:16px;" title="Return Bike"></span></a>'
+            else '<span class="fa fa-undo" style="color:#cfcfcf; opacity:.55;" title="Not Available"></span>'
+          end as return_link,*/
+      
+       case
+            when v.current_bike_assign_id is  null  and  v.bike_status_code not in ('IMPOUND','ACCIDENT')
+            then
+          '<a href="' ||
+          apex_page.get_url(
+              p_page   => 305,
+              p_items  => 'P305_BIKE_ID',
+              p_values => v.bike_id
+          ) || '" class="js-dialog-link">' ||
+          '<span class="fa fa-exchange" title="Change Status"></span></a>' 
+          else '<span class="fa fa-exchange" style="color:#cfcfcf; opacity:.55;" title="Not Available"></span>'
+          end as status_link,
+      
+         case
+            when v.current_bike_assign_id is  null
+            then
+          '<a href="' ||
+          apex_page.get_url(
+              p_page   => 306,
+              p_items  => 'P306_BIKE_ID',
+              p_values => v.bike_id
+          ) || '" class="js-dialog-link">' ||
+          '<span class="fa fa-map-marker" title="Change Custody"></span></a>' 
+          else '<span class="fa fa-map-marker" style="color:#cfcfcf; opacity:.55;" title="Not Available"></span>'
+          end
+          as custody_link,
+      oi.impound_id,
+          case
+            when v.bike_status_code = 'IMPOUND'
+             and oi.impound_id is not null
+            then
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 312,
+                  p_items  => 'P312_IMPOUND_ID',
+                  p_values => oi.impound_id
+              ) || '" class="js-dialog-link">' ||
+              '<span class="fa fa-unlock" title="Release Impound"></span></a>'
+      
+            when v.bike_status_code NOT IN  ('IMPOUND','ACCIDENT')
+            then
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 311,
+                  p_items  => 'P311_BIKE_ID',
+                  p_values => v.bike_id
+              ) || '" class="js-dialog-link">' ||
+              '<span class="fa fa-ban" title="Open Impound"></span></a>'
+              ELSE '<span class="fa fa-ban" style="color:#cfcfcf; opacity:.55;" title="Not Available"></span>'
+          end as impound_link,
+         /* case
+        when v.bike_status_code not in ('IMPOUND','ACCIDENT')
+        then
+          '<a href="' ||
+          apex_page.get_url(
+              p_page   => 314,
+              p_items  => 'P314_BIKE_ID',
+              p_values => v.bike_id
+          ) || '" class="js-dialog-link">' ||
+          '<span class="fa fa-exclamation-diamond" title="Open Accident"></span></a>'
+          ELSE
+          '<span class="fa fa-exclamation-diamond" style="color:#cfcfcf; opacity:.55;" title="Not Available"></span>'
+      end as accident_link,*/
+      case
+        when v.bike_status_code = 'ACCIDENT'
+         and oa.accident_status = 'OPEN'
+        then
+          '<a href="' ||
+          apex_page.get_url(
+              p_page   => 315,
+              p_items  => 'P315_ACCIDENT_ID',
+              p_values => oa.accident_id
+          ) || '" class="js-dialog-link">' ||
+          '<span class="fa fa-wrench" title="Start Repair"></span></a>'
+      
+        when v.bike_status_code = 'MAINTENANCE'
+         and oa.accident_status = 'UNDER_REPAIR'
+        then
+          '<a href="' ||
+          apex_page.get_url(
+              p_page   => 316,
+              p_items  => 'P316_ACCIDENT_ID',
+              p_values => oa.accident_id
+          ) || '" class="js-dialog-link">' ||
+          '<span class="fa fa-check" title="Close Accident"></span></a>'
+      
+        when v.bike_status_code not in ('IMPOUND','ACCIDENT','MAINTENANCE')
+        then
+          '<a href="' ||
+          apex_page.get_url(
+              p_page   => 314,
+              p_items  => 'P314_BIKE_ID',
+              p_values => v.bike_id
+          ) || '" class="js-dialog-link">' ||
+          '<span class="fa fa-car" title="Open Accident"></span></a>'
+          else '<span class="fa fa-car" style="color:#cfcfcf; opacity:.55;" title="Not Available"></span>'
+      end as accident_link,
+      
+      case
+        when v.current_bike_assign_id is not null
+        then
+          '<a href="' ||
+          apex_page.get_url(
+              p_page    => :APP_PAGE_ID,
+              p_request => 'PRINT_HANDOVER',
+              p_items   => 'P309_BIKE_ASSIGN_ID',
+              p_values  => v.current_bike_assign_id
+          ) || '" target="_blank">' ||
+          '<span class="fa fa-print" style="color:#2563eb; font-size:16px;" title="Print Handover Form"></span></a>'
+        else
+          '<span class="fa fa-print" style="color:#cfcfcf; opacity:.55;" title="Bike not assigned"></span>'
+      end as print_handover_link,
+      
+          v.bike_code,
+          v.plate_no,
+      
+          case
+            when v.bike_status_code = 'AVAILABLE' then
+              '<span class="t-Badge t-Badge--success">AVAILABLE</span>'
+            when v.bike_status_code = 'ASSIGNED' then
+              '<span class="t-Badge t-Badge--info">ASSIGNED</span>'
+            when v.bike_status_code in ('ACCIDENT','MAINTENANCE') then
+              '<span class="t-Badge t-Badge--warning">' || v.bike_status_name || '</span>'
+            when v.bike_status_code in ('IMPOUND','POLICE_CUSTODY') then
+              '<span class="t-Badge t-Badge--danger">' || v.bike_status_name || '</span>'
+            else
+              '<span class="t-Badge t-Badge--default">' || nvl(v.bike_status_name,'N/A') || '</span>'
+          end as bike_status_badge,
+      
+          v.custody_type_name,
+          v.custody_location_name,
+          v.current_emp_id,
+          v.current_assign_dt,
+      
+          case
+            when v.utilization_bucket = 'PRODUCTIVE' then
+              '<span class="t-Badge t-Badge--info">PRODUCTIVE</span>'
+            when v.utilization_bucket = 'IDLE_READY' then
+              '<span class="t-Badge t-Badge--success">IDLE READY</span>'
+            when v.utilization_bucket = 'IDLE_REPAIR' then
+              '<span class="t-Badge t-Badge--warning">IDLE REPAIR</span>'
+            when v.utilization_bucket = 'IDLE_LEGAL' then
+              '<span class="t-Badge t-Badge--danger">IDLE LEGAL</span>'
+            else
+              '<span class="t-Badge t-Badge--default">' || nvl(v.utilization_bucket,'OTHER') || '</span>'
+          end as utilization_badge,
+      
+          v.current_bike_assign_id,
+      
+          v.employee_name,
+          v.emp_code,
+          v.current_project,
+          v.nationality
+      from vw_fleet_bike_current v
+      left join (
+          select bike_id,
+                 max(impound_id) impound_id
+            from fleet_bike_impounds
+           where status_code = 'ACTIVE'
+             and release_ts is null
+           group by bike_id
+      ) oi
+      on oi.bike_id = v.bike_id
+      left join (
+          select bike_id,
+                 max(accident_id) accident_id,
+                 max(status_code) keep (dense_rank last order by accident_id) accident_status
+            from fleet_bike_accidents
+           where status_code in ('OPEN','UNDER_REPAIR')
+           group by bike_id
+      ) oa
+      on oa.bike_id = v.bike_id
+      where NVL(v.CURRENT_emp_id,0) = nvl(:P309_EMP_ID,NVL(V.CURRENT_EMP_ID,0))
+      order by current_assign_dt nulls first, v.bike_code
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 16328498304664147
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 19953872456967707
+      identification: 
+        name: Primary Report
+        alias: 199539
+
+    columns: 
+    - # ====== Column: BIKE_ID =====================================
+      id: 16328549697664148
+      identification: 
+        column-name: BIKE_ID
+        type: Avatar
+
+      heading: 
+        heading: Bike Id
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      settings: 
+        type: Image
+        shape: Default
+        size: Default
+
+      layout: 
+        sequence: 10
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      enable-users-to: 
+        hide: true
+
+    - # ====== Column: ASSIGN_LINK =================================
+      id: 16328619473664149
+      identification: 
+        column-name: ASSIGN_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Assign
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: STATUS_LINK =================================
+      id: 19939431232968001
+      identification: 
+        column-name: STATUS_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Change Status
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CUSTODY_LINK ================================
+      id: 19939575141968002
+      identification: 
+        column-name: CUSTODY_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Change Custody
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: BIKE_CODE ===================================
+      id: 19939655473968003
+      identification: 
+        column-name: BIKE_CODE
+        type: Hidden
+
+      heading: 
+        heading: Bike Code
+
+      layout: 
+        sequence: 60
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PLATE_NO ====================================
+      id: 19939713124968004
+      identification: 
+        column-name: PLATE_NO
+        type: Plain Text
+
+      heading: 
+        heading: Plate No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: BIKE_STATUS_BADGE ===========================
+      id: 19939822319968005
+      identification: 
+        column-name: BIKE_STATUS_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Bike Status Badge
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 80
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CUSTODY_TYPE_NAME ===========================
+      id: 19939971405968006
+      identification: 
+        column-name: CUSTODY_TYPE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Custody Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CUSTODY_LOCATION_NAME =======================
+      id: 19940032173968007
+      identification: 
+        column-name: CUSTODY_LOCATION_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Custody Location
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_EMP_ID ==============================
+      id: 19940150626968008
+      identification: 
+        column-name: CURRENT_EMP_ID
+        type: Plain Text
+
+      heading: 
+        heading: Assigned To Employee
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 110
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_ASSIGN_DT ===========================
+      id: 19940249511968009
+      identification: 
+        column-name: CURRENT_ASSIGN_DT
+        type: Plain Text
+
+      heading: 
+        heading: Assigned Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 120
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: UTILIZATION_BADGE ===========================
+      id: 19940344389968010
+      identification: 
+        column-name: UTILIZATION_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Utilization Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 130
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CURRENT_BIKE_ASSIGN_ID ======================
+      id: 19940469465968011
+      identification: 
+        column-name: CURRENT_BIKE_ASSIGN_ID
+        type: Hidden
+
+      heading: 
+        heading: Current Bike Assign Id
+
+      layout: 
+        sequence: 140
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 19940506697968012
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 150
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 19940665139968013
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Employee Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 160
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_PROJECT =============================
+      id: 19940772086968014
+      identification: 
+        column-name: CURRENT_PROJECT
+        type: Plain Text
+
+      heading: 
+        heading: Current Project
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 170
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: NATIONALITY =================================
+      id: 19940811706968015
+      identification: 
+        column-name: NATIONALITY
+        type: Plain Text
+
+      heading: 
+        heading: Nationality
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 180
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PRINT_HANDOVER_LINK =========================
+      id: 19944148751968048
+      identification: 
+        column-name: PRINT_HANDOVER_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Print
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 220
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: IMPOUND_LINK ================================
+      id: 30214520008810144
+      identification: 
+        column-name: IMPOUND_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Impound Link
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 190
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: IMPOUND_ID ==================================
+      id: 30540142303223606
+      identification: 
+        column-name: IMPOUND_ID
+        type: Hidden
+
+      heading: 
+        heading: Impound Id
+
+      layout: 
+        sequence: 200
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ACCIDENT_LINK ===============================
+      id: 30544058177223645
+      identification: 
+        column-name: ACCIDENT_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Accident Link
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 210
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Fleet Operations ============================
+  id: 41406882687853018
+  identification: 
+    name: Fleet Operations
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 9721609352336316
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Hero
+    template-options: 
+    - '#DEFAULT#'
+    - t-HeroRegion--hideIcon
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+page-items: 
+- # ====== Page Item: P309_BIKE_ASSIGN_ID ======================
+  id: 19944039391968047
+  identification: 
+    name: P309_BIKE_ASSIGN_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: Bike Operations # 16326999806664132
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P309_EMP_ID ==============================
+  id: 41406761252853017
+  identification: 
+    name: P309_EMP_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: Bike Operations # 16326999806664132
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+dynamic-actions: 
+- # ====== Dynamic Action: New =================================
+  id: 30678466555699313
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: Bike Operations # 16326999806664132
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 30678598704699314
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Bike Operations # 16326999806664132
+
+    execution: 
+      sequence: 10
+      event: New # 30678466555699313
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: PRINT_BIKE_HANDOVER ========================
+  id: 19944277323968049
+  identification: 
+    name: PRINT_BIKE_HANDOVER
+    type: Print Report
+    execution-chain: None
+
+  settings: 
+    report-query: RQ_Fleet.Bike_Hand_Over # 32695215991395688
+    filename: Test
+    view-file-as: Inline
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+  server-side-condition: 
+    type: Request = Value
+    value: PRINT_HANDOVER
+

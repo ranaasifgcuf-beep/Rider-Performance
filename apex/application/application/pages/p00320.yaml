@@ -1,0 +1,1506 @@
+---
+# ====== Page: Employee Charge Form ==========================
+id: 320
+identification: 
+  name: Employee Charge Form
+  alias: EMPLOYEE-CHARGE-FORM
+  title: Employee Charge Form
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  width: 1000
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+read-only: 
+  type: Item = Value
+  item: P320_MODE
+  value: READ
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Employee Charge =============================
+  id: 19941297400968019
+  identification: 
+    name: Employee Charge
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Employee Information ========================
+  id: 19943122924968038
+  identification: 
+    name: Employee Information
+    title: '<span class="fa fa-user" style="color:#2563eb;"></span> Employee Information'
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Employee Charge # 19941297400968019
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    - margin-bottom-sm
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Charge Details ==============================
+  id: 19943287376968039
+  identification: 
+    name: Charge Details
+    title: '<span class="fa fa-wallet" style="color:#16a34a;"></span> Charge Details'
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: Employee Charge # 19941297400968019
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P320_EMP_CHARGE_ID =======================
+  id: 19941336543968020
+  identification: 
+    name: P320_EMP_CHARGE_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Employee Charge # 19941297400968019
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_EMP_ID ==============================
+  id: 19941442663968021
+  identification: 
+    name: P320_EMP_ID
+    type: Popup LOV
+
+  label: 
+    label: Employee Name
+    alignment: Left
+
+  settings: 
+    display-as: Inline Popup
+    initial-fetch: Automatic
+    manual-entry: false
+    fetch-on-search: false
+
+  search: 
+    match-type: Contains
+    case-sensitive: false
+    minimum-characters: 0
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: Employee Information # 19943122924968038
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 6
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: FLEET.EMPLOYEE_LOV # 18130747472806310
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_CHARGE_TYPE =========================
+  id: 19941511633968022
+  identification: 
+    name: P320_CHARGE_TYPE
+    type: Select List
+
+  label: 
+    label: Charge Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Charge Details # 19943287376968039
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Food Permit;FOOD_PERMIT,Impound;IMPOUND,Accident Recovery;ACCIDENT_RECOVERY,Maintenance Recovery;MAINTENANCE_RECOVERY,Damage;DAMAGE,Over Mileage;OVER_MILEAGE,Other;OTHER'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_RECURRENCE_TYPE =====================
+  id: 19941673578968023
+  identification: 
+    name: P320_RECURRENCE_TYPE
+    type: Select List
+
+  label: 
+    label: Recurrence Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Charge Details # 19943287376968039
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:One Time;ONE_TIME,Yearly;YEARLY,Monthly;MONTHLY'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: ONE_TIME
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_CHARGE_TS ===========================
+  id: 19941785605968024
+  identification: 
+    name: P320_CHARGE_TS
+    type: Date Picker
+
+  label: 
+    label: Charge Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 10
+    region: Charge Details # 19943287376968039
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sysdate
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_AMOUNT ==============================
+  id: 19941859793968025
+  identification: 
+    name: P320_AMOUNT
+    type: Number Field
+
+  label: 
+    label: Amount (AED)
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 10
+    region: Charge Details # 19943287376968039
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_SOURCE_START_DT =====================
+  id: 19941997498968026
+  identification: 
+    name: P320_SOURCE_START_DT
+    type: Date Picker
+
+  label: 
+    label: Start Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 20
+    region: Charge Details # 19943287376968039
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_SOURCE_END_DT =======================
+  id: 19942090106968027
+  identification: 
+    name: P320_SOURCE_END_DT
+    type: Date Picker
+
+  label: 
+    label: End Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 30
+    region: Charge Details # 19943287376968039
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_SOURCE_TABLE_NAME ===================
+  id: 19942178022968028
+  identification: 
+    name: P320_SOURCE_TABLE_NAME
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 90
+    region: Charge Details # 19943287376968039
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_SOURCE_ROW_ID =======================
+  id: 19942223425968029
+  identification: 
+    name: P320_SOURCE_ROW_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 100
+    region: Charge Details # 19943287376968039
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_BIKE_ID =============================
+  id: 19942392924968030
+  identification: 
+    name: P320_BIKE_ID
+    type: Select List
+
+  label: 
+    label: Plate No
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Employee Information # 19943122924968038
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 4
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: FLEET_BIKES.BIKE_CODE # 19357351506338808
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_CHARGE_TO_EMPLOYEE_YN ===============
+  id: 19942539738968032
+  identification: 
+    name: P320_CHARGE_TO_EMPLOYEE_YN
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 50
+    region: Charge Details # 19943287376968039
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: Y
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_APPROVAL_STATUS =====================
+  id: 19942630180968033
+  identification: 
+    name: P320_APPROVAL_STATUS
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 60
+    region: Charge Details # 19943287376968039
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: APPROVED
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_PAYROLL_DEDUCTION_CODE ==============
+  id: 19942759654968034
+  identification: 
+    name: P320_PAYROLL_DEDUCTION_CODE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 80
+    region: Charge Details # 19943287376968039
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_REMARKS =============================
+  id: 19942801934968035
+  identification: 
+    name: P320_REMARKS
+    type: Text Field
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 40
+    region: Charge Details # 19943287376968039
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_CHARGE_BALANCE ======================
+  id: 19942909345968036
+  identification: 
+    name: P320_CHARGE_BALANCE
+    type: Display Only
+
+  label: 
+    label: Charge Balance
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 40
+    region: Employee Information # 19943122924968038
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_APPROVAL_STATUS_DISP ================
+  id: 19943622720968043
+  identification: 
+    name: P320_APPROVAL_STATUS_DISP
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 70
+    region: Charge Details # 19943287376968039
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      select case :P320_APPROVAL_STATUS
+               when 'APPROVED' then '<span class="t-Badge t-Badge--success">APPROVED</span>'
+               when 'DRAFT' then '<span class="t-Badge t-Badge--warning">DRAFT</span>'
+               when 'CANCELLED' then '<span class="t-Badge t-Badge--danger">CANCELLED</span>'
+               when 'CLOSED' then '<span class="t-Badge t-Badge--info">CLOSED</span>'
+               when 'BAD_DEBT' then '<span class="t-Badge t-Badge--danger">BAD DEBT</span>'
+               else '<span class="t-Badge">N/A</span>'
+             end
+      from dual
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: APPROVED
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P320_MODE ================================
+  id: 30107475159516001
+  identification: 
+    name: P320_MODE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: Employee Charge # 19941297400968019
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PB_CREATE ===================================
+  id: 30107770586516004
+  identification: 
+    button-name: PB_CREATE
+    label: Create
+
+  layout: 
+    sequence: 30
+    region: Employee Charge # 19941297400968019
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-plus-square
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Item = Value
+    item: P320_EMP_CHARGE_ID
+    value: READ
+
+- # ====== Button: PB_CANCEL ===================================
+  id: 30107837497516005
+  identification: 
+    button-name: PB_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 20
+    region: Employee Charge # 19941297400968019
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-times-circle
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: PB_SAVE =====================================
+  id: 30107938166516006
+  identification: 
+    button-name: PB_SAVE
+    label: Save
+
+  layout: 
+    sequence: 10
+    region: Employee Charge # 19941297400968019
+    slot: CHANGE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-save
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Item = Value
+    item: P320_MODE
+    value: EDIT
+
+dynamic-actions: 
+- # ====== Dynamic Action: DA_SHOW_RECURRING_PERIOD ============
+  id: 30108053602516007
+  identification: 
+    name: DA_SHOW_RECURRING_PERIOD
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P320_RECURRENCE_TYPE
+
+  client-side-condition: 
+    type: Item is in list
+    item: P320_RECURRENCE_TYPE
+    list: 
+    - MONTHLY
+    - YEARLY
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 30108132423516008
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P320_SOURCE_START_DT
+      - P320_SOURCE_END_DT
+
+    execution: 
+      sequence: 10
+      event: DA_SHOW_RECURRING_PERIOD # 30108053602516007
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 30108297557516009
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P320_SOURCE_START_DT
+      - P320_SOURCE_END_DT
+
+    execution: 
+      sequence: 10
+      event: DA_SHOW_RECURRING_PERIOD # 30108053602516007
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: Close Dialog ========================
+  id: 30678991725699318
+  identification: 
+    name: Close Dialog
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: PB_CANCEL # 30107837497516005
+
+  actions: 
+  - # ====== Action: Close Dialog ================================
+    id: 30679046368699319
+    identification: 
+      action: Close Dialog
+
+    execution: 
+      sequence: 10
+      event: Close Dialog # 30678991725699318
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations: 
+- # ====== Validation: VAL_P320_REQUIRED_PERIOD_FOR_RECURRING ==
+  id: 30108618658516013
+  identification: 
+    name: VAL_P320_REQUIRED_PERIOD_FOR_RECURRING
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      if :P320_RECURRENCE_TYPE in ('YEARLY','MONTHLY') then
+          return :P320_SOURCE_START_DT is not null
+             and :P320_SOURCE_END_DT is not null;
+      end if;
+      
+      return true;
+    always-execute: false
+
+  error: 
+    error-message: Source Start Date and Source End Date are required for recurring charges.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: VAL_P320_PERIOD_DATE ====================
+  id: 30108746356516014
+  identification: 
+    name: VAL_P320_PERIOD_DATE
+
+  execution: 
+    sequence: 20
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      return :P320_SOURCE_END_DT is null
+          or :P320_SOURCE_START_DT is null
+          or :P320_SOURCE_END_DT >= :P320_SOURCE_START_DT;
+    always-execute: false
+
+  error: 
+    error-message: Source End Date cannot be earlier than Source Start Date.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: VAL_BLOCK_UPDATE_IF_INSTALLMENTS_EXIST ==
+  id: 30152860290037238
+  identification: 
+    name: VAL_BLOCK_UPDATE_IF_INSTALLMENTS_EXIST
+
+  execution: 
+    sequence: 30
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      declare
+          l_cnt number;
+      begin
+          select count(*)
+            into l_cnt
+            from hr_emp_charge_installments
+           where emp_charge_id = :P320_EMP_CHARGE_ID;
+      
+          if l_cnt > 0 then
+              return false;
+          end if;
+      
+          return true;
+      end;
+    always-execute: false
+
+  error: 
+    error-message: Charge cannot be updated because installments are already created. Cancel/delete installments first, then update the charge.
+    display-location: Inline with Field and in Notification
+
+  server-side-condition: 
+    when-button-pressed: PB_SAVE # 30107938166516006
+
+processes: 
+- # ====== Process: 10. Set Form Mode ==========================
+  id: 18040450116024950
+  identification: 
+    name: 10. Set Form Mode
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      if :P320_MODE is null then 
+      :P320_MODE := case when :P320_EMP_CHARGE_ID is null then 'CREATE' else 'EDIT' end;
+      end if;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: 20. Fetch HR EMP Record ====================
+  id: 30107519343516002
+  identification: 
+    name: 20. Fetch HR EMP Record
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      IF :P320_EMP_CHARGE_ID IS NOT NULL THEN
+      select emp_id,
+             charge_type,
+             recurrence_type,
+             charge_ts,
+             amount,
+             source_start_dt,
+             source_end_dt,
+             source_table_name,
+             source_row_id,
+             bike_id,
+             charge_to_employee_yn,
+             approval_status,
+             payroll_deduction_code,
+             remarks
+        into :P320_EMP_ID,
+             :P320_CHARGE_TYPE,
+             :P320_RECURRENCE_TYPE,
+             :P320_CHARGE_TS,
+             :P320_AMOUNT,
+             :P320_SOURCE_START_DT,
+             :P320_SOURCE_END_DT,
+             :P320_SOURCE_TABLE_NAME,
+             :P320_SOURCE_ROW_ID,
+             :P320_BIKE_ID,
+             :P320_CHARGE_TO_EMPLOYEE_YN,
+             :P320_APPROVAL_STATUS,
+             :P320_PAYROLL_DEDUCTION_CODE,
+             :P320_REMARKS
+        from hr_emp_charges
+       where emp_charge_id = :P320_EMP_CHARGE_ID;
+       END IF;
+
+  execution: 
+    sequence: 20
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: 30. Fetch EMP Charge Balance ===============
+  id: 30107687551516003
+  identification: 
+    name: 30. Fetch EMP Charge Balance
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: ':P320_CHARGE_BALANCE := hr_charges_pkg.get_charge_balance(:P320_EMP_CHARGE_ID);'
+
+  execution: 
+    sequence: 30
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: CREATE_HR_EMP_CHARGES ======================
+  id: 30108852604516015
+  identification: 
+    name: CREATE_HR_EMP_CHARGES
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      declare
+          l_emp_charge_id number;
+      begin
+          hr_charges_pkg.create_charge(
+              p_emp_id                  => :P320_EMP_ID,
+              p_charge_type             => :P320_CHARGE_TYPE,
+              p_recurrence_type         => :P320_RECURRENCE_TYPE,
+              p_charge_ts               => :P320_CHARGE_TS,
+              p_amount                  => :P320_AMOUNT,
+              p_source_start_dt         => :P320_SOURCE_START_DT,
+              p_source_end_dt           => :P320_SOURCE_END_DT,
+              p_source_table_name       => :P320_SOURCE_TABLE_NAME,
+              p_source_row_id           => :P320_SOURCE_ROW_ID,
+              p_bike_id                 => :P320_BIKE_ID,
+              p_charge_to_employee_yn   => :P320_CHARGE_TO_EMPLOYEE_YN,
+              p_approval_status         => :P320_APPROVAL_STATUS,
+              p_payroll_deduction_code  => :P320_PAYROLL_DEDUCTION_CODE,
+              p_remarks                 => :P320_REMARKS,
+              p_emp_charge_id           => l_emp_charge_id
+          );
+      
+          :P320_EMP_CHARGE_ID := l_emp_charge_id;
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: PB_CREATE # 30107770586516004
+
+- # ====== Process: UPDATE_HR_EMP_CHARGE =======================
+  id: 30108999553516016
+  identification: 
+    name: UPDATE_HR_EMP_CHARGE
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          hr_charges_pkg.update_charge(
+              p_emp_charge_id           => :P320_EMP_CHARGE_ID,
+              p_emp_id                  => :P320_EMP_ID,
+              p_charge_type             => :P320_CHARGE_TYPE,
+              p_recurrence_type         => :P320_RECURRENCE_TYPE,
+              p_charge_ts               => :P320_CHARGE_TS,
+              p_amount                  => :P320_AMOUNT,
+              p_source_start_dt         => :P320_SOURCE_START_DT,
+              p_source_end_dt           => :P320_SOURCE_END_DT,
+              p_source_table_name       => :P320_SOURCE_TABLE_NAME,
+              p_source_row_id           => :P320_SOURCE_ROW_ID,
+              p_bike_id                 => :P320_BIKE_ID,
+              p_charge_to_employee_yn   => :P320_CHARGE_TO_EMPLOYEE_YN,
+              p_approval_status         => :P320_APPROVAL_STATUS,
+              p_payroll_deduction_code  => :P320_PAYROLL_DEDUCTION_CODE,
+              p_remarks                 => :P320_REMARKS
+          );
+      end;
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Close Dialog Create ========================
+  id: 30679161116699320
+  identification: 
+    name: Close Dialog Create
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: PB_CREATE # 30107770586516004
+
+- # ====== Process: Close Dialog Update ========================
+  id: 30679278656699321
+  identification: 
+    name: Close Dialog Update
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 40
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: PB_SAVE # 30107938166516006
+

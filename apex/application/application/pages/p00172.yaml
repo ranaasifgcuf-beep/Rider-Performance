@@ -1,0 +1,1325 @@
+---
+# ====== Page: Loan Transaction Request ======================
+id: 172
+identification: 
+  name: Loan Transaction Request
+  alias: LOAN-TRANSACTION-REQUEST
+  title: Loan Transaction Request
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Modal Dialog
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Transaction Request =========================
+  id: 35771574482306912
+  identification: 
+    name: Transaction Request
+    title: Transaction Request
+    type: Static Content
+
+  layout: 
+    sequence: 150
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  read-only: 
+    type: Item is NOT in colon delimited list
+    item: P172_APPROVAL_STATUS
+    list: 'DRAFT:REJECTED'
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P172_LOAN_TXN_ID =========================
+  id: 35720560917737546
+  identification: 
+    name: P172_LOAN_TXN_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P172_LOAN_ID =============================
+  id: 35720631719737547
+  identification: 
+    name: P172_LOAN_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 20
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P172_TXN_TYPE ============================
+  id: 35720783171737548
+  identification: 
+    name: P172_TXN_TYPE
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 30
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P172_LOAN_NO =============================
+  id: 35720835298737549
+  identification: 
+    name: P172_LOAN_NO
+    type: Display Only
+
+  label: 
+    label: Loan No
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Transaction Request # 35771574482306912
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P172_EMPLOYEE ============================
+  id: 35720924000737550
+  identification: 
+    name: P172_EMPLOYEE
+    type: Display Only
+
+  label: 
+    label: Employee
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Transaction Request # 35771574482306912
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P172_CURRENT_BALANCE =====================
+  id: 35770511685306902
+  identification: 
+    name: P172_CURRENT_BALANCE
+    type: Display Only
+
+  label: 
+    label: Current Balance
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Transaction Request # 35771574482306912
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: 999G999G999G999G990D00
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P172_TXN_TYPE_NAME =======================
+  id: 35770622876306903
+  identification: 
+    name: P172_TXN_TYPE_NAME
+    type: Display Only
+
+  label: 
+    label: Transaction Type
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 40
+    region: Transaction Request # 35771574482306912
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P172_APPROVAL_STATUS =====================
+  id: 35770708418306904
+  identification: 
+    name: P172_APPROVAL_STATUS
+    type: Display Only
+
+  label: 
+    label: Approval Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 110
+    region: Transaction Request # 35771574482306912
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P172_TXN_DATE ============================
+  id: 35770811604306905
+  identification: 
+    name: P172_TXN_DATE
+    type: Date Picker
+
+  label: 
+    label: 'Transaction Date '
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 50
+    region: Transaction Request # 35771574482306912
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P172_AMOUNT ==============================
+  id: 35770951733306906
+  identification: 
+    name: P172_AMOUNT
+    type: Number Field
+
+  label: 
+    label: Amount
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 60
+    region: Transaction Request # 35771574482306912
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P172_PAY_MODE ============================
+  id: 35771058696306907
+  identification: 
+    name: P172_PAY_MODE
+    type: Select List
+
+  label: 
+    label: Pay Mode
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 70
+    region: Transaction Request # 35771574482306912
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: LOV_LOAN_PAY_MODE # 35703320948655153
+    display-extra-values: false
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P172_REFERENCE_NO ========================
+  id: 35771131081306908
+  identification: 
+    name: P172_REFERENCE_NO
+    type: Text Field
+
+  label: 
+    label: Reference No
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 80
+    region: Transaction Request # 35771574482306912
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P172_REVERSAL_OF_TXN_ID ==================
+  id: 35771233351306909
+  identification: 
+    name: P172_REVERSAL_OF_TXN_ID
+    type: Select List
+
+  label: 
+    label: Reversal Reference
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 90
+    region: Transaction Request # 35771574482306912
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select case t.txn_type
+                 when 'PAYROLL_DEDUCTION' then 'Payroll Deduction'
+                 when 'MANUAL_PAYMENT' then 'Manual Payment'
+                 when 'WAIVER' then 'Waiver'
+                 when 'ADJUSTMENT' then 'Adjustment'
+                 when 'BAD_DEBT_WRITE_OFF' then 'Bad Debt Write-off'
+                 when 'REVERSAL' then 'Reversal'
+                 else t.txn_type
+             end
+             || ' | AED ' || to_char(t.amount, '999G999G990D00')
+             || ' | ' || to_char(t.txn_date, 'DD-MON-YYYY') d,
+             t.loan_txn_id r
+      from hr_emp_loan_txns t
+      where t.loan_id = :P172_LOAN_ID
+        and t.approval_status = 'APPROVED'
+        and t.txn_type <> 'REVERSAL'
+        and not exists (
+              select 1
+              from hr_emp_loan_txns r
+              where r.reversal_of_txn_id = t.loan_txn_id
+                and r.approval_status in ('SUBMITTED','APPROVED')
+        )
+      order by t.txn_date desc, t.loan_txn_id desc;
+    display-extra-values: false
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P172_REMARKS =============================
+  id: 35771335237306910
+  identification: 
+    name: P172_REMARKS
+    type: Textarea
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 100
+    region: Transaction Request # 35771574482306912
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PB_SAVE_DRAFT ===============================
+  id: 35772520229306922
+  identification: 
+    button-name: PB_SAVE_DRAFT
+    label: Save Draft
+
+  layout: 
+    sequence: 120
+    region: Transaction Request # 35771574482306912
+    slot: CHANGE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-save
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Item is in colon delimited list
+    item: P172_APPROVAL_STATUS
+    list: 'DRAFT:REJECTED'
+
+- # ====== Button: PB_CANCEL ===================================
+  id: 35772657352306923
+  identification: 
+    button-name: PB_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 130
+    region: Transaction Request # 35771574482306912
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-times
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: PB_SUBMIT_APPROVAL ==========================
+  id: 35772965242306926
+  identification: 
+    button-name: PB_SUBMIT_APPROVAL
+    label: Submit Approval
+
+  layout: 
+    sequence: 130
+    region: Transaction Request # 35771574482306912
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-send
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Item is in colon delimited list
+    item: P172_APPROVAL_STATUS
+    list: 'DRAFT:REJECTED'
+
+dynamic-actions: 
+- # ====== Dynamic Action: Show Hide Pay Mode ==================
+  id: 35771782009306914
+  identification: 
+    name: Show Hide Pay Mode
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 35771800705306915
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        if ($v("P172_TXN_TYPE") === "MANUAL_PAYMENT") {
+            apex.item("P172_PAY_MODE").show();
+            apex.item("P172_REFERENCE_NO").show();
+        } else {
+            apex.item("P172_PAY_MODE").hide();
+            apex.item("P172_REFERENCE_NO").hide();
+        }
+
+    execution: 
+      sequence: 10
+      event: Show Hide Pay Mode # 35771782009306914
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Show / Hide Pay Mode ================
+  id: 35771927496306916
+  identification: 
+    name: Show / Hide Pay Mode
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P172_TXN_TYPE
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 35772036368306917
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        function toggleLoanTxnFields() {
+            var txnType = $v("P172_TXN_TYPE");
+        
+            // Default: hide special fields
+            apex.item("P172_PAY_MODE").hide();
+            apex.item("P172_REFERENCE_NO").hide();
+            apex.item("P172_REVERSAL_OF_TXN_ID").hide();
+        
+            // Default: show amount
+            apex.item("P172_AMOUNT").show();
+        
+            if (txnType === "MANUAL_PAYMENT") {
+        
+                // Payment needs amount + pay mode + reference
+                apex.item("P172_AMOUNT").show();
+                apex.item("P172_PAY_MODE").show();
+                apex.item("P172_REFERENCE_NO").show();
+        
+            } else if (txnType === "REVERSAL") {
+        
+                // Reversal needs original transaction only
+                // Amount should not be entered by user
+                apex.item("P172_AMOUNT").hide();
+                apex.item("P172_PAY_MODE").hide();
+                apex.item("P172_REFERENCE_NO").hide();
+                apex.item("P172_REVERSAL_OF_TXN_ID").show();
+        
+            } else if (
+                txnType === "WAIVER" ||
+                txnType === "ADJUSTMENT" ||
+                txnType === "BAD_DEBT_WRITE_OFF"
+            ) {
+        
+                // These need amount and remarks
+                apex.item("P172_AMOUNT").show();
+                apex.item("P172_PAY_MODE").hide();
+                apex.item("P172_REFERENCE_NO").hide();
+                apex.item("P172_REVERSAL_OF_TXN_ID").hide();
+        
+            }
+        }
+        
+        toggleLoanTxnFields();
+
+    execution: 
+      sequence: 10
+      event: Show / Hide Pay Mode # 35771927496306916
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Show Hide Reversal Item =============
+  id: 35772381938306920
+  identification: 
+    name: Show Hide Reversal Item
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 35772412798306921
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        if ($v("P172_TXN_TYPE") === "REVERSAL") {
+            apex.item("P172_REVERSAL_OF_TXN_ID").show();
+            apex.item("P172_AMOUNT").hide();
+        } else {
+            apex.item("P172_REVERSAL_OF_TXN_ID").hide();
+              apex.item("P172_AMOUNT").show();
+        }
+
+    execution: 
+      sequence: 10
+      event: Show Hide Reversal Item # 35772381938306920
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Cancel Dialog =======================
+  id: 35772779431306924
+  identification: 
+    name: Cancel Dialog
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: PB_CANCEL # 35772657352306923
+
+  actions: 
+  - # ====== Action: Cancel Dialog ===============================
+    id: 35772879827306925
+    identification: 
+      action: Cancel Dialog
+
+    execution: 
+      sequence: 10
+      event: Cancel Dialog # 35772779431306924
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Load on Transaction Page ===================
+  id: 35771414828306911
+  identification: 
+    name: Load on Transaction Page
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      declare
+          l_txn_type varchar2(40);
+      begin
+          -- If editing existing transaction request
+          if :P172_LOAN_TXN_ID is not null then
+      
+              select t.loan_id,
+                     t.txn_type,
+                     t.txn_date,
+                     t.amount,
+                     t.pay_mode,
+                     t.reference_no,
+                     t.reversal_of_txn_id,
+                     t.remarks,
+                     t.approval_status
+                into :P172_LOAN_ID,
+                     :P172_TXN_TYPE,
+                     :P172_TXN_DATE,
+                     :P172_AMOUNT,
+                     :P172_PAY_MODE,
+                     :P172_REFERENCE_NO,
+                     :P172_REVERSAL_OF_TXN_ID,
+                     :P172_REMARKS,
+                     :P172_APPROVAL_STATUS
+                from hr_emp_loan_txns t
+               where t.loan_txn_id = :P172_LOAN_TXN_ID;
+      
+          end if;
+      
+          -- Load loan summary
+          select loan_no,
+                 emp_code || ' - ' || employee_name,
+                 balance_amount
+            into :P172_LOAN_NO,
+                 :P172_EMPLOYEE,
+                 :P172_CURRENT_BALANCE
+            from hr_emp_loan_v
+           where loan_id = :P172_LOAN_ID;
+      
+          -- Default date
+          if :P172_TXN_DATE is null then
+              :P172_TXN_DATE := trunc(cast(systimestamp at time zone 'Asia/Dubai' as date));
+          end if;
+      
+          -- Default approval status
+          if :P172_APPROVAL_STATUS is null then
+              :P172_APPROVAL_STATUS := 'DRAFT';
+          end if;
+      
+          l_txn_type := :P172_TXN_TYPE;
+      
+          :P172_TXN_TYPE_NAME :=
+              case l_txn_type
+                  when 'MANUAL_PAYMENT' then 'Manual Payment'
+                  when 'WAIVER' then 'Waiver'
+                  when 'ADJUSTMENT' then 'Adjustment'
+                  when 'REVERSAL' then 'Reversal'
+                  when 'BAD_DEBT_WRITE_OFF' then 'Bad Debt Write-off'
+                  else nvl(l_txn_type, '-')
+              end;
+      end;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Save Loan Transaction Request ==============
+  id: 35773070250306927
+  identification: 
+    name: Save Loan Transaction Request
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      declare
+          l_emp_id          number;
+          l_balance         number;
+          l_status          varchar2(20);
+          l_old_status      varchar2(20);
+          l_reverse_amount  number;
+      begin
+          select emp_id,
+                 balance_amount
+            into l_emp_id,
+                 l_balance
+            from hr_emp_loan_v
+           where loan_id = :P172_LOAN_ID;
+      
+             -- Reversal validation
+          if :P172_TXN_TYPE = 'REVERSAL' then
+              if :P172_REVERSAL_OF_TXN_ID is null then
+                  raise_application_error(-20006, 'Please select transaction to reverse.');
+              end if;
+      
+              select amount
+                into l_reverse_amount
+                from hr_emp_loan_txns
+               where loan_txn_id = :P172_REVERSAL_OF_TXN_ID
+                 and loan_id = :P172_LOAN_ID
+                 and approval_status = 'APPROVED';
+      
+              -- For now reversal is full reversal
+              :P172_AMOUNT := l_reverse_amount;
+          end if;
+      
+          -- Basic validations
+          if :P172_LOAN_ID is null then
+              raise_application_error(-20001, 'Loan ID is required.');
+          end if;
+      
+          if :P172_TXN_TYPE is null then
+              raise_application_error(-20002, 'Transaction type is required.');
+          end if;
+      
+      if :P172_TXN_TYPE in ('MANUAL_PAYMENT', 'WAIVER', 'BAD_DEBT_WRITE_OFF','REVERSAL') then
+          if nvl(:P172_AMOUNT, 0) <= 0 then
+              raise_application_error(-20003, 'Amount must be greater than zero.');
+          end if;
+          END IF;
+      
+          -- Pay mode required for manual payment
+          if :P172_TXN_TYPE = 'MANUAL_PAYMENT'
+             and :P172_PAY_MODE is null then
+              raise_application_error(-20004, 'Pay mode is required for manual payment.');
+          end if;
+      
+          -- Remarks required for sensitive actions
+          if :P172_TXN_TYPE in ('WAIVER','ADJUSTMENT','REVERSAL','BAD_DEBT_WRITE_OFF')
+             and :P172_REMARKS is null then
+              raise_application_error(-20005, 'Remarks / reason is required for this request.');
+          end if;
+      
+        
+      
+          -- Amount cannot exceed current balance for balance-reducing requests
+          if :P172_TXN_TYPE in ('MANUAL_PAYMENT','WAIVER','ADJUSTMENT','BAD_DEBT_WRITE_OFF')
+             and :P172_AMOUNT > l_balance then
+              raise_application_error(-20007, 'Amount cannot be greater than current loan balance.');
+          end if;
+      
+          if :REQUEST = 'PB_SAVE_DRAFT' then
+              l_status := 'DRAFT';
+          else
+              l_status := 'SUBMITTED';
+          end if;
+      
+          -- Insert new request
+          if :P172_LOAN_TXN_ID is null then
+      
+              insert into hr_emp_loan_txns (
+                  loan_id,
+                  emp_id,
+                  txn_date,
+                  txn_type,
+                  amount,
+                  pay_mode,
+                  reference_no,
+                  reversal_of_txn_id,
+                  approval_status,
+                  remarks,
+                  source_type,
+                  source_id
+              )
+              values (
+                  :P172_LOAN_ID,
+                  l_emp_id,
+                  nvl(:P172_TXN_DATE, trunc(cast(systimestamp at time zone 'Asia/Dubai' as date))),
+                  :P172_TXN_TYPE,
+                  :P172_AMOUNT,
+                  case when :P172_TXN_TYPE = 'MANUAL_PAYMENT' then :P172_PAY_MODE end,
+                  case when :P172_TXN_TYPE = 'MANUAL_PAYMENT' then :P172_REFERENCE_NO end,
+                  :P172_REVERSAL_OF_TXN_ID,
+                  l_status,
+                  :P172_REMARKS,
+                  'MANUAL',
+                  null
+              )
+              returning loan_txn_id into :P172_LOAN_TXN_ID;
+      
+          else
+      
+              select approval_status
+                into l_old_status
+                from hr_emp_loan_txns
+               where loan_txn_id = :P172_LOAN_TXN_ID;
+      
+              if l_old_status not in ('DRAFT','REJECTED') then
+                  raise_application_error(-20008, 'Only Draft or Rejected requests can be edited.');
+              end if;
+      
+              update hr_emp_loan_txns
+                 set txn_date             = nvl(:P172_TXN_DATE, txn_date),
+                     txn_type             = :P172_TXN_TYPE,
+                     amount               = :P172_AMOUNT,
+                     pay_mode             = case when :P172_TXN_TYPE = 'MANUAL_PAYMENT' then :P172_PAY_MODE end,
+                     reference_no          = case when :P172_TXN_TYPE = 'MANUAL_PAYMENT' then :P172_REFERENCE_NO end,
+                     reversal_of_txn_id   = :P172_REVERSAL_OF_TXN_ID,
+                     approval_status      = l_status,
+                     remarks              = :P172_REMARKS
+               where loan_txn_id = :P172_LOAN_TXN_ID;
+      
+          end if;
+      
+          /*
+            Later approval wiring:
+            if l_status = 'SUBMITTED' then
+                call generic approval engine:
+                module_code = 'LOAN_TXN'
+                record_pk   = :P172_LOAN_TXN_ID
+            end if;
+          */
+      
+              if l_status = 'SUBMITTED' then
+          hr_loan_app_pkg.submit_for_approval(:P172_LOAN_TXN_ID);
+      end if;
+      
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Loan transaction request saved successfully.
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Close Dialog ===============================
+  id: 35773771554306934
+  identification: 
+    name: Close Dialog
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

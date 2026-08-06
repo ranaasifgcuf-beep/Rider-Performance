@@ -1,0 +1,885 @@
+---
+# ====== Page: Manage Access =================================
+id: 912
+identification: 
+  name: Manage Access
+  alias: MANAGE-ACCESS
+  title: Manage Access
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: User Summary ================================
+  id: 9838385189147119
+  identification: 
+    name: User Summary
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Access ======================================
+  id: 9839915516147135
+  identification: 
+    name: Access
+    type: Region Display Selector
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Tabs Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-TabsRegion-mod--simple
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      mode: View Single Region
+      display-region-icons: false
+      include-'show-all': true
+      remember-selection: By User
+
+- # ====== Region: Roles =======================================
+  id: 9840042472147136
+  identification: 
+    name: Roles
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Access # 9839915516147135
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Organizations ===============================
+  id: 9840182016147137
+  identification: 
+    name: Organizations
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Access # 9839915516147135
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Projects ====================================
+  id: 9840232542147138
+  identification: 
+    name: Projects
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Access # 9839915516147135
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P912_USER_ID =============================
+  id: 9838406545147120
+  identification: 
+    name: P912_USER_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: User Summary # 9838385189147119
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P912_USERNAME ============================
+  id: 9838568336147121
+  identification: 
+    name: P912_USERNAME
+    type: Display Only
+
+  label: 
+    label: User
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: User Summary # 9838385189147119
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P912_FULL_NAME ===========================
+  id: 9838615092147122
+  identification: 
+    name: P912_FULL_NAME
+    type: Display Only
+
+  label: 
+    label: Full Name
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: User Summary # 9838385189147119
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P912_EMAIL ===============================
+  id: 9838828104147124
+  identification: 
+    name: P912_EMAIL
+    type: Display Only
+
+  label: 
+    label: Email
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 40
+    region: User Summary # 9838385189147119
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P912_IS_ACTIVE ===========================
+  id: 9838965730147125
+  identification: 
+    name: P912_IS_ACTIVE
+    type: Display Only
+
+  label: 
+    label: Is Active
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 50
+    region: User Summary # 9838385189147119
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P912_ROLE_IDS ============================
+  id: 9840330787147139
+  identification: 
+    name: P912_ROLE_IDS
+    type: Shuttle
+
+  label: 
+    label: Role Assignmnet
+    alignment: Left
+
+  settings: 
+    show-controls: All
+
+  multiple-values: 
+    type: Delimited List
+    separator: ':'
+
+  layout: 
+    sequence: 10
+    region: Roles # 9840042472147136
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 15
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select role_name d, role_id r
+      from sec_roles
+      where is_active='Y'
+      order by role_name
+      
+    display-extra-values: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Function Body
+    language: PL/SQL
+    pl/sql-function-body: |
+      declare l_list varchar2(32767);
+      begin
+        select listagg(role_id, ':') within group (order by role_id)
+          into l_list
+          from sec_user_roles
+         where user_id = :P912_USER_ID;
+      
+        return nvl(l_list,'');
+      end;
+    used: Always, replacing any existing value in session state
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P912_ORG_IDS =============================
+  id: 9840464449147140
+  identification: 
+    name: P912_ORG_IDS
+    type: Shuttle
+
+  label: 
+    label: Organization Assignment
+    alignment: Left
+
+  settings: 
+    show-controls: All
+
+  multiple-values: 
+    type: Delimited List
+    separator: ':'
+
+  layout: 
+    sequence: 10
+    region: Organizations # 9840182016147137
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 15
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select org_name d, org_id r
+      from hr_orgs
+      where is_active='Y'
+      order by org_name
+      
+    display-extra-values: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Function Body
+    language: PL/SQL
+    pl/sql-function-body: |
+      declare l_list varchar2(32767);
+      begin
+        select listagg(org_id, ':') within group (order by org_id)
+          into l_list
+          from sec_user_orgs
+         where user_id = :P912_USER_ID;
+      
+        return nvl(l_list,'');
+      end;
+    used: Always, replacing any existing value in session state
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P912_PROJECT_IDS =========================
+  id: 9840580303147141
+  identification: 
+    name: P912_PROJECT_IDS
+    type: Shuttle
+
+  label: 
+    label: Project Ids
+    alignment: Left
+
+  settings: 
+    show-controls: All
+
+  multiple-values: 
+    type: Delimited List
+    separator: ':'
+
+  layout: 
+    sequence: 10
+    region: Projects # 9840232542147138
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 15
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select project_name d, project_id r
+      from hr_projects
+      where is_active='Y'
+      order by project_name
+      
+    display-extra-values: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Function Body
+    language: PL/SQL
+    pl/sql-function-body: |
+      declare l_list varchar2(32767);
+      begin
+        select listagg(project_id, ':') within group (order by project_id)
+          into l_list
+          from sec_user_projects
+         where user_id = :P912_USER_ID;
+      
+        return nvl(l_list,'');
+      end;
+    used: Always, replacing any existing value in session state
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: BTN_CANCEL ==================================
+  id: 9840747364147143
+  identification: 
+    button-name: BTN_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 30
+    region: Access # 9839915516147135
+    slot: TOP
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    horizontal-alignment: Right
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-window-close
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: BTN_SAVE ====================================
+  id: 9840839641147144
+  identification: 
+    button-name: BTN_SAVE
+    label: Save
+
+  layout: 
+    sequence: 40
+    region: Access # 9839915516147135
+    slot: TOP
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    horizontal-alignment: Right
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-save
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: Cancel Dialog =======================
+  id: 9841106257147147
+  identification: 
+    name: Cancel Dialog
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: BTN_CANCEL # 9840747364147143
+
+  actions: 
+  - # ====== Action: Cancel Dialog ===============================
+    id: 9841239923147148
+    identification: 
+      action: Cancel Dialog
+
+    execution: 
+      sequence: 10
+      event: Cancel Dialog # 9841106257147147
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Populate User Details ======================
+  id: 9839093500147126
+  identification: 
+    name: Populate User Details
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |2
+        select username, full_name, email,  case when is_active = 'Y' then
+         'Active'
+          else
+            'Inactive'
+        end as is_active_disp
+        into :P912_USERNAME, :P912_FULL_NAME, :P912_EMAIL, :P912_IS_ACTIVE
+        from sec_users
+       where user_id = :P912_USER_ID;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Save =======================================
+  id: 9840974563147145
+  identification: 
+    name: Save
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+        -- ROLES
+        delete from sec_user_roles where user_id = :P912_USER_ID;
+      
+        if :P912_ROLE_IDS is not null then
+          for r in (
+            select to_number(column_value) v
+            from table(apex_string.split(:P912_ROLE_IDS, ':'))
+          ) loop
+            insert into sec_user_roles(user_id, role_id)
+            values (:P912_USER_ID, r.v);
+          end loop;
+        end if;
+      
+        -- ORGS
+        delete from sec_user_orgs where user_id = :P912_USER_ID;
+      
+        if :P912_ORG_IDS is not null then
+          for o in (
+            select to_number(column_value) v
+            from table(apex_string.split(:P912_ORG_IDS, ':'))
+          ) loop
+            insert into sec_user_orgs(user_id, org_id)
+            values (:P912_USER_ID, o.v);
+          end loop;
+        end if;
+      
+        -- PROJECTS
+        delete from sec_user_projects where user_id = :P912_USER_ID;
+      
+        if :P912_PROJECT_IDS is not null then
+          for p in (
+            select to_number(column_value) v
+            from table(apex_string.split(:P912_PROJECT_IDS, ':'))
+          ) loop
+            insert into sec_user_projects(user_id, project_id)
+            values (:P912_USER_ID, p.v);
+          end loop;
+        end if;
+      end;
+      
+
+  execution: 
+    sequence: 10
+    point: After Submit
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: BTN_SAVE # 9840839641147144
+
+- # ====== Process: Close Dialog ===============================
+  id: 9841021917147146
+  identification: 
+    name: Close Dialog
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Access updated.
+
+  error: 
+    display-location: Inline in Notification
+

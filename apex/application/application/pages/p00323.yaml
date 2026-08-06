@@ -1,0 +1,1017 @@
+---
+# ====== Page: Installment Action Modal ======================
+id: 323
+identification: 
+  name: Installment Action Modal
+  alias: INSTALLMENT-ACTION-MODAL
+  title: Installment Action Modal
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Installment Action ==========================
+  id: 30149856822037208
+  identification: 
+    name: Installment Action
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Hero
+    template-options: 
+    - '#DEFAULT#'
+    - t-HeroRegion--hideIcon
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: pb_button ===================================
+  id: 30149977900037209
+  identification: 
+    name: pb_button
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-ButtonRegion--noBorder
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P323_INSTALLMENT_ID ======================
+  id: 30150074867037210
+  identification: 
+    name: P323_INSTALLMENT_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Installment Action # 30149856822037208
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P323_INSTALLMENT_NO ======================
+  id: 30150274366037212
+  identification: 
+    name: P323_INSTALLMENT_NO
+    type: Display Only
+
+  label: 
+    label: Installment No
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Installment Action # 30149856822037208
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P323_DUE_DT ==============================
+  id: 30150395249037213
+  identification: 
+    name: P323_DUE_DT
+    type: Display Only
+
+  label: 
+    label: Due Date
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Installment Action # 30149856822037208
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P323_AMOUNT ==============================
+  id: 30150412120037214
+  identification: 
+    name: P323_AMOUNT
+    type: Display Only
+
+  label: 
+    label: Amount
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 40
+    region: Installment Action # 30149856822037208
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P323_CURRENT_STATUS ======================
+  id: 30150537689037215
+  identification: 
+    name: P323_CURRENT_STATUS
+    type: Display Only
+
+  label: 
+    label: Current Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 50
+    region: Installment Action # 30149856822037208
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P323_HOLD_FROM_DT ========================
+  id: 30150745587037217
+  identification: 
+    name: P323_HOLD_FROM_DT
+    type: Date Picker
+
+  label: 
+    label: Hold From Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 60
+    region: Installment Action # 30149856822037208
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ":P323_CURRENT_STATUS in ('PENDING','ON_HOLD')"
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P323_HOLD_TO_DT ==========================
+  id: 30150804673037218
+  identification: 
+    name: P323_HOLD_TO_DT
+    type: Date Picker
+
+  label: 
+    label: Hold To Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 70
+    region: Installment Action # 30149856822037208
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ":P323_CURRENT_STATUS in ('PENDING','ON_HOLD')"
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P323_PAYROLL_RUN_REF =====================
+  id: 30150963629037219
+  identification: 
+    name: P323_PAYROLL_RUN_REF
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 80
+    region: Installment Action # 30149856822037208
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P323_REMARKS =============================
+  id: 30151095605037220
+  identification: 
+    name: P323_REMARKS
+    type: Text Field
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 90
+    region: Installment Action # 30149856822037208
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P323_CHARGE_ID ===========================
+  id: 30152673673037236
+  identification: 
+    name: P323_CHARGE_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 100
+    region: Installment Action # 30149856822037208
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PROCESS_BTN =================================
+  id: 30151375575037223
+  identification: 
+    button-name: PROCESS_BTN
+    label: Process
+
+  layout: 
+    sequence: 10
+    region: pb_button # 30149977900037209
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Item = Value
+    item: P323_CURRENT_STATUS
+    value: PENDING
+
+- # ====== Button: HOLD_BTN ====================================
+  id: 30151497743037224
+  identification: 
+    button-name: HOLD_BTN
+    label: Hold
+
+  layout: 
+    sequence: 20
+    region: pb_button # 30149977900037209
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Item = Value
+    item: P323_CURRENT_STATUS
+    value: PENDING
+
+- # ====== Button: RESUME_BTN ==================================
+  id: 30151501739037225
+  identification: 
+    button-name: RESUME_BTN
+    label: Resume
+
+  layout: 
+    sequence: 30
+    region: pb_button # 30149977900037209
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Item = Value
+    item: P323_CURRENT_STATUS
+    value: ON_HOLD
+
+- # ====== Button: CANCEL_BTN ==================================
+  id: 30151676745037226
+  identification: 
+    button-name: CANCEL_BTN
+    label: Cancel
+
+  layout: 
+    sequence: 60
+    region: pb_button # 30149977900037209
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: BAD_DEBT_BTN ================================
+  id: 30151752082037227
+  identification: 
+    button-name: BAD_DEBT_BTN
+    label: Bad Debt
+
+  layout: 
+    sequence: 50
+    region: pb_button # 30149977900037209
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ":P323_CURRENT_STATUS in ('PENDING','ON_HOLD')"
+
+- # ====== Button: WAIVE_BTN ===================================
+  id: 30151884209037228
+  identification: 
+    button-name: WAIVE_BTN
+    label: Wave
+
+  layout: 
+    sequence: 40
+    region: pb_button # 30149977900037209
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ":P323_CURRENT_STATUS in ('PENDING','ON_HOLD')"
+
+processes: 
+- # ====== Process: FETCH_P323_INSTALLMENT_INFO ================
+  id: 30151267699037222
+  identification: 
+    name: FETCH_P323_INSTALLMENT_INFO
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      select installment_no,
+             due_dt,
+             amount,
+             status_code,
+             hold_from_dt,
+             hold_to_dt,
+             payroll_run_ref,
+             remarks
+        into :P323_INSTALLMENT_NO,
+             :P323_DUE_DT,
+             :P323_AMOUNT,
+             :P323_CURRENT_STATUS,
+             :P323_HOLD_FROM_DT,
+             :P323_HOLD_TO_DT,
+             :P323_PAYROLL_RUN_REF,
+             :P323_REMARKS
+        from hr_emp_charge_installments
+       where installment_id = :P323_INSTALLMENT_ID;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: PROCESS INSTALLMENT ========================
+  id: 30151948492037229
+  identification: 
+    name: PROCESS INSTALLMENT
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          hr_charges_pkg.mark_installment_processed(
+              p_installment_id  => :P323_INSTALLMENT_ID,
+              p_payroll_run_ref => :P323_PAYROLL_RUN_REF,
+              p_remarks         => :P323_REMARKS
+          );
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: PROCESS_BTN # 30151375575037223
+
+- # ====== Process: HOLD_INSTALLMENT ===========================
+  id: 30152022305037230
+  identification: 
+    name: HOLD_INSTALLMENT
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          hr_charges_pkg.mark_installment_hold(
+              p_installment_id => :P323_INSTALLMENT_ID,
+              p_hold_from_dt   => :P323_HOLD_FROM_DT,
+              p_hold_to_dt     => :P323_HOLD_TO_DT,
+              p_remarks        => :P323_REMARKS
+          );
+      end;
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: HOLD_BTN # 30151497743037224
+
+- # ====== Process: RESUME_INSTALLMENT =========================
+  id: 30152170740037231
+  identification: 
+    name: RESUME_INSTALLMENT
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          hr_charges_pkg.resume_installment(
+              p_installment_id => :P323_INSTALLMENT_ID,
+              p_remarks        => :P323_REMARKS
+          );
+      end;
+
+  execution: 
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: RESUME_BTN # 30151501739037225
+
+- # ====== Process: WAIVE_INSTALLMENT ==========================
+  id: 30152249901037232
+  identification: 
+    name: WAIVE_INSTALLMENT
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          hr_charges_pkg.mark_installment_waived(
+              p_installment_id => :P323_INSTALLMENT_ID,
+              p_remarks        => :P323_REMARKS
+          );
+      end;
+
+  execution: 
+    sequence: 40
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: WAIVE_BTN # 30151884209037228
+
+- # ====== Process: BAD_DEBT_INSTALLMENT =======================
+  id: 30152377614037233
+  identification: 
+    name: BAD_DEBT_INSTALLMENT
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          hr_charges_pkg.mark_installment_bad_debt(
+              p_installment_id => :P323_INSTALLMENT_ID,
+              p_remarks        => :P323_REMARKS
+          );
+      end;
+
+  execution: 
+    sequence: 50
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: BAD_DEBT_BTN # 30151752082037227
+
+- # ====== Process: CANCEL_INSTALLMENT =========================
+  id: 30152436143037234
+  identification: 
+    name: CANCEL_INSTALLMENT
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          hr_charges_pkg.cancel_installment(
+              p_installment_id => :P323_INSTALLMENT_ID,
+              p_remarks        => :P323_REMARKS
+          );
+      end;
+
+  execution: 
+    sequence: 60
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: CANCEL_BTN # 30151676745037226
+
+branches: 
+- # ====== Branch: GO TO PAGE 321 ==============================
+  id: 30152516951037235
+  identification: 
+    name: GO TO PAGE 321
+
+  execution: 
+    sequence: 10
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:321:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 321 # Charge Installments List
+

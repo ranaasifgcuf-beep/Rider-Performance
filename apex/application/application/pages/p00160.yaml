@@ -1,0 +1,1537 @@
+---
+# ====== Page: Admin Workflow ================================
+id: 160
+identification: 
+  name: Admin Workflow
+  alias: ADMIN-WORKFLOW
+  title: Admin Workflow
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Admin Workflow ==============================
+  id: 34766064961345496
+  identification: 
+    name: Admin Workflow
+    type: Breadcrumb
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useRegionTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: '#DEFAULT_BREADCRUMB_TEMPLATE#'
+
+- # ====== Region: Admin Workflows - Smart Filters =============
+  id: 34766807421345497
+  identification: 
+    name: Admin Workflows - Smart Filters
+    type: Smart Filters
+
+  source: 
+    filtered-region: Admin Workflows - Report # 34766921062345497
+
+  layout: 
+    sequence: 10
+    parent-region: Admin Workflow # 34766064961345496
+    slot: SMART_FILTERS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      more-filters-suggestion-chip: false
+      compact-numbers-threshold: 10000
+      show-total-row-count: No
+
+  facets: 
+  - # ====== Facet: P160_SEARCH ==================================
+    id: 34767397252345498
+    identification: 
+      name: P160_SEARCH
+      type: Search
+
+    label: 
+      label: Search
+
+    settings: 
+      search-type: Row Search
+      input-field: Top of Faceted Search Region
+
+    layout: 
+      sequence: 10
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Facet: P160_TYPE ====================================
+    id: 34767783425345498
+    identification: 
+      name: P160_TYPE
+      type: Checkbox Group
+
+    label: 
+      label: Type
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 20
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: WORKFLOW_DEF_NAME
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P160_STATE ===================================
+    id: 34768127150345498
+    identification: 
+      name: P160_STATE
+      type: Checkbox Group
+
+    label: 
+      label: State
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 50
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: WORKFLOW_CONSOLE.LOV.WORKFLOW_STATE # 34721704861330545
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: false
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: STATE_CODE
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P160_APPLICATION =============================
+    id: 34768563962345498
+    identification: 
+      name: P160_APPLICATION
+      type: Checkbox Group
+
+    label: 
+      label: Application
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 70
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: WORKFLOW_DEF_APP_NAME
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P160_INITIATOR ===============================
+    id: 34768990743345499
+    identification: 
+      name: P160_INITIATOR
+      type: Checkbox Group
+
+    label: 
+      label: Initiator
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 80
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: INITIATOR
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P160_INITIATED ===============================
+    id: 34769360518345499
+    identification: 
+      name: P160_INITIATED
+      type: Range
+
+    label: 
+      label: Initiated
+      show-label-for-current-facet: true
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 90
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: WORKFLOW_CONSOLE.LOV.INITIATED # 34723211958330546
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: CREATED_AGO_HOURS
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  filters: 
+  - # ====== Filter: P160_SEARCH =================================
+    id: 34767397252345498
+    identification: 
+      name: P160_SEARCH
+      type: Search
+
+    label: 
+      label: Search
+
+    settings: 
+      search-type: Row Search
+      collapsed-search-field: false
+
+    layout: 
+      sequence: 10
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Filter: P160_TYPE ===================================
+    id: 34767783425345498
+    identification: 
+      name: P160_TYPE
+      type: Checkbox Group
+
+    label: 
+      label: Type
+
+    layout: 
+      sequence: 20
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: WORKFLOW_DEF_NAME
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P160_STATE ==================================
+    id: 34768127150345498
+    identification: 
+      name: P160_STATE
+      type: Checkbox Group
+
+    label: 
+      label: State
+
+    layout: 
+      sequence: 50
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: WORKFLOW_CONSOLE.LOV.WORKFLOW_STATE # 34721704861330545
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: false
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: STATE_CODE
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P160_APPLICATION ============================
+    id: 34768563962345498
+    identification: 
+      name: P160_APPLICATION
+      type: Checkbox Group
+
+    label: 
+      label: Application
+
+    layout: 
+      sequence: 70
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: WORKFLOW_DEF_APP_NAME
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P160_INITIATOR ==============================
+    id: 34768990743345499
+    identification: 
+      name: P160_INITIATOR
+      type: Checkbox Group
+
+    label: 
+      label: Initiator
+
+    layout: 
+      sequence: 80
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: INITIATOR
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P160_INITIATED ==============================
+    id: 34769360518345499
+    identification: 
+      name: P160_INITIATED
+      type: Range
+
+    label: 
+      label: Initiated
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 90
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: WORKFLOW_CONSOLE.LOV.INITIATED # 34723211958330546
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: CREATED_AGO_HOURS
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+- # ====== Region: Admin Workflows - Report ====================
+  id: 34766921062345497
+  identification: 
+    name: Admin Workflows - Report
+    type: Content Row
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select workflow_id,
+             workflow_def_name,
+             workflow_def_app_name,
+             title,
+             initiator,
+             state_code,
+             created_on,
+             created_ago,
+             created_ago_hours,
+             last_updated_on,
+             badge_text,
+             badge_state
+        from table ( apex_workflow.get_workflows (
+                         p_context => 'ADMIN_WORKFLOWS'
+                         --, p_application_id => :APP_ID
+                         ) )
+    optimizer-hint: APEX$USE_NO_GROUPING_SETS
+
+  order-by: 
+    type: Item
+    item: 
+      item-name: P160_SORT_BY
+      order-bys: 
+      - key: CREATED_ON
+        clause: created_on desc
+
+      - key: LAST_UPDATED_ON
+        clause: last_updated_on desc
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      display: Multiple (Report)
+
+    settings: 
+      title: '&TITLE.'
+      description: |
+        <strong>&WORKFLOW_DEF_NAME!HTML.</strong>
+        {if INITIATOR/}
+            <span role="separator" aria-label="&middot;"> &middot; </span>
+            &{APEX.WORKFLOW.INITIATED_BY_USER_SINCE 0=&INITIATOR!HTML. 1=&CREATED_AGO.}.
+        {endif/}
+      display-avatar: false
+      display-badge: true
+
+    badge: 
+      label: State
+      value: BADGE_TEXT
+      state: BADGE_STATE
+      display-label: false
+      style: Default
+      shape: Default
+      size: Default
+      column-width: Medium
+      position: START
+      alignment: START
+
+    appearance: 
+      apply-theme-colors: false
+      style: Default
+      hide-borders: false
+      remove-padding: false
+
+    row-selection: 
+      type: None
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+    entity-title: 
+      singular: workflow
+      plural: workflows
+
+    messages: 
+      when-no-data-found: No Workflows
+      no-data-found-icon: fa-workflow fa-lg
+
+  columns: 
+  - # ====== Column: WORKFLOW_ID =================================
+    id: 34770057881345500
+    identification: 
+      name: WORKFLOW_ID
+
+    layout: 
+      sequence: 10
+
+    source: 
+      type: Database Column
+      database-column: WORKFLOW_ID
+      data-type: NUMBER
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: WORKFLOW_DEF_NAME ===========================
+    id: 34770530473345500
+    identification: 
+      name: WORKFLOW_DEF_NAME
+
+    layout: 
+      sequence: 20
+
+    source: 
+      type: Database Column
+      database-column: WORKFLOW_DEF_NAME
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: WORKFLOW_DEF_APP_NAME =======================
+    id: 34771045917345500
+    identification: 
+      name: WORKFLOW_DEF_APP_NAME
+
+    layout: 
+      sequence: 30
+
+    source: 
+      type: Database Column
+      database-column: WORKFLOW_DEF_APP_NAME
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: TITLE =======================================
+    id: 34771585579345501
+    identification: 
+      name: TITLE
+
+    layout: 
+      sequence: 40
+
+    source: 
+      type: Database Column
+      database-column: TITLE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: true
+
+    appearance: 
+      group: false
+
+  - # ====== Column: INITIATOR ===================================
+    id: 34772000859345501
+    identification: 
+      name: INITIATOR
+
+    layout: 
+      sequence: 50
+
+    source: 
+      type: Database Column
+      database-column: INITIATOR
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: STATE_CODE ==================================
+    id: 34772577649345501
+    identification: 
+      name: STATE_CODE
+
+    layout: 
+      sequence: 60
+
+    source: 
+      type: Database Column
+      database-column: STATE_CODE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: CREATED_ON ==================================
+    id: 34773064598345501
+    identification: 
+      name: CREATED_ON
+
+    layout: 
+      sequence: 70
+
+    source: 
+      type: Database Column
+      database-column: CREATED_ON
+      data-type: TIMESTAMP WITH TIME ZONE
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      format-mask: SINCE
+      group: false
+
+  - # ====== Column: CREATED_AGO =================================
+    id: 34773597340345502
+    identification: 
+      name: CREATED_AGO
+
+    layout: 
+      sequence: 80
+
+    source: 
+      type: Database Column
+      database-column: CREATED_AGO
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: CREATED_AGO_HOURS ===========================
+    id: 34774006675345502
+    identification: 
+      name: CREATED_AGO_HOURS
+
+    layout: 
+      sequence: 90
+
+    source: 
+      type: Database Column
+      database-column: CREATED_AGO_HOURS
+      data-type: NUMBER
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: LAST_UPDATED_ON =============================
+    id: 34774502642345502
+    identification: 
+      name: LAST_UPDATED_ON
+
+    layout: 
+      sequence: 100
+
+    source: 
+      type: Database Column
+      database-column: LAST_UPDATED_ON
+      data-type: TIMESTAMP WITH TIME ZONE
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      format-mask: SINCE
+      group: false
+
+  - # ====== Column: BADGE_TEXT ==================================
+    id: 34775006762345503
+    identification: 
+      name: BADGE_TEXT
+
+    layout: 
+      sequence: 110
+
+    source: 
+      type: Database Column
+      database-column: BADGE_TEXT
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: BADGE_STATE =================================
+    id: 34775560734345503
+    identification: 
+      name: BADGE_STATE
+
+    layout: 
+      sequence: 120
+
+    source: 
+      type: Database Column
+      database-column: BADGE_STATE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  actions: 
+  - # ====== Action: Title Link ==================================
+    id: 34776082379345503
+    identification: 
+      position: Title Link # 348722977165395441
+
+    layout: 
+      sequence: 10
+
+    link: 
+      type: Redirect to Page in this Application
+      target: 
+        url: 'f?p=&APP_ID.:162:&SESSION.::&DEBUG.:RP,:P162_WORKFLOW_ID:&WORKFLOW_ID.'
+        page: 162 # Admin Workflow Detail Page
+        clear-cache: RP
+        values: 
+          p162_workflow_id: '&WORKFLOW_ID.'
+
+  - # ====== Action: Suspend =====================================
+    id: 34776542965345504
+    identification: 
+      position: Primary Actions # 362316004162771045
+      template: Button # 362316605839802174
+      label: Suspend
+
+    layout: 
+      sequence: 20
+
+    link: 
+      type: Redirect to URL
+      target: '#'
+      link-attributes: data-id="&WORKFLOW_ID."
+
+    appearance: 
+      display-type: Text with Icon
+      icon: fa-pause-circle u-warning-text
+      hot: false
+      show-as-disabled: false
+      css-classes: 
+      - suspend
+
+    server-side-condition: 
+      type: Expression
+      language: PL/SQL
+      pl/sql-expression: ":state_code in ('ACTIVE','FAULTED')"
+      execute-condition: For Each Row
+
+  - # ====== Action: Resume ======================================
+    id: 34777014670345504
+    identification: 
+      position: Primary Actions # 362316004162771045
+      template: Button # 362316605839802174
+      label: Resume
+
+    layout: 
+      sequence: 30
+
+    link: 
+      type: Redirect to URL
+      target: '#'
+      link-attributes: data-id="&WORKFLOW_ID."
+
+    appearance: 
+      display-type: Text with Icon
+      icon: fa-play-circle u-success-text
+      hot: false
+      show-as-disabled: false
+      css-classes: 
+      - resume
+
+    server-side-condition: 
+      type: Expression
+      language: PL/SQL
+      pl/sql-expression: ":state_code = 'SUSPENDED'"
+      execute-condition: For Each Row
+
+  - # ====== Action: Terminate ===================================
+    id: 34777551099345505
+    identification: 
+      position: Primary Actions # 362316004162771045
+      template: Button # 362316605839802174
+      label: Terminate
+
+    layout: 
+      sequence: 40
+
+    link: 
+      type: Redirect to URL
+      target: '#'
+      link-attributes: data-id="&WORKFLOW_ID."
+
+    appearance: 
+      display-type: Text with Icon
+      icon: fa-times u-danger-text
+      hot: false
+      show-as-disabled: false
+      css-classes: 
+      - terminate
+
+    server-side-condition: 
+      type: Expression
+      language: PL/SQL
+      pl/sql-expression: ":state_code in ('ACTIVE','FAULTED','SUSPENDED')"
+      execute-condition: For Each Row
+
+page-items: 
+- # ====== Page Item: P160_WORKFLOW_ID =========================
+  id: 34766471510345496
+  identification: 
+    name: P160_WORKFLOW_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: false
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P160_SORT_BY =============================
+  id: 34778035648345505
+  identification: 
+    name: P160_SORT_BY
+    type: Select List
+
+  label: 
+    label: Sort By
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Admin Workflows - Report # 34766921062345497
+    slot: ORDER_BY_ITEM
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: 0
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-sort-amount-desc
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC2:Create Date;CREATED_ON,Last Update;LAST_UPDATED_ON'
+    display-extra-values: false
+    display-null-value: false
+
+  advanced: 
+    css-classes: 
+    - mnw160
+    warn-on-unsaved-changes: Ignore
+
+  source: 
+    type: Static Value
+    static-value: LAST_UPDATED_ON
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per User (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+dynamic-actions: 
+- # ====== Dynamic Action: Suspend =============================
+  id: 34778435713345505
+  identification: 
+    name: Suspend
+
+  execution: 
+    sequence: 10
+    event-scope: Dynamic
+    static-container-(jquery-selector): body
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: jQuery Selector
+    jquery-selector: a.suspend
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 34778850645345505
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: JavaScript Expression
+      javascript-expression: this.triggeringElement.dataset.id
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P160_WORKFLOW_ID
+
+    execution: 
+      sequence: 10
+      event: Suspend # 34778435713345505
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Execute Server-side Code ====================
+    id: 34779362199345506
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        apex_workflow.suspend (
+            p_instance_id => :P160_WORKFLOW_ID );
+      items-to-submit: 
+      - P160_WORKFLOW_ID
+
+    execution: 
+      sequence: 20
+      event: Suspend # 34778435713345505
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 34779882746345506
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: apex.message.showPageSuccess('Workflow suspended');
+
+    execution: 
+      sequence: 30
+      event: Suspend # 34778435713345505
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 34780350103345506
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Admin Workflows - Smart Filters # 34766807421345497
+
+    execution: 
+      sequence: 40
+      event: Suspend # 34778435713345505
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 34780811085345506
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Admin Workflows - Report # 34766921062345497
+
+    execution: 
+      sequence: 50
+      event: Suspend # 34778435713345505
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Resume ==============================
+  id: 34781336969345507
+  identification: 
+    name: Resume
+
+  execution: 
+    sequence: 20
+    event-scope: Dynamic
+    static-container-(jquery-selector): body
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: jQuery Selector
+    jquery-selector: a.resume
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 34781703648345507
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: JavaScript Expression
+      javascript-expression: this.triggeringElement.dataset.id
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P160_WORKFLOW_ID
+
+    execution: 
+      sequence: 10
+      event: Resume # 34781336969345507
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Execute Server-side Code ====================
+    id: 34782204718345507
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        apex_workflow.resume (
+            p_instance_id => :P160_WORKFLOW_ID );
+      items-to-submit: 
+      - P160_WORKFLOW_ID
+
+    execution: 
+      sequence: 20
+      event: Resume # 34781336969345507
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 34782732426345507
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: apex.message.showPageSuccess('Workflow resumed');
+
+    execution: 
+      sequence: 30
+      event: Resume # 34781336969345507
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 34783272458345508
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Admin Workflows - Smart Filters # 34766807421345497
+
+    execution: 
+      sequence: 40
+      event: Resume # 34781336969345507
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 34783731438345508
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Admin Workflows - Report # 34766921062345497
+
+    execution: 
+      sequence: 50
+      event: Resume # 34781336969345507
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Terminate ===========================
+  id: 34784279576345508
+  identification: 
+    name: Terminate
+
+  execution: 
+    sequence: 30
+    event-scope: Dynamic
+    static-container-(jquery-selector): body
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: jQuery Selector
+    jquery-selector: a.terminate
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 34784695349345508
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: JavaScript Expression
+      javascript-expression: this.triggeringElement.dataset.id
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P160_WORKFLOW_ID
+
+    execution: 
+      sequence: 10
+      event: Terminate # 34784279576345508
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Execute Server-side Code ====================
+    id: 34785127853345508
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        apex_workflow.terminate (
+            p_instance_id => :P160_WORKFLOW_ID );
+      items-to-submit: 
+      - P160_WORKFLOW_ID
+
+    execution: 
+      sequence: 20
+      event: Terminate # 34784279576345508
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 34785635426345509
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: apex.message.showPageSuccess('Workflow terminated');
+
+    execution: 
+      sequence: 30
+      event: Terminate # 34784279576345508
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 34786140633345509
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Admin Workflows - Smart Filters # 34766807421345497
+
+    execution: 
+      sequence: 40
+      event: Terminate # 34784279576345508
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 34786608252345509
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Admin Workflows - Report # 34766921062345497
+
+    execution: 
+      sequence: 50
+      event: Terminate # 34784279576345508
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Refresh - Admin Workflows - Report ==
+  id: 34787197226345509
+  identification: 
+    name: Refresh - Admin Workflows - Report
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed or Canceled
+    selection-type: Region
+    region: Admin Workflows - Report # 34766921062345497
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 34787538924345510
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Admin Workflows - Report # 34766921062345497
+
+    execution: 
+      sequence: 10
+      event: Refresh - Admin Workflows - Report # 34787197226345509
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 34788006685345510
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Admin Workflows - Smart Filters # 34766807421345497
+
+    execution: 
+      sequence: 20
+      event: Refresh - Admin Workflows - Report # 34787197226345509
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

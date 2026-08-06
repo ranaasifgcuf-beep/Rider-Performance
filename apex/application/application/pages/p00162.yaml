@@ -1,0 +1,2463 @@
+---
+# ====== Page: Admin Workflow Detail Page ====================
+id: 162
+identification: 
+  name: Admin Workflow Detail Page
+  title: Admin Workflow Detail Page
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Drawer
+  template-options: 
+  - '#DEFAULT#'
+  - js-dialog-class-t-Drawer--pullOutEnd
+
+dialog: 
+  chained: true
+  resizable: false
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: No - Prevent page from being re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Subject =====================================
+  id: 34790490301345513
+  identification: 
+    name: Subject
+    type: Content Row
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select title,
+             workflow_def_name,
+             initiator,
+             created_ago,
+             badge_text,
+             badge_state
+        from table ( apex_workflow.get_workflows (
+                         p_context     => 'SINGLE_WORKFLOW',
+                         p_workflow_id => :P162_WORKFLOW_ID ) );
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 60
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noPadding
+    - t-Region--hideHeader js-addHiddenHeadingRoleDesc
+    - t-Region--noUI
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      display: Single (Partial)
+
+    settings: 
+      title: '&TITLE.'
+      description: |
+        <strong>&WORKFLOW_DEF_NAME!HTML.</strong>
+        {if INITIATOR/}
+            <span role="separator" aria-label="&middot;"> &middot; </span>
+            &{APEX.WORKFLOW.INITIATED_BY_USER_SINCE 0=&INITIATOR!HTML. 1=&CREATED_AGO.}.
+        {endif/}
+      display-avatar: false
+      display-badge: true
+
+    badge: 
+      label: State
+      value: BADGE_TEXT
+      state: BADGE_STATE
+      display-label: false
+      style: Default
+      shape: Default
+      size: Medium
+      column-width: Auto
+      position: START
+      alignment: START
+
+    performance: 
+      lazy-loading: false
+
+  columns: 
+  - # ====== Column: TITLE =======================================
+    id: 34790848121345514
+    identification: 
+      name: TITLE
+
+    layout: 
+      sequence: 10
+
+    source: 
+      type: Database Column
+      database-column: TITLE
+      data-type: VARCHAR2
+      primary-key: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: WORKFLOW_DEF_NAME ===========================
+    id: 34791322283345515
+    identification: 
+      name: WORKFLOW_DEF_NAME
+
+    layout: 
+      sequence: 20
+
+    source: 
+      type: Database Column
+      database-column: WORKFLOW_DEF_NAME
+      data-type: VARCHAR2
+      primary-key: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: INITIATOR ===================================
+    id: 34791861790345515
+    identification: 
+      name: INITIATOR
+
+    layout: 
+      sequence: 30
+
+    source: 
+      type: Database Column
+      database-column: INITIATOR
+      data-type: VARCHAR2
+      primary-key: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: CREATED_AGO =================================
+    id: 34792385472345515
+    identification: 
+      name: CREATED_AGO
+
+    layout: 
+      sequence: 40
+
+    source: 
+      type: Database Column
+      database-column: CREATED_AGO
+      data-type: VARCHAR2
+      primary-key: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: BADGE_TEXT ==================================
+    id: 34792847599345516
+    identification: 
+      name: BADGE_TEXT
+
+    layout: 
+      sequence: 50
+
+    source: 
+      type: Database Column
+      database-column: BADGE_TEXT
+      data-type: VARCHAR2
+      primary-key: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: BADGE_STATE =================================
+    id: 34793389713345516
+    identification: 
+      name: BADGE_STATE
+
+    layout: 
+      sequence: 60
+
+    source: 
+      type: Database Column
+      database-column: BADGE_STATE
+      data-type: VARCHAR2
+      primary-key: false
+
+    appearance: 
+      group: false
+
+- # ====== Region: Activities ==================================
+  id: 34793815113345516
+  identification: 
+    name: Activities
+    type: Content Row
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select activity_id,
+             type,
+             name,
+             state,
+             error_message,
+             due_on,
+             retry_count,
+             start_time,
+             end_time,
+             initcap(state) as badge_text,
+             case state
+                 when 'WAITING'    then 'danger'
+                 when 'COMPLETED'  then 'success'
+                 when 'TERMINATED' then 'warning'
+                 when 'FAULTED'    then 'danger'
+             end as badge_state,
+             ( select max(workflow_id)
+                 from apex_workflows w
+                where w.parent_workflow_id = :P162_WORKFLOW_ID
+                  and w.parent_activity_id = a.activity_id ) as invoked_workflow_id
+        from apex_workflow_activities a
+       where workflow_id = :P162_WORKFLOW_ID
+       order by start_time
+    page-items-to-submit: 
+    - P162_WORKFLOW_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 70
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noPadding
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      display: Multiple (Report)
+
+    settings: 
+      title: '&NAME.'
+      description: '&ERROR_MESSAGE.'
+      miscellaneous: |
+        {case STATE/}
+            {when COMPLETED/}
+                &{APEX.WORKFLOW.COMPLETED_SINCE 0=&END_TIME.}.
+            {otherwise/}
+                &{APEX.WORKFLOW.STARTED_SINCE 0=&START_TIME.}.
+        {endcase/}
+        {if DUE_ON/}
+            <span role="separator" aria-label="&middot;"> &middot; </span>
+            &{APEX.WORKFLOW.DUE_SINCE 0=&DUE_ON.}.
+        {endif/}
+        {if RETRY_COUNT/}
+            {case RETRY_COUNT/}
+                {when 0/}
+                {when 1/}
+                <span role="separator" aria-label="&middot;"> &middot; </span>
+                    &{APEX.WORKFLOW.RETRY_COUNT.EQUALS_ONE 0=&RETRY_COUNT.}.
+                {otherwise/}
+                <span role="separator" aria-label="&middot;"> &middot; </span>
+                    &{APEX.WORKFLOW.RETRY_COUNT.NOT_EQUALS_ONE 0=&RETRY_COUNT.}.
+            {endcase/}
+        {endif/}
+      display-avatar: false
+      display-badge: true
+
+    badge: 
+      label: Status
+      value: BADGE_TEXT
+      state: BADGE_STATE
+      display-label: false
+      style: Outline
+      shape: Default
+      size: Default
+      column-width: Medium
+      position: START
+      alignment: START
+
+    appearance: 
+      apply-theme-colors: true
+      style: Default
+      hide-borders: false
+      remove-padding: false
+
+    row-selection: 
+      type: None
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Page
+      entities-per-page: 10
+      show-total-count: false
+
+  columns: 
+  - # ====== Column: ACTIVITY_ID =================================
+    id: 34794282088345517
+    identification: 
+      name: ACTIVITY_ID
+
+    layout: 
+      sequence: 10
+
+    source: 
+      type: Database Column
+      database-column: ACTIVITY_ID
+      data-type: NUMBER
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: TYPE ========================================
+    id: 34794707777345517
+    identification: 
+      name: TYPE
+
+    layout: 
+      sequence: 20
+
+    source: 
+      type: Database Column
+      database-column: TYPE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: NAME ========================================
+    id: 34795226807345517
+    identification: 
+      name: NAME
+
+    layout: 
+      sequence: 30
+
+    source: 
+      type: Database Column
+      database-column: NAME
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: true
+
+    appearance: 
+      group: false
+
+  - # ====== Column: STATE =======================================
+    id: 34795743736345517
+    identification: 
+      name: STATE
+
+    layout: 
+      sequence: 40
+
+    source: 
+      type: Database Column
+      database-column: STATE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: ERROR_MESSAGE ===============================
+    id: 34796237240345518
+    identification: 
+      name: ERROR_MESSAGE
+
+    layout: 
+      sequence: 50
+
+    source: 
+      type: Database Column
+      database-column: ERROR_MESSAGE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: DUE_ON ======================================
+    id: 34796746231345518
+    identification: 
+      name: DUE_ON
+
+    layout: 
+      sequence: 60
+
+    source: 
+      type: Database Column
+      database-column: DUE_ON
+      data-type: TIMESTAMP WITH TIME ZONE
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      format-mask: SINCE
+      group: false
+
+  - # ====== Column: RETRY_COUNT =================================
+    id: 34797240953345518
+    identification: 
+      name: RETRY_COUNT
+
+    layout: 
+      sequence: 70
+
+    source: 
+      type: Database Column
+      database-column: RETRY_COUNT
+      data-type: NUMBER
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: START_TIME ==================================
+    id: 34797774899345519
+    identification: 
+      name: START_TIME
+
+    layout: 
+      sequence: 80
+
+    source: 
+      type: Database Column
+      database-column: START_TIME
+      data-type: TIMESTAMP WITH TIME ZONE
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      format-mask: SINCE
+      group: false
+
+  - # ====== Column: END_TIME ====================================
+    id: 34798262866345519
+    identification: 
+      name: END_TIME
+
+    layout: 
+      sequence: 90
+
+    source: 
+      type: Database Column
+      database-column: END_TIME
+      data-type: TIMESTAMP WITH TIME ZONE
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      format-mask: SINCE
+      group: false
+
+  - # ====== Column: BADGE_TEXT ==================================
+    id: 34798770818345519
+    identification: 
+      name: BADGE_TEXT
+
+    layout: 
+      sequence: 100
+
+    source: 
+      type: Database Column
+      database-column: BADGE_TEXT
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: BADGE_STATE =================================
+    id: 34799229279345520
+    identification: 
+      name: BADGE_STATE
+
+    layout: 
+      sequence: 110
+
+    source: 
+      type: Database Column
+      database-column: BADGE_STATE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: INVOKED_WORKFLOW_ID =========================
+    id: 34799705560345520
+    identification: 
+      name: INVOKED_WORKFLOW_ID
+
+    layout: 
+      sequence: 120
+
+    source: 
+      type: Database Column
+      database-column: INVOKED_WORKFLOW_ID
+      data-type: NUMBER
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  actions: 
+  - # ====== Action: Title Link ==================================
+    id: 34800279358345520
+    identification: 
+      position: Title Link # 348722977165395441
+
+    layout: 
+      sequence: 10
+
+    link: 
+      type: Redirect to URL
+      target: '#'
+      link-attributes: class="audit" data-id="&ACTIVITY_ID." aria-haspopup="dialog"
+
+    server-side-condition: 
+      type: Item is NULL
+      item: INVOKED_WORKFLOW_ID
+      execute-condition: For Each Row
+
+  - # ====== Action: Title Link ==================================
+    id: 34800762395345521
+    identification: 
+      position: Title Link # 348722977165395441
+
+    layout: 
+      sequence: 20
+
+    link: 
+      type: Redirect to Page in this Application
+      target: 
+        url: 'f?p=&APP_ID.:162:&SESSION.::&DEBUG.:RP,162:P162_WORKFLOW_ID:&INVOKED_WORKFLOW_ID.'
+        page: 162 # Admin Workflow Detail Page
+        clear-cache: RP,162
+        values: 
+          p162_workflow_id: '&INVOKED_WORKFLOW_ID.'
+
+    server-side-condition: 
+      type: Item is NOT NULL
+      item: INVOKED_WORKFLOW_ID
+      execute-condition: For Each Row
+
+- # ====== Region: Activity Audit ==============================
+  id: 34801290834345521
+  identification: 
+    name: Activity Audit
+    type: Comments
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select created_by,
+             created_on,
+             action,
+             display_msg
+        from apex_workflow_audit
+       where workflow_id         = :P162_WORKFLOW_ID
+         and current_activity_id = :P162_ACTIVITY_ID
+       order by audit_id
+    page-items-to-submit: 
+    - P162_WORKFLOW_ID
+    - P162_ACTIVITY_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 80
+    parent-region: Activities # 34793815113345516
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Inline Popup
+    template-options: 
+    - '#DEFAULT#'
+    - js-dialog-autoheight
+    - js-dialog-size600x400
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      display: Multiple (Report)
+
+    settings: 
+      comment-text: DISPLAY_MSG
+      user-name: CREATED_BY
+      date: CREATED_ON
+      display-avatar: false
+      style: Basic
+      apply-theme-colors: true
+
+    row-selection: 
+      type: None
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Page
+      entities-per-page: 5
+      show-total-count: false
+
+  columns: 
+  - # ====== Column: CREATED_BY ==================================
+    id: 34801649937345522
+    identification: 
+      name: CREATED_BY
+
+    layout: 
+      sequence: 10
+
+    source: 
+      type: Database Column
+      database-column: CREATED_BY
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: CREATED_ON ==================================
+    id: 34802189365345522
+    identification: 
+      name: CREATED_ON
+
+    layout: 
+      sequence: 20
+
+    source: 
+      type: Database Column
+      database-column: CREATED_ON
+      data-type: DATE
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      format-mask: SINCE
+      group: false
+
+  - # ====== Column: ACTION ======================================
+    id: 34802667954345523
+    identification: 
+      name: ACTION
+
+    layout: 
+      sequence: 30
+
+    source: 
+      type: Database Column
+      database-column: ACTION
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: DISPLAY_MSG =================================
+    id: 34803135965345523
+    identification: 
+      name: DISPLAY_MSG
+
+    layout: 
+      sequence: 40
+
+    source: 
+      type: Database Column
+      database-column: DISPLAY_MSG
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+- # ====== Region: Variables ===================================
+  id: 34804076466345524
+  identification: 
+    name: Variables
+    type: Content Row
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select static_id,
+             label,
+             display_value
+        from apex_workflow_variables
+       where workflow_id = :P162_WORKFLOW_ID
+         and variable_type = 'VARIABLE'
+       order by label
+    page-items-to-submit: 
+    - P162_WORKFLOW_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 90
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Collapsible
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noPadding
+    - js-useLocalStorage
+    - is-collapsed
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    static-id: VARIABLES
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      display: Multiple (Report)
+
+    settings: 
+      overline: '&LABEL.'
+      title: '&DISPLAY_VALUE.'
+      display-avatar: false
+      display-badge: false
+
+    appearance: 
+      apply-theme-colors: true
+      style: Default
+      hide-borders: false
+      remove-padding: false
+
+    row-selection: 
+      type: None
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Page
+      entities-per-page: 10
+      show-total-count: false
+
+  columns: 
+  - # ====== Column: STATIC_ID ===================================
+    id: 34804473339345524
+    identification: 
+      name: STATIC_ID
+
+    layout: 
+      sequence: 10
+
+    source: 
+      type: Database Column
+      database-column: STATIC_ID
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: LABEL =======================================
+    id: 34804986620345524
+    identification: 
+      name: LABEL
+
+    layout: 
+      sequence: 20
+
+    source: 
+      type: Database Column
+      database-column: LABEL
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: true
+
+    appearance: 
+      group: false
+
+  - # ====== Column: DISPLAY_VALUE ===============================
+    id: 34805486215345524
+    identification: 
+      name: DISPLAY_VALUE
+
+    layout: 
+      sequence: 30
+
+    source: 
+      type: Database Column
+      database-column: DISPLAY_VALUE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  actions: 
+  - # ====== Action: Edit ========================================
+    id: 34805911192345525
+    identification: 
+      position: Primary Actions # 362316004162771045
+      template: Button # 362316605839802174
+      label: Edit
+
+    layout: 
+      sequence: 10
+
+    link: 
+      type: Redirect to URL
+      target: '#'
+      link-attributes: class="variable" data-id="&STATIC_ID!ATTR." data-label="&LABEL!ATTR." data-value="&DISPLAY_VALUE!ATTR." aria-haspopup="dialog"
+
+    appearance: 
+      display-type: Text
+      hot: false
+      show-as-disabled: false
+
+    server-side-condition: 
+      type: Expression
+      language: PL/SQL
+      pl/sql-expression: |
+        apex_workflow.is_allowed (
+            p_instance_id => :P162_WORKFLOW_ID,
+            p_operation   => apex_workflow.c_workflow$_op_update_var )
+      execute-condition: Once
+
+- # ====== Region: Edit Variable ===============================
+  id: 34806427024345525
+  identification: 
+    name: Edit Variable
+    type: Static Content
+
+  layout: 
+    sequence: 100
+    parent-region: Variables # 34804076466345524
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Inline Popup
+    template-options: 
+    - '#DEFAULT#'
+    - js-dialog-autoheight
+    - js-dialog-nosize
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Form
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: Text (escape special characters)
+      show-line-breaks: true
+
+- # ====== Region: Parameters ==================================
+  id: 34809236739345527
+  identification: 
+    name: Parameters
+    type: Content Row
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select label,
+             display_value
+        from apex_workflow_variables
+       where workflow_id = :P162_WORKFLOW_ID
+         and variable_type = 'PARAMETER'
+       order by label
+    page-items-to-submit: 
+    - P162_WORKFLOW_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 110
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Collapsible
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noPadding
+    - js-useLocalStorage
+    - is-collapsed
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      display: Multiple (Report)
+
+    settings: 
+      overline: '&LABEL.'
+      title: '&DISPLAY_VALUE.'
+      display-avatar: false
+      display-badge: false
+
+    appearance: 
+      apply-theme-colors: true
+      style: Default
+      hide-borders: false
+      remove-padding: false
+
+    row-selection: 
+      type: None
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Page
+      entities-per-page: 10
+      show-total-count: false
+
+  columns: 
+  - # ====== Column: LABEL =======================================
+    id: 34809628723345527
+    identification: 
+      name: LABEL
+
+    layout: 
+      sequence: 10
+
+    source: 
+      type: Database Column
+      database-column: LABEL
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: true
+
+    appearance: 
+      group: false
+
+  - # ====== Column: DISPLAY_VALUE ===============================
+    id: 34810182032345528
+    identification: 
+      name: DISPLAY_VALUE
+
+    layout: 
+      sequence: 20
+
+    source: 
+      type: Database Column
+      database-column: DISPLAY_VALUE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+- # ====== Region: History =====================================
+  id: 34810686906345528
+  identification: 
+    name: History
+    type: Comments
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select display_msg,
+             created_by,
+             created_on
+        from apex_workflow_audit
+       where workflow_id = :P162_WORKFLOW_ID
+         and current_activity_id is null
+       order by audit_id desc
+    page-items-to-submit: 
+    - P162_WORKFLOW_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 120
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Collapsible
+    template-options: 
+    - '#DEFAULT#'
+    - js-useLocalStorage
+    - is-collapsed
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      display: Multiple (Report)
+
+    settings: 
+      comment-text: DISPLAY_MSG
+      user-name: CREATED_BY
+      date: CREATED_ON
+      display-avatar: false
+      style: Basic
+      apply-theme-colors: false
+
+    row-selection: 
+      type: None
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Page
+      entities-per-page: 15
+      show-total-count: false
+
+  columns: 
+  - # ====== Column: DISPLAY_MSG =================================
+    id: 34811025139345528
+    identification: 
+      name: DISPLAY_MSG
+
+    layout: 
+      sequence: 10
+
+    source: 
+      type: Database Column
+      database-column: DISPLAY_MSG
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: CREATED_BY ==================================
+    id: 34811596871345528
+    identification: 
+      name: CREATED_BY
+
+    layout: 
+      sequence: 20
+
+    source: 
+      type: Database Column
+      database-column: CREATED_BY
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: true
+
+    appearance: 
+      group: false
+
+  - # ====== Column: CREATED_ON ==================================
+    id: 34812019458345529
+    identification: 
+      name: CREATED_ON
+
+    layout: 
+      sequence: 30
+
+    source: 
+      type: Database Column
+      database-column: CREATED_ON
+      data-type: DATE
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: true
+
+    appearance: 
+      format-mask: SINCE
+      group: false
+
+- # ====== Region: Workflow Diagram ============================
+  id: 34812563486345529
+  identification: 
+    name: Workflow Diagram
+    type: Workflow Diagram
+
+  layout: 
+    sequence: 130
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Collapsible
+    template-options: 
+    - '#DEFAULT#'
+    - js-useLocalStorage
+    - is-collapsed
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      workflow-id: P162_WORKFLOW_ID
+      enable-navigator: true
+      initial-zoom: Zoom to Fit
+
+- # ====== Region: Buttons =====================================
+  id: 34812964794345530
+  identification: 
+    name: Buttons
+    type: Static Content
+
+  layout: 
+    sequence: 200
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-ButtonRegion--stickToBottom
+    - t-ButtonRegion--slimPadding
+    - margin-bottom-none
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P162_WORKFLOW_ID =========================
+  id: 34788827069345511
+  identification: 
+    name: P162_WORKFLOW_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: false
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P162_ACTIVITY_ID =========================
+  id: 34789298889345511
+  identification: 
+    name: P162_ACTIVITY_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 20
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: false
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P162_PARENT_WORKFLOW_ID ==================
+  id: 34789653022345511
+  identification: 
+    name: P162_PARENT_WORKFLOW_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 30
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: 'select parent_workflow_id from apex_workflows where workflow_id = :P162_WORKFLOW_ID'
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: false
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P162_VARIABLE_ID =========================
+  id: 34806852949345526
+  identification: 
+    name: P162_VARIABLE_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: Edit Variable # 34806427024345525
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Ignore
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: false
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P162_VARIABLE_LABEL ======================
+  id: 34807228667345526
+  identification: 
+    name: P162_VARIABLE_LABEL
+    type: Display Only
+
+  label: 
+    label: Variable
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: false
+
+  layout: 
+    sequence: 20
+    region: Edit Variable # 34806427024345525
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Ignore
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: false
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P162_CURRENT_VALUE =======================
+  id: 34807634840345526
+  identification: 
+    name: P162_CURRENT_VALUE
+    type: Display Only
+
+  label: 
+    label: Current Value
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: false
+
+  layout: 
+    sequence: 30
+    region: Edit Variable # 34806427024345525
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Ignore
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: false
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P162_NEW_VALUE ===========================
+  id: 34808051962345526
+  identification: 
+    name: P162_NEW_VALUE
+    type: Textarea
+
+  label: 
+    label: New Value
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 40
+    region: Edit Variable # 34806427024345525
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 3
+
+  validation: 
+    value-required: false
+    maximum-length: 4000
+
+  advanced: 
+    warn-on-unsaved-changes: Ignore
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: TO_PARENT_WORKFLOW ==========================
+  id: 34790013075345512
+  identification: 
+    button-name: TO_PARENT_WORKFLOW
+    label: To Parent Workflow
+
+  layout: 
+    sequence: 50
+    region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-arrow-left-alt
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:162:&SESSION.::&DEBUG.:RP,162:P162_WORKFLOW_ID:&P162_PARENT_WORKFLOW_ID.'
+      page: 162 # Admin Workflow Detail Page
+      clear-cache: RP,162
+      values: 
+        p162_workflow_id: '&P162_PARENT_WORKFLOW_ID.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P162_PARENT_WORKFLOW_ID
+
+- # ====== Button: CANCEL_ACTIVITY_AUDIT =======================
+  id: 34803618081345523
+  identification: 
+    button-name: CANCEL_ACTIVITY_AUDIT
+    label: Close
+
+  layout: 
+    sequence: 10
+    region: Activity Audit # 34801290834345521
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: false
+
+- # ====== Button: CANCEL_EDIT_VARIABLE ========================
+  id: 34808437877345527
+  identification: 
+    button-name: CANCEL_EDIT_VARIABLE
+    label: Close
+
+  layout: 
+    sequence: 10
+    region: Edit Variable # 34806427024345525
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: false
+
+- # ====== Button: UPDATE_VARIABLE =============================
+  id: 34808898521345527
+  identification: 
+    button-name: UPDATE_VARIABLE
+    label: Apply Changes
+
+  layout: 
+    sequence: 20
+    region: Edit Variable # 34806427024345525
+    slot: EDIT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: CANCEL ======================================
+  id: 34813355515345530
+  identification: 
+    button-name: CANCEL
+    label: Close
+
+  layout: 
+    sequence: 10
+    region: Buttons # 34812964794345530
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: false
+
+- # ====== Button: SUSPEND =====================================
+  id: 34813740155345530
+  identification: 
+    button-name: SUSPEND
+    label: Suspend
+
+  layout: 
+    sequence: 10
+    region: Buttons # 34812964794345530
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-pause-circle u-warning-text
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: |
+      apex_workflow.is_allowed (
+          p_instance_id => :P162_WORKFLOW_ID,
+          p_operation   => apex_workflow.c_workflow$_op_suspend )
+
+- # ====== Button: RESUME ======================================
+  id: 34814191949345531
+  identification: 
+    button-name: RESUME
+    label: Resume
+
+  layout: 
+    sequence: 20
+    region: Buttons # 34812964794345530
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-play-circle u-success-text
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: |
+      apex_workflow.is_allowed (
+          p_instance_id => :P162_WORKFLOW_ID,
+          p_operation   => apex_workflow.c_workflow$_op_resume )
+
+- # ====== Button: TERMINATE ===================================
+  id: 34814584965345531
+  identification: 
+    button-name: TERMINATE
+    label: Terminate
+
+  layout: 
+    sequence: 30
+    region: Buttons # 34812964794345530
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-times u-danger-text
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: |
+      apex_workflow.is_allowed (
+          p_instance_id => :P162_WORKFLOW_ID,
+          p_operation   => apex_workflow.c_workflow$_op_terminate )
+
+- # ====== Button: RETRY =======================================
+  id: 34814963152345531
+  identification: 
+    button-name: RETRY
+    label: Retry
+
+  layout: 
+    sequence: 40
+    region: Buttons # 34812964794345530
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-redo-alt
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: |
+      apex_workflow.is_allowed (
+          p_instance_id => :P162_WORKFLOW_ID,
+          p_operation   => apex_workflow.c_workflow$_op_retry )
+
+dynamic-actions: 
+- # ====== Dynamic Action: Activity Audit ======================
+  id: 34815347637345532
+  identification: 
+    name: Activity Audit
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: jQuery Selector
+    jquery-selector: a.audit
+
+  actions: 
+  - # ====== Action: Open Region =================================
+    id: 34815742547345532
+    identification: 
+      action: Open Region
+
+    affected-elements: 
+      selection-type: Region
+      region: Activity Audit # 34801290834345521
+
+    execution: 
+      sequence: 10
+      event: Activity Audit # 34815347637345532
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Set Value ===================================
+    id: 34816277515345532
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: JavaScript Expression
+      javascript-expression: apex.jQuery(this.triggeringElement).attr("data-id")
+      suppress-change-event: true
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P162_ACTIVITY_ID
+
+    execution: 
+      sequence: 20
+      event: Activity Audit # 34815347637345532
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Refresh =====================================
+    id: 34816783281345532
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Activity Audit # 34801290834345521
+
+    execution: 
+      sequence: 30
+      event: Activity Audit # 34815347637345532
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Cancel Activity Audit ===============
+  id: 34817210030345532
+  identification: 
+    name: Cancel Activity Audit
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL_ACTIVITY_AUDIT # 34803618081345523
+
+  actions: 
+  - # ====== Action: Close Region ================================
+    id: 34817693912345533
+    identification: 
+      action: Close Region
+
+    affected-elements: 
+      selection-type: Region
+      region: Activity Audit # 34801290834345521
+
+    execution: 
+      sequence: 10
+      event: Cancel Activity Audit # 34817210030345532
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Edit Variable =======================
+  id: 34818160450345533
+  identification: 
+    name: Edit Variable
+
+  execution: 
+    sequence: 30
+    event-scope: Dynamic
+    static-container-(jquery-selector): '#VARIABLES'
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: jQuery Selector
+    jquery-selector: a.variable
+
+  actions: 
+  - # ====== Action: Open Region =================================
+    id: 34818529079345533
+    identification: 
+      action: Open Region
+
+    affected-elements: 
+      selection-type: Region
+      region: Edit Variable # 34806427024345525
+
+    execution: 
+      sequence: 10
+      event: Edit Variable # 34818160450345533
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Disable =====================================
+    id: 34819045675345533
+    identification: 
+      action: Disable
+
+    affected-elements: 
+      selection-type: Button
+      button: UPDATE_VARIABLE # 34808898521345527
+
+    execution: 
+      sequence: 20
+      event: Edit Variable # 34818160450345533
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Set Value ===================================
+    id: 34819553386345534
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: JavaScript Expression
+      javascript-expression: apex.jQuery(this.triggeringElement).attr("data-id")
+      suppress-change-event: true
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P162_VARIABLE_ID
+
+    execution: 
+      sequence: 30
+      event: Edit Variable # 34818160450345533
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Set Value ===================================
+    id: 34820011276345534
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: JavaScript Expression
+      javascript-expression: apex.jQuery(this.triggeringElement).attr("data-label")
+      suppress-change-event: true
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P162_VARIABLE_LABEL
+
+    execution: 
+      sequence: 40
+      event: Edit Variable # 34818160450345533
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Set Value ===================================
+    id: 34820578287345535
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: JavaScript Expression
+      javascript-expression: apex.jQuery(this.triggeringElement).attr("data-value")
+      suppress-change-event: true
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P162_CURRENT_VALUE
+      - P162_NEW_VALUE
+
+    execution: 
+      sequence: 50
+      event: Edit Variable # 34818160450345533
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Set Focus ===================================
+    id: 34821036977345535
+    identification: 
+      action: Set Focus
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P162_NEW_VALUE
+
+    execution: 
+      sequence: 60
+      event: Edit Variable # 34818160450345533
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Cancel Edit Variable ================
+  id: 34821503266345535
+  identification: 
+    name: Cancel Edit Variable
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL_EDIT_VARIABLE # 34808437877345527
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 34821951874345535
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P162_NEW_VALUE
+
+    execution: 
+      sequence: 10
+      event: Cancel Edit Variable # 34821503266345535
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Close Region ================================
+    id: 34822495714345536
+    identification: 
+      action: Close Region
+
+    affected-elements: 
+      selection-type: Region
+      region: Edit Variable # 34806427024345525
+
+    execution: 
+      sequence: 20
+      event: Cancel Edit Variable # 34821503266345535
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Cancel Dialog =======================
+  id: 34822903354345536
+  identification: 
+    name: Cancel Dialog
+
+  execution: 
+    sequence: 50
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 34813355515345530
+
+  actions: 
+  - # ====== Action: Cancel Dialog ===============================
+    id: 34823324305345536
+    identification: 
+      action: Cancel Dialog
+
+    execution: 
+      sequence: 10
+      event: Cancel Dialog # 34822903354345536
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Disable/Enable Update Button ========
+  id: 34823837068345536
+  identification: 
+    name: Disable/Enable Update Button
+
+  execution: 
+    sequence: 60
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Key Release
+    selection-type: Item(s)
+    item(s): 
+    - P162_NEW_VALUE
+
+  client-side-condition: 
+    type: JavaScript expression
+    javascript-expression: apex.items.P162_NEW_VALUE.value != apex.items.P162_CURRENT_VALUE.value
+
+  actions: 
+  - # ====== Action: Enable ======================================
+    id: 34824259560345537
+    identification: 
+      action: Enable
+
+    affected-elements: 
+      selection-type: Button
+      button: UPDATE_VARIABLE # 34808898521345527
+
+    execution: 
+      sequence: 10
+      event: Disable/Enable Update Button # 34823837068345536
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Disable =====================================
+    id: 34824791312345537
+    identification: 
+      action: Disable
+
+    affected-elements: 
+      selection-type: Button
+      button: UPDATE_VARIABLE # 34808898521345527
+
+    execution: 
+      sequence: 20
+      event: Disable/Enable Update Button # 34823837068345536
+      fire-when-event-result-is: False
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Update Variable ============================
+  id: 34825236009345537
+  identification: 
+    name: Update Variable
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      apex_workflow.update_variables (
+          p_instance_id    => :P162_WORKFLOW_ID,
+          p_changed_params => apex_workflow.t_workflow_parameters (
+              1 => apex_workflow.t_workflow_parameter (
+                      static_id    => :P162_VARIABLE_ID,
+                      string_value => :P162_NEW_VALUE ) ) );
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Variable updated
+
+  error: 
+    error-message: '#SQLERRM_TEXT#'
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: UPDATE_VARIABLE # 34808898521345527
+
+- # ====== Process: Suspend ====================================
+  id: 34825696757345537
+  identification: 
+    name: Suspend
+    type: Workflow
+    execution-chain: None
+
+  settings: 
+    type: Suspend
+    workflow-id-item: P162_WORKFLOW_ID
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Workflow suspended
+
+  error: 
+    error-message: '#SQLERRM_TEXT#'
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: SUSPEND # 34813740155345530
+
+- # ====== Process: Resume =====================================
+  id: 34826020486345538
+  identification: 
+    name: Resume
+    type: Workflow
+    execution-chain: None
+
+  settings: 
+    type: Resume
+    workflow-id-item: P162_WORKFLOW_ID
+
+  execution: 
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Workflow resumed
+
+  error: 
+    error-message: '#SQLERRM_TEXT#'
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: RESUME # 34814191949345531
+
+- # ====== Process: Terminate ==================================
+  id: 34826455747345538
+  identification: 
+    name: Terminate
+    type: Workflow
+    execution-chain: None
+
+  settings: 
+    type: Terminate
+    workflow-id-item: P162_WORKFLOW_ID
+
+  execution: 
+    sequence: 40
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Workflow terminated
+
+  error: 
+    error-message: '#SQLERRM_TEXT#'
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: TERMINATE # 34814584965345531
+
+- # ====== Process: Retry ======================================
+  id: 34826883505345538
+  identification: 
+    name: Retry
+    type: Workflow
+    execution-chain: None
+
+  settings: 
+    type: Retry
+    workflow-id-item: P162_WORKFLOW_ID
+
+  execution: 
+    sequence: 50
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Workflow retried
+
+  error: 
+    error-message: '#SQLERRM_TEXT#'
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: RETRY # 34814963152345531
+
+- # ====== Process: Close Dialog ===============================
+  id: 34827202437345538
+  identification: 
+    name: Close Dialog
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 60
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request is NOT contained in Value
+    value: UPDATE_VARIABLE
+

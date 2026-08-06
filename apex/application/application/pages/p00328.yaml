@@ -1,0 +1,1060 @@
+---
+# ====== Page: SIM Request ===================================
+id: 328
+identification: 
+  name: SIM Request
+  alias: SIM-REQUEST
+  title: SIM Request
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Sim Request =================================
+  id: 41406981966853019
+  identification: 
+    name: Sim Request
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P328_EMP_ID ==============================
+  id: 41407099146853020
+  identification: 
+    name: P328_EMP_ID
+    type: Popup LOV
+
+  label: 
+    label: Employee
+    alignment: Left
+
+  settings: 
+    display-as: Inline Popup
+    initial-fetch: Automatic
+    manual-entry: false
+    fetch-on-search: false
+
+  search: 
+    match-type: Contains
+    case-sensitive: false
+    minimum-characters: 0
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Sim Request # 41406981966853019
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: HR.EMPLOYEE_LOV # 34519350958620461
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item = Value
+    item: P328_FROM_PAGE
+    value: 108
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P328_REQUEST_TYPE ========================
+  id: 41407130188853021
+  identification: 
+    name: P328_REQUEST_TYPE
+    type: Select List
+
+  label: 
+    label: Request Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: Sim Request # 41406981966853019
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select d, r
+      from (
+          select 'New Onboarding'              d, 'NEW_ONBOARDING'              r, 10 seq_no from dual union all
+          select 'Additional SIM'              d, 'ADDITIONAL_SIM'              r, 20 seq_no from dual union all
+          select 'Replacement - Lost'          d, 'REPLACEMENT_LOST'            r, 30 seq_no from dual union all
+          select 'Replacement - Damaged'       d, 'REPLACEMENT_DAMAGED'         r, 40 seq_no from dual union all
+          select 'Replacement - Blocked'       d, 'REPLACEMENT_BLOCKED'         r, 50 seq_no from dual union all
+          select 'Replacement - Project Change'd, 'REPLACEMENT_PROJECT_CHANGE'  r, 60 seq_no from dual union all
+          select 'Temporary Replacement'       d, 'TEMPORARY_REPLACEMENT'       r, 70 seq_no from dual union all
+          select 'Return Request'              d, 'RETURN_REQUEST'              r, 80 seq_no from dual union all
+          select 'Other'                       d, 'OTHER'                       r, 99 seq_no from dual
+      )
+      order by seq_no;
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: NEW_ONBOARDING
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P328_PRIORITY ============================
+  id: 41407262369853022
+  identification: 
+    name: P328_PRIORITY
+    type: Select List
+
+  label: 
+    label: Priority
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Sim Request # 41406981966853019
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select d, r
+      from (
+          select 'Urgent' d, 'URGENT' r, 1 seq_no from dual union all
+          select 'High'   d, 'HIGH'   r, 2 seq_no from dual union all
+          select 'Normal' d, 'NORMAL' r, 3 seq_no from dual union all
+          select 'Low'    d, 'LOW'    r, 4 seq_no from dual
+      )
+      order by seq_no;
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: NORMAL
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item = Value
+    item: P328_FROM_PAGE
+    value: 108
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P328_REQUIRED_BY_DT ======================
+  id: 41407319723853023
+  identification: 
+    name: P328_REQUIRED_BY_DT
+    type: Date Picker
+
+  label: 
+    label: Request Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 40
+    region: Sim Request # 41406981966853019
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sysdate
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item = Value
+    item: P328_FROM_PAGE
+    value: 108
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P328_REQUESTED_PROJECT_ID ================
+  id: 41407436821853024
+  identification: 
+    name: P328_REQUESTED_PROJECT_ID
+    type: Select List
+
+  label: 
+    label: Project
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 50
+    region: Sim Request # 41406981966853019
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select project_name d,
+             project_id r
+        from hr_projects
+       order by project_name;
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item = Value
+    item: P328_FROM_PAGE
+    value: 108
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P328_REQUESTED_CITY_ID ===================
+  id: 41407516856853025
+  identification: 
+    name: P328_REQUESTED_CITY_ID
+    type: Select List
+
+  label: 
+    label: City
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 60
+    region: Sim Request # 41406981966853019
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: REF_CITIES.CITY_NAME # 13534316622988223
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item = Value
+    item: P328_FROM_PAGE
+    value: 108
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P328_CURRENT_SIM_ID ======================
+  id: 41407661178853026
+  identification: 
+    name: P328_CURRENT_SIM_ID
+    type: Select List
+
+  label: 
+    label: Current Sim
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 70
+    region: Sim Request # 41406981966853019
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select mobile_no || ' - ' || operator_name || ' - Assigned: ' ||
+             to_char(assign_dt, 'DD-MON-YYYY') as d,
+             sim_id as r
+        from vw_hr_emp_current_sims
+       where emp_id = :P328_EMP_ID
+       order by assign_dt desc, sim_id desc;
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P328_EMP_ID
+    items-to-submit: 
+    - P328_EMP_ID
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item = Value
+    item: P328_FROM_PAGE
+    value: 108
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P328_REASON_CODE =========================
+  id: 41407836602853028
+  identification: 
+    name: P328_REASON_CODE
+    type: Text Field
+
+  label: 
+    label: Reason Code
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 80
+    region: Sim Request # 41406981966853019
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P328_REQUEST_REMARKS =====================
+  id: 41407929639853029
+  identification: 
+    name: P328_REQUEST_REMARKS
+    type: Text Field
+
+  label: 
+    label: Request Remarks
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 90
+    region: Sim Request # 41406981966853019
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P328_FROM_PAGE ===========================
+  id: 41408086583853030
+  identification: 
+    name: P328_FROM_PAGE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 100
+    region: Sim Request # 41406981966853019
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PB_CREATE_REQUEST ===========================
+  id: 41408704519853037
+  identification: 
+    button-name: PB_CREATE_REQUEST
+    label: Create Request
+
+  layout: 
+    sequence: 110
+    region: Sim Request # 41406981966853019
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-plus-square
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: PB_CANCEL ===================================
+  id: 41408833954853038
+  identification: 
+    button-name: PB_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 120
+    region: Sim Request # 41406981966853019
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: Show/Hide Current SIM ===============
+  id: 41408241202853032
+  identification: 
+    name: Show/Hide Current SIM
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P328_REQUEST_TYPE
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 41408394941853033
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        var t = apex.item("P328_REQUEST_TYPE").getValue();
+        
+        var needCurrentSim = [
+            "REPLACEMENT_LOST",
+            "REPLACEMENT_DAMAGED",
+            "REPLACEMENT_BLOCKED",
+            "REPLACEMENT_PROJECT_CHANGE",
+            "TEMPORARY_REPLACEMENT",
+            "RETURN_REQUEST"
+        ].indexOf(t) >= 0;
+        
+        if (needCurrentSim) {
+            apex.item("P328_CURRENT_SIM_ID").show();
+        } else {
+            apex.item("P328_CURRENT_SIM_ID").setValue("");
+            apex.item("P328_CURRENT_SIM_ID").hide();
+        }
+
+    execution: 
+      sequence: 10
+      event: Show/Hide Current SIM # 41408241202853032
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: Close Dialog ========================
+  id: 41408911534853039
+  identification: 
+    name: Close Dialog
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: PB_CANCEL # 41408833954853038
+
+  actions: 
+  - # ====== Action: Close Dialog ================================
+    id: 41409003107853040
+    identification: 
+      action: Close Dialog
+
+    execution: 
+      sequence: 10
+      event: Close Dialog # 41408911534853039
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations: 
+- # ====== Validation: Employee Required =======================
+  id: 41408436210853034
+  identification: 
+    name: Employee Required
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if :P328_EMP_ID is null then
+              return 'Employee is required.';
+          end if;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: Current SIM required for replacement/retu
+  id: 41408560821853035
+  identification: 
+    name: Current SIM required for replacement/return
+
+  execution: 
+    sequence: 20
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if :P328_REQUEST_TYPE in (
+              'REPLACEMENT_LOST',
+              'REPLACEMENT_DAMAGED',
+              'REPLACEMENT_BLOCKED',
+              'REPLACEMENT_PROJECT_CHANGE',
+              'TEMPORARY_REPLACEMENT',
+              'RETURN_REQUEST'
+          )
+          and :P328_CURRENT_SIM_ID is null then
+              return 'Current SIM is required for replacement or return request.';
+          end if;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: Remarks required for Other ==============
+  id: 41408615920853036
+  identification: 
+    name: Remarks required for Other
+
+  execution: 
+    sequence: 30
+
+  validation: 
+    type: Function Body (returning Error Text)
+    language: PL/SQL
+    pl/sql-function-body-returning-error-text: |
+      begin
+          if :P328_REQUEST_TYPE = 'OTHER'
+             and :P328_REQUEST_REMARKS is null then
+              return 'Remarks are required for Other SIM request.';
+          end if;
+      
+          return null;
+      end;
+    always-execute: false
+
+  error: 
+    display-location: Inline with Field and in Notification
+
+processes: 
+- # ====== Process: Default Project / City =====================
+  id: 41408116752853031
+  identification: 
+    name: Default Project / City
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          if :P328_EMP_ID is not null then
+      
+              if :P328_REQUESTED_PROJECT_ID is null
+                 or :P328_REQUESTED_CITY_ID is null then
+      
+                  begin
+                      select project_id,
+                             city_id
+                        into :P328_REQUESTED_PROJECT_ID,
+                             :P328_REQUESTED_CITY_ID
+                        from (
+                              select project_id,
+                                     city_id
+                                from hr_emp_status_hist
+                               where emp_id = :P328_EMP_ID
+                                 and effective_to is null
+                               order by effective_from desc, status_id desc
+                             )
+                       where rownum = 1;
+                  exception
+                      when no_data_found then
+                          null;
+                  end;
+      
+              end if;
+      
+          end if;
+      end;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Create SIM Request =========================
+  id: 41409134339853041
+  identification: 
+    name: Create SIM Request
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      declare
+          l_request_id number;
+      begin
+          l_request_id := hr_sim_req_pkg.create_request(
+              p_emp_id               => :P328_EMP_ID,
+              p_request_type         => :P328_REQUEST_TYPE,
+              p_priority             => :P328_PRIORITY,
+              p_required_by_dt       => :P328_REQUIRED_BY_DT,
+              p_requested_project_id => :P328_REQUESTED_PROJECT_ID,
+              p_requested_city_id    => :P328_REQUESTED_CITY_ID,
+              p_current_sim_id       => :P328_CURRENT_SIM_ID,
+              p_reason_code          => :P328_REASON_CODE,
+              p_remarks              => :P328_REQUEST_REMARKS
+          );
+      
+          apex_application.g_print_success_message :=
+              'SIM request created successfully. Request ID: ' || l_request_id;
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: PB_CREATE_REQUEST # 41408704519853037
+
+- # ====== Process: Close Diaglog ==============================
+  id: 41409292878853042
+  identification: 
+    name: Close Diaglog
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

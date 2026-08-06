@@ -1,0 +1,36 @@
+---
+- # ====== Report Layout: RL_TEST_DOCGEN =======================
+  id: 32495121284266798
+  identification: 
+    name: RL_TEST_DOCGEN
+    type: Named Columns (DOCX)
+    file-name: test_docgen_template.docx
+
+  advanced: 
+    static-id: RL_TEST_DOCGEN
+
+  attributes: 
+    mime-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+
+  templates: 
+    data-loop-name: rq_test_docgen
+
+  subscription: 
+    version-number: 39911272295534
+
+- # ====== Report Layout: RL_FLEET_BIKE_HANDOVER_PDF ===========
+  id: 32893215163709778
+  identification: 
+    name: RL_FLEET_BIKE_HANDOVER_PDF
+    type: Named Columns (DOCX)
+    file-name: RL_FLEET_BIKE_HANDOVER.docx
+
+  advanced: 
+    static-id: RL_FLEET_BIKE_HANDOVER_PDF
+
+  attributes: 
+    mime-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+
+  subscription: 
+    version-number: 39911485677547
+

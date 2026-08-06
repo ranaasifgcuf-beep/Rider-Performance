@@ -1,0 +1,258 @@
+---
+# ====== Application: FLEETHUB ===============================
+identification: 
+  name: FLEETHUB
+  alias: FLEETHUB
+  version: Release 1.0
+
+row-search: 
+  tokenize: true
+  text-query-function: None
+
+availability: 
+  status: Available with Developer Toolbar
+  build-status: Run and Build Application
+
+error-handling: 
+  default-display-location: Inline with Field and in Notification
+
+report-printing: 
+  type: Use Instance Settings
+
+advanced: 
+  friendly-urls: true
+  allow-feedback: true
+  logging: true
+  debugging: false
+  compatibility-mode: 24.2
+  accessible-read-only-items: true
+  pass-ecid: Y
+
+authentication: 
+  public-user: APEX_PUBLIC_USER
+  authentication-scheme: APEX_AUTH_FN # 9737381191346400
+
+authorization: 
+  source-for-role-or-group-schemes: Access Control User Role Assignments
+
+session-management: 
+  rejoin-sessions: Disabled
+
+session-state-protection: 
+  enabled: true
+
+security: 
+  deep-linking: Disabled
+  browser-cache: Disabled
+  embed-in-frames: Deny
+  referrer-policy: strict-origin
+  html-escaping-mode: Extended
+
+database-session: 
+  parsing-schema: WKSP_ALNAJAH
+
+globalization: 
+  primary-language: English (en)
+  document-direction: Language Default
+  language-derived-from: Application Primary Language
+  automatic-time-zone: true
+  automatic-csv-encoding: true
+
+application-format-masks: 
+  date: DD-MON-YYYY
+  timestamp: 'DD-MON-YYYY HH24:MI:SS'
+  timestamp-time-zone: 'DD-MON-YYYY HH24:MI:SS'
+
+character-value-comparison: 
+  behavior: Database session NLS setting (default)
+
+logo: 
+  type: Text
+  text: FleetHub ERP
+
+progressive-web-app: 
+  enable: true
+  installable: true
+  display: Fullscreen
+  screen-orientation: Any
+  ios-status-bar-style: Default
+  enable-push-notifications: false
+
+navigation: 
+  home-url: 
+    url: 'f?p=&APP_ID.:1:&APP_SESSION.::&DEBUG.:::'
+    page: 1 # Home
+
+  login-url: 
+    url: 'f?p=&APP_ID.:LOGIN:&APP_SESSION.::&DEBUG.:::'
+    page: LOGIN
+
+navigation-menu: 
+  list-template: Side Navigation Menu
+  template-options: 
+  - '#DEFAULT#'
+  - js-defaultCollapsed
+  - js-navCollapsed--default
+  - t-TreeNav--styleA
+  list-position: Side
+  list: Custom Menu # 9973498614382754
+
+navigation-bar: 
+  implementation: List
+  list: Navigation Bar # 9723311746336345
+  list-template: Navigation Bar
+  template-options: 
+  - '#DEFAULT#'
+
+javascript: 
+  include-jquery-migrate: false
+
+attributes: 
+  theme: Universal Theme # 42
+  global-page: 0
+  enable-end-users-to-choose-theme-style: false
+  add-"built-with-apex"-to-footer: false
+  auto-dismiss-success-messages: false
+
+subscription: 
+  version-number: 39912188511833
+
+substitutions: 
+- # ====== Substitution: APP_NAME ==============================
+  id: 1
+  identification: 
+    name: APP_NAME
+
+  value: 
+    static-value: FLEETHUB
+
+component-settings: 
+- # ====== Component Setting: NATIVE_DISPLAY_SELECTOR ==========
+  id: 9716810009336310
+  identification: 
+    name: NATIVE_DISPLAY_SELECTOR
+    type: Region
+
+  subscription: 
+    version-number: 39900337080393
+
+- # ====== Component Setting: NATIVE_ADFBC =====================
+  id: 9717125587336311
+  identification: 
+    name: NATIVE_ADFBC
+    type: REST Data Source
+
+  subscription: 
+    version-number: 39900337080450
+
+- # ====== Component Setting: NATIVE_MAP_REGION ================
+  id: 9717409967336312
+  identification: 
+    name: NATIVE_MAP_REGION
+    type: Region
+
+  subscription: 
+    version-number: 39900337080456
+
+- # ====== Component Setting: NATIVE_GEOCODING =================
+  id: 9717715309336312
+  identification: 
+    name: NATIVE_GEOCODING
+    type: Process
+
+  settings: 
+    attribute-1: RELAX_HOUSE_NUMBER
+
+  subscription: 
+    version-number: 39900337080462
+
+- # ====== Component Setting: NATIVE_SELECT_MANY ===============
+  id: 9718066676336312
+  identification: 
+    name: NATIVE_SELECT_MANY
+    type: Item
+
+  subscription: 
+    version-number: 39900337080468
+
+- # ====== Component Setting: NATIVE_DATE_PICKER_APEX ==========
+  id: 9718306018336312
+  identification: 
+    name: NATIVE_DATE_PICKER_APEX
+    type: Item
+
+  subscription: 
+    version-number: 39900337080474
+
+- # ====== Component Setting: NATIVE_SINGLE_CHECKBOX ===========
+  id: 9718653575336312
+  identification: 
+    name: NATIVE_SINGLE_CHECKBOX
+    type: Item
+
+  subscription: 
+    version-number: 39900337080480
+
+- # ====== Component Setting: NATIVE_COLOR_PICKER ==============
+  id: 9718959607336312
+  identification: 
+    name: NATIVE_COLOR_PICKER
+    type: Item
+
+  subscription: 
+    version-number: 39900337080486
+
+- # ====== Component Setting: NATIVE_STAR_RATING ===============
+  id: 9719262538336312
+  identification: 
+    name: NATIVE_STAR_RATING
+    type: Item
+
+  subscription: 
+    version-number: 39900337080489
+
+- # ====== Component Setting: NATIVE_IR ========================
+  id: 9719515165336313
+  identification: 
+    name: NATIVE_IR
+    type: Region
+
+  subscription: 
+    version-number: 39900337080492
+
+- # ====== Component Setting: NATIVE_GEOCODED_ADDRESS ==========
+  id: 9719858052336313
+  identification: 
+    name: NATIVE_GEOCODED_ADDRESS
+    type: Item
+
+  subscription: 
+    version-number: 39900337080498
+
+- # ====== Component Setting: NATIVE_OPEN_AI_ASSISTANT =========
+  id: 9720198368336313
+  identification: 
+    name: NATIVE_OPEN_AI_ASSISTANT
+    type: Dynamic Action
+
+  subscription: 
+    version-number: 39900337080504
+
+- # ====== Component Setting: NATIVE_BOSS ======================
+  id: 9720430627336313
+  identification: 
+    name: NATIVE_BOSS
+    type: REST Data Source
+
+  subscription: 
+    version-number: 39900337080508
+
+- # ====== Component Setting: NATIVE_YES_NO ====================
+  id: 9720790978336313
+  identification: 
+    name: NATIVE_YES_NO
+    type: Item
+
+  subscription: 
+    version-number: 39900337080508
+

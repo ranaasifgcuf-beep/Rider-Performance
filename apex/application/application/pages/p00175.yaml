@@ -1,0 +1,1427 @@
+---
+# ====== Page: Loan History ==================================
+id: 175
+identification: 
+  name: Loan History
+  alias: LOAN-HISTORY
+  title: Loan History
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    .hist-context {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 14px 18px;
+        margin-bottom: 14px;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    }
+    
+    .hist-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+    
+    .hist-sub {
+        font-size: 12px;
+        color: #64748b;
+        margin-top: 3px;
+    }
+    
+    .hist-balance {
+        font-size: 16px;
+        font-weight: 700;
+        color: #9a3412;
+    }
+    
+    #approval_requests .t-Report-report,
+    #approval_steps .t-Report-report {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    #approval_requests th,
+    #approval_steps th {
+        background: #f8fafc;
+        color: #334155;
+        font-weight: 700;
+        font-size: 12px;
+    }
+    
+    #approval_requests td,
+    #approval_steps td {
+        vertical-align: middle;
+        padding: 10px 12px;
+    }
+    
+    .hist-context {
+        border-left: 4px solid #2563eb;
+    }
+    
+    .hist-balance {
+        background: #fff7ed;
+        padding: 8px 12px;
+        border-radius: 8px;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: History Context =============================
+  id: 37242521520914205
+  identification: 
+    name: History Context
+    type: Dynamic Content
+
+  source: 
+    language: PL/SQL
+    pl/sql-function-body-returning-a-clob: |
+      declare
+          l_html clob;
+      
+          function esc(p_text varchar2) return varchar2 is
+          begin
+              return apex_escape.html(nvl(p_text, '-'));
+          end;
+      
+          function money(p_amount number) return varchar2 is
+          begin
+              return 'AED ' || trim(to_char(nvl(p_amount,0), '999G999G999G990D00'));
+          end;
+      begin
+          if :P175_LOAN_TXN_ID is null then
+      
+              for r in (
+                  select loan_no,
+                         emp_code,
+                         employee_name,
+                         balance_amount,
+                         approval_status,
+                         status
+                    from hr_emp_loan_v
+                   where loan_id = :P175_LOAN_ID
+              )
+              loop
+                  l_html :=
+                      '<div class="hist-context">' ||
+                      '  <div>' ||
+                      '    <div class="hist-title">Loan History</div>' ||
+                      '    <div class="hist-sub">' || esc(r.loan_no) || ' | ' ||
+                             esc(r.emp_code || ' - ' || r.employee_name) || '</div>' ||
+                      '  </div>' ||
+                      '  <div class="hist-balance">' || money(r.balance_amount) || '</div>' ||
+                      '</div>';
+              end loop;
+      
+          else
+      
+              for r in (
+                  select v.loan_no,
+                         v.emp_code,
+                         v.employee_name,
+                         t.txn_type,
+                         t.amount,
+                         t.approval_status,
+                         t.remarks
+                    from hr_emp_loan_txns t
+                    join hr_emp_loan_v v
+                      on v.loan_id = t.loan_id
+                   where t.loan_txn_id = :P175_LOAN_TXN_ID
+                     and t.loan_id = :P175_LOAN_ID
+              )
+              loop
+                  l_html :=
+                      '<div class="hist-context">' ||
+                      '  <div>' ||
+                      '    <div class="hist-title">Transaction History</div>' ||
+                      '    <div class="hist-sub">' || esc(r.loan_no) || ' | ' ||
+                             esc(r.emp_code || ' - ' || r.employee_name) || '</div>' ||
+                      '    <div class="hist-sub">Transaction: ' || esc(r.txn_type) ||
+                             ' | ' || money(r.amount) || '</div>' ||
+                      '  </div>' ||
+                      '  <div class="hist-balance">' || esc(r.approval_status) || '</div>' ||
+                      '</div>';
+              end loop;
+      
+          end if;
+      
+          htp.p(nvl(l_html, '<div class="hist-context">No history context found.</div>'));
+      end;
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    performance: 
+      lazy-loading: false
+
+- # ====== Region: Approval Request ============================
+  id: 37242609146914206
+  identification: 
+    name: Approval Request
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select r.approval_id,
+             case r.module_code
+                 when 'LOAN_MASTER' then 'Loan Creation'
+                 when 'LOAN_TXN' then 'Loan Transaction'
+                 else r.module_code
+             end approval_type,
+             r.txn_type_code,
+             r.approval_subject,
+             'AED ' || trim(to_char(nvl(r.approval_amount,0), '999G999G999G990D00')) amount,
+            case r.request_status
+          when 'APPROVED' then '<span class="t-Badge t-Badge--success">Approved</span>'
+          when 'SUBMITTED' then '<span class="t-Badge t-Badge--warning">Submitted</span>'
+          when 'REJECTED' then '<span class="t-Badge t-Badge--danger">Rejected</span>'
+          else '<span class="t-Badge">' || apex_escape.html(r.request_status) || '</span>'
+      end request_status,
+             r.requested_by,
+             to_char(r.requested_dt, 'DD-MON-YYYY HH24:MI') requested_dt,
+             r.final_action_done
+      from hr_approval_requests r
+      where (
+              :P175_LOAN_TXN_ID is null
+              and r.module_code = 'LOAN_MASTER'
+              and r.record_pk = :P175_LOAN_ID
+            )
+         or (
+              r.module_code = 'LOAN_TXN'
+              and exists (
+                  select 1
+                    from hr_emp_loan_txns t
+                   where t.loan_txn_id = r.record_pk
+                     and t.loan_id = :P175_LOAN_ID
+                     and (
+                          :P175_LOAN_TXN_ID is null
+                          or t.loan_txn_id = :P175_LOAN_TXN_ID
+                     )
+              )
+            )
+      order by r.approval_id desc;
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: approval_requests
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: APPROVAL_ID =================================
+    id: 37242710437914207
+    identification: 
+      column-name: APPROVAL_ID
+      type: Hidden
+
+    layout: 
+      sequence: 10
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: APPROVAL_TYPE ===============================
+    id: 37242847244914208
+    identification: 
+      column-name: APPROVAL_TYPE
+      type: Hidden
+
+    layout: 
+      sequence: 20
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TXN_TYPE_CODE ===============================
+    id: 37242988794914209
+    identification: 
+      column-name: TXN_TYPE_CODE
+      type: Plain Text
+
+    heading: 
+      heading: Type
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: APPROVAL_SUBJECT ============================
+    id: 37243002571914210
+    identification: 
+      column-name: APPROVAL_SUBJECT
+      type: Hidden
+
+    layout: 
+      sequence: 50
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REQUEST_STATUS ==============================
+    id: 37243277500914212
+    identification: 
+      column-name: REQUEST_STATUS
+      type: Plain Text
+
+    heading: 
+      heading: Status
+      alignment: center
+
+    layout: 
+      sequence: 60
+      column-alignment: center
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: false
+
+  - # ====== Column: REQUESTED_BY ================================
+    id: 37243301096914213
+    identification: 
+      column-name: REQUESTED_BY
+      type: Plain Text
+
+    heading: 
+      heading: Submitted By
+      alignment: start
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REQUESTED_DT ================================
+    id: 37243408420914214
+    identification: 
+      column-name: REQUESTED_DT
+      type: Plain Text
+
+    heading: 
+      heading: Submitted Date
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: FINAL_ACTION_DONE ===========================
+    id: 37243533766914215
+    identification: 
+      column-name: FINAL_ACTION_DONE
+      type: Hidden
+
+    layout: 
+      sequence: 90
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: AMOUNT ======================================
+    id: 37246012977914240
+    identification: 
+      column-name: AMOUNT
+      type: Plain Text
+
+    heading: 
+      heading: Amount
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Approval Step History =======================
+  id: 37243660944914216
+  identification: 
+    name: Approval Step History
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select r.approval_id,
+             case r.module_code
+                 when 'LOAN_MASTER' then 'Loan Creation'
+                 when 'LOAN_TXN' then 'Loan Transaction'
+                 else r.module_code
+             end approval_type,
+             r.approval_subject,
+             s.step_seq,
+             s.step_name,
+             s.approver_users,
+             case s.step_status
+          when 'APPROVED' then '<span class="t-Badge t-Badge--success">Approved</span>'
+          when 'TASK_CREATED' then '<span class="t-Badge t-Badge--warning">Pending</span>'
+          when 'PENDING' then '<span class="t-Badge">Waiting</span>'
+          when 'REJECTED' then '<span class="t-Badge t-Badge--danger">Rejected</span>'
+          when 'CANCELLED' then '<span class="t-Badge">Cancelled</span>'
+          else '<span class="t-Badge">' || apex_escape.html(s.step_status) || '</span>'
+      end step_status,
+             s.action_by,
+             to_char(s.action_dt, 'DD-MON-YYYY HH24:MI') action_dt,
+             s.comments
+      from hr_approval_request_steps s
+      join hr_approval_requests r
+        on r.approval_id = s.approval_id
+      where (
+              :P175_LOAN_TXN_ID is null
+              and r.module_code = 'LOAN_MASTER'
+              and r.record_pk = :P175_LOAN_ID
+            )
+         or (
+              r.module_code = 'LOAN_TXN'
+              and exists (
+                  select 1
+                    from hr_emp_loan_txns t
+                   where t.loan_txn_id = r.record_pk
+                     and t.loan_id = :P175_LOAN_ID
+                     and (
+                          :P175_LOAN_TXN_ID is null
+                          or t.loan_txn_id = :P175_LOAN_TXN_ID
+                     )
+              )
+            )
+      order by r.approval_id desc, s.step_seq;
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 50
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: approval_steps
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: APPROVAL_ID =================================
+    id: 37243726312914217
+    identification: 
+      column-name: APPROVAL_ID
+      type: Hidden
+
+    layout: 
+      sequence: 10
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: APPROVAL_TYPE ===============================
+    id: 37243872320914218
+    identification: 
+      column-name: APPROVAL_TYPE
+      type: Hidden
+
+    layout: 
+      sequence: 20
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: APPROVAL_SUBJECT ============================
+    id: 37243966674914219
+    identification: 
+      column-name: APPROVAL_SUBJECT
+      type: Hidden
+
+    layout: 
+      sequence: 30
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: STEP_SEQ ====================================
+    id: 37244089674914220
+    identification: 
+      column-name: STEP_SEQ
+      type: Plain Text
+
+    heading: 
+      heading: Step Seq
+      alignment: end
+
+    layout: 
+      sequence: 40
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: STEP_NAME ===================================
+    id: 37244157631914221
+    identification: 
+      column-name: STEP_NAME
+      type: Plain Text
+
+    heading: 
+      heading: Step Name
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: APPROVER_USERS ==============================
+    id: 37244242200914222
+    identification: 
+      column-name: APPROVER_USERS
+      type: Plain Text
+
+    heading: 
+      heading: Approver Users
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: STEP_STATUS =================================
+    id: 37244333081914223
+    identification: 
+      column-name: STEP_STATUS
+      type: Plain Text
+
+    heading: 
+      heading: Status
+      alignment: center
+
+    layout: 
+      sequence: 70
+      column-alignment: center
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: false
+
+  - # ====== Column: ACTION_BY ===================================
+    id: 37244487057914224
+    identification: 
+      column-name: ACTION_BY
+      type: Plain Text
+
+    heading: 
+      heading: Action By
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ACTION_DT ===================================
+    id: 37244598161914225
+    identification: 
+      column-name: ACTION_DT
+      type: Plain Text
+
+    heading: 
+      heading: Action Date
+      alignment: start
+
+    layout: 
+      sequence: 90
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: COMMENTS ====================================
+    id: 37244684663914226
+    identification: 
+      column-name: COMMENTS
+      type: Plain Text
+
+    heading: 
+      heading: Comments
+      alignment: start
+
+    layout: 
+      sequence: 100
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Action Log ==================================
+  id: 37244762508914227
+  identification: 
+    name: Action Log
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select l.log_id,
+             r.approval_id,
+             case r.module_code
+                 when 'LOAN_MASTER' then 'Loan Creation'
+                 when 'LOAN_TXN' then 'Loan Transaction'
+                 else r.module_code
+             end approval_type,
+             r.approval_subject,
+             l.action_code,
+             l.action_by,
+             to_char(l.action_dt, 'DD-MON-YYYY HH24:MI') action_dt,
+             l.comments
+      from hr_approval_action_log l
+      join hr_approval_requests r
+        on r.approval_id = l.approval_id
+      where (
+              :P175_LOAN_TXN_ID is null
+              and r.module_code = 'LOAN_MASTER'
+              and r.record_pk = :P175_LOAN_ID
+            )
+         or (
+              r.module_code = 'LOAN_TXN'
+              and exists (
+                  select 1
+                    from hr_emp_loan_txns t
+                   where t.loan_txn_id = r.record_pk
+                     and t.loan_id = :P175_LOAN_ID
+                     and (
+                          :P175_LOAN_TXN_ID is null
+                          or t.loan_txn_id = :P175_LOAN_TXN_ID
+                     )
+              )
+            )
+      order by l.action_dt desc, l.log_id desc;
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 60
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Never
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: LOG_ID ======================================
+    id: 37244867278914228
+    identification: 
+      column-name: LOG_ID
+      type: Plain Text
+
+    heading: 
+      heading: Log Id
+      alignment: end
+
+    layout: 
+      sequence: 10
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: APPROVAL_ID =================================
+    id: 37244946582914229
+    identification: 
+      column-name: APPROVAL_ID
+      type: Plain Text
+
+    heading: 
+      heading: Approval Id
+      alignment: end
+
+    layout: 
+      sequence: 20
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: APPROVAL_TYPE ===============================
+    id: 37245085540914230
+    identification: 
+      column-name: APPROVAL_TYPE
+      type: Plain Text
+
+    heading: 
+      heading: Approval Type
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: APPROVAL_SUBJECT ============================
+    id: 37245102370914231
+    identification: 
+      column-name: APPROVAL_SUBJECT
+      type: Plain Text
+
+    heading: 
+      heading: Approval Subject
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ACTION_CODE =================================
+    id: 37245246065914232
+    identification: 
+      column-name: ACTION_CODE
+      type: Plain Text
+
+    heading: 
+      heading: Action Code
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ACTION_BY ===================================
+    id: 37245374417914233
+    identification: 
+      column-name: ACTION_BY
+      type: Plain Text
+
+    heading: 
+      heading: Action By
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ACTION_DT ===================================
+    id: 37245478430914234
+    identification: 
+      column-name: ACTION_DT
+      type: Plain Text
+
+    heading: 
+      heading: Action Dt
+      alignment: start
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: COMMENTS ====================================
+    id: 37245593117914235
+    identification: 
+      column-name: COMMENTS
+      type: Plain Text
+
+    heading: 
+      heading: Comments
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+page-items: 
+- # ====== Page Item: P175_LOAN_ID =============================
+  id: 37242366459914203
+  identification: 
+    name: P175_LOAN_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P175_LOAN_TXN_ID =========================
+  id: 37242452092914204
+  identification: 
+    name: P175_LOAN_TXN_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: BACK_TO_LOAN ================================
+  id: 37245693009914236
+  identification: 
+    button-name: BACK_TO_LOAN
+    label: Back To Loan
+
+  layout: 
+    sequence: 70
+    region: History Context # 37242521520914205
+    slot: TOP
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    horizontal-alignment: Right
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-arrow-left
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:171:&SESSION.::&DEBUG.::P171_LOAN_ID:&P175_LOAN_ID.'
+      page: 171 # Loan Detail
+      values: 
+        p171_loan_id: '&P175_LOAN_ID.'
+
+    warn-on-unsaved-changes: Do Not Check
+

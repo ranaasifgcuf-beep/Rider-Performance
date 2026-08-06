@@ -1,0 +1,450 @@
+---
+# ====== Page: Reset Password ================================
+id: 913
+identification: 
+  name: Reset Password
+  alias: RESET-PASSWORD
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Reset Password ==============================
+  id: 8624349834815341
+  identification: 
+    name: Reset Password
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P913_USERNAME ============================
+  id: 8624413189815342
+  identification: 
+    name: P913_USERNAME
+    type: Display Only
+
+  label: 
+    label: Username
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Reset Password # 8624349834815341
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P913_NEW_PASSWORD ========================
+  id: 8624568983815343
+  identification: 
+    name: P913_NEW_PASSWORD
+    type: Password
+
+  label: 
+    label: New Password
+    alignment: Left
+
+  settings: 
+    submit-when-enter-pressed: true
+
+  layout: 
+    sequence: 20
+    region: Reset Password # 8624349834815341
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P913_CONFIRM_PASSWORD ====================
+  id: 8624673310815344
+  identification: 
+    name: P913_CONFIRM_PASSWORD
+    type: Password
+
+  label: 
+    label: Confirm Password
+    alignment: Left
+
+  settings: 
+    submit-when-enter-pressed: true
+
+  layout: 
+    sequence: 30
+    region: Reset Password # 8624349834815341
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P913_FORCE_CHANGE ========================
+  id: 8624752597815345
+  identification: 
+    name: P913_FORCE_CHANGE
+    type: Switch
+
+  label: 
+    label: Force Password Reset
+    alignment: Left
+
+  settings: 
+    use-defaults: false
+    on-value: Y
+    off-value: N
+
+  layout: 
+    sequence: 40
+    region: Reset Password # 8624349834815341
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: Y
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: BTN_RESET ===================================
+  id: 8624984233815347
+  identification: 
+    button-name: BTN_RESET
+    label: Reset
+
+  layout: 
+    sequence: 10
+    region: Reset Password # 8624349834815341
+    slot: BELOW_BOX
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    horizontal-alignment: Right
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-refresh
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: BTN_CANCEL ==================================
+  id: 8625035985815348
+  identification: 
+    button-name: BTN_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 20
+    region: Reset Password # 8624349834815341
+    slot: BELOW_BOX
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    horizontal-alignment: Right
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-window-close
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+validations: 
+- # ====== Validation: Passwords match =========================
+  id: 8624887975815346
+  identification: 
+    name: Passwords match
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: 'nvl(trim(:P913_NEW_PASSWORD),1) = nvl(trim(:P913_CONFIRM_PASSWORD),0)'
+    always-execute: false
+
+  error: 
+    error-message: Passwords do not match.
+    display-location: Inline with Field and in Notification
+    associated-item: P913_CONFIRM_PASSWORD # 8624673310815344
+
+  server-side-condition: 
+    when-button-pressed: BTN_RESET # 8624984233815347
+
+- # ====== Validation: Password policy =========================
+  id: 8625169841815349
+  identification: 
+    name: Password policy
+
+  execution: 
+    sequence: 20
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      return length(trim(:P913_NEW_PASSWORD)) >= 8
+         and regexp_like(:P913_NEW_PASSWORD, '[A-Z]')
+         and regexp_like(:P913_NEW_PASSWORD, '[a-z]')
+         and regexp_like(:P913_NEW_PASSWORD, '[0-9]')
+         and regexp_like(:P913_NEW_PASSWORD, '[^A-Za-z0-9]');
+    always-execute: false
+
+  error: 
+    error-message: Password must be 8+ chars with upper, lower, number, and special character.
+    display-location: Inline with Field and in Notification
+    associated-item: P913_NEW_PASSWORD # 8624568983815343
+
+  server-side-condition: 
+    when-button-pressed: BTN_RESET # 8624984233815347
+
+processes: 
+- # ====== Process: Reset Password =============================
+  id: 8625261369815350
+  identification: 
+    name: Reset Password
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+        -- basic match check (keep validation also)
+        if trim(:P913_NEW_PASSWORD) <> trim(:P913_CONFIRM_PASSWORD) then
+          raise_application_error(-20011, 'Passwords do not match.');
+        end if;
+      
+        sec_auth_pkg.set_password(
+          p_username    => :P913_USERNAME,
+          p_password    => :P913_NEW_PASSWORD,
+          p_must_change => :P913_FORCE_CHANGE
+        );
+      end;
+      
+
+  execution: 
+    sequence: 10
+    point: After Submit
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Close Dialog ===============================
+  id: 9836730896147103
+  identification: 
+    name: Close Dialog
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Password reset successfully.
+
+  error: 
+    display-location: Inline in Notification
+

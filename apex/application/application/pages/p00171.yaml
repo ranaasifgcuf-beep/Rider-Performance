@@ -1,0 +1,2642 @@
+---
+# ====== Page: Loan Detail ===================================
+id: 171
+identification: 
+  name: Loan Detail
+  alias: LOAN-DETAIL
+  title: Loan Detail
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    .loan-actionbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+    
+    .loan-overview-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+      margin-bottom: 18px;
+    }
+    
+    .loan-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #edf0f4;
+      margin-bottom: 16px;
+    }
+    
+    .loan-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #111827;
+      letter-spacing: .3px;
+    }
+    
+    .loan-subtitle {
+      margin-top: 4px;
+      font-size: 14px;
+      color: #64748b;
+      font-weight: 600;
+    }
+    
+    .loan-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .loan-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    
+    .loan-badge-blue {
+      background: #eff6ff;
+      color: #075db3;
+      border: 1px solid #bfdbfe;
+    }
+    
+    .loan-badge-green {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #bbf7d0;
+    }
+    
+    .loan-meta {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .loan-meta div {
+      background: #f8fafc;
+      border: 1px solid #edf0f4;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    
+    .loan-meta span,
+    .loan-kpi span,
+    .loan-remarks span {
+      display: block;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+    
+    .loan-meta b {
+      color: #111827;
+      font-size: 14px;
+    }
+    
+    .loan-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    
+    .loan-kpi {
+      background: #f8fafc;
+      border: 1px solid #edf0f4;
+      border-radius: 14px;
+      padding: 14px;
+      min-height: 92px;
+    }
+    
+    .loan-kpi b {
+      display: block;
+      color: #111827;
+      font-size: 18px;
+      font-weight: 800;
+    }
+    
+    .loan-kpi-main {
+      background: #fff7ed;
+      border-color: #fed7aa;
+    }
+    
+    .loan-kpi-balance {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+    }
+    
+    .loan-kpi-danger {
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
+    
+    .loan-remarks {
+      margin-top: 12px;
+      background: #ffffff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 14px;
+    }
+    
+    @media (max-width: 1100px) {
+      .loan-kpi-grid {
+        grid-template-columns: repeat(3, minmax(140px, 1fr));
+      }
+    
+      .loan-meta {
+        grid-template-columns: repeat(2, minmax(150px, 1fr));
+      }
+    }
+    
+    @media (max-width: 700px) {
+      .loan-header {
+        flex-direction: column;
+      }
+    
+      .loan-kpi-grid,
+      .loan-meta {
+        grid-template-columns: 1fr;
+      }
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Loan Overview ===============================
+  id: 35005596247124541
+  identification: 
+    name: Loan Overview
+    type: Dynamic Content
+
+  source: 
+    language: PL/SQL
+    pl/sql-function-body-returning-a-clob: |
+      declare
+          l_html             clob;
+      
+          l_loan_no          hr_emp_loan_v.loan_no%type;
+          l_emp_code         hr_emp_loan_v.emp_code%type;
+          l_employee_name    hr_emp_loan_v.employee_name%type;
+          l_loan_type        hr_emp_loan_v.loan_type%type;
+          l_source_type      hr_emp_loan_v.source_type%type;
+          l_loan_amount      number;
+          l_emi_amount       number;
+          l_paid_amount      number;
+          l_waived_amount    number;
+          l_adjustment_amount number;
+          l_reversed_amount  number;
+          l_bad_debt_amount  number;
+          l_balance_amount   number;
+          l_issue_dt         date;
+          l_start_month      date;
+          l_approval_status  hr_emp_loan_v.approval_status%type;
+          l_status           hr_emp_loan_v.status%type;
+          l_remarks          hr_emp_loan_v.remarks%type;
+      
+          function money(p_amount number) return varchar2 is
+          begin
+              return 'AED ' || to_char(nvl(p_amount,0), 'FM999G999G999G990D00');
+          end;
+      
+          function clean_text(p_text varchar2) return varchar2 is
+          begin
+              return apex_escape.html(nvl(p_text, '-'));
+          end;
+      
+          function loan_type_name(p_code varchar2) return varchar2 is
+          begin
+              return case p_code
+                       when 'PRO_DEAL'        then 'PRO / Visa Deal Loan'
+                       when 'LONG_TERM'       then 'Manual Long-Term Loan'
+                       when 'OTHER_LONG_TERM' then 'Other Long-Term Loan'
+                       when 'NEW_INSIDE'      then 'New Inside Deal Loan'
+                       when 'NEW_OUTSIDE'     then 'New Outside Deal Loan'
+                       when 'RENEWAL'         then 'Renewal Deal Loan'
+                       else nvl(p_code, '-')
+                     end;
+          end;
+      
+          function source_type_name(p_code varchar2) return varchar2 is
+          begin
+              return case p_code
+                       when 'PRO_DEAL' then 'PRO Deal'
+                       when 'MANUAL'   then 'Manual Entry'
+                       else nvl(p_code, '-')
+                     end;
+          end;
+      
+      begin
+          select loan_no,
+                 emp_code,
+                 employee_name,
+                 loan_type,
+                 source_type,
+                 loan_amount,
+                 emi_amount,
+                 paid_amount,
+                 waived_amount,
+                 adjustment_amount,
+                 reversed_amount,
+                 bad_debt_amount,
+                 balance_amount,
+                 issue_dt,
+                 start_month,
+                 approval_status,
+                 status,
+                 remarks
+            into l_loan_no,
+                 l_emp_code,
+                 l_employee_name,
+                 l_loan_type,
+                 l_source_type,
+                 l_loan_amount,
+                 l_emi_amount,
+                 l_paid_amount,
+                 l_waived_amount,
+                 l_adjustment_amount,
+                 l_reversed_amount,
+                 l_bad_debt_amount,
+                 l_balance_amount,
+                 l_issue_dt,
+                 l_start_month,
+                 l_approval_status,
+                 l_status,
+                 l_remarks
+            from hr_emp_loan_v
+           where loan_id = :P171_LOAN_ID;
+      
+          l_html := '
+      <div class="loan-overview-card">
+      
+        <div class="loan-header">
+          <div>
+            <div class="loan-title">' || clean_text(l_loan_no) || '</div>
+            <div class="loan-subtitle">' || clean_text(l_emp_code || ' - ' || l_employee_name) || '</div>
+          </div>
+      
+          <div class="loan-badges">
+            <span class="loan-badge loan-badge-blue">' || clean_text(l_approval_status) || '</span>
+            <span class="loan-badge loan-badge-green">' || clean_text(l_status) || '</span>
+          </div>
+        </div>
+      
+        <div class="loan-meta">
+          <div><span>Loan Type</span><b>' || clean_text(loan_type_name(l_loan_type)) || '</b></div>
+          <div><span>Source</span><b>' || clean_text(source_type_name(l_source_type)) || '</b></div>
+          <div><span>Issue Date</span><b>' || clean_text(to_char(l_issue_dt, 'DD-MON-YYYY')) || '</b></div>
+          <div><span>Start Month</span><b>' || clean_text(to_char(l_start_month, 'MON-YYYY')) || '</b></div>
+        </div>
+      
+        <div class="loan-kpi-grid">
+          <div class="loan-kpi loan-kpi-main">
+            <span>Loan Amount</span>
+            <b>' || money(l_loan_amount) || '</b>
+          </div>
+      
+          <div class="loan-kpi">
+            <span>EMI Amount</span>
+            <b>' || money(l_emi_amount) || '</b>
+          </div>
+      
+          <div class="loan-kpi">
+            <span>Paid Amount</span>
+            <b>' || money(l_paid_amount) || '</b>
+          </div>
+      
+          <div class="loan-kpi">
+            <span>Waived Amount</span>
+            <b>' || money(l_waived_amount) || '</b>
+          </div>
+      
+          <div class="loan-kpi loan-kpi-danger">
+            <span>Bad Debt / Write-off</span>
+            <b>' || money(l_bad_debt_amount) || '</b>
+          </div>
+      
+          <div class="loan-kpi loan-kpi-balance">
+            <span>Balance Amount</span>
+            <b>' || money(l_balance_amount) || '</b>
+          </div>
+        </div>
+      
+        <div class="loan-remarks">
+          <span>Remarks</span>
+          <b>' || clean_text(l_remarks) || '</b>
+        </div>
+      
+      </div>';
+      
+          return l_html;
+      
+      exception
+          when no_data_found then
+              return '<div class="t-Alert t-Alert--warning">Loan record not found.</div>';
+      
+          when others then
+              return '<div class="t-Alert t-Alert--danger">' ||
+                     apex_escape.html(sqlerrm) ||
+                     '</div>';
+      end;
+    page-items-to-submit: 
+    - P171_LOAN_ID
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: loan_header
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    performance: 
+      lazy-loading: false
+
+- # ====== Region: Approved Recovery Ledger ====================
+  id: 35716807344737509
+  identification: 
+    name: Approved Recovery Ledger
+    title: Approved Recovery Ledger
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select t.loan_txn_id,
+             to_char(t.txn_date, 'DD-MON-YYYY') as txn_date,
+             to_char(t.payroll_month, 'MON-YYYY') as payroll_month,
+      
+             case t.txn_type
+                 when 'PAYROLL_DEDUCTION' then 'Payroll Deduction'
+                 when 'MANUAL_PAYMENT' then 'Manual Payment'
+                 when 'WAIVER' then 'Waiver'
+                 when 'ADJUSTMENT' then 'Adjustment'
+                 when 'REVERSAL' then 'Reversal'
+                 when 'BAD_DEBT_WRITE_OFF' then 'Bad Debt Write-off'
+                 else t.txn_type
+             end as txn_type,
+      
+             t.amount,
+             t.pay_mode,
+             t.reference_no,
+             t.remarks,
+             t.approved_by,
+             to_char(t.approved_dt, 'DD-MON-YYYY HH24:MI') as approved_dt,
+             t.created_by,
+             to_char(t.created_dt, 'DD-MON-YYYY HH24:MI') as created_dt,
+             '<a href="' ||
+      apex_page.get_url(
+          p_page        => 175,
+          p_items       => 'P175_LOAN_ID,P175_LOAN_TXN_ID',
+          p_values      => t.loan_id || ',' || t.loan_txn_id,
+          p_clear_cache => '175'
+      ) ||
+      '" title="Transaction History">' ||
+      '<span class="fa fa-history"></span></a>' history_link
+      from hr_emp_loan_txns t
+      where t.loan_id = :P171_LOAN_ID
+        and t.approval_status = 'APPROVED'
+      order by t.txn_date desc, t.loan_txn_id desc;
+    page-items-to-submit: 
+    - P171_LOAN_ID
+
+  layout: 
+    sequence: 60
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: approved_ledger
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 35716963604737510
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 35736048956803680
+      identification: 
+        name: Primary Report
+        alias: 357361
+
+    columns: 
+    - # ====== Column: LOAN_TXN_ID =================================
+      id: 35717043852737511
+      identification: 
+        column-name: LOAN_TXN_ID
+        type: Hidden
+
+      heading: 
+        heading: Loan Txn Id
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: TXN_DATE ====================================
+      id: 35717128175737512
+      identification: 
+        column-name: TXN_DATE
+        type: Plain Text
+
+      heading: 
+        heading: Transaction Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PAYROLL_MONTH ===============================
+      id: 35717289606737513
+      identification: 
+        column-name: PAYROLL_MONTH
+        type: Plain Text
+
+      heading: 
+        heading: Payroll Month
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: TXN_TYPE ====================================
+      id: 35717382682737514
+      identification: 
+        column-name: TXN_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Transaction Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: AMOUNT ======================================
+      id: 35717409475737515
+      identification: 
+        column-name: AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G990D00
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PAY_MODE ====================================
+      id: 35717594040737516
+      identification: 
+        column-name: PAY_MODE
+        type: Plain Text
+
+      heading: 
+        heading: Pay Mode
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REFERENCE_NO ================================
+      id: 35717670674737517
+      identification: 
+        column-name: REFERENCE_NO
+        type: Plain Text
+
+      heading: 
+        heading: Reference No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 80
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REMARKS =====================================
+      id: 35717764948737518
+      identification: 
+        column-name: REMARKS
+        type: Plain Text
+
+      heading: 
+        heading: Remarks
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: APPROVED_BY =================================
+      id: 35717832251737519
+      identification: 
+        column-name: APPROVED_BY
+        type: Plain Text
+
+      heading: 
+        heading: Approved By
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: APPROVED_DT =================================
+      id: 35717927588737520
+      identification: 
+        column-name: APPROVED_DT
+        type: Plain Text
+
+      heading: 
+        heading: Approved Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 110
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_BY ==================================
+      id: 35718099916737521
+      identification: 
+        column-name: CREATED_BY
+        type: Plain Text
+
+      heading: 
+        heading: Created By
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 120
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_DT ==================================
+      id: 35718161432737522
+      identification: 
+        column-name: CREATED_DT
+        type: Plain Text
+
+      heading: 
+        heading: Created Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 130
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: HISTORY_LINK ================================
+      id: 37245879385914238
+      identification: 
+        column-name: HISTORY_LINK
+        type: Plain Text
+
+      heading: 
+        heading: History
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 140
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Approved Recovery Ledger
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Pending Financial Requests ==================
+  id: 35718250108737523
+  identification: 
+    name: Pending Financial Requests
+    title: Pending Financial Requests
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select t.loan_txn_id,
+             to_char(t.txn_date, 'DD-MON-YYYY') as txn_date,
+      
+             case t.txn_type
+                 when 'MANUAL_PAYMENT' then 'Manual Payment'
+                 when 'WAIVER' then 'Waiver'
+                 when 'ADJUSTMENT' then 'Adjustment'
+                 when 'REVERSAL' then 'Reversal'
+                 when 'BAD_DEBT_WRITE_OFF' then 'Bad Debt Write-off'
+                 else t.txn_type
+             end as txn_type,
+      
+             t.amount,
+             t.pay_mode,
+             t.reference_no,
+      
+             case t.approval_status
+                 when 'DRAFT' then
+                     '<span class="t-Badge">Draft</span>'
+                 when 'SUBMITTED' then
+                     '<span class="t-Badge t-Badge--warning">Submitted</span>'
+                 when 'REJECTED' then
+                     '<span class="t-Badge t-Badge--danger">Rejected</span>'
+                 when 'CANCELLED' then
+                     '<span class="t-Badge">Cancelled</span>'
+                 else
+                     '<span class="t-Badge">' || apex_escape.html(t.approval_status) || '</span>'
+             end as approval_status,
+      
+             t.remarks,
+             t.created_by,
+             to_char(t.created_dt, 'DD-MON-YYYY HH24:MI') as created_dt,
+      
+             '<span class="fa fa-edit" title="Edit"></span>' as edit_link,
+             '<a href="' ||
+      apex_page.get_url(
+          p_page        => 175,
+          p_items       => 'P175_LOAN_ID,P175_LOAN_TXN_ID',
+          p_values      => t.loan_id || ',' || t.loan_txn_id,
+          p_clear_cache => '175'
+      ) ||
+      '" title="Transaction History">' ||
+      '<span class="fa fa-history"></span></a>' history_link
+      
+      from hr_emp_loan_txns t
+      where t.loan_id = :P171_LOAN_ID
+        and t.approval_status in ('DRAFT','SUBMITTED','REJECTED','CANCELLED')
+      order by t.loan_txn_id desc;
+    page-items-to-submit: 
+    - P171_LOAN_ID
+
+  layout: 
+    sequence: 70
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: pending_requests
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 35718385184737524
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 35746703188839500
+      identification: 
+        name: Primary Report
+        alias: 357468
+
+    columns: 
+    - # ====== Column: LOAN_TXN_ID =================================
+      id: 35718462012737525
+      identification: 
+        column-name: LOAN_TXN_ID
+        type: Hidden
+
+      heading: 
+        heading: Loan Txn Id
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: TXN_DATE ====================================
+      id: 35718576852737526
+      identification: 
+        column-name: TXN_DATE
+        type: Plain Text
+
+      heading: 
+        heading: Transaction Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: TXN_TYPE ====================================
+      id: 35718604201737527
+      identification: 
+        column-name: TXN_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Transaction Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: AMOUNT ======================================
+      id: 35718703020737528
+      identification: 
+        column-name: AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G990D00
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PAY_MODE ====================================
+      id: 35718876163737529
+      identification: 
+        column-name: PAY_MODE
+        type: Plain Text
+
+      heading: 
+        heading: Pay Mode
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REFERENCE_NO ================================
+      id: 35718994912737530
+      identification: 
+        column-name: REFERENCE_NO
+        type: Plain Text
+
+      heading: 
+        heading: Reference No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: APPROVAL_STATUS =============================
+      id: 35719024294737531
+      identification: 
+        column-name: APPROVAL_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Approval Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: REMARKS =====================================
+      id: 35719112701737532
+      identification: 
+        column-name: REMARKS
+        type: Plain Text
+
+      heading: 
+        heading: Remarks
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 80
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_BY ==================================
+      id: 35719268516737533
+      identification: 
+        column-name: CREATED_BY
+        type: Plain Text
+
+      heading: 
+        heading: Created By
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_DT ==================================
+      id: 35719312943737534
+      identification: 
+        column-name: CREATED_DT
+        type: Plain Text
+
+      heading: 
+        heading: Created Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EDIT_LINK ===================================
+      id: 35719492636737535
+      identification: 
+        column-name: EDIT_LINK
+        type: Link
+
+      heading: 
+        heading: Edit
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 110
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:172:&SESSION.::&DEBUG.:172:P172_LOAN_TXN_ID:#LOAN_TXN_ID#'
+          page: 172 # Loan Transaction Request
+          clear-cache: 172
+          values: 
+            p172_loan_txn_id: '#LOAN_TXN_ID#'
+
+        link-text: '#EDIT_LINK#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: HISTORY_LINK ================================
+      id: 37245974531914239
+      identification: 
+        column-name: HISTORY_LINK
+        type: Plain Text
+
+      heading: 
+        heading: History
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 120
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Pending Financial Requests
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Loan Actions ================================
+  id: 35719620505737537
+  identification: 
+    name: Loan Actions
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-ButtonRegion--noUI
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P171_LOAN_ID =============================
+  id: 35005476989124540
+  identification: 
+    name: P171_LOAN_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 1
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PB_BACK =====================================
+  id: 35719537844737536
+  identification: 
+    button-name: PB_BACK
+    label: Back
+
+  layout: 
+    sequence: 50
+    region: Loan Actions # 35719620505737537
+    slot: PREVIOUS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-box-arrow-out-east
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:170:&SESSION.::&DEBUG.:::'
+      page: 170 # Loan Workbench
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: PB_REQ_PAYMENT ==============================
+  id: 35719742282737538
+  identification: 
+    button-name: PB_REQ_PAYMENT
+    label: Receive Payment
+
+  layout: 
+    sequence: 10
+    region: Loan Actions # 35719620505737537
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    css-classes: 
+    - null
+    - t-Button--success
+    icon: fa-money
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:172:&SESSION.::&DEBUG.:172:P172_LOAN_ID,P172_TXN_TYPE:&P171_LOAN_ID.,MANUAL_PAYMENT'
+      page: 172 # Loan Transaction Request
+      clear-cache: 172
+      values: 
+        p172_loan_id: '&P171_LOAN_ID.'
+        p172_txn_type: MANUAL_PAYMENT
+
+    warn-on-unsaved-changes: Do Not Check
+
+  advanced: 
+    static-id: js-loan-modal-action
+
+  server-side-condition: 
+    type: Rows returned
+    sql-query: |
+      select 1
+      from hr_emp_loan_v
+      where loan_id = :P171_LOAN_ID
+        and approval_status = 'APPROVED'
+        and status = 'ACTIVE'
+        and balance_amount > 0
+
+- # ====== Button: PB_REQ_WAIVER ===============================
+  id: 35720097551737541
+  identification: 
+    button-name: PB_REQ_WAIVER
+    label: Request Waiver
+
+  layout: 
+    sequence: 20
+    region: Loan Actions # 35719620505737537
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    css-classes: 
+    - js-loan-modal-action
+    - t-Button--warning
+    icon: fa-gift
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:172:&SESSION.::&DEBUG.:172:P172_LOAN_ID,P172_TXN_TYPE:&P171_LOAN_ID.,WAIVER'
+      page: 172 # Loan Transaction Request
+      clear-cache: 172
+      values: 
+        p172_loan_id: '&P171_LOAN_ID.'
+        p172_txn_type: WAIVER
+
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Rows returned
+    sql-query: |
+      select 1
+      from hr_emp_loan_v
+      where loan_id = :P171_LOAN_ID
+        and approval_status = 'APPROVED'
+        and status = 'ACTIVE'
+        and balance_amount > 0
+
+- # ====== Button: PB_REQ_ADJUSTMENT ===========================
+  id: 35720143712737542
+  identification: 
+    button-name: PB_REQ_ADJUSTMENT
+    label: Request Adjustment
+
+  layout: 
+    sequence: 30
+    region: Loan Actions # 35719620505737537
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    css-classes: 
+    - js-loan-modal-action
+    - t-Button--warning
+    icon: fa-sliders
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:172:&SESSION.::&DEBUG.:172:P172_LOAN_ID,P172_TXN_TYPE:&P171_LOAN_ID.,ADJUSTMENT'
+      page: 172 # Loan Transaction Request
+      clear-cache: 172
+      values: 
+        p172_loan_id: '&P171_LOAN_ID.'
+        p172_txn_type: ADJUSTMENT
+
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Rows returned
+    sql-query: |
+      select 1
+      from hr_emp_loan_v
+      where loan_id = :P171_LOAN_ID
+        and approval_status = 'APPROVED'
+        and status = 'ACTIVE'
+        and balance_amount > 0
+
+- # ====== Button: PB_REQ_REVERSAL =============================
+  id: 35720383442737544
+  identification: 
+    button-name: PB_REQ_REVERSAL
+    label: Request Reversal
+
+  layout: 
+    sequence: 40
+    region: Loan Actions # 35719620505737537
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    css-classes: 
+    - js-loan-modal-action
+    - t-Button--warning
+    icon: fa-undo
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:172:&SESSION.::&DEBUG.:172:P172_LOAN_ID,P172_TXN_TYPE:&P171_LOAN_ID.,REVERSAL'
+      page: 172 # Loan Transaction Request
+      clear-cache: 172
+      values: 
+        p172_loan_id: '&P171_LOAN_ID.'
+        p172_txn_type: REVERSAL
+
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Rows returned
+    sql-query: |
+      select 1
+      from hr_emp_loan_txns
+      where loan_id = :P171_LOAN_ID
+        and approval_status = 'APPROVED'
+
+- # ====== Button: PB_REQ_BAD_DEBTS ============================
+  id: 35720474768737545
+  identification: 
+    button-name: PB_REQ_BAD_DEBTS
+    label: Request Bad Debt Write-off
+
+  layout: 
+    sequence: 50
+    region: Loan Actions # 35719620505737537
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    css-classes: 
+    - js-loan-modal-action
+    - t-Button--danger
+    icon: fa-exclamation-triangle-o
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:172:&SESSION.::&DEBUG.:172:P172_LOAN_ID,P172_TXN_TYPE:&P171_LOAN_ID.,BAD_DEBT_WRITE_OFF'
+      page: 172 # Loan Transaction Request
+      clear-cache: 172
+      values: 
+        p172_loan_id: '&P171_LOAN_ID.'
+        p172_txn_type: BAD_DEBT_WRITE_OFF
+
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Rows returned
+    sql-query: |
+      select 1
+      from hr_emp_loan_v
+      where loan_id = :P171_LOAN_ID
+        and approval_status = 'APPROVED'
+        and status = 'ACTIVE'
+        and balance_amount > 0
+
+- # ====== Button: Refresh =====================================
+  id: 35774279391306939
+  identification: 
+    button-name: Refresh
+    label: Refresh
+
+  layout: 
+    sequence: 60
+    region: Loan Actions # 35719620505737537
+    slot: PREVIOUS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-refresh
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: PRINT_STATEMENT =============================
+  id: 37295252837639609
+  identification: 
+    button-name: PRINT_STATEMENT
+    label: Print Statement
+
+  layout: 
+    sequence: 10
+    region: Loan Actions # 35719620505737537
+    slot: CHANGE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-print
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:174:&SESSION.::&DEBUG.::P174_LOAN_ID:&P171_LOAN_ID.'
+      page: 174 # Loan Statement
+      values: 
+        p174_loan_id: '&P171_LOAN_ID.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: Refresh Regions =====================
+  id: 35774351329306940
+  identification: 
+    name: Refresh Regions
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Button
+    button: PB_REQ_PAYMENT # 35719742282737538
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 35774420225306941
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Loan Overview # 35005596247124541
+
+    execution: 
+      sequence: 10
+      event: Refresh Regions # 35774351329306940
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 35774575264306942
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Approved Recovery Ledger # 35716807344737509
+
+    execution: 
+      sequence: 20
+      event: Refresh Regions # 35774351329306940
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 35774645945306943
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Pending Financial Requests # 35718250108737523
+
+    execution: 
+      sequence: 30
+      event: Refresh Regions # 35774351329306940
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Refresh Regions_1 ===================
+  id: 35774774909306944
+  identification: 
+    name: Refresh Regions_1
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Button
+    button: PB_REQ_ADJUSTMENT # 35720143712737542
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 35774804871306945
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Loan Overview # 35005596247124541
+
+    execution: 
+      sequence: 10
+      event: Refresh Regions_1 # 35774774909306944
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 35774924992306946
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Approved Recovery Ledger # 35716807344737509
+
+    execution: 
+      sequence: 20
+      event: Refresh Regions_1 # 35774774909306944
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 35775026799306947
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Pending Financial Requests # 35718250108737523
+
+    execution: 
+      sequence: 30
+      event: Refresh Regions_1 # 35774774909306944
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Refresh Regions_1_1 =================
+  id: 35775144033306948
+  identification: 
+    name: Refresh Regions_1_1
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Button
+    button: PB_REQ_BAD_DEBTS # 35720474768737545
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 35775255073306949
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Loan Overview # 35005596247124541
+
+    execution: 
+      sequence: 10
+      event: Refresh Regions_1_1 # 35775144033306948
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 35775301700306950
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Approved Recovery Ledger # 35716807344737509
+
+    execution: 
+      sequence: 20
+      event: Refresh Regions_1_1 # 35775144033306948
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 35841649389830001
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Pending Financial Requests # 35718250108737523
+
+    execution: 
+      sequence: 30
+      event: Refresh Regions_1_1 # 35775144033306948
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Refresh Regions_1_1_1 ===============
+  id: 35841747114830002
+  identification: 
+    name: Refresh Regions_1_1_1
+
+  execution: 
+    sequence: 50
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Button
+    button: PB_REQ_REVERSAL # 35720383442737544
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 35841863912830003
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Loan Overview # 35005596247124541
+
+    execution: 
+      sequence: 10
+      event: Refresh Regions_1_1_1 # 35841747114830002
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 35841934905830004
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Approved Recovery Ledger # 35716807344737509
+
+    execution: 
+      sequence: 20
+      event: Refresh Regions_1_1_1 # 35841747114830002
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 35842013186830005
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Pending Financial Requests # 35718250108737523
+
+    execution: 
+      sequence: 30
+      event: Refresh Regions_1_1_1 # 35841747114830002
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Refresh Regions_1_1_1_1 =============
+  id: 35842101756830006
+  identification: 
+    name: Refresh Regions_1_1_1_1
+
+  execution: 
+    sequence: 60
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Button
+    button: PB_REQ_WAIVER # 35720097551737541
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 35842231713830007
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Loan Overview # 35005596247124541
+
+    execution: 
+      sequence: 10
+      event: Refresh Regions_1_1_1_1 # 35842101756830006
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 35842361111830008
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Approved Recovery Ledger # 35716807344737509
+
+    execution: 
+      sequence: 20
+      event: Refresh Regions_1_1_1_1 # 35842101756830006
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 35842405396830009
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Pending Financial Requests # 35718250108737523
+
+    execution: 
+      sequence: 30
+      event: Refresh Regions_1_1_1_1 # 35842101756830006
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Refresh Regions_1_1_1_1_1 ===========
+  id: 35842543683830010
+  identification: 
+    name: Refresh Regions_1_1_1_1_1
+
+  execution: 
+    sequence: 70
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: Refresh # 35774279391306939
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 35842614597830011
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Loan Overview # 35005596247124541
+
+    execution: 
+      sequence: 10
+      event: Refresh Regions_1_1_1_1_1 # 35842543683830010
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 35842724054830012
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Approved Recovery Ledger # 35716807344737509
+
+    execution: 
+      sequence: 20
+      event: Refresh Regions_1_1_1_1_1 # 35842543683830010
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 35842834112830013
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Pending Financial Requests # 35718250108737523
+
+    execution: 
+      sequence: 30
+      event: Refresh Regions_1_1_1_1_1 # 35842543683830010
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

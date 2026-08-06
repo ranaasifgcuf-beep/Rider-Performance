@@ -1,0 +1,1072 @@
+---
+# ====== Page: Bike Impound List =============================
+id: 310
+identification: 
+  name: Bike Impound List
+  alias: BIKE-IMPOUND-LIST
+  title: Bike Impound List
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Bike Impound List ===========================
+  id: 29709471842591781
+  identification: 
+    name: Bike Impound List
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+          i.impound_id,
+      
+          case
+            when i.status_code = 'ACTIVE' then
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 312,
+                  p_items  => 'P312_IMPOUND_ID',
+                  p_values => i.impound_id
+              ) || '" class="js-dialog-link">' ||
+              '<span class="fa fa-unlock" title="Release Impound"></span></a>'
+          end as release_link,
+      
+          case
+            when i.emp_charge_id is not null then
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 320,
+                  p_items  => 'P320_EMP_CHARGE_ID',
+                  p_values => i.emp_charge_id
+              ) || '">' ||
+              '<span class="fa fa-money" title="View Charge"></span></a>'
+          end as charge_link,
+      
+          i.bike_id,
+          b.bike_code,
+          b.plate_no,
+          i.emp_id,
+          i.impound_start_ts,
+          i.expected_release_ts,
+          i.release_ts as actual_release_ts,
+      
+          case
+            when i.status_code = 'ACTIVE'
+             and i.expected_release_ts is not null
+             and i.expected_release_ts < systimestamp then
+              '<span class="t-Badge t-Badge--danger">OVERDUE</span>'
+            when i.status_code = 'ACTIVE'
+             and i.expected_release_ts is not null
+             and i.expected_release_ts <= systimestamp + interval '3' day then
+              '<span class="t-Badge t-Badge--warning">DUE SOON</span>'
+            when i.status_code = 'ACTIVE'
+             and i.expected_release_ts is not null then
+              '<span class="t-Badge t-Badge--info">PLANNED</span>'
+            when i.status_code = 'ACTIVE' then
+              '<span class="t-Badge t-Badge--default">NO PLAN</span>'
+            else
+              '<span class="t-Badge t-Badge--success">CLOSED</span>'
+          end as release_plan_badge,
+      
+          ct.custody_type_name,
+          cl.location_name as impound_location_name,
+          i.impound_location_text,
+          i.impound_reason,
+          i.impound_cost,
+      
+          case
+            when i.emp_charge_id is null then
+              '<span class="t-Badge t-Badge--default">NO CHARGE</span>'
+            when hr_charges_pkg.get_charge_balance(i.emp_charge_id) = 0 then
+              '<span class="t-Badge t-Badge--success">RECOVERED/CLOSED</span>'
+            else
+              '<span class="t-Badge t-Badge--warning">RECOVERY PENDING</span>'
+          end as recovery_badge,
+      
+          case i.status_code
+            when 'ACTIVE' then '<span class="t-Badge t-Badge--danger">ACTIVE</span>'
+            when 'RELEASED' then '<span class="t-Badge t-Badge--success">RELEASED</span>'
+            when 'CANCELLED' then '<span class="t-Badge t-Badge--default">CANCELLED</span>'
+          end as status_badge,
+      
+          i.remarks,
+          i.created_by,
+          i.created_dt
+      from fleet_bike_impounds i
+      join fleet_bikes b
+        on b.bike_id = i.bike_id
+      left join fleet_ref_custody_types ct
+        on ct.custody_type_code = i.impound_custody_code
+      left join fleet_ref_custody_locations cl
+        on cl.location_id = i.impound_location_id
+      order by i.impound_start_ts desc, i.impound_id desc
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 29709523235591781
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 30218975645809752
+      identification: 
+        name: Primary Report
+        alias: 302190
+
+    columns: 
+    - # ====== Column: IMPOUND_ID ==================================
+      id: 29710245133591772
+      identification: 
+        column-name: IMPOUND_ID
+        type: Hidden
+
+      heading: 
+        heading: Impound Id
+
+      layout: 
+        sequence: 1
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: RELEASE_LINK ================================
+      id: 29710679120591771
+      identification: 
+        column-name: RELEASE_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Release Link
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: BIKE_ID =====================================
+      id: 29711075594591770
+      identification: 
+        column-name: BIKE_ID
+        type: Hidden
+
+      heading: 
+        heading: Bike Id
+
+      layout: 
+        sequence: 3
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: BIKE_CODE ===================================
+      id: 29711499829591770
+      identification: 
+        column-name: BIKE_CODE
+        type: Hidden
+
+      heading: 
+        heading: Bike Code
+
+      layout: 
+        sequence: 4
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PLATE_NO ====================================
+      id: 29711848813591770
+      identification: 
+        column-name: PLATE_NO
+        type: Plain Text
+
+      heading: 
+        heading: Plate No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 5
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_ID ======================================
+      id: 29712275753591769
+      identification: 
+        column-name: EMP_ID
+        type: Plain Text
+
+      heading: 
+        heading: Emp Id
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 6
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IMPOUND_START_TS ============================
+      id: 29712666125591769
+      identification: 
+        column-name: IMPOUND_START_TS
+        type: Plain Text
+
+      heading: 
+        heading: Impound Start Ts
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 7
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CUSTODY_TYPE_NAME ===========================
+      id: 29713895356591768
+      identification: 
+        column-name: CUSTODY_TYPE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Custody Type Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IMPOUND_LOCATION_NAME =======================
+      id: 29714684039591768
+      identification: 
+        column-name: IMPOUND_LOCATION_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Impound Location Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 12
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IMPOUND_LOCATION_TEXT =======================
+      id: 29715015147591768
+      identification: 
+        column-name: IMPOUND_LOCATION_TEXT
+        type: Plain Text
+
+      heading: 
+        heading: Impound Location Text
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 13
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IMPOUND_REASON ==============================
+      id: 29715417869591767
+      identification: 
+        column-name: IMPOUND_REASON
+        type: Plain Text
+
+      heading: 
+        heading: Impound Reason
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 14
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IMPOUND_COST ================================
+      id: 29715847075591767
+      identification: 
+        column-name: IMPOUND_COST
+        type: Plain Text
+
+      heading: 
+        heading: Impound Cost
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 15
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REMARKS =====================================
+      id: 29717407183591766
+      identification: 
+        column-name: REMARKS
+        type: Plain Text
+
+      heading: 
+        heading: Remarks
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 19
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_BY ==================================
+      id: 29717869464591766
+      identification: 
+        column-name: CREATED_BY
+        type: Plain Text
+
+      heading: 
+        heading: Created By
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_DT ==================================
+      id: 29718281413591766
+      identification: 
+        column-name: CREATED_DT
+        type: Plain Text
+
+      heading: 
+        heading: Created Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 21
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CHARGE_LINK =================================
+      id: 30153803465037248
+      identification: 
+        column-name: CHARGE_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Charge Link
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 31
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPECTED_RELEASE_TS =========================
+      id: 30153955107037249
+      identification: 
+        column-name: EXPECTED_RELEASE_TS
+        type: Plain Text
+
+      heading: 
+        heading: Expected Release Ts
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 41
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ACTUAL_RELEASE_TS ===========================
+      id: 30154048646037250
+      identification: 
+        column-name: ACTUAL_RELEASE_TS
+        type: Plain Text
+
+      heading: 
+        heading: Actual Release Ts
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 51
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: RELEASE_PLAN_BADGE ==========================
+      id: 30210288446810101
+      identification: 
+        column-name: RELEASE_PLAN_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Release Plan Badge
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 61
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: RECOVERY_BADGE ==============================
+      id: 30210343966810102
+      identification: 
+        column-name: RECOVERY_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Recovery Badge
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 71
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: STATUS_BADGE ================================
+      id: 30210431023810103
+      identification: 
+        column-name: STATUS_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Status Badge
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 81
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Bike Impound List
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+

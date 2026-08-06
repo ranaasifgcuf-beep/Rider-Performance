@@ -1,0 +1,608 @@
+---
+# ====== Page: Generate Installments Modal ===================
+id: 322
+identification: 
+  name: Generate Installments Modal
+  alias: GENERATE-INSTALLMENTS-MODAL
+  title: Generate Installments Modal
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Generate Installments =======================
+  id: 30149585427037205
+  identification: 
+    name: Generate Installments
+    type: Static Content
+
+  layout: 
+    sequence: 80
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P322_EMP_CHARGE_ID =======================
+  id: 30111557099516042
+  identification: 
+    name: P322_EMP_CHARGE_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Generate Installments # 30149585427037205
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P322_TOTAL_AMOUNT ========================
+  id: 30111621345516043
+  identification: 
+    name: P322_TOTAL_AMOUNT
+    type: Display Only
+
+  label: 
+    label: Total Amount
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Generate Installments # 30149585427037205
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P322_FIRST_DUE_DT ========================
+  id: 30111720869516044
+  identification: 
+    name: P322_FIRST_DUE_DT
+    type: Text Field
+
+  label: 
+    label: First Due Date
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 40
+    region: Generate Installments # 30149585427037205
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sysdate
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P322_NO_OF_INSTALLMENTS ==================
+  id: 30111814757516045
+  identification: 
+    name: P322_NO_OF_INSTALLMENTS
+    type: Text Field
+
+  label: 
+    label: No Of Installments
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 50
+    region: Generate Installments # 30149585427037205
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P322_REMARKS =============================
+  id: 30111990638516046
+  identification: 
+    name: P322_REMARKS
+    type: Text Field
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 60
+    region: Generate Installments # 30149585427037205
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P322_BALANCE =============================
+  id: 30152710234037237
+  identification: 
+    name: P322_BALANCE
+    type: Display Only
+
+  label: 
+    label: Balance Amount
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Generate Installments # 30149585427037205
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P322_ACTION_MODE =========================
+  id: 30152970938037239
+  identification: 
+    name: P322_ACTION_MODE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 70
+    region: Generate Installments # 30149585427037205
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PB_SAVE =====================================
+  id: 30112277818516049
+  identification: 
+    button-name: PB_SAVE
+    label: Save
+
+  layout: 
+    sequence: 60
+    region: Generate Installments # 30149585427037205
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-save
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: PB_CANCEL ===================================
+  id: 30112333593516050
+  identification: 
+    button-name: PB_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 70
+    region: Generate Installments # 30149585427037205
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-times-circle
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:321:&SESSION.::&DEBUG.::P321_CHARGE_TYPE:&P322_EMP_CHARGE_ID.'
+      page: 321 # Charge Installments List
+      values: 
+        p321_charge_type: '&P322_EMP_CHARGE_ID.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: BR_CLOSE_P322_AFTER_CAN =============
+  id: 30153377142037243
+  identification: 
+    name: BR_CLOSE_P322_AFTER_CAN
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Button
+    button: PB_CANCEL # 30112333593516050
+
+  actions: 
+  - # ====== Action: Close Dialog ================================
+    id: 30153496114037244
+    identification: 
+      action: Close Dialog
+
+    execution: 
+      sequence: 10
+      event: BR_CLOSE_P322_AFTER_CAN # 30153377142037243
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations: 
+- # ====== Validation: VAL_P322_INSTALLMENT_COUNT ==============
+  id: 30112178014516048
+  identification: 
+    name: VAL_P322_INSTALLMENT_COUNT
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return nvl(:P322_NO_OF_INSTALLMENTS,0) > 0;'
+    always-execute: false
+
+  error: 
+    error-message: Number of installments must be greater than zero.
+    display-location: Inline with Field and in Notification
+
+processes: 
+- # ====== Process: FETCH_P322_CHARGE_AMOUNT ===================
+  id: 30112024751516047
+  identification: 
+    name: FETCH_P322_CHARGE_AMOUNT
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      select amount,
+      hr_charges_pkg.get_charge_balance(:P322_EMP_CHARGE_ID)
+        into :P322_TOTAL_AMOUNT,
+        :P322_BALANCE
+        from hr_emp_charges
+       where emp_charge_id = :P322_EMP_CHARGE_ID;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: GENERATE_EQUAL_INSTALLMENTS ================
+  id: 30149638967037206
+  identification: 
+    name: GENERATE_EQUAL_INSTALLMENTS
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          if :P322_ACTION_MODE = 'RESCHEDULE' then
+              hr_charges_pkg.reschedule_remaining_installments(
+                  p_emp_charge_id      => :P322_EMP_CHARGE_ID,
+                  p_first_due_dt       => :P322_FIRST_DUE_DT,
+                  p_no_of_installments => :P322_NO_OF_INSTALLMENTS,
+                  p_remarks            => :P322_REMARKS
+              );
+          else
+              hr_charges_pkg.create_equal_installments(
+                  p_emp_charge_id      => :P322_EMP_CHARGE_ID,
+                  p_first_due_dt       => :P322_FIRST_DUE_DT,
+                  p_no_of_installments => :P322_NO_OF_INSTALLMENTS,
+                  p_remarks            => :P322_REMARKS
+              );
+          end if;
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: PB_SAVE # 30112277818516049
+
+branches: 
+- # ====== Branch: Go To Page 321 ==============================
+  id: 30153796494037247
+  identification: 
+    name: Go To Page 321
+
+  execution: 
+    sequence: 10
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:321:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 321 # Charge Installments List
+

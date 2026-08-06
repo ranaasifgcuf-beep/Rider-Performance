@@ -1,0 +1,853 @@
+---
+- # ====== Workflow: Unified Approval Workflow =================
+  id: 33208717125488633
+  identification: 
+    name: Unified Approval Workflow
+    title: Unified Approval Workflow
+
+  advanced: 
+    static-id: WF_UNIFIED_APPROVAL
+
+  parameters: 
+  - # ====== Parameter: Approval Id ==============================
+    id: 33209430672488640
+    identification: 
+      static-id: APPROVAL_ID
+
+    label: 
+      label: Approval Id
+
+    parameter: 
+      data-type: NUMBER
+      direction: In
+
+    value: 
+      required: false
+
+  versions: 
+  - # ====== Version: New ========================================
+    id: 33208888371488634
+    identification: 
+      workflow-version: New
+
+    settings: 
+      state: In Development
+
+    activities: 
+    - # ====== Activity: Start =====================================
+      id: 33208979955488635
+      identification: 
+        name: Start
+        type: Workflow Start
+
+      deadline: 
+        due-on-type: None
+
+      layout: 
+        sequence: 10
+
+      advanced: 
+        static-id: New
+
+      connections: 
+      - # ====== Connection: New =====================================
+        id: 33209285445488638
+        identification: 
+          name: New
+          type: Normal
+
+        activity: 
+          from: Start # 33208979955488635
+          to: Get Next Approval Step # 33209089476488636
+
+    - # ====== Activity: Get Next Approval Step ====================
+      id: 33209089476488636
+      identification: 
+        name: Get Next Approval Step
+        type: Invoke API
+
+      settings: 
+        type: PL/SQL Package
+        owner: PARSING SCHEMA
+        package: HR_APPROVAL_WF_PKG
+        procedure-or-function: GET_NEXT_STEP
+
+      deadline: 
+        due-on-type: None
+
+      layout: 
+        sequence: 20
+
+      advanced: 
+        static-id: New_1
+
+      connections: 
+      - # ====== Connection: New =====================================
+        id: 34220374334120317
+        identification: 
+          name: New
+          type: Normal
+
+        activity: 
+          from: Get Next Approval Step # 33209089476488636
+          to: Human Task / Approval Task # 34219573647120309
+
+      parameters: 
+      - # ====== Parameter: p_approval_id ============================
+        id: 34218805346120302
+        identification: 
+          name: p_approval_id
+
+        parameter: 
+          direction: In
+          data-type: NUMBER
+          has-default: false
+
+        value: 
+          type: Item
+          item: APPROVAL_ID
+
+        advanced: 
+          display-sequence: 10
+
+      - # ====== Parameter: p_step_id ================================
+        id: 34218920881120303
+        identification: 
+          name: p_step_id
+
+        parameter: 
+          direction: Out
+          data-type: NUMBER
+          ignore-output: false
+
+        value: 
+          item: CURRENT_STEP_ID
+
+        advanced: 
+          display-sequence: 20
+
+      - # ====== Parameter: p_approver_users =========================
+        id: 34219093026120304
+        identification: 
+          name: p_approver_users
+
+        parameter: 
+          direction: Out
+          data-type: VARCHAR2
+          ignore-output: false
+
+        value: 
+          item: CURRENT_APPROVERS
+
+        advanced: 
+          display-sequence: 30
+
+      - # ====== Parameter: p_task_subject ===========================
+        id: 34219102174120305
+        identification: 
+          name: p_task_subject
+
+        parameter: 
+          direction: Out
+          data-type: VARCHAR2
+          ignore-output: false
+
+        value: 
+          item: TASK_SUBJECT
+
+        advanced: 
+          display-sequence: 40
+
+      - # ====== Parameter: p_module_code ============================
+        id: 34219202391120306
+        identification: 
+          name: p_module_code
+
+        parameter: 
+          direction: Out
+          data-type: VARCHAR2
+          ignore-output: false
+
+        value: 
+          item: MODULE_CODE
+
+        advanced: 
+          display-sequence: 50
+
+      - # ====== Parameter: p_record_pk ==============================
+        id: 34219376533120307
+        identification: 
+          name: p_record_pk
+
+        parameter: 
+          direction: Out
+          data-type: NUMBER
+          ignore-output: false
+
+        value: 
+          item: RECORD_PK
+
+        advanced: 
+          display-sequence: 60
+
+    - # ====== Activity: End =======================================
+      id: 33209134573488637
+      identification: 
+        name: End
+        type: Workflow End
+
+      settings: 
+        end-state: Completed
+
+      deadline: 
+        due-on-type: None
+
+      layout: 
+        sequence: 30
+
+      advanced: 
+        static-id: New_2
+
+    - # ====== Activity: Human Task / Approval Task ================
+      id: 34219573647120309
+      identification: 
+        name: Human Task / Approval Task
+        type: Human Task - Create
+
+      settings: 
+        definition: Unified Approval Task # 34211635075000907
+        details-primary-key--item: CURRENT_STEP_ID
+        outcome: TASK_OUTCOME
+        owner: TASK_APPROVER
+
+      deadline: 
+        due-on-type: None
+
+      layout: 
+        sequence: 40
+
+      advanced: 
+        static-id: New_3
+
+      connections: 
+      - # ====== Connection: New_1 ===================================
+        id: 34220435384120318
+        identification: 
+          name: New_1
+          type: Normal
+
+        activity: 
+          from: Human Task / Approval Task # 34219573647120309
+          to: Outcome Switch # 34220568679120319
+
+      parameters: 
+      - # ====== Parameter: Approval Id ==============================
+        id: 34219748097120311
+        identification: 
+          name: Approval Id # 34216145088040364
+
+        value: 
+          type: Item
+          item: APPROVAL_ID
+
+      - # ====== Parameter: Approval Step Id =========================
+        id: 34219858811120312
+        identification: 
+          name: Approval Step Id # 34216538459040364
+
+        value: 
+          type: Item
+          item: CURRENT_STEP_ID
+
+      - # ====== Parameter: Approval Subject =========================
+        id: 34219952584120313
+        identification: 
+          name: Approval Subject # 34216953753040365
+
+        value: 
+          type: Item
+          item: TASK_SUBJECT
+
+      - # ====== Parameter: Approver Users ===========================
+        id: 34220024907120314
+        identification: 
+          name: Approver Users # 34217312809040365
+
+        value: 
+          type: Item
+          item: CURRENT_APPROVERS
+
+      - # ====== Parameter: Module Code ==============================
+        id: 34220138648120315
+        identification: 
+          name: Module Code # 34217758757040365
+
+        value: 
+          type: Item
+          item: MODULE_CODE
+
+      - # ====== Parameter: Record Pk ================================
+        id: 34220254074120316
+        identification: 
+          name: Record Pk # 34218174020040365
+
+        value: 
+          type: Item
+          item: RECORD_PK
+
+    - # ====== Activity: Outcome Switch ============================
+      id: 34220568679120319
+      identification: 
+        name: Outcome Switch
+        type: Switch
+
+      switch: 
+        type: Check Workflow Variable
+
+      compare: 
+        compare-variable: TASK_OUTCOME
+
+      deadline: 
+        due-on-type: None
+
+      layout: 
+        sequence: 50
+
+      advanced: 
+        static-id: OUTCOME_SWITCH
+
+      connections: 
+      - # ====== Connection: New =====================================
+        id: 34220896560120322
+        identification: 
+          name: New
+
+        condition: 
+          operator: Is Equal To
+          value: APPROVED
+
+        activity: 
+          to: Mark Step Approved # 34220757584120321
+
+      - # ====== Connection: New_1 ===================================
+        id: 34222020806120334
+        identification: 
+          name: New_1
+
+        condition: 
+          operator: Is Equal To
+          value: REJECTED
+
+        activity: 
+          to: Mark Step Rejected # 34222136034120335
+
+    - # ====== Activity: Mark Step Approved ========================
+      id: 34220757584120321
+      identification: 
+        name: Mark Step Approved
+        type: Invoke API
+
+      settings: 
+        type: PL/SQL Package
+        owner: PARSING SCHEMA
+        package: HR_APPROVAL_WF_PKG
+        procedure-or-function: MARK_STEP_APPROVED
+
+      deadline: 
+        due-on-type: None
+
+      layout: 
+        sequence: 60
+
+      advanced: 
+        static-id: STEP_APPROVED
+
+      connections: 
+      - # ====== Connection: New =====================================
+        id: 34221306958120327
+        identification: 
+          name: New
+          type: Normal
+
+        activity: 
+          from: Mark Step Approved # 34220757584120321
+          to: Has Next Step # 34221439068120328
+
+      parameters: 
+      - # ====== Parameter: p_step_id ================================
+        id: 34220990229120323
+        identification: 
+          name: p_step_id
+
+        parameter: 
+          direction: In
+          data-type: NUMBER
+          has-default: false
+
+        value: 
+          type: Item
+          item: CURRENT_STEP_ID
+
+        advanced: 
+          display-sequence: 10
+
+      - # ====== Parameter: p_approver_user ==========================
+        id: 34221056055120324
+        identification: 
+          name: p_approver_user
+
+        parameter: 
+          direction: In
+          data-type: VARCHAR2
+          has-default: false
+
+        value: 
+          type: Item
+          item: CURRENT_APPROVERS
+
+        advanced: 
+          display-sequence: 20
+
+      - # ====== Parameter: p_comments ===============================
+        id: 34221110632120325
+        identification: 
+          name: p_comments
+
+        parameter: 
+          direction: In
+          data-type: VARCHAR2
+          has-default: false
+
+        value: 
+          type: Null
+
+        advanced: 
+          display-sequence: 30
+
+      - # ====== Parameter: p_has_next_step ==========================
+        id: 34221229232120326
+        identification: 
+          name: p_has_next_step
+
+        parameter: 
+          direction: Out
+          data-type: VARCHAR2
+          ignore-output: false
+
+        value: 
+          item: HAS_NEXT_STEP
+
+        advanced: 
+          display-sequence: 40
+
+    - # ====== Activity: Has Next Step =============================
+      id: 34221439068120328
+      identification: 
+        name: Has Next Step
+        type: Switch
+
+      switch: 
+        type: Check Workflow Variable
+
+      compare: 
+        compare-variable: HAS_NEXT_STEP
+
+      deadline: 
+        due-on-type: None
+
+      layout: 
+        sequence: 70
+
+      advanced: 
+        static-id: New_4
+
+      connections: 
+      - # ====== Connection: Has Next Step ===========================
+        id: 34221539189120329
+        identification: 
+          name: Has Next Step
+
+        condition: 
+          operator: Is Equal To
+          value: Y
+
+        activity: 
+          to: Get Next Approval Step # 33209089476488636
+
+      - # ====== Connection: Has Next Step No ========================
+        id: 34221753072120331
+        identification: 
+          name: Has Next Step No
+
+        condition: 
+          operator: Is Equal To
+          value: N
+
+        activity: 
+          to: Final Approve # 34221806098120332
+
+    - # ====== Activity: Final Approve =============================
+      id: 34221806098120332
+      identification: 
+        name: Final Approve
+        type: Invoke API
+
+      settings: 
+        type: PL/SQL Package
+        owner: PARSING SCHEMA
+        package: HR_APPROVAL_WF_PKG
+        procedure-or-function: FINAL_APPROVE
+
+      deadline: 
+        due-on-type: None
+
+      layout: 
+        sequence: 80
+
+      advanced: 
+        static-id: New_5
+
+      connections: 
+      - # ====== Connection: New =====================================
+        id: 34223137151120345
+        identification: 
+          name: New
+          type: Normal
+
+        activity: 
+          from: Final Approve # 34221806098120332
+          to: End # 33209134573488637
+
+      parameters: 
+      - # ====== Parameter: p_approval_id ============================
+        id: 34221951709120333
+        identification: 
+          name: p_approval_id
+
+        parameter: 
+          direction: In
+          data-type: NUMBER
+          has-default: false
+
+        value: 
+          type: Item
+          item: APPROVAL_ID
+
+        advanced: 
+          display-sequence: 10
+
+    - # ====== Activity: Mark Step Rejected ========================
+      id: 34222136034120335
+      identification: 
+        name: Mark Step Rejected
+        type: Invoke API
+
+      settings: 
+        type: PL/SQL Package
+        owner: PARSING SCHEMA
+        package: HR_APPROVAL_WF_PKG
+        procedure-or-function: MARK_STEP_REJECTED
+
+      deadline: 
+        due-on-type: None
+
+      layout: 
+        sequence: 90
+
+      advanced: 
+        static-id: New_6
+
+      connections: 
+      - # ====== Connection: New =====================================
+        id: 34222676099120340
+        identification: 
+          name: New
+          type: Normal
+
+        activity: 
+          from: Mark Step Rejected # 34222136034120335
+          to: Final Reject # 34222780796120341
+
+      parameters: 
+      - # ====== Parameter: p_step_id ================================
+        id: 34222210914120336
+        identification: 
+          name: p_step_id
+
+        parameter: 
+          direction: In
+          data-type: NUMBER
+          has-default: false
+
+        value: 
+          type: Item
+          item: CURRENT_STEP_ID
+
+        advanced: 
+          display-sequence: 10
+
+      - # ====== Parameter: p_approver_user ==========================
+        id: 34222301941120337
+        identification: 
+          name: p_approver_user
+
+        parameter: 
+          direction: In
+          data-type: VARCHAR2
+          has-default: false
+
+        value: 
+          type: Item
+          item: CURRENT_APPROVERS
+
+        advanced: 
+          display-sequence: 20
+
+      - # ====== Parameter: p_comments ===============================
+        id: 34222470402120338
+        identification: 
+          name: p_comments
+
+        parameter: 
+          direction: In
+          data-type: VARCHAR2
+          has-default: false
+
+        value: 
+          type: Item
+          item: REJECT_REASON
+
+        advanced: 
+          display-sequence: 30
+
+    - # ====== Activity: Final Reject ==============================
+      id: 34222780796120341
+      identification: 
+        name: Final Reject
+        type: Invoke API
+
+      settings: 
+        type: PL/SQL Package
+        owner: PARSING SCHEMA
+        package: HR_APPROVAL_WF_PKG
+        procedure-or-function: FINAL_REJECT
+
+      deadline: 
+        due-on-type: None
+
+      layout: 
+        sequence: 100
+
+      advanced: 
+        static-id: New_7
+
+      connections: 
+      - # ====== Connection: New =====================================
+        id: 34223057455120344
+        identification: 
+          name: New
+          type: Normal
+
+        activity: 
+          from: Final Reject # 34222780796120341
+          to: End # 33209134573488637
+
+      parameters: 
+      - # ====== Parameter: p_approval_id ============================
+        id: 34222807769120342
+        identification: 
+          name: p_approval_id
+
+        parameter: 
+          direction: In
+          data-type: NUMBER
+          has-default: false
+
+        value: 
+          type: Item
+          item: APPROVAL_ID
+
+        advanced: 
+          display-sequence: 10
+
+      - # ====== Parameter: p_reason =================================
+        id: 34222938059120343
+        identification: 
+          name: p_reason
+
+        parameter: 
+          direction: In
+          data-type: VARCHAR2
+          has-default: false
+
+        value: 
+          type: Item
+          item: REJECT_REASON
+
+        advanced: 
+          display-sequence: 20
+
+    variables: 
+    - # ====== Variable: CURRENT_STEP_ID ===========================
+      id: 33209566799488641
+      identification: 
+        static-id: CURRENT_STEP_ID
+
+      label: 
+        label: CURRENT_STEP_ID
+
+      parameter: 
+        data-type: NUMBER
+
+      value: 
+        type: Null
+
+    - # ====== Variable: CURRENT_APPROVERS =========================
+      id: 33209613904488642
+      identification: 
+        static-id: CURRENT_APPROVERS
+
+      label: 
+        label: CURRENT_APPROVERS
+
+      parameter: 
+        data-type: VARCHAR2
+
+      value: 
+        type: Null
+
+    - # ====== Variable: TASK_SUBJECT ==============================
+      id: 33209799997488643
+      identification: 
+        static-id: TASK_SUBJECT
+
+      label: 
+        label: TASK_SUBJECT
+
+      parameter: 
+        data-type: VARCHAR2
+
+      value: 
+        type: Null
+
+    - # ====== Variable: MODULE_CODE ===============================
+      id: 33209837300488644
+      identification: 
+        static-id: MODULE_CODE
+
+      label: 
+        label: MODULE_CODE
+
+      parameter: 
+        data-type: VARCHAR2
+
+      value: 
+        type: Null
+
+    - # ====== Variable: RECORD_PK =================================
+      id: 33209974611488645
+      identification: 
+        static-id: RECORD_PK
+
+      label: 
+        label: RECORD_PK
+
+      parameter: 
+        data-type: NUMBER
+
+      value: 
+        type: Null
+
+    - # ====== Variable: TASK_OUTCOME ==============================
+      id: 33210089269488646
+      identification: 
+        static-id: TASK_OUTCOME
+
+      label: 
+        label: TASK_OUTCOME
+
+      parameter: 
+        data-type: VARCHAR2
+
+      value: 
+        type: Null
+
+    - # ====== Variable: TASK_APPROVER =============================
+      id: 33210194804488647
+      identification: 
+        static-id: TASK_APPROVER
+
+      label: 
+        label: TASK_APPROVER
+
+      parameter: 
+        data-type: VARCHAR2
+
+      value: 
+        type: Null
+
+    - # ====== Variable: HAS_NEXT_STEP =============================
+      id: 33210249004488648
+      identification: 
+        static-id: HAS_NEXT_STEP
+
+      label: 
+        label: HAS_NEXT_STEP
+
+      parameter: 
+        data-type: VARCHAR2
+
+      value: 
+        type: Null
+
+    - # ====== Variable: REJECT_REASON =============================
+      id: 33210339954488649
+      identification: 
+        static-id: REJECT_REASON
+
+      label: 
+        label: REJECT_REASON
+
+      parameter: 
+        data-type: VARCHAR2
+
+      value: 
+        type: Null
+
+    - # ====== Variable: Approver ==================================
+      id: 34219666007120310
+      identification: 
+        static-id: APPROVER
+
+      label: 
+        label: Approver
+
+      parameter: 
+        data-type: VARCHAR2
+
+      value: 
+        type: Null
+
+    participants: 
+    - # ====== Participant: Workflow Owner =========================
+      id: 33210487586488650
+      identification: 
+        name: Workflow Owner
+        type: Workflow Owner
+
+      value: 
+        type: Function Body
+        language: PL/SQL
+        pl/sql-function-body: return hr_approval_wf_pkg.get_role_users('APPROVAL_ADMIN');
+
+    - # ====== Participant: Workflow Administrator =================
+      id: 34218757573120301
+      identification: 
+        name: Workflow Admin
+        type: Workflow Administrator
+
+      value: 
+        type: Function Body
+        language: PL/SQL
+        pl/sql-function-body: return hr_approval_wf_pkg.get_role_users('WORKFLOW_ADMIN');
+

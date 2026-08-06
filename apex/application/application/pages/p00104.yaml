@@ -1,0 +1,964 @@
+---
+# ====== Page: Employee Identifiers ==========================
+id: 104
+identification: 
+  name: Employee Identifiers
+  alias: EMPLOYEE-IDENTIFIERS
+  title: Employee Identifiers
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Employee Display Only =======================
+  id: 15894844465110446
+  identification: 
+    name: Employee Display Only
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Employee Identifiers ========================
+  id: 15960343185527519
+  identification: 
+    name: Employee Identifiers
+    type: Interactive Grid
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select ID_REC_ID,
+             EMP_ID,
+             ID_TYPE,
+             ID_NO,
+             ISSUE_DT,
+             EXPIRY_DT,
+             IS_PRIMARY,
+             STATUS,
+             REPLACED_BY_ID_REC_ID,
+             CREATED_BY,
+             CREATED_DT,
+             UPDATED_BY,
+             UPDATED_DT
+        from HR_EMP_IDENTIFIERS
+        where EMP_ID = :P104_EMP_ID;
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 15960834663527516
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+      add-row-if-empty: true
+
+    edit-authorization: 
+      add: AUTH_IG_ADD # 9993779001807624
+      update: AUTH_IG_UPDATE # 9993943233810314
+      delete: AUTH_IG_DELETE # 9994264908817843
+
+    performance: 
+      lazy-loading: false
+
+    appearance: 
+      select-first-row: true
+      fixed-row-height: true
+
+    pagination: 
+      type: Scroll
+      show-total-count: true
+
+    toolbar: 
+      show: true
+      controls: 
+      - Search Column Selection
+      - Search Field
+      - Actions Menu
+      - Reset Button
+      - Save Button
+
+    enable-users-to: 
+      save-public-report: false
+      flashback: true
+      define-chart-view: true
+      download: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - PDF
+      - Excel
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 15961232616527515
+      identification: 
+        name: Primary Report
+        alias: 159613
+
+  columns: 
+  - # ====== Column: APEX$ROW_SELECTOR ===========================
+    id: 15961636101527512
+    identification: 
+      column-name: APEX$ROW_SELECTOR
+      type: Row Selector
+
+    settings: 
+      enable-multi-select: true
+      show-select-all: true
+      hide-control: false
+
+    layout: 
+      sequence: 10
+
+  - # ====== Column: APEX$ROW_ACTION =============================
+    id: 15962193051527511
+    identification: 
+      column-name: APEX$ROW_ACTION
+      type: Actions Menu
+
+    layout: 
+      sequence: 20
+
+  - # ====== Column: ID_REC_ID ===================================
+    id: 15963127391527508
+    identification: 
+      column-name: ID_REC_ID
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 30
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: ID_REC_ID
+      data-type: NUMBER
+      query-only: true
+      primary-key: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+
+  - # ====== Column: EMP_ID ======================================
+    id: 15964187124527504
+    identification: 
+      column-name: EMP_ID
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 40
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: EMP_ID
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      type: Item
+      item: P104_EMP_ID
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: ID_TYPE =====================================
+    id: 15965058842527504
+    identification: 
+      column-name: ID_TYPE
+      type: Select List
+
+    heading: 
+      heading: UID Type
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC:PASSPORT;PASSPORT,EID;EID'
+      display-extra-values: true
+      display-null-value: true
+
+    source: 
+      type: Database Column
+      database-column: ID_TYPE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: ID_NO =======================================
+    id: 15966057791527503
+    identification: 
+      column-name: ID_NO
+      type: Text Field
+
+    heading: 
+      heading: UID Number
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: Upper
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 15
+
+    source: 
+      type: Database Column
+      database-column: ID_NO
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: ISSUE_DT ====================================
+    id: 15967025748527502
+    identification: 
+      column-name: ISSUE_DT
+      type: Display Only
+
+    heading: 
+      heading: Issue Date
+      alignment: start
+
+    settings: 
+      format: Plain Text
+      based-on: Item Value
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: ISSUE_DT
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: EXPIRY_DT ===================================
+    id: 15968017402527502
+    identification: 
+      column-name: EXPIRY_DT
+      type: Display Only
+
+    heading: 
+      heading: Expiry Date
+      alignment: start
+
+    settings: 
+      format: Plain Text
+      based-on: Item Value
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: EXPIRY_DT
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: IS_PRIMARY ==================================
+    id: 15969068697527501
+    identification: 
+      column-name: IS_PRIMARY
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 90
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: IS_PRIMARY
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      type: Static
+      static-value: Y
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: STATUS ======================================
+    id: 15970032100527501
+    identification: 
+      column-name: STATUS
+      type: Display Only
+
+    heading: 
+      heading: Status
+      alignment: start
+
+    settings: 
+      format: Plain Text
+      based-on: Item Value
+
+    layout: 
+      sequence: 100
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: STATUS
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      type: Static
+      static-value: ACTIVE
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: REPLACED_BY_ID_REC_ID =======================
+    id: 15971083204527500
+    identification: 
+      column-name: REPLACED_BY_ID_REC_ID
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 110
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: REPLACED_BY_ID_REC_ID
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: CREATED_BY ==================================
+    id: 15972033091527499
+    identification: 
+      column-name: CREATED_BY
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 120
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: CREATED_BY
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: CREATED_DT ==================================
+    id: 15973030681527499
+    identification: 
+      column-name: CREATED_DT
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 130
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: CREATED_DT
+      data-type: TIMESTAMP
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: UPDATED_BY ==================================
+    id: 15974019798527498
+    identification: 
+      column-name: UPDATED_BY
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 140
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: UPDATED_BY
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: UPDATED_DT ==================================
+    id: 15975045365527498
+    identification: 
+      column-name: UPDATED_DT
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 150
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: UPDATED_DT
+      data-type: TIMESTAMP
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  printing: 
+    page: 
+      size: Letter
+      orientation: Landscape
+      units: Inches
+      width: 11
+      height: 8.5
+      border-width: 0.5
+      border-color: '#666666'
+
+    page-header: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+      page-header-text: Employee Identifiers
+
+    column-headings: 
+      font: Helvetica
+      font-weight: Bold
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#EEEEEE'
+
+    columns: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#FFFFFF'
+
+    page-footer: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+page-items: 
+- # ====== Page Item: P104_EMP_ID ==============================
+  id: 15894640974110444
+  identification: 
+    name: P104_EMP_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Employee Identifiers # 15960343185527519
+    slot: ORDER_BY_ITEM
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P104_EMP_DISPLAY =========================
+  id: 15894949211110447
+  identification: 
+    name: P104_EMP_DISPLAY
+    type: Display Only
+
+  label: 
+    label: Employee Name
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Employee Display Only # 15894844465110446
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      select FULL_EMPLOYEE_NAME
+      from VW_HR_EMPLOYEE_LIST
+      where emp_id = :P104_EMP_ID
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PB_CANCEL ===================================
+  id: 15895048150110448
+  identification: 
+    button-name: PB_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 20
+    region: Employee Identifiers # 15960343185527519
+    slot: ABOVE_BOX
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    horizontal-alignment: Right
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:101:&SESSION.::&DEBUG.:::'
+      page: 101 # Employee Management
+
+    warn-on-unsaved-changes: Do Not Check
+
+processes: 
+- # ====== Process: Employee Identifiers - Save Interactive Grid
+  id: 15976482696527494
+  identification: 
+    name: Employee Identifiers - Save Interactive Grid Data
+    type: Interactive Grid - Automatic Row Processing (DML)
+    execution-chain: None
+    editable-region: Employee Identifiers # 15960343185527519
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    execution-scope: For Created and Modified Rows
+
+- # ====== Process: Set Authorization Values ===================
+  id: 16638987478652216
+  identification: 
+    name: Set Authorization Values
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      apex_util.set_session_state('G_IG_PERM_ADD', 'HR_UI_ADD');
+      apex_util.set_session_state('G_IG_PERM_UPD', 'HR_UI_UPDATE');
+      apex_util.set_session_state('G_IG_PERM_DEL', 'HR_UI_DELETE');
+      apex_util.set_session_state('P0_PERM_CODE', 'HR_UI_VIEW');
+      
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+

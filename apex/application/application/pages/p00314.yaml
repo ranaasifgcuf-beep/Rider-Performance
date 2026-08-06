@@ -1,0 +1,1657 @@
+---
+# ====== Page: Open Accident =================================
+id: 314
+identification: 
+  name: Open Accident
+  alias: OPEN-ACCIDENT
+  title: Open Accident
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Drawer
+  template-options: 
+  - '#DEFAULT#'
+  - js-dialog-class-t-Drawer--pullOutEnd
+
+dialog: 
+  width: 1000
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Bike Details ================================
+  id: 30540246730223607
+  identification: 
+    name: Bike Details
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Hero
+    template-options: 
+    - '#DEFAULT#'
+    - t-HeroRegion--hideIcon
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Accident Basic Info =========================
+  id: 30540854500223613
+  identification: 
+    name: Accident Basic Info
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Accident Details # 30544151810223646
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Accident Classification =====================
+  id: 30541361761223618
+  identification: 
+    name: Accident Classification
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: Accident Details # 30544151810223646
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: false
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Cost / Employee Charge ======================
+  id: 30541922231223624
+  identification: 
+    name: Cost / Employee Charge
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: Accident Details # 30544151810223646
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Accident Details ============================
+  id: 30544151810223646
+  identification: 
+    name: Accident Details
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--noBorder
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P314_BIKE_ID =============================
+  id: 30540343807223608
+  identification: 
+    name: P314_BIKE_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Bike Details # 30540246730223607
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_ACCIDENT_ID =========================
+  id: 30540421394223609
+  identification: 
+    name: P314_ACCIDENT_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: Bike Details # 30540246730223607
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_CURRENT_STATUS ======================
+  id: 30540552705223610
+  identification: 
+    name: P314_CURRENT_STATUS
+    type: Display Only
+
+  label: 
+    label: Current Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 40
+    region: Bike Details # 30540246730223607
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_PLATE_NO ============================
+  id: 30540642666223611
+  identification: 
+    name: P314_PLATE_NO
+    type: Display Only
+
+  label: 
+    label: Plate No
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Bike Details # 30540246730223607
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_CURRENT_CUSTODY =====================
+  id: 30540711920223612
+  identification: 
+    name: P314_CURRENT_CUSTODY
+    type: Display Only
+
+  label: 
+    label: Current Custody
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 50
+    region: Bike Details # 30540246730223607
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_EMP_ID ==============================
+  id: 30540951154223614
+  identification: 
+    name: P314_EMP_ID
+    type: Popup LOV
+
+  label: 
+    label: Employee
+    alignment: Left
+
+  settings: 
+    display-as: Inline Popup
+    initial-fetch: Automatic
+    manual-entry: false
+    fetch-on-search: false
+
+  search: 
+    match-type: Contains
+    case-sensitive: false
+    minimum-characters: 0
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Accident Basic Info # 30540854500223613
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: FLEET.EMPLOYEE_LOV # 18130747472806310
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P314_EMP_ID
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_ACCIDENT_LOCATION ===================
+  id: 30541006356223615
+  identification: 
+    name: P314_ACCIDENT_LOCATION
+    type: Text Field
+
+  label: 
+    label: Accident Location
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 30
+    region: Accident Basic Info # 30540854500223613
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_ACCIDENT_DT =========================
+  id: 30541199053223616
+  identification: 
+    name: P314_ACCIDENT_DT
+    type: Date Picker
+
+  label: 
+    label: Accident Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 20
+    region: Accident Basic Info # 30540854500223613
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sysdate
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_POLICE_REPORT_NO ====================
+  id: 30541274739223617
+  identification: 
+    name: P314_POLICE_REPORT_NO
+    type: Text Field
+
+  label: 
+    label: Police Report No
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 40
+    region: Accident Basic Info # 30540854500223613
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_FAULT_TYPE ==========================
+  id: 30541409140223619
+  identification: 
+    name: P314_FAULT_TYPE
+    type: Select List
+
+  label: 
+    label: Fault Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Accident Classification # 30541361761223618
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Employee;EMPLOYEE,Company;COMPANY,Third Party;THIRD_PARTY'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_ACCIDENT_SEVERITY ===================
+  id: 30541542918223620
+  identification: 
+    name: P314_ACCIDENT_SEVERITY
+    type: Select List
+
+  label: 
+    label: Severity
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: Accident Classification # 30541361761223618
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Minor;MINOR,Major;MAJOR,Total Loss;TOTAL_LOSS'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_REMARKS =============================
+  id: 30541642568223621
+  identification: 
+    name: P314_REMARKS
+    type: Text Field
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 50
+    region: Accident Classification # 30541361761223618
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_ACCIDENT_CUSTODY_CODE ===============
+  id: 30541737150223622
+  identification: 
+    name: P314_ACCIDENT_CUSTODY_CODE
+    type: Select List
+
+  label: 
+    label: Accident Custody
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Accident Classification # 30541361761223618
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select custody_type_name d,
+             custody_type_code r
+      from fleet_ref_custody_types
+      where is_active = 'Y'
+      order by nvl(seq_no,9999)
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_ACCIDENT_LOCATION_ID ================
+  id: 30541886206223623
+  identification: 
+    name: P314_ACCIDENT_LOCATION_ID
+    type: Select List
+
+  label: 
+    label: Accident Location
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: Accident Classification # 30541361761223618
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select location_name d,
+             location_id r
+      from fleet_ref_custody_locations
+      where is_active = 'Y'
+        and custody_type_code = :P314_ACCIDENT_CUSTODY_CODE
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P314_ACCIDENT_CUSTODY_CODE
+    items-to-submit: 
+    - P314_ACCIDENT_CUSTODY_CODE
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_ESTIMATED_COST ======================
+  id: 30542096128223625
+  identification: 
+    name: P314_ESTIMATED_COST
+    type: Number Field
+
+  label: 
+    label: Estimated Cost
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 30
+    region: Cost / Employee Charge # 30541922231223624
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_CHARGE_TO_EMPLOYEE_YN ===============
+  id: 30542186129223626
+  identification: 
+    name: P314_CHARGE_TO_EMPLOYEE_YN
+    type: Switch
+
+  label: 
+    label: Charge To Employee?
+    alignment: Left
+
+  settings: 
+    use-defaults: false
+    on-value: Y
+    on-label: Yes
+    off-value: N
+    off-label: No
+
+  layout: 
+    sequence: 20
+    region: Cost / Employee Charge # 30541922231223624
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_CREATE_CHARGE_YN ====================
+  id: 30542255809223627
+  identification: 
+    name: P314_CREATE_CHARGE_YN
+    type: Switch
+
+  label: 
+    label: Create Charge?
+    alignment: Left
+
+  settings: 
+    use-defaults: true
+
+  layout: 
+    sequence: 10
+    region: Cost / Employee Charge # 30541922231223624
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_EXCLUDED_FROM_CHARGE_YN =============
+  id: 30542344025223628
+  identification: 
+    name: P314_EXCLUDED_FROM_CHARGE_YN
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 50
+    region: Cost / Employee Charge # 30541922231223624
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: N
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P314_CHARGE_DUE_DT =======================
+  id: 30542476319223629
+  identification: 
+    name: P314_CHARGE_DUE_DT
+    type: Date Picker
+
+  label: 
+    label: Charge Due Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 60
+    region: Cost / Employee Charge # 30541922231223624
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: BTN_SAVE ====================================
+  id: 30543633880223641
+  identification: 
+    button-name: BTN_SAVE
+    label: Save
+
+  layout: 
+    sequence: 40
+    region: Cost / Employee Charge # 30541922231223624
+    slot: CHANGE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-save
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: BTN_CANCEL ==================================
+  id: 30543771288223642
+  identification: 
+    button-name: BTN_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 30
+    region: Cost / Employee Charge # 30541922231223624
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-times-circle
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:309:&SESSION.::&DEBUG.:::'
+      page: 309 # Bike Operations
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: CREATE_CHARGE =======================
+  id: 30542654252223631
+  identification: 
+    name: CREATE_CHARGE
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P314_CREATE_CHARGE_YN
+
+  client-side-condition: 
+    type: Item = Value
+    item: P314_CREATE_CHARGE_YN
+    value: Y
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 30542731993223632
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P314_CHARGE_TO_EMPLOYEE_YN
+      - P314_CHARGE_DUE_DT
+      - P314_ESTIMATED_COST
+
+    execution: 
+      sequence: 10
+      event: CREATE_CHARGE # 30542654252223631
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 30542893300223633
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P314_CHARGE_TO_EMPLOYEE_YN
+      - P314_CHARGE_DUE_DT
+      - P314_ESTIMATED_COST
+
+    execution: 
+      sequence: 20
+      event: CREATE_CHARGE # 30542654252223631
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+  - # ====== Action: Set Value ===================================
+    id: 30542980322223634
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: Y
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P314_CHARGE_TO_EMPLOYEE_YN
+
+    execution: 
+      sequence: 20
+      event: CREATE_CHARGE # 30542654252223631
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Set Value ===================================
+    id: 30543012297223635
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      value: Y
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P314_CHARGE_TO_EMPLOYEE_YN
+
+    execution: 
+      sequence: 10
+      event: CREATE_CHARGE # 30542654252223631
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: Close Dialog ========================
+  id: 30678669419699315
+  identification: 
+    name: Close Dialog
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: BTN_CANCEL # 30543771288223642
+
+  actions: 
+  - # ====== Action: Close Dialog ================================
+    id: 30678788554699316
+    identification: 
+      action: Close Dialog
+
+    execution: 
+      sequence: 10
+      event: Close Dialog # 30678669419699315
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations: 
+- # ====== Validation: EMP_REQUIRED ============================
+  id: 30543106158223636
+  identification: 
+    name: EMP_REQUIRED
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return :P314_EMP_ID is not null;'
+    always-execute: false
+
+  error: 
+    error-message: Employee is required!
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: ACCIDENT_DATE_REQUIRED ==================
+  id: 30543290825223637
+  identification: 
+    name: ACCIDENT_DATE_REQUIRED
+
+  execution: 
+    sequence: 20
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return :P314_ACCIDENT_DT is not null;'
+    always-execute: false
+
+  error: 
+    error-message: Accident Date is required!
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: FAULT_TYPE_REQUIRED =====================
+  id: 30543367593223638
+  identification: 
+    name: FAULT_TYPE_REQUIRED
+
+  execution: 
+    sequence: 30
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return :P314_FAULT_TYPE is not null;'
+    always-execute: false
+
+  error: 
+    error-message: Fault Type is required!
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: Cost Required ===========================
+  id: 30543497849223639
+  identification: 
+    name: Cost Required
+
+  execution: 
+    sequence: 40
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: 'return nvl(:P314_ESTIMATED_COST,0) > 0;'
+    always-execute: false
+
+  error: 
+    error-message: Cost is required!
+    display-location: Inline with Field and in Notification
+
+  server-side-condition: 
+    type: Item = Value
+    item: P314_CREATE_CHARGE_YN
+    value: Y
+
+- # ====== Validation: Charge To EMP ===========================
+  id: 30543558825223640
+  identification: 
+    name: Charge To EMP
+
+  execution: 
+    sequence: 50
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: "return :P314_CHARGE_TO_EMPLOYEE_YN = 'Y';"
+    always-execute: false
+
+  error: 
+    error-message: Charge To Employee is required!
+    display-location: Inline with Field and in Notification
+
+  server-side-condition: 
+    type: Item = Value
+    item: P314_CREATE_CHARGE_YN
+    value: Y
+
+processes: 
+- # ====== Process: FETCH_BIKE_INFO ============================
+  id: 30542532172223630
+  identification: 
+    name: FETCH_BIKE_INFO
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          select 
+                 plate_no,
+                 bike_status_name,
+                 custody_type_name,
+                 current_emp_id
+            into 
+                 :P314_PLATE_NO,
+                 :P314_CURRENT_STATUS,
+                 :P314_CURRENT_CUSTODY,
+                 :P314_EMP_ID
+            from vw_fleet_bike_current
+           where bike_id = :P314_BIKE_ID;
+      end;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: OPEN_ACCIDENT ==============================
+  id: 30543863422223643
+  identification: 
+    name: OPEN_ACCIDENT
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      declare
+          l_accident_id number;
+      begin
+          fleet_pkg.open_bike_accident(
+              p_bike_id                 => :P314_BIKE_ID,
+              p_emp_id                  => :P314_EMP_ID,
+              p_accident_dt             => :P314_ACCIDENT_DT,
+              p_accident_location       => :P314_ACCIDENT_LOCATION,
+              p_police_report_no        => :P314_POLICE_REPORT_NO,
+              p_fault_type              => :P314_FAULT_TYPE,
+              p_accident_severity       => :P314_ACCIDENT_SEVERITY,
+              p_accident_custody_code   => :P314_ACCIDENT_CUSTODY_CODE,
+              p_accident_location_id    => :P314_ACCIDENT_LOCATION_ID,
+              p_estimated_cost          => :P314_ESTIMATED_COST,
+              p_charge_to_employee_yn   => :P314_CHARGE_TO_EMPLOYEE_YN,
+              p_excluded_from_charge_yn => :P314_EXCLUDED_FROM_CHARGE_YN,
+              p_create_charge_yn        => :P314_CREATE_CHARGE_YN,
+              p_charge_due_dt           => :P314_CHARGE_DUE_DT,
+              p_remarks                 => :P314_REMARKS,
+              p_accident_id             => l_accident_id
+          );
+      
+          :P314_ACCIDENT_ID := l_accident_id;
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: BTN_SAVE # 30543633880223641
+
+- # ====== Process: Close Diaglog ==============================
+  id: 30678839968699317
+  identification: 
+    name: Close Diaglog
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: BTN_SAVE # 30543633880223641
+

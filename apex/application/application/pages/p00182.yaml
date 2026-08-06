@@ -1,0 +1,1138 @@
+---
+# ====== Page: Legal Profile List ============================
+id: 182
+identification: 
+  name: Legal Profile List
+  alias: LEGAL-PROFILE-LIST
+  title: Legal Profile List
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    .legal-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(140px, 1fr));
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    
+    .legal-kpi-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-left: 4px solid #2563eb;
+        border-radius: 10px;
+        padding: 12px 14px;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+        min-height: 82px;
+    }
+    
+    .legal-kpi-card.success {
+        border-left-color: #15803d;
+    }
+    
+    .legal-kpi-card.warning {
+        border-left-color: #d97706;
+    }
+    
+    .legal-kpi-card.danger {
+        border-left-color: #dc2626;
+    }
+    
+    .legal-kpi-label {
+        font-size: 10px;
+        text-transform: uppercase;
+        color: #334155;
+        font-weight: 800;
+        letter-spacing: .03em;
+    }
+    
+    .legal-kpi-value {
+        font-size: 25px;
+        font-weight: 900;
+        color: #0f172a;
+        margin-top: 5px;
+        line-height: 1;
+    }
+    
+    .legal-kpi-card.success .legal-kpi-value {
+        color: #15803d;
+    }
+    
+    .legal-kpi-card.warning .legal-kpi-value {
+        color: #d97706;
+    }
+    
+    .legal-kpi-card.danger .legal-kpi-value {
+        color: #dc2626;
+    }
+    
+    .legal-kpi-sub {
+        font-size: 10px;
+        color: #64748b;
+        margin-top: 6px;
+    }
+    
+    @media (max-width: 1200px) {
+        .legal-kpi-grid {
+            grid-template-columns: repeat(3, minmax(140px, 1fr));
+        }
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Summary =====================================
+  id: 38206551339256234
+  identification: 
+    name: Summary
+    type: Dynamic Content
+
+  source: 
+    language: PL/SQL
+    pl/sql-function-body-returning-a-clob: |
+      declare
+          l_total          number := 0;
+          l_valid          number := 0;
+          l_in_process     number := 0;
+          l_risky          number := 0;
+          l_inside_wps     number := 0;
+          l_outside_wps    number := 0;
+          l_html           clob;
+      begin
+          select count(*),
+                 sum(case when legal_status = 'VALID' then 1 else 0 end),
+                 sum(case when legal_status = 'IN_PROCESS' then 1 else 0 end),
+                 sum(case when legal_status in ('ABSCONDING','EMPLOYEE_COMPLAINT','CANCELLED_MOHRE','CANCELLED_ICP','CANCELLED','EXPIRED') then 1 else 0 end),
+                 sum(case when default_wps_clearing_mode = 'INTERNAL_WPS' then 1 else 0 end),
+                 sum(case when default_wps_clearing_mode = 'OUTSIDE_CLEARING' then 1 else 0 end)
+            into l_total,
+                 l_valid,
+                 l_in_process,
+                 l_risky,
+                 l_inside_wps,
+                 l_outside_wps
+            from hr_emp_legal_profile_v;
+      
+          l_html :=
+          '<div class="legal-kpi-grid">' ||
+      
+          '<div class="legal-kpi-card">' ||
+          '<div class="legal-kpi-label">Total Profiles</div>' ||
+          '<div class="legal-kpi-value">' || nvl(l_total,0) || '</div>' ||
+          '<div class="legal-kpi-sub">Employees with profile</div>' ||
+          '</div>' ||
+      
+          '<div class="legal-kpi-card success">' ||
+          '<div class="legal-kpi-label">Valid Legal Status</div>' ||
+          '<div class="legal-kpi-value">' || nvl(l_valid,0) || '</div>' ||
+          '<div class="legal-kpi-sub">Ready legally</div>' ||
+          '</div>' ||
+      
+          '<div class="legal-kpi-card warning">' ||
+          '<div class="legal-kpi-label">In Process</div>' ||
+          '<div class="legal-kpi-value">' || nvl(l_in_process,0) || '</div>' ||
+          '<div class="legal-kpi-sub">Visa/legal process</div>' ||
+          '</div>' ||
+      
+          '<div class="legal-kpi-card danger">' ||
+          '<div class="legal-kpi-label">Risk / Exception</div>' ||
+          '<div class="legal-kpi-value">' || nvl(l_risky,0) || '</div>' ||
+          '<div class="legal-kpi-sub">Absconding/cancelled/expired</div>' ||
+          '</div>' ||
+      
+          '<div class="legal-kpi-card success">' ||
+          '<div class="legal-kpi-label">Inside WPS</div>' ||
+          '<div class="legal-kpi-value">' || nvl(l_inside_wps,0) || '</div>' ||
+          '<div class="legal-kpi-sub">Default internal WPS</div>' ||
+          '</div>' ||
+      
+          '<div class="legal-kpi-card warning">' ||
+          '<div class="legal-kpi-label">Outside WPS</div>' ||
+          '<div class="legal-kpi-value">' || nvl(l_outside_wps,0) || '</div>' ||
+          '<div class="legal-kpi-sub">Default outside clearing</div>' ||
+          '</div>' ||
+      
+          '</div>';
+      
+          return l_html;
+      end;
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: legal_kpi_summary
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    performance: 
+      lazy-loading: false
+
+- # ====== Region: Breadcrumb ==================================
+  id: 38612997572985404
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 9721609352336316
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: Legal Profile List ==========================
+  id: 38613669591985411
+  identification: 
+    name: Legal Profile List
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select legal_profile_id,
+             emp_id,
+             emp_code,
+             employee_name,
+             legal_worker_type,
+             legal_party_name,
+      
+             case legal_status
+                 when 'VALID' then '<span class="t-Badge t-Badge--success">Valid</span>'
+                 when 'IN_PROCESS' then '<span class="t-Badge t-Badge--warning">In Process</span>'
+                 when 'EXPIRED' then '<span class="t-Badge t-Badge--danger">Expired</span>'
+                 when 'ABSCONDING' then '<span class="t-Badge t-Badge--danger">Absconding</span>'
+                 when 'EMPLOYEE_COMPLAINT' then '<span class="t-Badge t-Badge--danger">Employee Complaint</span>'
+                 when 'CANCELLED_MOHRE' then '<span class="t-Badge t-Badge--danger">Cancelled MOHRE</span>'
+                 when 'CANCELLED_ICP' then '<span class="t-Badge t-Badge--danger">Cancelled ICP</span>'
+                 when 'CANCELLED' then '<span class="t-Badge">Cancelled</span>'
+                 when 'ON_HOLD' then '<span class="t-Badge t-Badge--warning">On Hold</span>'
+                 when 'EXITED' then '<span class="t-Badge">Exited</span>'
+                 else '<span class="t-Badge">' || apex_escape.html(legal_status) || '</span>'
+             end legal_status,
+      
+             case default_wps_clearing_mode
+                 when 'INTERNAL_WPS' then '<span class="t-Badge t-Badge--success">Inside WPS</span>'
+                 when 'OUTSIDE_CLEARING' then '<span class="t-Badge t-Badge--warning">Outside Clearing</span>'
+                 when 'SUPPLIER_WPS' then '<span class="t-Badge">Supplier WPS</span>'
+                 when 'NOT_REQUIRED' then '<span class="t-Badge">Not Required</span>'
+                 when 'BLOCKED' then '<span class="t-Badge t-Badge--danger">Blocked</span>'
+                 when 'MANAGEMENT_EXCEPTION' then '<span class="t-Badge t-Badge--warning">Management Exception</span>'
+                 else '<span class="t-Badge">' || apex_escape.html(default_wps_clearing_mode) || '</span>'
+             end wps_mode,
+      
+             case wps_status
+                 when 'ACTIVE' then '<span class="t-Badge t-Badge--success">Active</span>'
+                 when 'SETUP_PENDING' then '<span class="t-Badge t-Badge--warning">Setup Pending</span>'
+                 when 'BLOCKED' then '<span class="t-Badge t-Badge--danger">Blocked</span>'
+                 when 'NOT_REQUIRED' then '<span class="t-Badge">Not Required</span>'
+                 when 'EXCEPTION' then '<span class="t-Badge t-Badge--warning">Exception</span>'
+                 else '<span class="t-Badge">' || apex_escape.html(wps_status) || '</span>'
+             end wps_status,
+      
+             wps_contract_salary,
+             wps_salary_amount,
+      
+             passport_expiry_days,
+             eid_expiry_days,
+             visa_expiry_days,
+             labour_card_expiry_days,
+      
+             '<a href="' ||
+             apex_page.get_url(
+                 p_page        => 183,
+                 p_items       => 'P183_LEGAL_PROFILE_ID,P183_EMP_ID',
+                 p_values      => legal_profile_id || ',' || emp_id,
+                 p_clear_cache => '183'
+             ) ||
+             '" title="Open Legal Profile"><span class="fa fa-edit"></span></a>' open_profile,
+      
+             '<a href="' ||
+             apex_page.get_url(
+                 p_page        => 105,
+                 p_items       => 'P105_EMP_ID',
+                 p_values      => emp_id,
+                 p_clear_cache => '105'
+             ) ||
+             '" title="Open Documents"><span class="fa fa-folder-open"></span></a>' open_docs
+      
+      from hr_emp_legal_profile_v
+      order by emp_id desc;
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 38613717507985411
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 38622279287992998
+      identification: 
+        name: Primary Report
+        alias: 386223
+
+    columns: 
+    - # ====== Column: LEGAL_STATUS ================================
+      id: 38206121547256230
+      identification: 
+        column-name: LEGAL_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Legal Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 26
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: WPS_MODE ====================================
+      id: 38206216326256231
+      identification: 
+        column-name: WPS_MODE
+        type: Plain Text
+
+      heading: 
+        heading: Wps Mode
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 36
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: WPS_CONTRACT_SALARY =========================
+      id: 38206314413256232
+      identification: 
+        column-name: WPS_CONTRACT_SALARY
+        type: Plain Text
+
+      heading: 
+        heading: Wps Contract Salary
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 46
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: OPEN_DOCS ===================================
+      id: 38206440104256233
+      identification: 
+        column-name: OPEN_DOCS
+        type: Plain Text
+
+      heading: 
+        heading: Open Docs
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 56
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: LEGAL_PROFILE_ID ============================
+      id: 38614434217985417
+      identification: 
+        column-name: LEGAL_PROFILE_ID
+        type: Hidden
+
+      heading: 
+        heading: Legal Profile Id
+
+      layout: 
+        sequence: 1
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_ID ======================================
+      id: 38614858368985418
+      identification: 
+        column-name: EMP_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Id
+
+      layout: 
+        sequence: 2
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMP_CODE ====================================
+      id: 38615270817985418
+      identification: 
+        column-name: EMP_CODE
+        type: Plain Text
+
+      heading: 
+        heading: Emp Code
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EMPLOYEE_NAME ===============================
+      id: 38615694040985419
+      identification: 
+        column-name: EMPLOYEE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Employee Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LEGAL_WORKER_TYPE ===========================
+      id: 38616096442985419
+      identification: 
+        column-name: LEGAL_WORKER_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Legal Worker Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 5
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LEGAL_PARTY_NAME ============================
+      id: 38616459786985419
+      identification: 
+        column-name: LEGAL_PARTY_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Legal Party Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 6
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: WPS_STATUS ==================================
+      id: 38617661239985420
+      identification: 
+        column-name: WPS_STATUS
+        type: Plain Text
+
+      heading: 
+        heading: Wps Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 9
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: WPS_SALARY_AMOUNT ===========================
+      id: 38618054484985421
+      identification: 
+        column-name: WPS_SALARY_AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Wps Salary Amount
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PASSPORT_EXPIRY_DAYS ========================
+      id: 38618840145985421
+      identification: 
+        column-name: PASSPORT_EXPIRY_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Passport Expiry Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 12
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EID_EXPIRY_DAYS =============================
+      id: 38619271126985422
+      identification: 
+        column-name: EID_EXPIRY_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Eid Expiry Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 13
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: VISA_EXPIRY_DAYS ============================
+      id: 38619652850985422
+      identification: 
+        column-name: VISA_EXPIRY_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Visa Expiry Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 14
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LABOUR_CARD_EXPIRY_DAYS =====================
+      id: 38620055395985422
+      identification: 
+        column-name: LABOUR_CARD_EXPIRY_DAYS
+        type: Plain Text
+
+      heading: 
+        heading: Labour Card Expiry Days
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 15
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: OPEN_PROFILE ================================
+      id: 38620433850985423
+      identification: 
+        column-name: OPEN_PROFILE
+        type: Plain Text
+
+      heading: 
+        heading: Open Profile
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 16
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Legal Profile List
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+

@@ -1,0 +1,146 @@
+---
+- # ====== Report Query: RQ_TEST_DOCGEN ========================
+  id: 32494265806253299
+  identification: 
+    name: RQ_TEST_DOCGEN
+
+  advanced: 
+    static-id: RQ_TEST_DOCGEN
+
+  output: 
+    file-name: RQ_TEST_DOCGEN
+    format: PDF
+    layout: RL_TEST_DOCGEN # 32495121284266798
+    view-file-as: Inline
+
+  session-state: 
+
+  source-queries: 
+  - # ====== Source Query: RQ_TEST_DOCGEN ========================
+    id: 32494589314253326
+    source: 
+      location: Local Database
+      type: SQL Query
+      sql-query: |
+        select 'OCI Document Generator Test' as REPORT_TITLE,
+               to_char(sysdate, 'DD-MON-YYYY HH24:MI:SS') as PRINT_DATE,
+               v('APP_USER') as PRINTED_BY
+        from dual
+
+    identification: 
+      name: RQ_TEST_DOCGEN
+
+    layout: 
+      sequence: 1
+
+- # ====== Report Query: RQ_Fleet.Bike_Hand_Over ===============
+  id: 32695215991395688
+  identification: 
+    name: RQ_Fleet.Bike_Hand_Over
+
+  advanced: 
+    static-id: RQ_FLEET_BIKE_HAND_OVER
+
+  output: 
+    file-name: RQ_Fleet.Bike_Hand_Over
+    format: PDF
+    layout: RL_FLEET_BIKE_HANDOVER_PDF # 32893215163709778
+    view-file-as: Inline
+
+  session-state: 
+
+  source-queries: 
+  - # ====== Source Query: RQ_FLEET_BIKE_HANDOVER_PDF ============
+    id: 32695515777395694
+    source: 
+      location: Local Database
+      type: SQL Query
+      sql-query: |
+        select
+            v.employee_name                         as EMP_NAME_XX,
+            v.emp_code                              as EMP_ID_XX,
+        
+            nvl(p.passport_no, '-')                 as EMP_PASS_XX,
+            nvl(v.nationality, '-')                 as EMP_NAT_XX,
+            nvl(eid.emirates_id_no, '-')            as EMP_EID_XX,
+        
+            nvl(v.current_project, '-')             as EMP_PROJ_XX,
+            nvl(dl.license_no, '-')                 as EMP_LIC_XX,
+            nvl(emp.MOBILE, '-')                 as EMP_MOB_XX,
+        
+            nvl(v.plate_no, v.bike_code)            as VEH_NO_XX,
+        
+            to_char(v.current_assign_dt, 'DD-MON-YYYY') as VEH_ISSD_XX,
+            to_char(v.current_assign_dt, 'HH24:MI')     as VEH_ISST_XX
+        from vw_fleet_bike_current v
+        left join hr_employees emp
+               on emp.emp_id = v.current_emp_id
+        
+        /* Latest passport */
+        left join (
+            select emp_id,
+                   doc_no as passport_no
+            from (
+                select d.emp_id,
+                       d.doc_no,
+                       row_number() over (
+                           partition by d.emp_id
+                           order by nvl(d.IS_CURRENT_RECORD, 'N') desc,
+                                    d.expiry_dt desc nulls last,
+                                    d.doc_id desc
+                       ) rn
+                from hr_emp_docs d
+                where d.DOC_TYPE = 'PASSPORT'
+            )
+            where rn = 1
+        ) p
+        on p.emp_id = v.current_emp_id
+        
+        /* Latest Emirates ID */
+        left join (
+            select emp_id,
+                   doc_no as emirates_id_no
+            from (
+                select d.emp_id,
+                       d.doc_no,
+                       row_number() over (
+                           partition by d.emp_id
+                           order by nvl(d.IS_CURRENT_RECORD, 'N') desc,
+                                    d.expiry_dt desc nulls last,
+                                    d.doc_id desc
+                       ) rn
+                from hr_emp_docs d
+                where d.DOC_TYPE in ('EID', 'EMIRATES_ID')
+            )
+            where rn = 1
+        ) eid
+        on eid.emp_id = v.current_emp_id
+        
+        /* Latest driving license */
+        left join (
+            select emp_id,
+                   doc_no as license_no
+            from (
+                select d.emp_id,
+                       d.doc_no,
+                       row_number() over (
+                           partition by d.emp_id
+                           order by nvl(d.IS_CURRENT_RECORD, 'N') desc,
+                                    d.expiry_dt desc nulls last,
+                                    d.doc_id desc
+                       ) rn
+                from hr_emp_docs d
+                where d.DOC_TYPE in ('DL', 'DRIVING_LICENSE', 'LICENSE')
+            )
+            where rn = 1
+        ) dl
+        on dl.emp_id = v.current_emp_id
+        
+        where v.current_bike_assign_id = :P309_BIKE_ASSIGN_ID
+
+    identification: 
+      name: RQ_FLEET_BIKE_HANDOVER_PDF
+
+    layout: 
+      sequence: 1
+

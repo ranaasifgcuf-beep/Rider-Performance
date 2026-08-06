@@ -1,0 +1,961 @@
+---
+# ====== Page: Employee Charge List ==========================
+id: 319
+identification: 
+  name: Employee Charge List
+  alias: EMPLOYEE-CHARGE-LIST
+  title: Employee Charge List
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Employee Charge List ========================
+  id: 29746291125627208
+  identification: 
+    name: Employee Charge List
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+          c.emp_charge_id,
+      
+          '<a href="' ||
+          apex_page.get_url(
+              p_page   => 320,
+              p_items  => 'P320_EMP_CHARGE_ID',
+              p_values => c.emp_charge_id
+          ) || '">' ||
+          '<span class="fa fa-edit" title="Edit Charge"></span></a>' as edit_link,
+      
+          '<a href="' ||
+          apex_page.get_url(
+              p_page   => 321,
+              p_items  => 'P321_EMP_CHARGE_ID',
+              p_values => c.emp_charge_id
+          ) || '">' ||
+          '<span class="fa fa-list" title="Installments"></span></a>' as installments_link,
+      
+          c.emp_id,
+      
+          c.charge_type,
+          case c.charge_type
+            when 'FOOD_PERMIT' then '<span class="t-Badge t-Badge--info">FOOD PERMIT</span>'
+            when 'IMPOUND' then '<span class="t-Badge t-Badge--danger">IMPOUND</span>'
+            when 'ACCIDENT_RECOVERY' then '<span class="t-Badge t-Badge--warning">ACCIDENT</span>'
+            when 'MAINTENANCE_RECOVERY' then '<span class="t-Badge t-Badge--warning">MAINTENANCE</span>'
+            when 'DAMAGE' then '<span class="t-Badge t-Badge--danger">DAMAGE</span>'
+            when 'OVER_MILEAGE' then '<span class="t-Badge t-Badge--warning">OVER MILEAGE</span>'
+            else '<span class="t-Badge t-Badge--default">OTHER</span>'
+          end as charge_type_badge,
+      
+          c.recurrence_type,
+          case c.recurrence_type
+            when 'ONE_TIME' then '<span class="t-Badge t-Badge--default">ONE TIME</span>'
+            when 'YEARLY' then '<span class="t-Badge t-Badge--info">YEARLY</span>'
+            when 'MONTHLY' then '<span class="t-Badge t-Badge--warning">MONTHLY</span>'
+          end as recurrence_badge,
+      
+          c.charge_ts,
+          c.amount,
+          c.source_start_dt,
+          c.source_end_dt,
+          c.bike_id,
+      
+          case c.charge_to_employee_yn
+            when 'Y' then '<span class="t-Badge t-Badge--success">CHARGEABLE</span>'
+            else '<span class="t-Badge t-Badge--default">NO</span>'
+          end as charge_to_emp_badge,
+      
+          case c.excluded_from_charge_yn
+            when 'Y' then '<span class="t-Badge t-Badge--warning">EXCLUDED</span>'
+            else '<span class="t-Badge t-Badge--success">NOT EXCLUDED</span>'
+          end as excluded_badge,
+      
+          case c.approval_status
+            when 'DRAFT' then '<span class="t-Badge t-Badge--warning">DRAFT</span>'
+            when 'APPROVED' then '<span class="t-Badge t-Badge--success">APPROVED</span>'
+            when 'CANCELLED' then '<span class="t-Badge t-Badge--danger">CANCELLED</span>'
+            when 'CLOSED' then '<span class="t-Badge t-Badge--info">CLOSED</span>'
+            when 'BAD_DEBT' then '<span class="t-Badge t-Badge--danger">BAD DEBT</span>'
+            else '<span class="t-Badge t-Badge--default">' || c.approval_status || '</span>'
+          end as approval_badge,
+      
+          case c.payroll_processed_yn
+            when 'Y' then '<span class="t-Badge t-Badge--success">PROCESSED</span>'
+            else '<span class="t-Badge t-Badge--warning">PENDING</span>'
+          end as payroll_badge,
+      
+          c.remarks,
+          c.created_by,
+          c.created_dt
+      from hr_emp_charges c
+      order by c.charge_ts desc, c.emp_charge_id desc
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 29746313676627208
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 29758077856581455
+      identification: 
+        name: Primary Report
+        alias: 297581
+
+    columns: 
+    - # ====== Column: EMP_CHARGE_ID ===============================
+      id: 29746971006627199
+      identification: 
+        column-name: EMP_CHARGE_ID
+        type: Hidden
+
+      heading: 
+        heading: Emp Charge Id
+
+      layout: 
+        sequence: 1
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EDIT_LINK ===================================
+      id: 29747338664627198
+      identification: 
+        column-name: EDIT_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Edit
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: INSTALLMENTS_LINK ===========================
+      id: 29747753618627197
+      identification: 
+        column-name: INSTALLMENTS_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Installments
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: EMP_ID ======================================
+      id: 29748191093627197
+      identification: 
+        column-name: EMP_ID
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: FLEET.EMPLOYEE_LOV # 18130747472806310
+
+      heading: 
+        heading: Employee Name
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: CHARGE_TYPE =================================
+      id: 29748563075627196
+      identification: 
+        column-name: CHARGE_TYPE
+        type: Hidden
+
+      heading: 
+        heading: Charge Type
+
+      layout: 
+        sequence: 5
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CHARGE_TYPE_BADGE ===========================
+      id: 29748976041627196
+      identification: 
+        column-name: CHARGE_TYPE_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Charge Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 6
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: RECURRENCE_TYPE =============================
+      id: 29749355883627195
+      identification: 
+        column-name: RECURRENCE_TYPE
+        type: Hidden
+
+      heading: 
+        heading: Recurrence Type
+
+      layout: 
+        sequence: 7
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: RECURRENCE_BADGE ============================
+      id: 29749756179627195
+      identification: 
+        column-name: RECURRENCE_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Recurrence
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 8
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CHARGE_TS ===================================
+      id: 29750146589627194
+      identification: 
+        column-name: CHARGE_TS
+        type: Plain Text
+
+      heading: 
+        heading: Charge Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 9
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: AMOUNT ======================================
+      id: 29750538672627194
+      identification: 
+        column-name: AMOUNT
+        type: Plain Text
+
+      heading: 
+        heading: Amount ( AED )
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: SOURCE_START_DT =============================
+      id: 29750968822627193
+      identification: 
+        column-name: SOURCE_START_DT
+        type: Plain Text
+
+      heading: 
+        heading: Start Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 11
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: SOURCE_END_DT ===============================
+      id: 29751375314627193
+      identification: 
+        column-name: SOURCE_END_DT
+        type: Plain Text
+
+      heading: 
+        heading: End Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 12
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: BIKE_ID =====================================
+      id: 29751719064627192
+      identification: 
+        column-name: BIKE_ID
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: FLEET_BIKES.BIKE_CODE # 19357351506338808
+
+      heading: 
+        heading: Plate No
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 13
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: CHARGE_TO_EMP_BADGE =========================
+      id: 29752179191627192
+      identification: 
+        column-name: CHARGE_TO_EMP_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Charge To Employee
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 14
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: EXCLUDED_BADGE ==============================
+      id: 29752524758627192
+      identification: 
+        column-name: EXCLUDED_BADGE
+        type: Hidden
+
+      heading: 
+        heading: Excluded Badge
+
+      layout: 
+        sequence: 15
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: APPROVAL_BADGE ==============================
+      id: 29752930930627191
+      identification: 
+        column-name: APPROVAL_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Approval Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 16
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: PAYROLL_BADGE ===============================
+      id: 29753386640627191
+      identification: 
+        column-name: PAYROLL_BADGE
+        type: Hidden
+
+      heading: 
+        heading: Payroll Badge
+
+      layout: 
+        sequence: 17
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: REMARKS =====================================
+      id: 29753733094627190
+      identification: 
+        column-name: REMARKS
+        type: Plain Text
+
+      heading: 
+        heading: Remarks
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 18
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_BY ==================================
+      id: 29754172479627190
+      identification: 
+        column-name: CREATED_BY
+        type: Hidden
+
+      heading: 
+        heading: Created By
+
+      layout: 
+        sequence: 19
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_DT ==================================
+      id: 29754598461627189
+      identification: 
+        column-name: CREATED_DT
+        type: Hidden
+
+      heading: 
+        heading: Created Dt
+
+      layout: 
+        sequence: 20
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Employee Charge List
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+buttons: 
+- # ====== Button: New =========================================
+  id: 19943065543968037
+  identification: 
+    button-name: New
+    label: New
+
+  layout: 
+    sequence: 10
+    region: Employee Charge List # 29746291125627208
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:320:&SESSION.::&DEBUG.:::'
+      page: 320 # Employee Charge Form
+
+    warn-on-unsaved-changes: Do Not Check
+

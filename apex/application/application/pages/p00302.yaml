@@ -1,0 +1,2077 @@
+---
+# ====== Page: Fleet Bike Form ===============================
+id: 302
+identification: 
+  name: Fleet Bike Form
+  alias: FLEET-BIKE-FORM
+  title: Fleet Bike Form
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    .fleet-card {
+        border-radius: 14px;
+        background: #ffffff;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+        border: 1px solid #e5e7eb;
+        margin-bottom: 16px;
+    }
+    
+    .fleet-card .t-Region-header {
+        background: #ffffff;
+        border-bottom: 1px solid #eef2f7;
+        padding: 14px 16px 10px 16px;
+    }
+    
+    .fleet-card .t-Region-body {
+        padding: 14px 16px 16px 16px;
+    }
+    
+    .t-Form-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #6b7280;
+    }
+    
+    .t-Form-inputContainer input,
+    .t-Form-inputContainer select,
+    .t-Form-inputContainer textarea {
+        border-radius: 10px !important;
+    }
+    
+    .t-Form-fieldContainer {
+        margin-bottom: 10px !important;
+    }
+    
+    .t-Region-title {
+        font-size: 17px;
+        font-weight: 700;
+        color: #111827;
+    }
+    
+    .fleet-key-field input {
+        background: #f0f7ff;
+        border: 2px solid #3b82f6;
+        font-weight: 700;
+        color: #0f172a;
+    }
+    
+    .fleet-key-field input {
+        background: #f0f7ff;
+        border: 2px solid #3b82f6;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Fleet Bike ==================================
+  id: 17541691945128547
+  identification: 
+    name: Fleet Bike
+    type: Form
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: FLEET_BIKES
+    include-rowid-column: false
+    page-items-to-submit: 
+    - P302_INITIAL_STATUS
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    - js-headingLevel-4
+    - t-Region--scrollBody
+    css-classes: 
+    - fleet-card
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: false
+
+- # ====== Region: Bike Details ================================
+  id: 17726938468086121
+  identification: 
+    name: Bike Details
+    title: <span class="fa fa-motorcycle"></span> Bike Details
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Fleet Bike # 17541691945128547
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    css-classes: 
+    - fleet-card
+    icon: fa-motorcycle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Ownership Details ===========================
+  id: 17727043193086122
+  identification: 
+    name: Ownership Details
+    title: '<span class="fa fa-building"></span> Ownership '
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: Fleet Bike # 17541691945128547
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    css-classes: 
+    - fleet-card
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P302_BIKE_ID =============================
+  id: 17541848256128549
+  identification: 
+    name: P302_BIKE_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Fleet Bike # 17541691945128547
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: BIKE_ID
+    data-type: NUMBER
+    query-only: true
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_BIKE_CODE ===========================
+  id: 17541946996128550
+  identification: 
+    name: P302_BIKE_CODE
+    type: Display Only
+
+  label: 
+    label: Bike Code
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Bike Details # 17726938468086121
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    css-classes: 
+    - fleet-key-field
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: BIKE_CODE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_PLATE_NO ============================
+  id: 17724952122086101
+  identification: 
+    name: P302_PLATE_NO
+    type: Text Field
+
+  label: 
+    label: Plate No
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: Upper
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 30
+    region: Bike Details # 17726938468086121
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+    maximum-length: 30
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: PLATE_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P302_BIKE_ID
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_PLATE_EMIRATE =======================
+  id: 17725032144086102
+  identification: 
+    name: P302_PLATE_EMIRATE
+    type: Select List
+
+  label: 
+    label: Emirate
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: Bike Details # 17726938468086121
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT CITY_NAME, CITY_ID
+      FROM REF_CITIES
+      WHERE COUNTRY_ID = 1
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P302_INITIAL_STATUS
+    items-to-submit: 
+    - P302_INITIAL_STATUS
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: PLATE_EMIRATE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_CHASSIS_NO ==========================
+  id: 17725119672086103
+  identification: 
+    name: P302_CHASSIS_NO
+    type: Text Field
+
+  label: 
+    label: Chassis No
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 50
+    region: Bike Details # 17726938468086121
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+    maximum-length: 100
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: CHASSIS_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_ENGINE_NO ===========================
+  id: 17725256018086104
+  identification: 
+    name: P302_ENGINE_NO
+    type: Text Field
+
+  label: 
+    label: Engine No
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 60
+    region: Bike Details # 17726938468086121
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+    maximum-length: 100
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: ENGINE_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_MODEL_ID ============================
+  id: 17725308626086105
+  identification: 
+    name: P302_MODEL_ID
+    type: Select List
+
+  label: 
+    label: Model
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 70
+    region: Bike Details # 17726938468086121
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: FLEET_MODE # 17738090188049018
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P302_INITIAL_STATUS
+    items-to-submit: 
+    - P302_INITIAL_STATUS
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: MODEL_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_MODEL_YEAR ==========================
+  id: 17725429160086106
+  identification: 
+    name: P302_MODEL_YEAR
+    type: Select List
+
+  label: 
+    label: Year
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 80
+    region: Bike Details # 17726938468086121
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: FLEET_BIKE_YEAR # 17738488427035994
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P302_INITIAL_STATUS
+    items-to-submit: 
+    - P302_INITIAL_STATUS
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: MODEL_YEAR
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_COLOR_ID ============================
+  id: 17725523013086107
+  identification: 
+    name: P302_COLOR_ID
+    type: Select List
+
+  label: 
+    label: Color
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 90
+    region: Bike Details # 17726938468086121
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select color_name d, color_id r
+      from fleet_ref_colors
+      where is_active = 'Y'
+      order by nvl(seq_no,9999), color_name
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P302_INITIAL_STATUS
+    items-to-submit: 
+    - P302_INITIAL_STATUS
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: COLOR_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_OWNERSHIP_TYPE ======================
+  id: 17725627680086108
+  identification: 
+    name: P302_OWNERSHIP_TYPE
+    type: Select List
+
+  label: 
+    label: Ownership
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Ownership Details # 17727043193086122
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Company;COMPANY,Rental;RENTAL'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: OWNERSHIP_TYPE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P302_BIKE_ID
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_VENDOR_ID ===========================
+  id: 17725744514086109
+  identification: 
+    name: P302_VENDOR_ID
+    type: Select List
+
+  label: 
+    label: Vendor
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: Ownership Details # 17727043193086122
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: FIN_SUPPLIERS.SUPPLIER_NAME # 13537762223988225
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P302_INITIAL_STATUS
+    items-to-submit: 
+    - P302_INITIAL_STATUS
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: VENDOR_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P302_BIKE_ID
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_PURCHASE_DT =========================
+  id: 17725810455086110
+  identification: 
+    name: P302_PURCHASE_DT
+    type: Date Picker
+
+  label: 
+    label: Purchase Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 30
+    region: Ownership Details # 17727043193086122
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: PURCHASE_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P302_BIKE_ID
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_PURCHASE_AMOUNT =====================
+  id: 17725959862086111
+  identification: 
+    name: P302_PURCHASE_AMOUNT
+    type: Number Field
+
+  label: 
+    label: Purchase Amount
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 20
+    region: Ownership Details # 17727043193086122
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: PURCHASE_AMOUNT
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P302_BIKE_ID
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_CURRENT_MONTHLY_RENT ================
+  id: 17726002865086112
+  identification: 
+    name: P302_CURRENT_MONTHLY_RENT
+    type: Number Field
+
+  label: 
+    label: Monthly Rent
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 50
+    region: Ownership Details # 17727043193086122
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: CURRENT_MONTHLY_RENT
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_CONTRACT_START_DT ===================
+  id: 17726101692086113
+  identification: 
+    name: P302_CONTRACT_START_DT
+    type: Date Picker
+
+  label: 
+    label: Contract Start Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 60
+    region: Ownership Details # 17727043193086122
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: CONTRACT_START_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_CONTRACT_END_DT =====================
+  id: 17726229642086114
+  identification: 
+    name: P302_CONTRACT_END_DT
+    type: Date Picker
+
+  label: 
+    label: Contract End Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 70
+    region: Ownership Details # 17727043193086122
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: CONTRACT_END_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_REMARKS =============================
+  id: 17726398908086115
+  identification: 
+    name: P302_REMARKS
+    type: Textarea
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 100
+    region: Bike Details # 17726938468086121
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+    maximum-length: 500
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: REMARKS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_CREATED_BY ==========================
+  id: 17726538866086117
+  identification: 
+    name: P302_CREATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 190
+    region: Fleet Bike # 17541691945128547
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: CREATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_CREATED_DT ==========================
+  id: 17726672497086118
+  identification: 
+    name: P302_CREATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 200
+    region: Fleet Bike # 17541691945128547
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: CREATED_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_UPDATED_BY ==========================
+  id: 17726772393086119
+  identification: 
+    name: P302_UPDATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 210
+    region: Fleet Bike # 17541691945128547
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: UPDATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_UPDATED_DT ==========================
+  id: 17726811244086120
+  identification: 
+    name: P302_UPDATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 220
+    region: Fleet Bike # 17541691945128547
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fleet Bike # 17541691945128547
+    column: UPDATED_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_INITIAL_STATUS ======================
+  id: 17727212349086124
+  identification: 
+    name: P302_INITIAL_STATUS
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 80
+    region: Ownership Details # 17727043193086122
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: AVAILABLE
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_INITIAL_LOCATION_ID =================
+  id: 17727332462086125
+  identification: 
+    name: P302_INITIAL_LOCATION_ID
+    type: Select List
+
+  label: 
+    label: Location
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 100
+    region: Ownership Details # 17727043193086122
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select location_name d, location_id r
+      from fleet_ref_custody_locations
+      where is_active = 'Y'
+        and custody_type_code = :P302_INITIAL_CUSTODY
+      order by nvl(seq_no,9999), location_name
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P302_INITIAL_CUSTODY
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P302_BIKE_ID
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P302_BIKE_ID
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_INITIAL_CUSTODY =====================
+  id: 17727464324086126
+  identification: 
+    name: P302_INITIAL_CUSTODY
+    type: Select List
+
+  label: 
+    label: Custody
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 90
+    region: Ownership Details # 17727043193086122
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select custody_type_name d, custody_type_code r
+      from fleet_ref_custody_types
+      where is_active = 'Y'
+      order by nvl(seq_no,9999), custody_type_name
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P302_BIKE_ID
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P302_BIKE_ID
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_MODE ================================
+  id: 17728375174086135
+  identification: 
+    name: P302_MODE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 230
+    region: Fleet Bike # 17541691945128547
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P302_IS_ACTIVE ===========================
+  id: 17728960927086141
+  identification: 
+    name: P302_IS_ACTIVE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: Bike Details # 17726938468086121
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: Y
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: PB_CREATE ===================================
+  id: 17729108661086143
+  identification: 
+    button-name: PB_CREATE
+    label: Create
+
+  layout: 
+    sequence: 10
+    region: Fleet Bike # 17541691945128547
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P302_BIKE_ID
+
+- # ====== Button: PB_CANCEL ===================================
+  id: 17729232496086144
+  identification: 
+    button-name: PB_CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 10
+    region: Fleet Bike # 17541691945128547
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:301:&SESSION.::&DEBUG.:::'
+      page: 301 # Fleet Bikes List
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: PB_SAVE =====================================
+  id: 17729397525086145
+  identification: 
+    button-name: PB_SAVE
+    label: Save
+
+  layout: 
+    sequence: 20
+    region: Fleet Bike # 17541691945128547
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sec_pkg.has_perm('FLEET_LIST_UPDATE') = 1
+
+dynamic-actions: 
+- # ====== Dynamic Action: if Company DA =======================
+  id: 17727622054086128
+  identification: 
+    name: if Company DA
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P302_OWNERSHIP_TYPE
+
+  client-side-condition: 
+    type: Item = Value
+    item: P302_OWNERSHIP_TYPE
+    value: COMPANY
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 17727765090086129
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P302_PURCHASE_DT
+      - P302_PURCHASE_AMOUNT
+
+    execution: 
+      sequence: 10
+      event: if Company DA # 17727622054086128
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 17727896821086130
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P302_PURCHASE_DT
+      - P302_PURCHASE_AMOUNT
+
+    execution: 
+      sequence: 10
+      event: if Company DA # 17727622054086128
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: if Rental DA ========================
+  id: 17727906027086131
+  identification: 
+    name: if Rental DA
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P302_OWNERSHIP_TYPE
+
+  client-side-condition: 
+    type: Item = Value
+    item: P302_OWNERSHIP_TYPE
+    value: RENTAL
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 17728063142086132
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P302_VENDOR_ID
+      - P302_CURRENT_MONTHLY_RENT
+      - P302_CONTRACT_START_DT
+      - P302_CONTRACT_END_DT
+
+    execution: 
+      sequence: 10
+      event: if Rental DA # 17727906027086131
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Hide ========================================
+    id: 17728227068086134
+    identification: 
+      action: Hide
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P302_VENDOR_ID
+      - P302_CURRENT_MONTHLY_RENT
+      - P302_CONTRACT_START_DT
+      - P302_CONTRACT_END_DT
+
+    execution: 
+      sequence: 10
+      event: if Rental DA # 17727906027086131
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+processes: 
+- # ====== Process: Fetch Record ===============================
+  id: 17729096683086142
+  identification: 
+    name: Fetch Record
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      IF :P302_BIKE_ID IS NOT NULL THEN
+      select bike_code,
+             plate_no,
+             plate_emirate,
+             chassis_no,
+             engine_no,
+             model_id,
+             model_year,
+             color_id,
+             ownership_type,
+             vendor_id,
+             purchase_dt,
+             purchase_amount,
+             current_monthly_rent,
+             contract_start_dt,
+             contract_end_dt,
+             remarks,
+             is_active
+        into :P302_BIKE_CODE,
+             :P302_PLATE_NO,
+             :P302_PLATE_EMIRATE,
+             :P302_CHASSIS_NO,
+             :P302_ENGINE_NO,
+             :P302_MODEL_ID,
+             :P302_MODEL_YEAR,
+             :P302_COLOR_ID,
+             :P302_OWNERSHIP_TYPE,
+             :P302_VENDOR_ID,
+             :P302_PURCHASE_DT,
+             :P302_PURCHASE_AMOUNT,
+             :P302_CURRENT_MONTHLY_RENT,
+             :P302_CONTRACT_START_DT,
+             :P302_CONTRACT_END_DT,
+             :P302_REMARKS,
+             :P302_IS_ACTIVE
+        from fleet_bikes
+       where bike_id = :P302_BIKE_ID;
+       END IF;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Create Bike ================================
+  id: 17729437611086146
+  identification: 
+    name: Create Bike
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      declare
+          l_bike_id   number;
+          l_bike_code varchar2(30);
+      begin
+          fleet_pkg.create_bike(
+              p_plate_no             => :P302_PLATE_NO,
+              p_plate_emirate        => :P302_PLATE_EMIRATE,
+              p_chassis_no           => :P302_CHASSIS_NO,
+              p_engine_no            => :P302_ENGINE_NO,
+              p_model_id             => :P302_MODEL_ID,
+              p_model_year           => :P302_MODEL_YEAR,
+              p_color_id             => :P302_COLOR_ID,
+              p_ownership_type       => :P302_OWNERSHIP_TYPE,
+              p_vendor_id            => :P302_VENDOR_ID,
+              p_purchase_dt          => :P302_PURCHASE_DT,
+              p_purchase_amount      => :P302_PURCHASE_AMOUNT,
+              p_current_monthly_rent => :P302_CURRENT_MONTHLY_RENT,
+              p_contract_start_dt    => :P302_CONTRACT_START_DT,
+              p_contract_end_dt      => :P302_CONTRACT_END_DT,
+              p_remarks              => :P302_REMARKS,
+              p_initial_status       => :P302_INITIAL_STATUS,
+              p_initial_custody      => :P302_INITIAL_CUSTODY,
+              p_initial_location_id  => :P302_INITIAL_LOCATION_ID,
+              p_effective_ts         => systimestamp,
+              p_bike_id              => l_bike_id,
+              p_bike_code            => l_bike_code
+          );
+      
+          :P302_BIKE_ID   := l_bike_id;
+          :P302_BIKE_CODE := l_bike_code;
+      end;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Record successfuly creted
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: PB_CREATE # 17729108661086143
+
+- # ====== Process: Update Bike ================================
+  id: 17729606581086148
+  identification: 
+    name: Update Bike
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          fleet_pkg.validate_bike_master(
+              p_bike_id              => :P302_BIKE_ID,
+              p_plate_no             => :P302_PLATE_NO,
+              p_ownership_type       => :P302_OWNERSHIP_TYPE,
+              p_vendor_id            => :P302_VENDOR_ID,
+              p_purchase_amount      => :P302_PURCHASE_AMOUNT,
+              p_current_monthly_rent => :P302_CURRENT_MONTHLY_RENT,
+              p_contract_start_dt    => :P302_CONTRACT_START_DT,
+              p_contract_end_dt      => :P302_CONTRACT_END_DT
+          );
+      
+      ---- Update----
+      
+      update fleet_bikes
+         set plate_no             = :P302_PLATE_NO,
+             plate_emirate        = :P302_PLATE_EMIRATE,
+             chassis_no           = :P302_CHASSIS_NO,
+             engine_no            = :P302_ENGINE_NO,
+             model_id             = :P302_MODEL_ID,
+             model_year           = :P302_MODEL_YEAR,
+             color_id             = :P302_COLOR_ID,
+             ownership_type       = :P302_OWNERSHIP_TYPE,
+             vendor_id            = :P302_VENDOR_ID,
+             purchase_dt          = :P302_PURCHASE_DT,
+             purchase_amount      = :P302_PURCHASE_AMOUNT,
+             current_monthly_rent = :P302_CURRENT_MONTHLY_RENT,
+             contract_start_dt    = :P302_CONTRACT_START_DT,
+             contract_end_dt      = :P302_CONTRACT_END_DT,
+             remarks              = :P302_REMARKS,
+             is_active            = :P302_IS_ACTIVE
+       where bike_id = :P302_BIKE_ID;
+      
+      
+      end;
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+branches: 
+- # ====== Branch: Go To Page 301 ==============================
+  id: 17729540042086147
+  identification: 
+    name: Go To Page 301
+
+  execution: 
+    sequence: 10
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:301:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 301 # Fleet Bikes List
+

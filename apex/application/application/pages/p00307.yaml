@@ -1,0 +1,875 @@
+---
+# ====== Page: Bike Documents list ===========================
+id: 307
+identification: 
+  name: Bike Documents list
+  alias: BIKE-DOCUMENTS-LIST
+  title: Bike Documents list
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Bike Documents - &P307_PLATE_NO. ============
+  id: 16324651963664109
+  identification: 
+    name: Bike Documents - &P307_PLATE_NO.
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |2
+          select
+              d.bike_doc_id,
+      
+              '<a href="' ||
+              apex_page.get_url(
+                  p_page   => 308,
+                  p_items  => 'P308_BIKE_DOC_ID,P308_BIKE_ID',
+                  p_values => d.bike_doc_id || ',' || d.bike_id
+              ) || '" class="js-dialog-link">' ||
+              '<span class="fa fa-edit" title="Edit Document"></span></a>' as edit_link,
+      
+              d.doc_type,
+              d.doc_no,
+              d.issue_dt,
+              d.expiry_dt,
+      
+              case
+                when d.expiry_dt is null then
+                  '<span class="t-Badge t-Badge--default">NO DATE</span>'
+                when d.expiry_dt < trunc(sysdate) then
+                  '<span class="t-Badge t-Badge--danger">EXPIRED</span>'
+                when d.expiry_dt <= trunc(sysdate) + 30 then
+                  '<span class="t-Badge t-Badge--warning">DUE SOON</span>'
+                else
+                  '<span class="t-Badge t-Badge--success">VALID</span>'
+              end as expiry_badge,
+      
+              d.issuer_name,
+            case when  nvl(d.is_current,'N') = 'Y'
+            then '<span class="fa fa-check-circle u-success-text" title="Current"></span>'--'<span class="t-Badge t-Badge--success">CURRENT</span>'
+            ELSE 
+            NULL
+            END AS is_current
+            ,
+              DBMS_LOB.GETLENGTH(d.file_blob) as file_blob,
+              d.remarks,
+              d.created_by,
+              d.created_dt
+          from fleet_bike_docs d
+          where d.bike_id = :P307_BIKE_ID
+          order by case when nvl(d.is_current,'N') = 'Y' then 1 else 2 end,
+          d.doc_type,
+                   d.expiry_dt desc,
+                   d.bike_doc_id desc
+    page-items-to-submit: 
+    - P307_BIKE_ID
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--stacked
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 16325331247664116
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 19352431359442269
+      identification: 
+        name: Primary Report
+        alias: 193525
+
+    columns: 
+    - # ====== Column: BIKE_DOC_ID =================================
+      id: 16325440520664117
+      identification: 
+        column-name: BIKE_DOC_ID
+        type: Hidden
+
+      heading: 
+        heading: Bike Doc Id
+
+      layout: 
+        sequence: 10
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOC_TYPE ====================================
+      id: 16325580765664118
+      identification: 
+        column-name: DOC_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Document Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOC_NO ======================================
+      id: 16325638555664119
+      identification: 
+        column-name: DOC_NO
+        type: Plain Text
+
+      heading: 
+        heading: Document No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ISSUE_DT ====================================
+      id: 16325725824664120
+      identification: 
+        column-name: ISSUE_DT
+        type: Plain Text
+
+      heading: 
+        heading: Issue Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXPIRY_DT ===================================
+      id: 16325879645664121
+      identification: 
+        column-name: EXPIRY_DT
+        type: Plain Text
+
+      heading: 
+        heading: Expiry Date
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ISSUER_NAME =================================
+      id: 16325909953664122
+      identification: 
+        column-name: ISSUER_NAME
+        type: Hidden
+
+      heading: 
+        heading: Issuer Name
+
+      layout: 
+        sequence: 60
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IS_CURRENT ==================================
+      id: 16326061408664123
+      identification: 
+        column-name: IS_CURRENT
+        type: Plain Text
+
+      heading: 
+        heading: Current Record
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: REMARKS =====================================
+      id: 16326210673664125
+      identification: 
+        column-name: REMARKS
+        type: Plain Text
+
+      heading: 
+        heading: Remarks
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_BY ==================================
+      id: 16326320235664126
+      identification: 
+        column-name: CREATED_BY
+        type: Hidden
+
+      heading: 
+        heading: Created By
+
+      layout: 
+        sequence: 100
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_DT ==================================
+      id: 16326446875664127
+      identification: 
+        column-name: CREATED_DT
+        type: Hidden
+
+      heading: 
+        heading: Created Dt
+
+      layout: 
+        sequence: 110
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EDIT_LINK ===================================
+      id: 18037938639024925
+      identification: 
+        column-name: EDIT_LINK
+        type: Plain Text
+
+      heading: 
+        heading: Edit
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 120
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: EXPIRY_BADGE ================================
+      id: 18038009436024926
+      identification: 
+        column-name: EXPIRY_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 130
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: FILE_BLOB ===================================
+      id: 18038385403024929
+      identification: 
+        column-name: FILE_BLOB
+        type: Download BLOB
+
+      heading: 
+        heading: Download
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 140
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        view-file-as: Attachment
+        download-text: <span class="fa fa-download" title="Download"></span>
+
+      blob-attributes: 
+        table-owner: Parsing Schema
+        table-name: FLEET_BIKE_DOCS
+        blob-column: FILE_BLOB
+        primary-key-column-1: BIKE_DOC_ID
+        mime-type-column: MIME_TYPE
+        filename-column: FILE_NAME
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+page-items: 
+- # ====== Page Item: P307_BIKE_ID =============================
+  id: 16324821552664111
+  identification: 
+    name: P307_BIKE_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P307_PLATE_NO ============================
+  id: 16325015767664113
+  identification: 
+    name: P307_PLATE_NO
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: Add_Document ================================
+  id: 16326894082664131
+  identification: 
+    button-name: Add_Document
+    label: Add Document
+
+  layout: 
+    sequence: 10
+    region: Bike Documents - &P307_PLATE_NO. # 16324651963664109
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-plus-square
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:308:&SESSION.::&DEBUG.::P308_BIKE_ID:&P307_BIKE_ID.'
+      page: 308 # Bike Document Form
+      values: 
+        p308_bike_id: '&P307_BIKE_ID.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: Back ========================================
+  id: 18039850578024944
+  identification: 
+    button-name: Back
+    label: Back
+
+  layout: 
+    sequence: 20
+    region: Bike Documents - &P307_PLATE_NO. # 16324651963664109
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-box-arrow-out-east
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:301:&SESSION.::&DEBUG.:::'
+      page: 301 # Fleet Bikes List
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: DA_REFRESH_P307_AFTER_DIALOG ========
+  id: 18039648621024942
+  identification: 
+    name: DA_REFRESH_P307_AFTER_DIALOG
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: Bike Documents - &P307_PLATE_NO. # 16324651963664109
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 18039751685024943
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Bike Documents - &P307_PLATE_NO. # 16324651963664109
+
+    execution: 
+      sequence: 10
+      event: DA_REFRESH_P307_AFTER_DIALOG # 18039648621024942
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Fetch Bike Details =========================
+  id: 16326517888664128
+  identification: 
+    name: Fetch Bike Details
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      select 
+             plate_no
+        into 
+             :P307_PLATE_NO
+        from fleet_bikes
+       where bike_id = :P307_BIKE_ID;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+

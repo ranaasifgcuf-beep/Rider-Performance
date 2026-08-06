@@ -1,0 +1,1716 @@
+---
+# ====== Page: Admin Workflow Dashboard ======================
+id: 161
+identification: 
+  name: Admin Workflow Dashboard
+  alias: ADMIN-WORKFLOW-DASHBOARD
+  title: Admin Workflow Dashboard
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Admin Workflow Dashboard ====================
+  id: 34827994252345539
+  identification: 
+    name: Admin Workflow Dashboard
+    type: Breadcrumb
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useRegionTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: '#DEFAULT_BREADCRUMB_TEMPLATE#'
+
+- # ====== Region: Region Display Selector =====================
+  id: 34828366607345539
+  identification: 
+    name: Region Display Selector
+    type: Region Display Selector
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      mode: View Single Region
+      display-region-icons: false
+      include-'show-all': true
+      remember-selection: By User
+
+- # ====== Region: Workflows By State ==========================
+  id: 34828786670345539
+  identification: 
+    name: Workflows By State
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Content Block
+    template-options: 
+    - '#DEFAULT#'
+    - t-ContentBlock--h2
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    custom-attributes: 
+    - aria-controls="workflow-state-details"
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: Text (escape special characters)
+      show-line-breaks: true
+
+- # ====== Region: Overview ====================================
+  id: 34829109780345539
+  identification: 
+    name: Overview
+    type: Chart
+
+  source: 
+    location: None
+
+  layout: 
+    sequence: 20
+    parent-region: Workflows By State # 34828786670345539
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - js-headingLevel-3
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  security: 
+    escape-special-characters: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 34829929094345540
+    chart: 
+      type: Pie
+
+    layout: 
+      height: 400
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    settings: 
+      pie-selection-effect: Highlight
+
+    value: 
+      pie-chart-other-threshold: 0
+      format-scaling: Automatic
+
+    animation: 
+      on-display: Automatic
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: true
+      show-value: true
+
+    legend: 
+      show: false
+
+    series: 
+    - # ====== Series: Overview Series =============================
+      id: 34830441747345540
+      identification: 
+        name: Overview Series
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Local Database
+        type: SQL Query
+        sql-query: |
+          select state, count(workflow_id) workflows 
+            from table ( apex_workflow.get_workflows (
+                             p_context => 'ADMIN_WORKFLOWS'
+                             --, p_application_id => :APP_ID
+                             ) )              
+           group by state               
+
+      order-by: 
+        type: None
+
+      column-mapping: 
+        label: STATE
+        value: WORKFLOWS
+
+      link: 
+        type: Redirect to URL
+        target: "javascript:apex.item('P161_STATE').setValue('&STATE!JS.');"
+
+      label: 
+        show: true
+        position: Outside Slice
+        display-as: Label
+
+      performance: 
+        maximum-rows-to-process: 20
+
+- # ====== Region: Details =====================================
+  id: 34831077429345541
+  identification: 
+    name: Details
+    type: Chart
+
+  source: 
+    location: None
+
+  layout: 
+    sequence: 40
+    parent-region: Workflows By State # 34828786670345539
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - js-headingLevel-3
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    static-id: workflow-state-details
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  security: 
+    escape-special-characters: true
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 34831481820345541
+    chart: 
+      type: Bar
+
+    appearance: 
+      orientation: Vertical
+      stack: false
+
+    layout: 
+      height: 400
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    multi-series-chart-data: 
+      fill-gaps-in-chart-data: true
+      sort-order: Label - Ascending
+      render-gap-as-zero: true
+
+    settings: 
+      zoom-and-scroll: No
+
+    animation: 
+      on-display: Automatic
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: false
+      show-group-name: true
+      show-value: true
+
+    legend: 
+      show: false
+
+    messages: 
+      when-no-data-found: Please select a workflow state in the Overview chart to see further details
+
+    series: 
+    - # ====== Series: Instances Per Workflow ======================
+      id: 34831964345345541
+      identification: 
+        name: Instances Per Workflow
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Local Database
+        type: SQL Query
+        sql-query: |
+          select workflow_def_name, count(workflow_id) instances  
+            from table ( apex_workflow.get_workflows (
+                             p_context => 'ADMIN_WORKFLOWS'
+                             --, p_application_id => :APP_ID
+                             ) )
+             where state=:P161_STATE
+             group by workflow_def_name;                
+        page-items-to-submit: 
+        - P161_STATE
+
+      order-by: 
+        type: None
+
+      column-mapping: 
+        label: WORKFLOW_DEF_NAME
+        value: INSTANCES
+
+      appearance: 
+        assigned-to-y2-axis: false
+
+      label: 
+        show: false
+
+    axes: 
+    - # ====== Axis: x =============================================
+      id: 34832522000345541
+      identification: 
+        name: x
+        show-axis: true
+        title: Workflows
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+
+      major-ticks: 
+        show: Automatic
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+        rotation: true
+        position: Outside
+
+    - # ====== Axis: y =============================================
+      id: 34833171295345542
+      identification: 
+        name: y
+        show-axis: true
+        title: Instances
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+        step: 1
+
+      appearance: 
+        position: Automatic
+
+      major-ticks: 
+        show: Automatic
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+
+- # ====== Region: Active Workflows ============================
+  id: 34834612799345542
+  identification: 
+    name: Active Workflows
+    type: Static Content
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Content Block
+    template-options: 
+    - '#DEFAULT#'
+    - t-ContentBlock--h2
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: Text (escape special characters)
+      show-line-breaks: true
+
+- # ====== Region: Overview ====================================
+  id: 34835028892345543
+  identification: 
+    name: Overview
+    type: Chart
+
+  source: 
+    location: None
+
+  layout: 
+    sequence: 50
+    parent-region: Active Workflows # 34834612799345542
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - js-headingLevel-3
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    custom-attributes: 
+    - aria-controls="active-workload-details"
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  security: 
+    escape-special-characters: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 34835848331345543
+    chart: 
+      type: Bar
+
+    appearance: 
+      orientation: Vertical
+      stack: false
+
+    layout: 
+      height: 400
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    multi-series-chart-data: 
+      fill-gaps-in-chart-data: true
+      sort-order: Label - Ascending
+      render-gap-as-zero: true
+
+    settings: 
+      zoom-and-scroll: No
+
+    animation: 
+      on-display: Automatic
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: false
+      show-group-name: true
+      show-value: true
+
+    legend: 
+      show: false
+
+    messages: 
+      when-no-data-found: No Active Workflows found
+
+    series: 
+    - # ====== Series: Workflows ===================================
+      id: 34836389610345543
+      identification: 
+        name: Workflows
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Local Database
+        type: SQL Query
+        sql-query: |
+          select workflow_def_name, 
+                 count(workflow_id) workflows 
+            from table ( apex_workflow.get_workflows (
+                             p_context => 'ADMIN_WORKFLOWS'
+                             --, p_application_id => :APP_ID
+                             ) )
+          where state_code in ('ACTIVE','SUSPENDED') 
+          group by workflow_def_name               
+
+      order-by: 
+        type: None
+
+      column-mapping: 
+        label: WORKFLOW_DEF_NAME
+        value: WORKFLOWS
+
+      appearance: 
+        assigned-to-y2-axis: false
+
+      link: 
+        type: Redirect to URL
+        target: "javascript:apex.item('P161_ACTIVE_DEF_NAME').setValue('&WORKFLOW_DEF_NAME!JS.');"
+
+      label: 
+        show: false
+
+      performance: 
+        maximum-rows-to-process: 20
+
+    axes: 
+    - # ====== Axis: x =============================================
+      id: 34836989867345544
+      identification: 
+        name: x
+        show-axis: true
+        title: Workflows
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+
+      major-ticks: 
+        show: Automatic
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+        rotation: true
+        position: Outside
+
+    - # ====== Axis: y =============================================
+      id: 34837557184345544
+      identification: 
+        name: y
+        show-axis: true
+        title: Instances
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+        step: 1
+
+      appearance: 
+        position: Automatic
+
+      major-ticks: 
+        show: Automatic
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+
+- # ====== Region: Activities ==================================
+  id: 34838125180345544
+  identification: 
+    name: Activities
+    type: Chart
+
+  source: 
+    location: None
+
+  layout: 
+    sequence: 70
+    parent-region: Active Workflows # 34834612799345542
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - js-headingLevel-3
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: active-workload-details
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  security: 
+    escape-special-characters: true
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 34838550377345544
+    chart: 
+      type: Bar
+
+    appearance: 
+      orientation: Vertical
+      stack: false
+
+    layout: 
+      height: 400
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    multi-series-chart-data: 
+      fill-gaps-in-chart-data: true
+      sort-order: Label - Ascending
+      render-gap-as-zero: true
+
+    settings: 
+      zoom-and-scroll: No
+
+    animation: 
+      on-display: Automatic
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: false
+      show-group-name: true
+      show-value: true
+
+    legend: 
+      show: false
+
+    messages: 
+      when-no-data-found: Please select a Workflow in the Overview region to see further details
+
+    series: 
+    - # ====== Series: Activities ==================================
+      id: 34839047082345545
+      identification: 
+        name: Activities
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Local Database
+        type: SQL Query
+        sql-query: |
+          select name activity, count(distinct(workflow_id)) instances 
+            from apex_workflow_activities
+           where state in ('WAITING','ACTIVE')
+             and workspace_id = :WORKSPACE_ID
+             and workflow_def_name = :P161_ACTIVE_DEF_NAME
+           group by name
+        page-items-to-submit: 
+        - P161_ACTIVE_DEF_NAME
+
+      order-by: 
+        type: None
+
+      column-mapping: 
+        label: ACTIVITY
+        value: INSTANCES
+
+      appearance: 
+        assigned-to-y2-axis: false
+
+      label: 
+        show: false
+
+    axes: 
+    - # ====== Axis: x =============================================
+      id: 34839682373345545
+      identification: 
+        name: x
+        show-axis: true
+        title: Activities
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+
+      major-ticks: 
+        show: Automatic
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+        rotation: true
+        position: Outside
+
+    - # ====== Axis: y =============================================
+      id: 34840227720345545
+      identification: 
+        name: y
+        show-axis: true
+        title: Instances
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+        step: 1
+
+      appearance: 
+        position: Automatic
+
+      major-ticks: 
+        show: Automatic
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+
+- # ====== Region: Faulted Workflows ===========================
+  id: 34841723293345546
+  identification: 
+    name: Faulted Workflows
+    type: Static Content
+
+  layout: 
+    sequence: 50
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Content Block
+    template-options: 
+    - '#DEFAULT#'
+    - t-ContentBlock--h2
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: Text (escape special characters)
+      show-line-breaks: true
+
+- # ====== Region: Overview ====================================
+  id: 34842184540345546
+  identification: 
+    name: Overview
+    type: Chart
+
+  source: 
+    location: None
+
+  layout: 
+    sequence: 60
+    parent-region: Faulted Workflows # 34841723293345546
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - js-headingLevel-3
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    custom-attributes: 
+    - aria-controls="fault-workload-details"
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  security: 
+    escape-special-characters: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 34842978740345547
+    chart: 
+      type: Bar
+
+    appearance: 
+      orientation: Vertical
+      stack: false
+
+    layout: 
+      height: 400
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    multi-series-chart-data: 
+      fill-gaps-in-chart-data: true
+      sort-order: Label - Ascending
+      render-gap-as-zero: true
+
+    settings: 
+      zoom-and-scroll: No
+
+    animation: 
+      on-display: Automatic
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: false
+      show-group-name: true
+      show-value: true
+
+    legend: 
+      show: false
+
+    messages: 
+      when-no-data-found: No Faulted Workflows found
+
+    series: 
+    - # ====== Series: Workflows ===================================
+      id: 34843418218345547
+      identification: 
+        name: Workflows
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Local Database
+        type: SQL Query
+        sql-query: |
+          select workflow_def_name, 
+                 count(workflow_id) workflows 
+            from table ( apex_workflow.get_workflows (
+                             p_context => 'ADMIN_WORKFLOWS'
+                             --, p_application_id => :APP_ID
+                             ) )
+          where state_code = 'FAULTED'
+          group by workflow_def_name               
+
+      order-by: 
+        type: None
+
+      column-mapping: 
+        label: WORKFLOW_DEF_NAME
+        value: WORKFLOWS
+
+      appearance: 
+        assigned-to-y2-axis: false
+
+      link: 
+        type: Redirect to URL
+        target: "javascript:apex.item('P161_FAULT_DEF_NAME').setValue('&WORKFLOW_DEF_NAME!JS.');"
+
+      label: 
+        show: false
+
+      performance: 
+        maximum-rows-to-process: 20
+
+    axes: 
+    - # ====== Axis: x =============================================
+      id: 34844081229345548
+      identification: 
+        name: x
+        show-axis: true
+        title: Workflows
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+
+      major-ticks: 
+        show: Automatic
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+        rotation: true
+        position: Outside
+
+    - # ====== Axis: y =============================================
+      id: 34844638608345548
+      identification: 
+        name: y
+        show-axis: true
+        title: Instances
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+        step: 1
+
+      appearance: 
+        position: Automatic
+
+      major-ticks: 
+        show: Automatic
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+
+- # ====== Region: Activities ==================================
+  id: 34845205483345548
+  identification: 
+    name: Activities
+    type: Chart
+
+  source: 
+    location: None
+
+  layout: 
+    sequence: 80
+    parent-region: Faulted Workflows # 34841723293345546
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - js-headingLevel-3
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: fault-workload-details
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  security: 
+    escape-special-characters: true
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 34845605635345549
+    chart: 
+      type: Bar
+
+    appearance: 
+      orientation: Vertical
+      stack: false
+
+    layout: 
+      height: 400
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    multi-series-chart-data: 
+      fill-gaps-in-chart-data: true
+      sort-order: Label - Ascending
+      render-gap-as-zero: true
+
+    settings: 
+      zoom-and-scroll: No
+
+    animation: 
+      on-display: Automatic
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: false
+      show-group-name: true
+      show-value: true
+
+    legend: 
+      show: false
+
+    messages: 
+      when-no-data-found: Please select a Workflow in the Overview region to see further details
+
+    series: 
+    - # ====== Series: Activities ==================================
+      id: 34846119173345549
+      identification: 
+        name: Activities
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Local Database
+        type: SQL Query
+        sql-query: |
+          select name activity, count(distinct(workflow_id)) instances 
+            from apex_workflow_activities
+          where state = 'FAULTED'
+             and workspace_id = :WORKSPACE_ID
+             and workflow_def_name = :P161_FAULT_DEF_NAME
+           group by name
+        page-items-to-submit: 
+        - P161_FAULT_DEF_NAME
+
+      order-by: 
+        type: None
+
+      column-mapping: 
+        label: ACTIVITY
+        value: INSTANCES
+
+      appearance: 
+        assigned-to-y2-axis: false
+
+      label: 
+        show: false
+
+    axes: 
+    - # ====== Axis: x =============================================
+      id: 34846750008345549
+      identification: 
+        name: x
+        show-axis: true
+        title: Activities
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+
+      major-ticks: 
+        show: Automatic
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+        rotation: true
+        position: Outside
+
+    - # ====== Axis: y =============================================
+      id: 34847348395345549
+      identification: 
+        name: y
+        show-axis: true
+        title: Instances
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+        step: 1
+
+      appearance: 
+        position: Automatic
+
+      major-ticks: 
+        show: Automatic
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+
+- # ====== Region: Performance =================================
+  id: 34848839500345550
+  identification: 
+    name: Performance
+    type: Static Content
+
+  layout: 
+    sequence: 60
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Content Block
+    template-options: 
+    - '#DEFAULT#'
+    - t-ContentBlock--h2
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: Text (escape special characters)
+      show-line-breaks: true
+
+- # ====== Region: Average Completion Time =====================
+  id: 34849266903345550
+  identification: 
+    name: Average Completion Time
+    type: Chart
+
+  source: 
+    location: None
+
+  layout: 
+    sequence: 10
+    parent-region: Performance # 34848839500345550
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    static-id: performance-chart
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  security: 
+    escape-special-characters: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 34850546275345551
+    chart: 
+      type: Bar
+
+    appearance: 
+      orientation: Horizontal
+      stack: false
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    multi-series-chart-data: 
+      fill-gaps-in-chart-data: true
+      sort-order: Label - Ascending
+      render-gap-as-zero: true
+
+    settings: 
+      time-axis-type: Automatic
+      zoom-and-scroll: No
+
+    animation: 
+      on-display: Automatic
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: false
+      show-group-name: true
+      show-value: true
+
+    legend: 
+      show: false
+
+    messages: 
+      when-no-data-found: No Completed or Terminated Workflows found
+
+    series: 
+    - # ====== Series: Average Completion Time =====================
+      id: 34851045705345551
+      identification: 
+        name: Average Completion Time
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Local Database
+        type: SQL Query
+        sql-query: |
+          select
+            workflow_def_name,
+            avg( duration_seconds ) / 
+            case :P161_TIME_UNIT
+                  when 'SEC' then 1
+                  when 'MIN' then 60
+                  when 'HOUR' then 3600
+                  when 'DAY' then ( 3600 * 24 )
+             end  as avg_time
+           from table ( apex_workflow.get_workflows (
+                             p_context => 'ADMIN_WORKFLOWS'
+                             --, p_application_id => :APP_ID
+                             ) )    
+          where state_code in ('COMPLETED','TERMINATED')        
+          group by workflow_def_name
+        page-items-to-submit: 
+        - P161_TIME_UNIT
+
+      order-by: 
+        type: None
+
+      column-mapping: 
+        label: WORKFLOW_DEF_NAME
+        value: AVG_TIME
+
+      appearance: 
+        assigned-to-y2-axis: false
+
+      label: 
+        show: false
+
+      performance: 
+        maximum-rows-to-process: 50
+
+    axes: 
+    - # ====== Axis: x =============================================
+      id: 34851620079345552
+      identification: 
+        name: x
+        show-axis: true
+        title: Workflows
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+
+      major-ticks: 
+        show: Automatic
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+        rotation: true
+        position: Outside
+
+    - # ====== Axis: y =============================================
+      id: 34852225398345552
+      identification: 
+        name: y
+        show-axis: true
+        title: Average Completion Time
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+
+      appearance: 
+        position: Automatic
+
+      major-ticks: 
+        show: Automatic
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+
+page-items: 
+- # ====== Page Item: P161_STATE ===============================
+  id: 34829564311345540
+  identification: 
+    name: P161_STATE
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: Overview # 34829109780345539
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P161_ACTIVE_DEF_NAME =====================
+  id: 34835425907345543
+  identification: 
+    name: P161_ACTIVE_DEF_NAME
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: Overview # 34835028892345543
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P161_FAULT_DEF_NAME ======================
+  id: 34842584120345547
+  identification: 
+    name: P161_FAULT_DEF_NAME
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: Overview # 34842184540345546
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P161_TIME_UNIT ===========================
+  id: 34849654517345550
+  identification: 
+    name: P161_TIME_UNIT
+    type: Select List
+
+  label: 
+    label: Time Unit
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Average Completion Time # 34849266903345550
+    slot: ORDER_BY_ITEM
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - t-Form-fieldContainer--large
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: WORKFLOW_CHARTS.LOV.TIME_UNIT # 34759960543330572
+    display-extra-values: false
+    display-null-value: false
+
+  advanced: 
+    custom-attributes: 
+    - aria-controls="performance-chart"
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: HOUR
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Select the time unit to display within the Performance chart.
+
+dynamic-actions: 
+- # ====== Dynamic Action: Refresh Workflow Per State Details Re
+  id: 34833701641345542
+  identification: 
+    name: Refresh Workflow Per State Details Region
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P161_STATE
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 34834159705345542
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Details # 34831077429345541
+
+    execution: 
+      sequence: 10
+      event: Refresh Workflow Per State Details Region # 34833701641345542
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Refresh Activities ==================
+  id: 34840835671345546
+  identification: 
+    name: Refresh Activities
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P161_ACTIVE_DEF_NAME
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 34841238257345546
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Activities # 34838125180345544
+
+    execution: 
+      sequence: 10
+      event: Refresh Activities # 34840835671345546
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Refresh Activities ==================
+  id: 34847963188345550
+  identification: 
+    name: Refresh Activities
+
+  execution: 
+    sequence: 50
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P161_FAULT_DEF_NAME
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 34848371581345550
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Activities # 34845205483345548
+
+    execution: 
+      sequence: 10
+      event: Refresh Activities # 34847963188345550
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Refresh Performance Chart ===========
+  id: 34852829891345552
+  identification: 
+    name: Refresh Performance Chart
+
+  execution: 
+    sequence: 60
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P161_TIME_UNIT
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 34853269261345552
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Average Completion Time # 34849266903345550
+
+    execution: 
+      sequence: 10
+      event: Refresh Performance Chart # 34852829891345552
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

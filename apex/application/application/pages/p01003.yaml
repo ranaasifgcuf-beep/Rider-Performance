@@ -1,0 +1,464 @@
+---
+# ====== Page: Cities List ===================================
+id: 1003
+identification: 
+  name: Cities List
+  alias: CITIES-LIST
+  title: Cities List
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Cities List =================================
+  id: 13338383235708095
+  identification: 
+    name: Cities List
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select CITY_ID,
+             COUNTRY_ID,
+             CITY_NAME,
+             IS_ACTIVE,
+             case
+          when is_active = 'Y' then
+            '<span class="t-Badge t-Badge--success">Active</span>'
+          else
+            '<span class="t-Badge t-Badge--danger">Inactive</span>'
+        end as is_active_disp
+        from REF_CITIES
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 13338490631708095
+    link: 
+      link-column: Link to Custom Target
+      target: 
+        url: 'f?p=&APP_ID.:1004:&APP_SESSION.::&DEBUG.:RP:P1004_CITY_ID:\#CITY_ID#\'
+        page: 1004 # Cities form
+        clear-cache: RP
+        values: 
+          p1004_city_id: '#CITY_ID#'
+
+      link-icon: <span role="img" aria-label="Edit" class="fa fa-edit" title="Edit"></span>
+      condition-type: Expression
+      language: PL/SQL
+      pl/sql-expression: sec_pkg.has_perm('REF_CITY_UPDATE') = 1
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 13343191240702930
+      identification: 
+        name: Primary Report
+        alias: 133432
+
+    columns: 
+    - # ====== Column: COUNTRY_ID ==================================
+      id: 12354102560729627
+      identification: 
+        column-name: COUNTRY_ID
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: REF_COUNTRIES.COUNTRY_CODE # 13331444176708110
+
+      heading: 
+        heading: Country
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: IS_ACTIVE_DISP ==============================
+      id: 12354220785729628
+      identification: 
+        column-name: IS_ACTIVE_DISP
+        type: Plain Text
+
+      heading: 
+        heading: Status
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 24
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CITY_ID =====================================
+      id: 13339183342708091
+      identification: 
+        column-name: CITY_ID
+        type: Hidden
+
+      heading: 
+        heading: City ID
+
+      layout: 
+        sequence: 0
+
+      source: 
+        primary-key: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CITY_NAME ===================================
+      id: 13339951058708090
+      identification: 
+        column-name: CITY_NAME
+        type: Plain Text
+
+      heading: 
+        heading: City Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IS_ACTIVE ===================================
+      id: 13340357927708089
+      identification: 
+        column-name: IS_ACTIVE
+        type: Hidden
+
+      heading: 
+        heading: Is Active
+
+      layout: 
+        sequence: 4
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Cities List
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+buttons: 
+- # ====== Button: CREATE ======================================
+  id: 13340849623708089
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 10
+    region: Cities List # 13338383235708095
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:1004:&APP_SESSION.::&DEBUG.:1004::'
+      page: 1004 # Cities form
+      clear-cache: 1004
+
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sec_pkg.has_perm('REF_CITY_ADD') = 1
+
+dynamic-actions: 
+- # ====== Dynamic Action: Edit Report - Dialog Closed =========
+  id: 13341136552708089
+  identification: 
+    name: Edit Report - Dialog Closed
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: Cities List # 13338383235708095
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 13341693093708088
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Cities List # 13338383235708095
+
+    execution: 
+      sequence: 10
+      event: Edit Report - Dialog Closed # 13341136552708089
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Set Page Access ============================
+  id: 16638598229652212
+  identification: 
+    name: Set Page Access
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: ":P0_PERM_CODE :='REF_CITY_VIEW';"
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+

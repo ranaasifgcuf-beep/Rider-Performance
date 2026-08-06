@@ -1,0 +1,2712 @@
+---
+# ====== Page: PRO Deal ======================================
+id: 141
+identification: 
+  name: PRO Deal
+  alias: PRO-DEAL
+  title: PRO Deal
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+  - ui-dialog--stretch
+
+dialog: 
+  width: 1200
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* Page background */
+    .t-Dialog-body {
+      background: #f6f7fb;
+    }
+    
+    /* Main cards */
+    #deal_detail_region,
+    #approval_region,
+    #agreement_region {
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }
+    
+    /* Region headers */
+    #deal_detail_region .t-Region-header,
+    #approval_region .t-Region-header,
+    #agreement_region .t-Region-header {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 12px 16px;
+    }
+    
+    /* Region title */
+    #deal_detail_region .t-Region-title,
+    #approval_region .t-Region-title,
+    #agreement_region .t-Region-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: #1f2937;
+    }
+    
+    /* Item labels */
+    .t-Form-label {
+      font-weight: 600;
+      color: #374151;
+      font-size: 12px;
+    }
+    
+    /* Form item spacing */
+    .t-Form-fieldContainer {
+      margin-bottom: 12px;
+    }
+    
+    /* Make remarks cleaner */
+    textarea {
+      min-height: 90px;
+      border-radius: 10px !important;
+    }
+    
+    /* Better switch spacing */
+    #agreement_region .t-Form-fieldContainer {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Deal Detail =================================
+  id: 34223350842120347
+  identification: 
+    name: Deal Detail
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: PRO Deal # 34387508507944407
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: 1
+    new-column: true
+    column-span: 8
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: deal_detail_region
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  read-only: 
+    type: Item is NOT in colon delimited list
+    item: P141_APPROVAL_STATUS
+    list: 'DRAFT:REJECTED'
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Approval Info ===============================
+  id: 34223494612120348
+  identification: 
+    name: Approval Info
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: PRO Deal # 34387508507944407
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: 9
+    new-column: true
+    column-span: 4
+
+  appearance: 
+    template: Collapsible
+    template-options: 
+    - '#DEFAULT#'
+    - is-expanded
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: approval_region
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: PRO Deal ====================================
+  id: 34387508507944407
+  identification: 
+    name: PRO Deal
+    type: Form
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_PRO_DEALS
+    include-rowid-column: false
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+- # ====== Region: Buttons =====================================
+  id: 34412136706944436
+  identification: 
+    name: Buttons
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: Text (escape special characters)
+      show-line-breaks: true
+
+- # ====== Region: Deal Inclusion ==============================
+  id: 34524236496673601
+  identification: 
+    name: Deal Inclusion
+    title: Deal Inclusion
+    type: Interactive Grid
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select i.deal_inclusion_id,
+             i.deal_id,
+             i.inclusion_code,
+             i.included_yn,
+             i.agreed_amount,
+             i.remarks
+      from hr_pro_deal_inclusions i
+      where i.deal_id = :P141_DEAL_ID
+
+  layout: 
+    sequence: 40
+    parent-region: PRO Deal # 34387508507944407
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P141_DEAL_ID
+
+  read-only: 
+    type: Item is NOT in colon delimited list
+    item: P141_APPROVAL_STATUS
+    list: 'DRAFT:REJECTED'
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 34524390302673602
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+      add-row-if-empty: true
+
+    performance: 
+      lazy-loading: false
+
+    appearance: 
+      select-first-row: true
+      fixed-row-height: true
+
+    pagination: 
+      type: Scroll
+      show-total-count: true
+
+    toolbar: 
+      show: true
+      controls: 
+      - Search Column Selection
+      - Search Field
+      - Actions Menu
+      - Reset Button
+      - Save Button
+
+    enable-users-to: 
+      save-public-report: false
+      flashback: true
+      define-chart-view: true
+      download: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 34529807316678040
+      identification: 
+        name: Primary Report
+        alias: 345299
+
+  columns: 
+  - # ====== Column: DEAL_INCLUSION_ID ===========================
+    id: 34524451730673603
+    identification: 
+      column-name: DEAL_INCLUSION_ID
+      type: Hidden
+
+    settings: 
+      value-protected: false
+
+    layout: 
+      sequence: 30
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DEAL_INCLUSION_ID
+      data-type: NUMBER
+      query-only: false
+      primary-key: true
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DEAL_ID =====================================
+    id: 34524555075673604
+    identification: 
+      column-name: DEAL_ID
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 40
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DEAL_ID
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      type: Item
+      item: P141_DEAL_ID
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: INCLUSION_CODE ==============================
+    id: 34524667634673605
+    identification: 
+      column-name: INCLUSION_CODE
+      type: Select List
+
+    heading: 
+      heading: Inclusion Detail
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    list-of-values: 
+      type: SQL Query
+      sql-query: |
+        select 
+               inclusion_name,
+        inclusion_code
+        from hr_pro_deal_incl_master
+        order by seq_no
+      display-extra-values: true
+      display-null-value: true
+
+    source: 
+      type: Database Column
+      database-column: INCLUSION_CODE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: INCLUDED_YN =================================
+    id: 34524880788673607
+    identification: 
+      column-name: INCLUDED_YN
+      type: Switch
+
+    heading: 
+      heading: Included?
+      alignment: start
+
+    settings: 
+      use-defaults: false
+      on-value: Y
+      on-label: Yes
+      off-value: N
+      off-label: No
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    source: 
+      type: Database Column
+      database-column: INCLUDED_YN
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: AGREED_AMOUNT ===============================
+    id: 34524978656673608
+    identification: 
+      column-name: AGREED_AMOUNT
+      type: Number Field
+
+    heading: 
+      heading: Agreed Amount
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 80
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: AGREED_AMOUNT
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: REMARKS =====================================
+    id: 34525075125673609
+    identification: 
+      column-name: REMARKS
+      type: Textarea
+
+    heading: 
+      heading: Remarks
+      alignment: start
+
+    settings: 
+      resizable: true
+      auto-height: false
+      character-counter: false
+      trim-spaces: Leading and Trailing
+
+    layout: 
+      sequence: 90
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: REMARKS
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: APEX$ROW_ACTION =============================
+    id: 34525138527673610
+    identification: 
+      column-name: APEX$ROW_ACTION
+      type: Actions Menu
+
+    layout: 
+      sequence: 20
+
+  - # ====== Column: APEX$ROW_SELECTOR ===========================
+    id: 34525223948673611
+    identification: 
+      column-name: APEX$ROW_SELECTOR
+      type: Row Selector
+
+    settings: 
+      enable-multi-select: true
+      show-select-all: true
+      hide-control: false
+
+    layout: 
+      sequence: 10
+
+  printing: 
+    page: 
+      size: Letter
+      orientation: Landscape
+      units: Inches
+      width: 11
+      height: 8.5
+      border-width: 0.5
+      border-color: '#666666'
+
+    page-header: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+      page-header-text: Deal Inclusion
+
+    column-headings: 
+      font: Helvetica
+      font-weight: Bold
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#EEEEEE'
+
+    columns: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#FFFFFF'
+
+    page-footer: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+page-items: 
+- # ====== Page Item: P141_DEAL_ID =============================
+  id: 34387844992944407
+  identification: 
+    name: P141_DEAL_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: PRO Deal # 34387508507944407
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: DEAL_ID
+    data-type: NUMBER
+    query-only: true
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_DEAL_NO =============================
+  id: 34388299413944413
+  identification: 
+    name: P141_DEAL_NO
+    type: Display Only
+
+  label: 
+    label: Deal No
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 4
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: DEAL_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_EMP_ID ==============================
+  id: 34388673649944414
+  identification: 
+    name: P141_EMP_ID
+    type: Popup LOV
+
+  label: 
+    label: Employee
+    alignment: Left
+
+  settings: 
+    display-as: Modal Dialog
+    initial-fetch: Automatic
+    manual-entry: false
+    fetch-on-search: false
+
+  search: 
+    match-type: Contains
+    case-sensitive: false
+    minimum-characters: 0
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 4
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: HR.EMPLOYEE_LOV # 34519350958620461
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: EMP_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_ORG_ID ==============================
+  id: 34389061748944416
+  identification: 
+    name: P141_ORG_ID
+    type: Select List
+
+  label: 
+    label: Organization
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 4
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: HR_ORGS.ORG_CODE # 34389172366944418
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: ORG_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_DEAL_TYPE_CODE ======================
+  id: 34389726261944419
+  identification: 
+    name: P141_DEAL_TYPE_CODE
+    type: Select List
+
+  label: 
+    label: Deal Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 50
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 3
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: HR_PRO_DEAL_TYPE_MASTER.DEAL_TYPE_NAME # 34389893952944419
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: DEAL_TYPE_CODE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_ENTRY_STATUS ========================
+  id: 34390499189944421
+  identification: 
+    name: P141_ENTRY_STATUS
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 60
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: ENTRY_STATUS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_DEAL_AMOUNT =========================
+  id: 34391225061944421
+  identification: 
+    name: P141_DEAL_AMOUNT
+    type: Number Field
+
+  label: 
+    label: Deal Amount
+    alignment: Left
+
+  settings: 
+    number-alignment: End
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 80
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: true
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: DEAL_AMOUNT
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_RECOVERABLE =========================
+  id: 34391652327944422
+  identification: 
+    name: P141_RECOVERABLE
+    type: Switch
+
+  label: 
+    label: Recoverable
+    alignment: Left
+
+  settings: 
+    use-defaults: false
+    on-value: Y
+    on-label: Yes
+    off-value: N
+    off-label: No
+
+  layout: 
+    sequence: 120
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: RECOVERABLE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: Y
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_EMI_AMOUNT ==========================
+  id: 34392002308944422
+  identification: 
+    name: P141_EMI_AMOUNT
+    type: Number Field
+
+  label: 
+    label: EMI Amount
+    alignment: Left
+
+  settings: 
+    number-alignment: End
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 100
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: true
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: EMI_AMOUNT
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_RECOVERY_START_MONTH ================
+  id: 34392448098944422
+  identification: 
+    name: P141_RECOVERY_START_MONTH
+    type: Date Picker
+
+  label: 
+    label: Recovery Start Month
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 110
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 3
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: RECOVERY_START_MONTH
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_AGREEMENT_REQUIRED ==================
+  id: 34392843499944422
+  identification: 
+    name: P141_AGREEMENT_REQUIRED
+    type: Switch
+
+  label: 
+    label: Agreement Required
+    alignment: Left
+
+  settings: 
+    use-defaults: false
+    on-value: Y
+    on-label: Yes
+    off-value: N
+    off-label: No
+
+  layout: 
+    sequence: 130
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: AGREEMENT_REQUIRED
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: Y
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_AGREEMENT_PRINTED ===================
+  id: 34393207011944423
+  identification: 
+    name: P141_AGREEMENT_PRINTED
+    type: Switch
+
+  label: 
+    label: Agreement Printed
+    alignment: Left
+
+  settings: 
+    use-defaults: false
+    on-value: Y
+    on-label: Yes
+    off-value: N
+    off-label: No
+
+  layout: 
+    sequence: 140
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: AGREEMENT_PRINTED
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_AGREEMENT_SIGNED ====================
+  id: 34393662681944423
+  identification: 
+    name: P141_AGREEMENT_SIGNED
+    type: Switch
+
+  label: 
+    label: Agreement Signed
+    alignment: Left
+
+  settings: 
+    use-defaults: false
+    on-value: Y
+    on-label: Yes
+    off-value: N
+    off-label: No
+
+  layout: 
+    sequence: 150
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: AGREEMENT_SIGNED
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_APPROVAL_STATUS =====================
+  id: 34394072259944423
+  identification: 
+    name: P141_APPROVAL_STATUS
+    type: Display Only
+
+  label: 
+    label: Approval Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Approval Info # 34223494612120348
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: APPROVAL_STATUS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: DRAFT
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_SUBMITTED_BY ========================
+  id: 34394447480944424
+  identification: 
+    name: P141_SUBMITTED_BY
+    type: Display Only
+
+  label: 
+    label: Submitted By
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 40
+    region: Approval Info # 34223494612120348
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: SUBMITTED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_SUBMITTED_DT ========================
+  id: 34394873600944424
+  identification: 
+    name: P141_SUBMITTED_DT
+    type: Display Only
+
+  label: 
+    label: Submitted Date
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 60
+    region: Approval Info # 34223494612120348
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: SUBMITTED_DT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_APPROVED_BY =========================
+  id: 34395688553944425
+  identification: 
+    name: P141_APPROVED_BY
+    type: Display Only
+
+  label: 
+    label: Approved By
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Approval Info # 34223494612120348
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: APPROVED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_APPROVED_DT =========================
+  id: 34396081244944426
+  identification: 
+    name: P141_APPROVED_DT
+    type: Display Only
+
+  label: 
+    label: Approved Date
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Approval Info # 34223494612120348
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: APPROVED_DT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_REJECTED_BY =========================
+  id: 34396897928944426
+  identification: 
+    name: P141_REJECTED_BY
+    type: Display Only
+
+  label: 
+    label: Rejected By
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 70
+    region: Approval Info # 34223494612120348
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: REJECTED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_REJECTED_DT =========================
+  id: 34397214162944426
+  identification: 
+    name: P141_REJECTED_DT
+    type: Display Only
+
+  label: 
+    label: Rejected Date
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 80
+    region: Approval Info # 34223494612120348
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: REJECTED_DT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_REJECTION_REASON ====================
+  id: 34398027250944427
+  identification: 
+    name: P141_REJECTION_REASON
+    type: Display Only
+
+  label: 
+    label: Rejection Reason
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 90
+    region: Approval Info # 34223494612120348
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: REJECTION_REASON
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_LOAN_CREATED ========================
+  id: 34398460011944427
+  identification: 
+    name: P141_LOAN_CREATED
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 230
+    region: PRO Deal # 34387508507944407
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: LOAN_CREATED
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_LOAN_ID =============================
+  id: 34398883400944427
+  identification: 
+    name: P141_LOAN_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 240
+    region: PRO Deal # 34387508507944407
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: LOAN_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_PRO_CASE_CREATED ====================
+  id: 34399264984944428
+  identification: 
+    name: P141_PRO_CASE_CREATED
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 250
+    region: PRO Deal # 34387508507944407
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: PRO_CASE_CREATED
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_PRO_CASE_ID =========================
+  id: 34399648131944428
+  identification: 
+    name: P141_PRO_CASE_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 260
+    region: PRO Deal # 34387508507944407
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: PRO_CASE_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_REMARKS =============================
+  id: 34400028390944428
+  identification: 
+    name: P141_REMARKS
+    type: Text Field
+
+  label: 
+    label: Remarks
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 160
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+
+  validation: 
+    value-required: false
+    maximum-length: 4000
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: REMARKS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_CREATED_BY ==========================
+  id: 34400420040944429
+  identification: 
+    name: P141_CREATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 280
+    region: PRO Deal # 34387508507944407
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: CREATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_CREATED_DT ==========================
+  id: 34400893020944429
+  identification: 
+    name: P141_CREATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 290
+    region: PRO Deal # 34387508507944407
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: CREATED_DT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_UPDATED_BY ==========================
+  id: 34401622060944429
+  identification: 
+    name: P141_UPDATED_BY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 300
+    region: PRO Deal # 34387508507944407
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: UPDATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_UPDATED_DT ==========================
+  id: 34402077123944430
+  identification: 
+    name: P141_UPDATED_DT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 310
+    region: PRO Deal # 34387508507944407
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: UPDATED_DT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P141_DEAL_ADVANCE ========================
+  id: 34525745819673616
+  identification: 
+    name: P141_DEAL_ADVANCE
+    type: Number Field
+
+  label: 
+    label: Deal Advance
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 90
+    region: Deal Detail # 34223350842120347
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: PRO Deal # 34387508507944407
+    column: DEAL_ADVANCE
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: CANCEL ======================================
+  id: 34412545479944436
+  identification: 
+    button-name: CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 10
+    region: Buttons # 34412136706944436
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-times-circle
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: DELETE ======================================
+  id: 34413919177944441
+  identification: 
+    button-name: DELETE
+    label: Delete
+
+  layout: 
+    sequence: 20
+    region: Buttons # 34412136706944436
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-minus-square
+
+  behavior: 
+    action: Submit Page
+    execute-validations: false
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL DELETE action
+
+  confirmation: 
+    message: '&APP_TEXT$DELETE_MSG!RAW.'
+    style: Danger
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: sec_pkg.has_perm('PRO_DEAL_DELETE') = 1
+
+- # ====== Button: SAVE ========================================
+  id: 34414330705944441
+  identification: 
+    button-name: SAVE
+    label: Apply Changes
+
+  layout: 
+    sequence: 30
+    region: Buttons # 34412136706944436
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ":P141_DEAL_ID IS NOT NULL AND :P141_APPROVAL_STATUS IN ('DRAFT','REJECTED')"
+
+- # ====== Button: CREATE ======================================
+  id: 34414758022944441
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 40
+    region: Buttons # 34412136706944436
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-check-circle
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P141_DEAL_ID
+
+- # ====== Button: Submit_App ==================================
+  id: 35003987589124525
+  identification: 
+    button-name: Submit_App
+    label: Submit Approval
+
+  layout: 
+    sequence: 10
+    region: Buttons # 34412136706944436
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-send
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ":P141_DEAL_ID IS NOT NULL AND:P141_APPROVAL_STATUS IN ('DRAFT','REJECTED')"
+
+dynamic-actions: 
+- # ====== Dynamic Action: Cancel Dialog =======================
+  id: 34412661706944436
+  identification: 
+    name: Cancel Dialog
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 34412545479944436
+
+  actions: 
+  - # ====== Action: Cancel Dialog ===============================
+    id: 34413405132944440
+    identification: 
+      action: Cancel Dialog
+
+    execution: 
+      sequence: 10
+      event: Cancel Dialog # 34412661706944436
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations: 
+- # ====== Validation: P141_SUBMITTED_DT must be timestamp =====
+  id: 34395318578944425
+  identification: 
+    name: P141_SUBMITTED_DT must be timestamp
+
+  execution: 
+    sequence: 160
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P141_SUBMITTED_DT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P141_SUBMITTED_DT # 34394873600944424
+
+- # ====== Validation: P141_APPROVED_DT must be timestamp ======
+  id: 34396535877944426
+  identification: 
+    name: P141_APPROVED_DT must be timestamp
+
+  execution: 
+    sequence: 180
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P141_APPROVED_DT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P141_APPROVED_DT # 34396081244944426
+
+- # ====== Validation: P141_REJECTED_DT must be timestamp ======
+  id: 34397748773944427
+  identification: 
+    name: P141_REJECTED_DT must be timestamp
+
+  execution: 
+    sequence: 200
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P141_REJECTED_DT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P141_REJECTED_DT # 34397214162944426
+
+- # ====== Validation: P141_CREATED_DT must be timestamp =======
+  id: 34401342134944429
+  identification: 
+    name: P141_CREATED_DT must be timestamp
+
+  execution: 
+    sequence: 280
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P141_CREATED_DT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P141_CREATED_DT # 34400893020944429
+
+- # ====== Validation: P141_UPDATED_DT must be timestamp =======
+  id: 34402582921944430
+  identification: 
+    name: P141_UPDATED_DT must be timestamp
+
+  execution: 
+    sequence: 300
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P141_UPDATED_DT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P141_UPDATED_DT # 34402077123944430
+
+- # ====== Validation: Deal amount cannot be negative. =========
+  id: 34525501682673614
+  identification: 
+    name: Deal amount cannot be negative.
+
+  execution: 
+    sequence: 310
+
+  validation: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ':P141_DEAL_AMOUNT >= 0'
+    always-execute: false
+
+  error: 
+    error-message: Deal amount cannot be negative.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: EMI amount is required for recoverable de
+  id: 34525632510673615
+  identification: 
+    name: EMI amount is required for recoverable deal.
+
+  execution: 
+    sequence: 320
+
+  validation: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: |
+      :P141_RECOVERABLE = 'N'
+      or nvl(:P141_EMI_AMOUNT,0) > 0
+    always-execute: false
+
+  error: 
+    error-message: EMI amount is required for recoverable deal.
+    display-location: Inline with Field and in Notification
+
+processes: 
+- # ====== Process: Initialize form PRO Deal ===================
+  id: 34415173953944442
+  identification: 
+    name: Initialize form PRO Deal
+    type: Form - Initialization
+    execution-chain: None
+    form-region: PRO Deal # 34387508507944407
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Process form PRO Deal ======================
+  id: 34415572419944442
+  identification: 
+    name: Process form PRO Deal
+    type: Form - Automatic Row Processing (DML)
+    execution-chain: None
+    form-region: PRO Deal # 34387508507944407
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Close Dialog ===============================
+  id: 34415985877944443
+  identification: 
+    name: Close Dialog
+    type: Close Dialog
+    execution-chain: None
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 40
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request is contained in Value
+    value: CREATE,SAVE,DELETE,Submit_App
+
+- # ====== Process: Deal Inclusion - Save Interactive Grid Data 
+  id: 34525318996673612
+  identification: 
+    name: Deal Inclusion - Save Interactive Grid Data
+    type: Interactive Grid - Automatic Row Processing (DML)
+    execution-chain: None
+    editable-region: Deal Inclusion # 34524236496673601
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    execution-scope: For Created and Modified Rows
+
+- # ====== Process: Submit Approval ============================
+  id: 34525459769673613
+  identification: 
+    name: Submit Approval
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      begin
+          hr_pro_deal_app_pkg.submit_for_approval(:P141_DEAL_ID);
+      end;
+
+  execution: 
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: Submit_App # 35003987589124525
+

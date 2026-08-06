@@ -1,0 +1,2 @@
+CREATE INDEX "IX_HR_ORG_TRN" ON "HR_ORGS" ("TRN_NO") 
+  ;

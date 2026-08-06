@@ -1,0 +1,1031 @@
+---
+# ====== Page: SIM Inventory =================================
+id: 331
+identification: 
+  name: SIM Inventory
+  alias: SIM-INVENTORY
+  title: SIM Inventory
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    .sim-action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 30px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        background: #ffffff;
+        color: #374151;
+        text-decoration: none;
+        margin-right: 4px;
+    }
+    
+    .sim-action-btn:hover {
+        background: #f3f4f6;
+        text-decoration: none;
+    }
+    
+    .a-IRR-table td {
+        vertical-align: middle;
+    }
+    
+    .t-Badge {
+        font-weight: 700;
+        border-radius: 8px;
+        padding: 5px 9px;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Breadcrumb ==================================
+  id: 43032629997318989
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 9721609352336316
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: SIM Inventory ===============================
+  id: 43033348548318994
+  identification: 
+    name: SIM Inventory
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select sim_id,
+             mobile_no,
+             iccid_no,
+      
+             operator_name,
+             sim_status_badge,
+      
+             ownership_type,
+             owner_name,
+      
+             plan_name,
+             data_package,
+             monthly_cost,
+             bill_account_no,
+             contract_no,
+      
+             to_char(activation_dt, 'DD-MON-YYYY') as activation_dt,
+             to_char(cancellation_dt, 'DD-MON-YYYY') as cancellation_dt,
+      
+             current_holder_badge,
+             current_emp_code,
+             current_employee_name,
+             to_char(current_assign_dt, 'DD-MON-YYYY') as current_assign_dt,
+      
+             remarks,
+      
+             '<a href="' ||
+             apex_util.prepare_url(
+                 'f?p=' || :APP_ID || ':333:' || :APP_SESSION ||
+                 '::NO::P333_SIM_ID:' || sim_id
+             ) ||
+             '" class="sim-action-btn" title="Edit SIM">' ||
+             '<span class="fa fa-edit" aria-hidden="true"></span>' ||
+             '</a>' as edit_action
+      
+      from vw_fleet_sim_inventory
+      order by mobile_no;
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 43033430733318994
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 43042060029319486
+      identification: 
+        name: Primary Report
+        alias: 430421
+
+    columns: 
+    - # ====== Column: SIM_ID ======================================
+      id: 43034026897318998
+      identification: 
+        column-name: SIM_ID
+        type: Hidden
+
+      heading: 
+        heading: Sim Id
+
+      layout: 
+        sequence: 1
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MOBILE_NO ===================================
+      id: 43034434420319000
+      identification: 
+        column-name: MOBILE_NO
+        type: Plain Text
+
+      heading: 
+        heading: Mobile No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ICCID_NO ====================================
+      id: 43034820129319000
+      identification: 
+        column-name: ICCID_NO
+        type: Hidden
+
+      heading: 
+        heading: ICCID No
+
+      layout: 
+        sequence: 3
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: OPERATOR_NAME ===============================
+      id: 43035211131319001
+      identification: 
+        column-name: OPERATOR_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Operator Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: SIM_STATUS_BADGE ============================
+      id: 43035626023319001
+      identification: 
+        column-name: SIM_STATUS_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Sim Status Badge
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 5
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: OWNERSHIP_TYPE ==============================
+      id: 43036050193319001
+      identification: 
+        column-name: OWNERSHIP_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Ownership Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 6
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: OWNER_NAME ==================================
+      id: 43036490605319001
+      identification: 
+        column-name: OWNER_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Owner Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 7
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PLAN_NAME ===================================
+      id: 43036821014319002
+      identification: 
+        column-name: PLAN_NAME
+        type: Hidden
+
+      heading: 
+        heading: Plan Name
+
+      layout: 
+        sequence: 8
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DATA_PACKAGE ================================
+      id: 43037205757319002
+      identification: 
+        column-name: DATA_PACKAGE
+        type: Hidden
+
+      heading: 
+        heading: Data Package
+
+      layout: 
+        sequence: 9
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MONTHLY_COST ================================
+      id: 43037694202319002
+      identification: 
+        column-name: MONTHLY_COST
+        type: Plain Text
+
+      heading: 
+        heading: Monthly Cost
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: BILL_ACCOUNT_NO =============================
+      id: 43038078788319003
+      identification: 
+        column-name: BILL_ACCOUNT_NO
+        type: Plain Text
+
+      heading: 
+        heading: Bill Account No
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 11
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CONTRACT_NO =================================
+      id: 43038445122319003
+      identification: 
+        column-name: CONTRACT_NO
+        type: Hidden
+
+      heading: 
+        heading: Contract No
+
+      layout: 
+        sequence: 12
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ACTIVATION_DT ===============================
+      id: 43038862398319003
+      identification: 
+        column-name: ACTIVATION_DT
+        type: Plain Text
+
+      heading: 
+        heading: Activation Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 13
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CANCELLATION_DT =============================
+      id: 43039250865319003
+      identification: 
+        column-name: CANCELLATION_DT
+        type: Plain Text
+
+      heading: 
+        heading: Cancellation Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 14
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_HOLDER_BADGE ========================
+      id: 43039665504319004
+      identification: 
+        column-name: CURRENT_HOLDER_BADGE
+        type: Plain Text
+
+      heading: 
+        heading: Current Holder Badge
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 15
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CURRENT_EMP_CODE ============================
+      id: 43040088457319004
+      identification: 
+        column-name: CURRENT_EMP_CODE
+        type: Hidden
+
+      heading: 
+        heading: Current Emp Code
+
+      layout: 
+        sequence: 16
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_EMPLOYEE_NAME =======================
+      id: 43040420613319004
+      identification: 
+        column-name: CURRENT_EMPLOYEE_NAME
+        type: Hidden
+
+      heading: 
+        heading: Current Employee Name
+
+      layout: 
+        sequence: 17
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CURRENT_ASSIGN_DT ===========================
+      id: 43040824849319005
+      identification: 
+        column-name: CURRENT_ASSIGN_DT
+        type: Plain Text
+
+      heading: 
+        heading: Current Assign Dt
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 18
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: REMARKS =====================================
+      id: 43041208328319005
+      identification: 
+        column-name: REMARKS
+        type: Plain Text
+
+      heading: 
+        heading: Remarks
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 19
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EDIT_ACTION =================================
+      id: 43041686157319005
+      identification: 
+        column-name: EDIT_ACTION
+        type: Plain Text
+
+      heading: 
+        heading: Edit Action
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: SIM Inventory
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+buttons: 
+- # ====== Button: ADD_SIM =====================================
+  id: 43013222028045446
+  identification: 
+    button-name: ADD_SIM
+    label: Add Sim
+
+  layout: 
+    sequence: 10
+    region: SIM Inventory # 43033348548318994
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-plus-square
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:333:&SESSION.::&DEBUG.:::'
+      page: 333 # SIM Master Form
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: Refresh =============================
+  id: 43070431679428304
+  identification: 
+    name: Refresh
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: SIM Inventory # 43033348548318994
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 43070575113428305
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: SIM Inventory # 43033348548318994
+
+    execution: 
+      sequence: 10
+      event: Refresh # 43070431679428304
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

@@ -4,16 +4,14 @@ Standalone Oracle APEX HRMS & Payroll system (Oracle Autonomous Database), built
 in-house — no Oracle Fusion HCM integration. This app is the system of record
 for employee data, assignments, fleet (bike) management, and payroll.
 
-## Current inventory (structure current as of 2026-08-08; PL/SQL objects as of 2026-07-26)
+## Current inventory (full export, 2026-08-08)
 
-- **73 tables**, **207 indexes**, **20 views**, **3 sequences** — current as of the
-  2026-08-08 export
-- **72 foreign keys**, **33 triggers**, **20 packages** (spec + body),
-  **2 standalone functions** — carried over from the 2026-07-26 export; **not yet
-  re-confirmed against the current schema**. A fresh `Generate DDL` export with
-  all object types checked is needed before these can be trusted current — see
-  `docs/new-instance-setup.md`.
-- **APEX Application 100**, 115 pages (unchanged between both exports)
+- **73 tables**, **207 indexes**, **45 foreign key files**, **20 views**,
+  **3 sequences**, **21 packages** (spec + body), **2 standalone functions**,
+  **38 triggers**
+- **APEX Application 100**, 115 pages
+- `scripts/deploy_full.sql` — single ordered deploy script generated from
+  everything below, ready to run against a fresh instance
 
 ## Modules observed in the schema
 
@@ -37,11 +35,10 @@ for employee data, assignments, fleet (bike) management, and payroll.
   `HR_APPROVAL_RULES`, `HR_APPR_RULE_STEPS`) — configurable approval chains
 - **SIM Assignment** (`FLEET_SIMS`, `FLEET_SIM_OPERATORS`, `FLEET_SIM_STATUS_MASTER`,
   `HR_SIM_ASSIGNMENTS`, `HR_SIM_REQUESTS`, `HR_SIM_REQUEST_LOG`,
-  `HR_EMP_SIM_ALLOWANCES`) — added since the last export; mirrors the bike
-  assignment pattern (request → assign → return, with status/log history).
-  `REF_JOBS` gained a `SIM_REQUIRED_YN` column tying job roles to SIM eligibility.
-  No dedicated package for this yet in the repo — likely added alongside the
-  triggers/packages not yet re-exported (see note above).
+  `HR_EMP_SIM_ALLOWANCES`) — mirrors the bike assignment pattern (request →
+  assign → return, with status/log history). Logic lives in `hr_sim_req_pkg`,
+  with 5 dedicated triggers and FK constraints now in the repo. `REF_JOBS`
+  gained a `SIM_REQUIRED_YN` column tying job roles to SIM eligibility.
 
 > No dedicated Payroll calculation package spotted yet in this import
   (`HR_CHARGES_PKG` handles charges/deductions, not full payroll runs) — worth
@@ -53,21 +50,21 @@ for employee data, assignments, fleet (bike) management, and payroll.
 apex/application/     APEX Application 100 export, split YAML format (115 pages)
 db/tables/             73 tables, one file per table
 db/indexes/            207 indexes, one file per index
-db/constraints/         Foreign keys, one file per table (stale — from 07-26 export)
-db/triggers/            33 triggers (stale — from 07-26 export)
+db/constraints/         Foreign keys, one file per table
+db/triggers/            38 triggers
 db/views/               20 views
 db/sequences/           3 sequences
-db/packages/            20 packages — <name>.pks (spec) + <name>.pkb (body) (stale)
-db/functions/           2 standalone functions (stale — from 07-26 export)
+db/packages/            21 packages — <name>.pks (spec) + <name>.pkb (body)
+db/functions/           2 standalone functions
 integration/            External integrations (bank/payment disbursement, SMS/notify), if any
 docs/                   Architecture & data model notes, new-instance-setup.md
-scripts/                deploy_phase1_structure.sql — ordered structure-only deploy script
+scripts/                deploy_full.sql — single ordered deploy script (structure only, no data)
 ```
 
-Note: the DDL source export had each object triplicated (same CREATE statement
-repeated ~3x at different points in the file, likely from overlapping category
-selections in APEX's Generate DDL wizard) — this was deduplicated during import,
-keeping one copy per object.
+Note: the DDL source exports have consistently had each object duplicated 2-3x
+(same CREATE statement repeated at different points in the file, likely from
+overlapping category selections in APEX's Generate DDL wizard) — this is
+deduplicated automatically during import, keeping one copy per object.
 
 ## Getting your APEX app into git (important)
 
@@ -89,5 +86,6 @@ subfolder — this keeps history and reviews sane per-object instead of one gian
    relationships), payroll calculation correctness and auditability, RBAC
    correctness (org/project-scoped permissions), and standard APEX/PL-SQL practices
    (bind variables, authorization schemes, session state protection).
-3. Confirm where SIM assignment and full payroll processing live — not visible in
-   this import.
+3. No dedicated payroll-run package found yet (`hr_charges_pkg` handles
+   charges/deductions, not full payroll runs) — confirm where payroll
+   processing actually lives before go-live.

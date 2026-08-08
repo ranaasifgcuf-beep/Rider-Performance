@@ -7,48 +7,51 @@ OCI Console → Create Autonomous Database:
   wallet/mTLS and the full feature set the APEX-workload instance lacked)
 - Always Free: checked (still development)
 
-## 2. Deploy the schema structure
+## 2. Deploy the full schema structure
 
-Run `scripts/deploy_phase1_structure.sql` in the new instance's Database Actions
-SQL Worksheet, in **Script mode** (not the regular statement runner) — it's a
-single ordered script: sequences → tables → indexes → views.
+Run `scripts/deploy_full.sql` in the new instance's Database Actions SQL
+Worksheet, in **Script mode** (not the regular statement runner). It's one
+ordered script, generated straight from `db/`, covering everything:
 
-This is **Phase 1 only** — structure for the tables/views/indexes/sequences
-that were captured in the latest export. It does **not** yet include:
-- Triggers (33 in the previous export — audit timestamp triggers etc.)
-- Packages (20 — this is where the actual business logic lives:
-  `fleet_pkg`, `hr_asg_pkg`, `hr_approval_wf_pkg`, `sec_auth_pkg`, etc.)
-- Functions (2, including `apex_auth_fn` — the APEX authentication function)
-- Foreign keys (72 — referential integrity between tables)
+1. Sequences
+2. Tables
+3. Indexes
+4. Foreign keys
+5. Views
+6. Package specs (`.pks`)
+7. Package bodies (`.pkb`) — run after all specs, since a body can't compile
+   without its spec existing first
+8. Functions
+9. Triggers
 
-**The app will not function correctly on Phase 1 alone** — no login (auth
-function missing), no business logic, no FK protection. Phase 2 needs a full
-`Generate DDL` re-export from APEX SQL Workshop with **all** object types
-checked: Tables, Views, Packages, Triggers, Sequences, Indexes, Functions,
-Procedures, Types — not just the default Tables/Views/Indexes/Sequences
-selection.
+This is current as of the 2026-08-08 full export (73 tables, 207 indexes,
+45 FK files, 20 views, 21 packages, 2 functions, 38 triggers) — includes the
+SIM Assignment module (`hr_sim_req_pkg`, 5 SIM triggers, 5 SIM FK sets) that
+was missing from the first pass.
+
+**Before running:** check the schema-qualified references inside packages
+and functions (e.g. `apex_auth_fn` calls `wksp_alnajah.sec_auth_pkg.authenticate`)
+— if your new schema is named differently than `wksp_alnajah`, these need
+updating or the calls will fail to resolve.
+
+**Data (actual rows) is not included** — this is structure only. Use the
+per-table `SELECT * FROM table` → Download-as-Insert approach if you need to
+carry over existing data, run after this script.
 
 ## 3. Configure APEX on the new instance
 
 1. Database Actions → **App Builder** (or the direct APEX URL for the new
    instance) → sign in as ADMIN (first time).
 2. Create a **Workspace** if one doesn't exist yet — associate it with your
-   schema (e.g. `WKSP_ALNAJAH` to match the original, or a new name).
+   schema (e.g. `WKSP_ALNAJAH` to match the original, or a new name — see the
+   schema-name caveat above if you pick something different).
 3. Inside the workspace: **App Builder → Import** → upload the app export
    (from `apex/application/`, or the original zip) → Install.
 4. During import, confirm the **parsing schema** matches the schema you just
    deployed the structure into (step 2).
-5. Run the app, expect it to fail at login/business-logic points until Phase 2
-   (packages/functions) is deployed — that's expected, not a setup error.
 
-## 4. Once Phase 2 DDL is available
+## 4. Verify
 
-Deploy in this order (dependencies matter):
-1. Foreign keys (needs tables to exist first — already does)
-2. Package **specs** (`.pks`) before package **bodies** (`.pkb`) — a body
-   can't compile without its spec existing first
-3. Functions
-4. Triggers
-
-Then re-test the app end to end: login, a few CRUD screens per module,
-SIM assignment flow specifically since it's the newest addition.
+Run the app end to end: login (exercises `apex_auth_fn` → `sec_auth_pkg`), a
+few CRUD screens per module, and the SIM assignment flow specifically since
+it's the newest addition and least tested so far.

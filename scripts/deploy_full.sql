@@ -2473,7 +2473,7 @@ ALTER TABLE "SEC_USER_ROLES" ADD FOREIGN KEY ("ROLE_ID")
 	  REFERENCES "SEC_ROLES" ("ROLE_ID") ON DELETE CASCADE ENABLE;
 
 
--- ---------- VIEWS (20) ----------
+-- ---------- VIEWS (21) ----------
 
 CREATE OR REPLACE FORCE EDITIONABLE VIEW "HR_EMP_DOCS_V" ("DOC_ID", "EMP_ID", "EMP_CODE", "EMPLOYEE_NAME", "DOC_TYPE", "DOC_TYPE_NAME", "DOC_GROUP", "IS_MANDATORY", "DOC_NO", "ISSUE_DT", "EXPIRY_DT", "IS_CURRENT_RECORD", "RELATED_ID_REC_ID", "FILE_REF", "FILE_NAME", "MIME_TYPE", "FILE_SIZE", "REMARKS", "EXPIRY_IN_DAYS", "EXPIRY_STATUS", "CREATED_BY", "CREATED_DT", "UPDATED_BY", "UPDATED_DT") AS 
   select d.doc_id,
@@ -2792,6 +2792,34 @@ nvl(l.agreed_advance_amount,0) agreed_advance_amount
 from hr_emp_loans l
 join hr_employees e
   on e.emp_id = l.emp_id;
+
+CREATE OR REPLACE FORCE EDITIONABLE VIEW "VW_FLEET_BIKE_ASSIGN_HIST" ("BIKE_ASSIGN_ID", "BIKE_ID", "BIKE_CODE", "PLATE_NO", "EMP_ID", "EMP_CODE", "EMPLOYEE_NAME", "CURRENT_PROJECT", "ASSIGN_DT", "EXPECTED_RETURN_DT", "RETURN_DT", "STATUS_CODE", "ISSUE_CONDITION", "RETURN_CONDITION", "RETURN_REASON_CODE", "ASSIGNED_BY", "RETURNED_BY", "REMARKS") AS
+select fba.bike_assign_id,
+       fba.bike_id,
+       fb.bike_code,
+       fb.plate_no,
+
+       fba.emp_id,
+       e.emp_code,
+       e.full_employee_name as employee_name,
+       e.current_project,
+
+       fba.assign_dt,
+       fba.expected_return_dt,
+       fba.return_dt,
+       fba.status_code,
+       fba.issue_condition,
+       fba.return_condition,
+       fba.return_reason_code,
+       fba.assigned_by,
+       fba.returned_by,
+       fba.remarks
+
+  from fleet_bike_assignments fba
+  join fleet_bikes fb
+    on fb.bike_id = fba.bike_id
+  join vw_hr_employee_list e
+    on e.emp_id = fba.emp_id;
 
 CREATE OR REPLACE FORCE EDITIONABLE VIEW "VW_FLEET_BIKE_CURRENT" ("BIKE_ID", "BIKE_CODE", "PLATE_NO", "PLATE_EMIRATE", "CHASSIS_NO", "ENGINE_NO", "MODEL_ID", "MODEL_NAME", "MODEL_YEAR", "MODEL_YEAR_LABEL", "COLOR_ID", "COLOR_NAME", "OWNERSHIP_TYPE", "VENDOR_ID", "VENDOR_NAME", "VENDOR_SHORT_NAME", "PURCHASE_DT", "PURCHASE_AMOUNT", "CURRENT_MONTHLY_RENT", "CONTRACT_START_DT", "CONTRACT_END_DT", "REMARKS", "IS_ACTIVE", "STATUS_TXN_ID", "BIKE_STATUS_CODE", "BIKE_STATUS_NAME", "STATUS_FROM_DT", "STATUS_TO_DT", "STATUS_REASON_CODE", "STATUS_REMARKS", "CUSTODY_TXN_ID", "CUSTODY_TYPE_CODE", "CUSTODY_TYPE_NAME", "LOCATION_ID", "CUSTODY_LOCATION_NAME", "CUSTODY_FROM_DT", "CUSTODY_TO_DT", "CUSTODY_REASON_CODE", "CUSTODY_REMARKS", "CURRENT_BIKE_ASSIGN_ID", "CURRENT_EMP_ID", "EMPLOYEE_NAME", "EMP_CODE", "CURRENT_PROJECT", "NATIONALITY", "CURRENT_ASSIGN_DT", "CURRENT_EXPECTED_RETURN_DT", "CURRENT_ISSUE_CONDITION", "CURRENT_ASSIGN_REMARKS", "MULKIYA_DOC_ID", "MULKIYA_NO", "MULKIYA_ISSUE_DT", "MULKIYA_EXPIRY_DT", "INSURANCE_DOC_ID", "INSURANCE_NO", "INSURANCE_ISSUE_DT", "INSURANCE_EXPIRY_DT", "MULKIYA_BUCKET", "INSURANCE_BUCKET", "UTILIZATION_BUCKET") AS 
   with curr_assign as (

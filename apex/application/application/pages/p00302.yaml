@@ -2024,9 +2024,10 @@ processes:
               p_purchase_amount      => :P302_PURCHASE_AMOUNT,
               p_current_monthly_rent => :P302_CURRENT_MONTHLY_RENT,
               p_contract_start_dt    => :P302_CONTRACT_START_DT,
-              p_contract_end_dt      => :P302_CONTRACT_END_DT
+              p_contract_end_dt      => :P302_CONTRACT_END_DT,
+              p_purchase_dt          => :P302_PURCHASE_DT
           );
-      
+
       ---- Update----
       
       update fleet_bikes

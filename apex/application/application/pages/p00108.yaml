@@ -1190,64 +1190,73 @@ regions:
                      'title="Move to Pending Active">' ||
                      '<span class="fa fa-hourglass-half" aria-hidden="true"></span> Pending Active' ||
                      '</a>'
-      
+
                  ------------------------------------------------------------------
-                 -- Existing bike request already open
+                 -- Otherwise: show every outstanding requirement together
+                 -- (bike AND SIM, not just whichever was checked first) so an
+                 -- onboarding that needs both never silently drops one of them.
                  ------------------------------------------------------------------
-                 when ac.open_bike_request_id is not null then
-                     '<span class="t-Badge t-Badge--warning">Request Already Open</span>'
-      
-                 ------------------------------------------------------------------
-                 -- Existing bike required but no bike/request
-                 ------------------------------------------------------------------
-                 when ac.bike_required_yn = 'Y'
-                  and ac.current_bike_id is null
-                  and ac.open_bike_request_id is null then
-                     '<a href="' ||
-                     apex_util.prepare_url(
-                         'f?p=' || :APP_ID || ':324:' || :APP_SESSION ||
-                         '::NO::P324_EMP_ID,P324_REQUEST_TYPE,P324_REQUESTED_PROJECT_ID,P324_REQUESTED_CITY_ID:' ||
-                         e.emp_id ||
-                         ',NEW_ONBOARDING,' ||
-                         e.status_project_id ||
-                         ',' ||
-                         e.status_city_id
-                     ) ||
-                     '" title="Open Bike Request">' ||
-                     '<span class="fa fa-motorcycle" aria-hidden="true"></span> Open Request' ||
-                     '</a>'
-      
-                 ------------------------------------------------------------------
-                 -- Bike ready but SIM request already open
-                 ------------------------------------------------------------------
-                 when nvl(j.sim_required_yn, 'N') = 'Y'
-                  and nvl(ss.active_sim_count, 0) = 0
-                  and sr.request_id is not null then
-                     '<span class="t-Badge t-Badge--warning">Waiting SIM Request</span>'
-      
-                 ------------------------------------------------------------------
-                 -- Bike ready but SIM missing
-                 ------------------------------------------------------------------
-                 when nvl(j.sim_required_yn, 'N') = 'Y'
-                  and nvl(ss.active_sim_count, 0) = 0
-                  and sr.request_id is null then
-                     '<a href="' ||
-                     apex_util.prepare_url(
-                         'f?p=' || :APP_ID || ':328:' || :APP_SESSION ||
-                         '::NO::P328_EMP_ID,P328_REQUEST_TYPE,P328_REQUESTED_PROJECT_ID,P328_REQUESTED_CITY_ID,P328_FROM_PAGE:' ||
-                         e.emp_id ||
-                         ',NEW_ONBOARDING,' ||
-                         e.status_project_id ||
-                         ',' ||
-                         e.status_city_id ||
-                         ',108'
-                     ) ||
-                     '" title="Raise SIM Request">' ||
-                     '<span class="fa fa-sim-card" aria-hidden="true"></span> Request SIM' ||
-                     '</a>'
-      
                  else
-                     '<span class="t-Badge t-Badge--warning">Review</span>'
+                     nvl(
+                         -- Bike leg
+                         ( case
+                             when ac.open_bike_request_id is not null then
+                                 '<span class="t-Badge t-Badge--warning">Request Already Open</span>'
+                             when ac.bike_required_yn = 'Y'
+                              and ac.current_bike_id is null
+                              and ac.open_bike_request_id is null then
+                                 '<a href="' ||
+                                 apex_util.prepare_url(
+                                     'f?p=' || :APP_ID || ':324:' || :APP_SESSION ||
+                                     '::NO::P324_EMP_ID,P324_REQUEST_TYPE,P324_REQUESTED_PROJECT_ID,P324_REQUESTED_CITY_ID:' ||
+                                     e.emp_id ||
+                                     ',NEW_ONBOARDING,' ||
+                                     e.status_project_id ||
+                                     ',' ||
+                                     e.status_city_id
+                                 ) ||
+                                 '" title="Open Bike Request">' ||
+                                 '<span class="fa fa-motorcycle" aria-hidden="true"></span> Open Request' ||
+                                 '</a>'
+                             else null
+                         end )
+                         ||
+                         ( case
+                             when ( ac.open_bike_request_id is not null
+                                    or (ac.bike_required_yn = 'Y' and ac.current_bike_id is null) )
+                              and nvl(j.sim_required_yn, 'N') = 'Y'
+                              and nvl(ss.active_sim_count, 0) = 0
+                             then '<br/>'
+                             else null
+                         end )
+                         ||
+                         -- SIM leg
+                         ( case
+                             when nvl(j.sim_required_yn, 'N') = 'Y'
+                              and nvl(ss.active_sim_count, 0) = 0
+                              and sr.request_id is not null then
+                                 '<span class="t-Badge t-Badge--warning">Waiting SIM Request</span>'
+                             when nvl(j.sim_required_yn, 'N') = 'Y'
+                              and nvl(ss.active_sim_count, 0) = 0
+                              and sr.request_id is null then
+                                 '<a href="' ||
+                                 apex_util.prepare_url(
+                                     'f?p=' || :APP_ID || ':328:' || :APP_SESSION ||
+                                     '::NO::P328_EMP_ID,P328_REQUEST_TYPE,P328_REQUESTED_PROJECT_ID,P328_REQUESTED_CITY_ID,P328_FROM_PAGE:' ||
+                                     e.emp_id ||
+                                     ',NEW_ONBOARDING,' ||
+                                     e.status_project_id ||
+                                     ',' ||
+                                     e.status_city_id ||
+                                     ',108'
+                                 ) ||
+                                 '" title="Raise SIM Request">' ||
+                                 '<span class="fa fa-sim-card" aria-hidden="true"></span> Request SIM' ||
+                                 '</a>'
+                             else null
+                         end ),
+                         '<span class="t-Badge t-Badge--warning">Review</span>'
+                     )
              end as next_action,
       
              ------------------------------------------------------------------

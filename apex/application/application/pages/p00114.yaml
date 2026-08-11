@@ -3436,11 +3436,10 @@ page-items:
     type: Static
     static-value: HEALTH
 
-  session-state: 
+  session-state:
     data-type: VARCHAR2
-    storage: Per Request (Memory Only)
 
-  security: 
+  security:
     session-state-protection: Unrestricted
     store-value-encrypted-in-session-state: true
     restricted-characters: All characters can be saved.

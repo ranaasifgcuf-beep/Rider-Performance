@@ -22,16 +22,31 @@ re-enter fresh on the new dev machine anyway).
 
 Run all three `.sql` scripts in the **new** instance's SQL Worksheet, Script mode.
 
-## Loading a table's data (per table)
+## Loading the table data
 
-1. **Old** DB → SQL Worksheet → `SELECT * FROM "TABLE_NAME";` → run as a normal
-   statement.
-2. Click **Download** above the Query Result grid → choose **Insert** format
-   (generates `INSERT INTO "TABLE" ("COL1","COL2",...) VALUES (...)` statements
-   with explicit column names — important, since some of these tables now have
-   an extra ID column in the new DB that didn't exist in the old one; explicit
-   column names mean that new column is simply omitted and auto-generates).
-3. **New** DB → SQL Worksheet → paste and run the downloaded INSERT statements.
+The Database Actions "Download" dropdown on this instance doesn't offer an
+Insert/SQL format (CSV/JSON only) — so use
+**`scripts/generate_insert_statements.sql`** instead. It doesn't depend on
+that UI feature at all; it generates `INSERT INTO "TABLE" ("COL1",...)
+VALUES (...)` statements directly via PL/SQL for all 25 master/reference/
+security tables in one run (explicit column names throughout, so the extra
+ID column some tables now have in the new DB is simply omitted and
+auto-generates).
+
+1. **Old** DB → SQL Worksheet → paste in `generate_insert_statements.sql` →
+   run in **Script mode** (the "Run Script" button, not the regular
+   single-statement Run — same mode used for the earlier DDL export).
+2. Output appears in the **Script Output** tab as plain text — one
+   `-- ===== TABLE_NAME =====` section per table, followed by its INSERT
+   statements. Use that pane's download/save icon to save it as one `.sql`
+   file. Check for any `-- FAILED on ...` lines — that means that one
+   table's data wasn't captured (schema/permission edge case) and needs
+   handling separately.
+3. **New** DB → SQL Worksheet → paste and run the saved file.
+
+If a table you need isn't in the list (only the 25 master/reference/security
+tables above are included), edit the `SYS.ODCIVARCHAR2LIST(...)` list near
+the bottom of the script and add it.
 
 ## Tables to load first: master/reference data
 

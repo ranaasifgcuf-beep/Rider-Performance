@@ -36,7 +36,15 @@ select org_doc_id,
            else '<span class="t-Badge t-Badge--danger">Inactive</span>'
        end as is_active,
 
-       remarks
+       remarks,
+
+       '<a href="' ||
+       apex_page.get_url(
+           p_page   => &DOC_FORM_PAGE.,
+           p_items  => 'P&DOC_FORM_PAGE._ORG_DOC_ID',
+           p_values => org_doc_id,
+           p_request => 'EDIT'
+       ) || '"><span class="fa fa-pencil" title="Edit Document"></span></a>' as edit_link
 
   from vw_hr_org_docs
  where (:P_ORG_ID is null or org_id = :P_ORG_ID)

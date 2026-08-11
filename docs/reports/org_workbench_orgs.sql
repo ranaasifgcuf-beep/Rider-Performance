@@ -40,8 +40,8 @@ select
 
   '<a href="' ||
   apex_page.get_url(
-      p_page   => &ORG_FORM_PAGE.,
-      p_items  => 'P&ORG_FORM_PAGE._ORG_ID',
+      p_page   => 954,
+      p_items  => 'P954_ORG_ID',
       p_values => o.org_id,
       p_request => 'EDIT'
   ) || '"><span class="fa fa-pencil" title="Edit Organization"></span></a>' as edit_link,

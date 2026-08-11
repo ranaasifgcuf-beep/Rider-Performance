@@ -1,49 +1,74 @@
 ---
-# ====== Page: Organization Workbench ========================
+# ====== Page: Organization Workbench =========================
 id: 953
-identification: 
+identification:
   name: Organization Workbench
   alias: ORGANIZATION-WORKBENCH
   title: Organization Workbench
 
-appearance: 
-  page-mode: Normal
-  page-template: Theme Default
-  template-options: 
-  - '#DEFAULT#'
-
-navigation-menu: 
+navigation-menu:
   override-user-interface-level: false
 
-navigation: 
-  cursor-focus: Do not focus cursor
-  warn-on-unsaved-changes: true
+navigation:
+  cursor-focus: First item on page
+  warn-on-unsaved-changes: Application Default
 
-security: 
+security:
   authentication: Page Requires Authentication
   deep-linking: Application Default
-  page-access-protection: Arguments Must Have Checksum
+  page-access-protection: Unrestricted
   form-auto-complete: Off
   browser-cache: Application Default
 
-session-management: 
+session-management:
   rejoin-sessions: Application Default
 
-advanced: 
+advanced:
   enable-duplicate-page-submissions: Yes - Enable page to be re-posted
   reload-on-submit: Only for Success
 
-server-cache: 
+server-cache:
   caching: Disabled
 
-regions: 
-- # ====== Region: Search / Filters ============================
-  id: 33205535539488601
-  identification: 
-    name: Search / Filters
-    type: Static Content
+regions:
+- # ====== Region: Groups =======================================
+  id: 94000000000001
+  identification:
+    name: Groups
+    title: <span class="fa fa-sitemap"></span> Groups (select one to see its Organizations) -- <a href="f?p=&APP_ID.:951:&SESSION.::&DEBUG.:::">Manage Groups</a>
+    type: Interactive Report
 
-  layout: 
+  source:
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+        '<a href="' ||
+        apex_page.get_url(
+            p_items  => 'P953_GROUP_ID',
+            p_values => g.group_id,
+            p_reset_pagination => 'Yes'
+        ) || '">' ||
+        case when g.group_id = :P953_GROUP_ID
+             then '<strong>' || g.group_name || '</strong>'
+             else g.group_name
+        end ||
+        '</a>' as group_name,
+
+        g.group_code,
+        g.owner_name,
+
+        case g.is_active
+          when 'Y' then '<span class="t-Badge t-Badge--success">Active</span>'
+          else '<span class="t-Badge t-Badge--danger">Inactive</span>'
+        end as is_active,
+
+        (select count(*) from hr_orgs o where o.group_id = g.group_id) as org_count
+
+      from hr_groups g
+      order by g.group_name;
+
+  layout:
     sequence: 10
     parent-region: No Parent
     slot: BODY
@@ -53,1237 +78,482 @@ regions:
     new-column: true
     column-span: Automatic
 
-  appearance: 
-    template: Standard
-    template-options: 
-    - '#DEFAULT#'
-    - t-Region--scrollBody
-    render-components: Above Content
-
-  accessibility: 
-    use-landmark: true
-    landmark-type: Template Default
-
-  advanced: 
-    region-display-selector: false
-    exclude-title-from-translation: false
-
-  customization: 
-    customizable: Not Customizable By End Users
-
-  attributes: 
-    settings: 
-      output-as: HTML
-      expand-shortcuts: false
-
-- # ====== Region: Organizations ===============================
-  id: 33206233117488608
-  identification: 
-    name: Organizations
-    title: Organizations
-    type: Interactive Report
-
-  source: 
-    location: Local Database
-    type: SQL Query
-    sql-query: |
-      select o.org_id,
-             g.group_name,
-             o.org_code,
-             o.org_name,
-             o.org_type,
-             p.org_code parent_org_code,
-             p.org_name parent_org_name,
-             o.trade_lic_no,
-             o.trade_lic_expiry_dt,
-             o.mol_code,
-             o.trn_no,
-             c.city_name,
-             o.is_active,
-             case 
-               when o.is_active = 'Y' then
-                 '<span class="t-Badge t-Badge--success">Active</span>'
-               else
-                 '<span class="t-Badge t-Badge--danger">Inactive</span>'
-             end as active_badge,
-             case
-               when o.trade_lic_expiry_dt is null then
-                 '<span class="t-Badge">No Expiry</span>'
-               when o.trade_lic_expiry_dt < trunc(sysdate) then
-                 '<span class="t-Badge t-Badge--danger">Expired</span>'
-               when o.trade_lic_expiry_dt <= trunc(sysdate) + 30 then
-                 '<span class="t-Badge t-Badge--warning">Expiring Soon</span>'
-               else
-                 '<span class="t-Badge t-Badge--success">Valid</span>'
-             end as license_status,
-      
-             '<span class="fa fa-eye" title="Open Organization"></span>' as open_link
-      from hr_orgs o
-      left join hr_groups g
-             on g.group_id = o.group_id
-      left join hr_orgs p
-             on p.org_id = o.parent_org_id
-      left join ref_cities c
-             on c.city_id = o.city_id
-      where (:P953_GROUP_ID = 0 or o.group_id = :P953_GROUP_ID)
-        and (:P953_ORG_TYPE = '%' or o.org_type = :P953_ORG_TYPE)
-        and (:P953_IS_ACTIVE = '%' or o.is_active = :P953_IS_ACTIVE)
-        and (
-              :P953_SEARCH is null
-              or (upper(o.org_code) like '%' || upper(:P953_SEARCH) || '%'
-              or upper(o.org_name) like '%' || upper(:P953_SEARCH) || '%'
-              or upper(o.trade_lic_no) like '%' || upper(:P953_SEARCH) || '%'
-              or upper(o.mol_code) like '%' || upper(:P953_SEARCH) || '%'
-              or upper(o.trn_no) like '%' || upper(:P953_SEARCH) || '%')
-            )
-      order by g.group_name, o.org_code
-    page-items-to-submit: 
-    - P953_GROUP_ID
-    - P953_ORG_TYPE
-    - P953_IS_ACTIVE
-    - P953_SEARCH
-
-  layout: 
-    sequence: 20
-    parent-region: No Parent
-    slot: BODY
-    start-new-layout: false
-    start-new-row: true
-    column: Automatic
-    new-column: true
-    column-span: Automatic
-
-  appearance: 
+  appearance:
     template: Interactive Report
-    template-options: 
+    template-options:
     - '#DEFAULT#'
-    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
     render-components: Above Content
 
-  accessibility: 
+  accessibility:
     use-landmark: true
     landmark-type: Template Default
 
-  advanced: 
-    region-display-selector: false
+  advanced:
+    region-display-selector: true
     exclude-title-from-translation: false
 
-  server-cache: 
+  server-cache:
     caching: Disabled
 
-  customization: 
+  customization:
     customizable: Not Customizable By End Users
 
-  attributes: 
-    id: 33206452222488610
-    link: 
+  attributes:
+    id: 94000000000005
+    link:
       link-column: Exclude Link Column
 
-    pagination: 
+    pagination:
       type: Row Ranges X to Y
       display-position: Bottom - Right
 
-    performance: 
-      lazy-loading: false
-      maximum-rows-to-process: 1000000
-
-    search-bar: 
+    search-bar:
       include-search-bar: true
       search-field: true
       finder-drop-down: true
       reports-select-list: true
       rows-per-page-selector: false
 
-    actions-menu: 
+    actions-menu:
       include-actions-menu: true
-      filter: true
-      select-columns: true
-      rows-per-page: true
-      sort: true
-      control-break: true
-      highlight: true
-      compute: true
-      aggregate: true
-      chart: true
-      group-by: true
-      pivot: true
-      flashback: true
-      save-report: true
-      save-public-report: false
-      reset: true
-      help: true
-      download: true
-      subscription: true
 
-    download: 
-      formats: 
+    download:
+      formats:
       - CSV
-      - HTML
-      - Excel
-      - PDF
-      send-as-email: true
 
-    heading: 
-      fixed-to: Page
-
-    icon-view: 
-      show: false
-
-    detail-view: 
-      show: false
-
-    saved-reports: 
-    - # ====== Saved Report: Primary Report ========================
-      id: 33221937917569345
-      identification: 
-        name: Primary Report
-        alias: 332220
-
-    columns: 
-    - # ====== Column: ORG_ID ======================================
-      id: 33206519432488611
-      identification: 
-        column-name: ORG_ID
-        type: Hidden
-
-      heading: 
-        heading: Org Id
-
-      layout: 
-        sequence: 10
-
-      source: 
-        primary-key: false
-
-      security: 
-        escape-special-characters: true
-
-    - # ====== Column: GROUP_NAME ==================================
-      id: 33206690229488612
-      identification: 
-        column-name: GROUP_NAME
-        type: Plain Text
-
-      heading: 
-        heading: Group Name
-        alignment: start
-
-      single-row-view: 
-        use-column-heading: true
-
-      layout: 
-        sequence: 20
-        column-alignment: start
-
-      accessibility: 
-        value-identifies-row: false
-
-      source: 
-        primary-key: false
-
-      column-filter: 
-        type: Default Based on Column Type
-
-      enable-users-to: 
-        hide: true
-        sort: true
-        filter: true
-        highlight: true
-        control-break: true
-        aggregate: true
-        compute: true
-        chart: true
-        group-by: true
-        pivot: true
-
-      security: 
-        escape-special-characters: true
-
-    - # ====== Column: ORG_CODE ====================================
-      id: 33206709056488613
-      identification: 
-        column-name: ORG_CODE
-        type: Plain Text
-
-      heading: 
-        heading: Organization Code
-        alignment: start
-
-      single-row-view: 
-        use-column-heading: true
-
-      layout: 
-        sequence: 30
-        column-alignment: start
-
-      accessibility: 
-        value-identifies-row: false
-
-      source: 
-        primary-key: false
-
-      column-filter: 
-        type: Default Based on Column Type
-
-      enable-users-to: 
-        hide: true
-        sort: true
-        filter: true
-        highlight: true
-        control-break: true
-        aggregate: true
-        compute: true
-        chart: true
-        group-by: true
-        pivot: true
-
-      security: 
-        escape-special-characters: true
-
-    - # ====== Column: ORG_NAME ====================================
-      id: 33206848645488614
-      identification: 
-        column-name: ORG_NAME
-        type: Plain Text
-
-      heading: 
-        heading: Organization Name
-        alignment: start
-
-      single-row-view: 
-        use-column-heading: true
-
-      layout: 
-        sequence: 40
-        column-alignment: start
-
-      accessibility: 
-        value-identifies-row: false
-
-      source: 
-        primary-key: false
-
-      column-filter: 
-        type: Default Based on Column Type
-
-      enable-users-to: 
-        hide: true
-        sort: true
-        filter: true
-        highlight: true
-        control-break: true
-        aggregate: true
-        compute: true
-        chart: true
-        group-by: true
-        pivot: true
-
-      security: 
-        escape-special-characters: true
-
-    - # ====== Column: ORG_TYPE ====================================
-      id: 33206980768488615
-      identification: 
-        column-name: ORG_TYPE
-        type: Plain Text
-
-      heading: 
-        heading: Organization Type
-        alignment: start
-
-      single-row-view: 
-        use-column-heading: true
-
-      layout: 
-        sequence: 50
-        column-alignment: start
-
-      accessibility: 
-        value-identifies-row: false
-
-      source: 
-        primary-key: false
-
-      column-filter: 
-        type: Default Based on Column Type
-
-      enable-users-to: 
-        hide: true
-        sort: true
-        filter: true
-        highlight: true
-        control-break: true
-        aggregate: true
-        compute: true
-        chart: true
-        group-by: true
-        pivot: true
-
-      security: 
-        escape-special-characters: true
-
-    - # ====== Column: PARENT_ORG_CODE =============================
-      id: 33207058742488616
-      identification: 
-        column-name: PARENT_ORG_CODE
-        type: Plain Text
-
-      heading: 
-        heading: Parent Org Code
-        alignment: start
-
-      single-row-view: 
-        use-column-heading: true
-
-      layout: 
-        sequence: 60
-        column-alignment: start
-
-      accessibility: 
-        value-identifies-row: false
-
-      source: 
-        primary-key: false
-
-      column-filter: 
-        type: Default Based on Column Type
-
-      enable-users-to: 
-        hide: true
-        sort: true
-        filter: true
-        highlight: true
-        control-break: true
-        aggregate: true
-        compute: true
-        chart: true
-        group-by: true
-        pivot: true
-
-      security: 
-        escape-special-characters: true
-
-    - # ====== Column: PARENT_ORG_NAME =============================
-      id: 33207103027488617
-      identification: 
-        column-name: PARENT_ORG_NAME
-        type: Hidden
-
-      heading: 
-        heading: Parent Org Name
-
-      layout: 
-        sequence: 70
-
-      source: 
-        primary-key: false
-
-      security: 
-        escape-special-characters: true
-
-    - # ====== Column: TRADE_LIC_NO ================================
-      id: 33207248553488618
-      identification: 
-        column-name: TRADE_LIC_NO
-        type: Plain Text
-
-      heading: 
-        heading: TL No
-        alignment: start
-
-      single-row-view: 
-        use-column-heading: true
-
-      layout: 
-        sequence: 80
-        column-alignment: start
-
-      accessibility: 
-        value-identifies-row: false
-
-      source: 
-        primary-key: false
-
-      column-filter: 
-        type: Default Based on Column Type
-
-      enable-users-to: 
-        hide: true
-        sort: true
-        filter: true
-        highlight: true
-        control-break: true
-        aggregate: true
-        compute: true
-        chart: true
-        group-by: true
-        pivot: true
-
-      security: 
-        escape-special-characters: true
-
-    - # ====== Column: TRADE_LIC_EXPIRY_DT =========================
-      id: 33207321565488619
-      identification: 
-        column-name: TRADE_LIC_EXPIRY_DT
-        type: Plain Text
-
-      heading: 
-        heading: TL Expiry
-        alignment: start
-
-      single-row-view: 
-        use-column-heading: true
-
-      layout: 
-        sequence: 90
-        column-alignment: start
-
-      accessibility: 
-        value-identifies-row: false
-
-      source: 
-        primary-key: false
-
-      column-filter: 
-        type: Default Based on Column Type
-        date-ranges: All
-
-      enable-users-to: 
-        hide: true
-        sort: true
-        filter: true
-        highlight: true
-        control-break: true
-        aggregate: true
-        compute: true
-        chart: true
-        group-by: true
-        pivot: true
-
-      security: 
-        escape-special-characters: true
-
-    - # ====== Column: MOL_CODE ====================================
-      id: 33207457012488620
-      identification: 
-        column-name: MOL_CODE
-        type: Plain Text
-
-      heading: 
-        heading: MOL Code
-        alignment: start
-
-      single-row-view: 
-        use-column-heading: true
-
-      layout: 
-        sequence: 100
-        column-alignment: start
-
-      accessibility: 
-        value-identifies-row: false
-
-      source: 
-        primary-key: false
-
-      column-filter: 
-        type: Default Based on Column Type
-
-      enable-users-to: 
-        hide: true
-        sort: true
-        filter: true
-        highlight: true
-        control-break: true
-        aggregate: true
-        compute: true
-        chart: true
-        group-by: true
-        pivot: true
-
-      security: 
-        escape-special-characters: true
-
-    - # ====== Column: TRN_NO ======================================
-      id: 33207538529488621
-      identification: 
-        column-name: TRN_NO
-        type: Plain Text
-
-      heading: 
-        heading: TRN No
-        alignment: start
-
-      single-row-view: 
-        use-column-heading: true
-
-      layout: 
-        sequence: 110
-        column-alignment: start
-
-      accessibility: 
-        value-identifies-row: false
-
-      source: 
-        primary-key: false
-
-      column-filter: 
-        type: Default Based on Column Type
-
-      enable-users-to: 
-        hide: true
-        sort: true
-        filter: true
-        highlight: true
-        control-break: true
-        aggregate: true
-        compute: true
-        chart: true
-        group-by: true
-        pivot: true
-
-      security: 
-        escape-special-characters: true
-
-    - # ====== Column: CITY_NAME ===================================
-      id: 33207600313488622
-      identification: 
-        column-name: CITY_NAME
-        type: Plain Text
-
-      heading: 
-        heading: City Name
-        alignment: start
-
-      single-row-view: 
-        use-column-heading: true
-
-      layout: 
-        sequence: 120
-        column-alignment: start
-
-      accessibility: 
-        value-identifies-row: false
-
-      source: 
-        primary-key: false
-
-      column-filter: 
-        type: Default Based on Column Type
-
-      enable-users-to: 
-        hide: true
-        sort: true
-        filter: true
-        highlight: true
-        control-break: true
-        aggregate: true
-        compute: true
-        chart: true
-        group-by: true
-        pivot: true
-
-      security: 
-        escape-special-characters: true
-
-    - # ====== Column: IS_ACTIVE ===================================
-      id: 33207736268488623
-      identification: 
-        column-name: IS_ACTIVE
-        type: Hidden
-
-      heading: 
-        heading: Is Active
-
-      layout: 
-        sequence: 130
-
-      source: 
-        primary-key: false
-
-      security: 
-        escape-special-characters: true
-
-    - # ====== Column: ACTIVE_BADGE ================================
-      id: 33207844148488624
-      identification: 
-        column-name: ACTIVE_BADGE
-        type: Plain Text
-
-      heading: 
-        heading: Is Active?
-        alignment: start
-
-      single-row-view: 
-        use-column-heading: true
-
-      layout: 
-        sequence: 140
-        column-alignment: start
-
-      accessibility: 
-        value-identifies-row: false
-
-      source: 
-        primary-key: false
-
-      column-filter: 
-        type: Default Based on Column Type
-
-      enable-users-to: 
-        hide: true
-        sort: true
-        filter: true
-        highlight: true
-        control-break: true
-        aggregate: true
-        compute: true
-        chart: true
-        group-by: true
-        pivot: true
-
-      security: 
-        escape-special-characters: false
-
-    - # ====== Column: LICENSE_STATUS ==============================
-      id: 33207992630488625
-      identification: 
-        column-name: LICENSE_STATUS
-        type: Plain Text
-
-      heading: 
-        heading: Status
-        alignment: start
-
-      single-row-view: 
-        use-column-heading: true
-
-      layout: 
-        sequence: 150
-        column-alignment: start
-
-      accessibility: 
-        value-identifies-row: false
-
-      source: 
-        primary-key: false
-
-      column-filter: 
-        type: Default Based on Column Type
-
-      enable-users-to: 
-        hide: true
-        sort: true
-        filter: true
-        highlight: true
-        control-break: true
-        aggregate: true
-        compute: true
-        chart: true
-        group-by: true
-        pivot: true
-
-      security: 
-        escape-special-characters: false
-
-    - # ====== Column: OPEN_LINK ===================================
-      id: 33208035188488626
-      identification: 
-        column-name: OPEN_LINK
-        type: Plain Text
-
-      heading: 
-        heading: View
-        alignment: start
-
-      single-row-view: 
-        use-column-heading: true
-
-      layout: 
-        sequence: 160
-        column-alignment: start
-
-      accessibility: 
-        value-identifies-row: false
-
-      source: 
-        primary-key: false
-
-      column-filter: 
-        type: Default Based on Column Type
-
-      enable-users-to: 
-        hide: true
-        sort: true
-        filter: true
-        highlight: true
-        control-break: true
-        aggregate: true
-        compute: true
-        chart: true
-        group-by: true
-        pivot: true
-
-      security: 
-        escape-special-characters: false
-
-    printing: 
-      output: 
-        layout: Default Report Layout
-        view-file-as: Attachment
-
-      page: 
-        size: Letter
-        orientation: Landscape
-        units: Inches
-        width: 11
-        height: 8.5
-        border-width: 0.5
-        border-color: '#666666'
-
-      page-header: 
-        font: Helvetica
-        font-weight: Normal
-        font-size: 12
-        font-color: '#000000'
-        alignment: center
-        page-header-text: Organizations
-
-      column-headings: 
-        font: Helvetica
-        font-weight: Bold
-        font-size: 10
-        font-color: '#000000'
-        background-color: '#EEEEEE'
-
-      columns: 
-        font: Helvetica
-        font-weight: Normal
-        font-size: 10
-        font-color: '#000000'
-        background-color: '#FFFFFF'
-
-      page-footer: 
-        font: Helvetica
-        font-weight: Normal
-        font-size: 12
-        font-color: '#000000'
-        alignment: center
-
-page-items: 
-- # ====== Page Item: P953_GROUP_ID ============================
-  id: 33205600960488602
-  identification: 
-    name: P953_GROUP_ID
-    type: Select List
-
-  label: 
-    label: Business Group
-    alignment: Left
-
-  settings: 
-    page-action-on-selection: None
-
-  multiple-values: 
-    type: No
-
-  layout: 
-    sequence: 10
-    region: Search / Filters # 33205535539488601
-    slot: BODY
-    alignment: Left
-    start-new-layout: false
-    start-new-row: true
-    column: Automatic
-    new-column: true
-    column-span: 3
-    label-column-span: Page Template Default
-
-  appearance: 
-    template: Optional - Floating
-    template-options: 
-    - '#DEFAULT#'
-    height: 1
-
-  validation: 
-    value-required: false
-
-  list-of-values: 
+- # ====== Region: Organizations =================================
+  id: 94000000000002
+  identification:
+    name: Organizations
+    title: <span class="fa fa-building"></span> Organizations
+    type: Interactive Report
+
+  source:
+    location: Local Database
     type: SQL Query
     sql-query: |
-      select group_code || ' - ' || group_name d,
-             group_id r
-      from hr_groups
-      where is_active = 'Y'
-      order by group_code
-    display-extra-values: true
-    display-null-value: true
-    null-display-value: All Group
-    null-return-value: 0
+      select
+        '<a href="' ||
+        apex_page.get_url(
+            p_items  => 'P953_ORG_ID',
+            p_values => o.org_id,
+            p_reset_pagination => 'Yes'
+        ) || '">' ||
+        case when o.org_id = :P953_ORG_ID
+             then '<strong>' || o.org_name || '</strong>'
+             else o.org_name
+        end ||
+        '</a>' as org_name,
 
-  advanced: 
-    warn-on-unsaved-changes: Page Default
+        o.org_code,
+        o.org_type,
+        p.org_name as parent_org_name,
 
-  source: 
-    type: Null
-    used: Always, replacing any existing value in session state
+        o.trade_lic_no,
+        o.trade_lic_expiry_dt,
+        case
+          when o.trade_lic_expiry_dt is null then
+            '<span class="t-Badge">No Date</span>'
+          when o.trade_lic_expiry_dt < trunc(sysdate) then
+            '<span class="t-Badge t-Badge--danger">Expired</span>'
+          when o.trade_lic_expiry_dt <= trunc(sysdate) + 30 then
+            '<span class="t-Badge t-Badge--warning">Near Expiry</span>'
+          else
+            '<span class="t-Badge t-Badge--success">Valid</span>'
+        end as trade_lic_status,
 
-  session-state: 
-    storage: Per Request (Memory Only)
+        case o.is_main_unit
+          when 'Y' then '<span class="t-Badge t-Badge--info">Main Unit</span>'
+          else null
+        end as main_unit_flag,
 
-  quick-picks: 
-    show-quick-picks: false
+        case o.is_active
+          when 'Y' then '<span class="t-Badge t-Badge--success">Active</span>'
+          else '<span class="t-Badge t-Badge--danger">Inactive</span>'
+        end as is_active,
 
-  security: 
-    session-state-protection: Unrestricted
-    store-value-encrypted-in-session-state: true
-    restricted-characters: All characters can be saved.
+        '<a href="' ||
+        apex_page.get_url(
+            p_page   => 954,
+            p_items  => 'P954_ORG_ID',
+            p_values => o.org_id,
+            p_request => 'EDIT'
+        ) || '"><span class="fa fa-pencil" title="Edit Organization"></span></a>' as edit_link,
 
-- # ====== Page Item: P953_ORG_TYPE ============================
-  id: 33205783909488603
-  identification: 
-    name: P953_ORG_TYPE
-    type: Select List
+        (select count(*) from hr_org_docs d where d.org_id = o.org_id) as doc_count
 
-  label: 
-    label: Organization Type
-    alignment: Left
+      from hr_orgs o
+      left join hr_orgs p
+        on p.org_id = o.parent_org_id
+      where o.group_id = :P953_GROUP_ID
+      order by o.org_name;
 
-  settings: 
-    page-action-on-selection: None
-
-  multiple-values: 
-    type: No
-
-  layout: 
+  layout:
     sequence: 20
-    region: Search / Filters # 33205535539488601
+    parent-region: No Parent
     slot: BODY
-    alignment: Left
     start-new-layout: false
-    start-new-row: false
+    start-new-row: true
     column: Automatic
     new-column: true
-    column-span: 2
-    label-column-span: Page Template Default
+    column-span: Automatic
 
-  appearance: 
-    template: Optional - Floating
-    template-options: 
+  appearance:
+    template: Interactive Report
+    template-options:
     - '#DEFAULT#'
-    height: 1
+    render-components: Above Content
 
-  validation: 
-    value-required: false
+  accessibility:
+    use-landmark: true
+    landmark-type: Template Default
 
-  list-of-values: 
-    type: Static Values
-    static-values: 'STATIC:All;%,Company;COMPANY,Branch;BRANCH'
-    display-extra-values: true
-    display-null-value: false
+  advanced:
+    region-display-selector: true
+    exclude-title-from-translation: false
 
-  advanced: 
-    warn-on-unsaved-changes: Page Default
+  server-cache:
+    caching: Disabled
 
-  source: 
-    type: Null
-    used: Always, replacing any existing value in session state
+  customization:
+    customizable: Not Customizable By End Users
 
-  session-state: 
-    storage: Per Request (Memory Only)
+  server-side-condition:
+    type: Item is NOT NULL
+    item: P953_GROUP_ID
 
-  quick-picks: 
-    show-quick-picks: false
+  attributes:
+    id: 94000000000006
+    link:
+      link-column: Exclude Link Column
 
-  security: 
-    session-state-protection: Unrestricted
-    store-value-encrypted-in-session-state: true
-    restricted-characters: All characters can be saved.
+    pagination:
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
 
-- # ====== Page Item: P953_IS_ACTIVE ===========================
-  id: 33205808039488604
-  identification: 
-    name: P953_IS_ACTIVE
-    type: Select List
+    search-bar:
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
 
-  label: 
-    label: Is Active
-    alignment: Left
+    actions-menu:
+      include-actions-menu: true
 
-  settings: 
-    page-action-on-selection: None
+    download:
+      formats:
+      - CSV
 
-  multiple-values: 
-    type: No
+- # ====== Region: Documents ======================================
+  id: 94000000000003
+  identification:
+    name: Documents
+    title: <span class="fa fa-file-text"></span> Organization Documents
+    type: Interactive Report
 
-  layout: 
+  source:
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select org_doc_id,
+             org_id,
+
+             org_code,
+             org_name,
+
+             doc_type_code,
+             doc_type_name as document,
+
+             doc_no as document_number,
+
+             issue_dt,
+             expiry_dt,
+             expiry_in_days,
+
+             case expiry_status
+                 when 'NO_EXPIRY' then
+                     '<span class="t-Badge">No Expiry</span>'
+                 when 'EXPIRED' then
+                     '<span class="t-Badge t-Badge--danger">Expired</span>'
+                 when 'EXPIRING_SOON' then
+                     '<span class="t-Badge t-Badge--warning">Near Expiry</span>'
+                 when 'VALID' then
+                     '<span class="t-Badge t-Badge--success">Active</span>'
+                 else
+                     '<span class="t-Badge">' || apex_escape.html(expiry_status) || '</span>'
+             end as expiry_status,
+
+             case is_current
+                 when 'Y' then '<span class="t-Badge t-Badge--success">Yes</span>'
+                 else '<span class="t-Badge">No</span>'
+             end as is_current,
+
+             case is_active
+                 when 'Y' then '<span class="t-Badge t-Badge--success">Active</span>'
+                 else '<span class="t-Badge t-Badge--danger">Inactive</span>'
+             end as is_active,
+
+             remarks,
+
+             '<a href="' ||
+             apex_page.get_url(
+                 p_page   => 955,
+                 p_items  => 'P955_ORG_DOC_ID',
+                 p_values => org_doc_id,
+                 p_request => 'EDIT'
+             ) || '"><span class="fa fa-pencil" title="Edit Document"></span></a>' as edit_link
+
+        from vw_hr_org_docs
+       where (:P953_ORG_ID is null or org_id = :P953_ORG_ID)
+       order by org_name, doc_type_name, issue_dt desc;
+
+  layout:
     sequence: 30
-    region: Search / Filters # 33205535539488601
+    parent-region: No Parent
     slot: BODY
-    alignment: Left
-    start-new-layout: false
-    start-new-row: false
-    column: Automatic
-    new-column: true
-    column-span: 2
-    label-column-span: Page Template Default
-
-  appearance: 
-    template: Optional - Floating
-    template-options: 
-    - '#DEFAULT#'
-    height: 1
-
-  validation: 
-    value-required: false
-
-  list-of-values: 
-    type: Static Values
-    static-values: 'STATIC:All;%,Active;Y,Inactive;N'
-    display-extra-values: true
-    display-null-value: false
-
-  advanced: 
-    warn-on-unsaved-changes: Page Default
-
-  source: 
-    type: Null
-    used: Always, replacing any existing value in session state
-
-  session-state: 
-    storage: Per Request (Memory Only)
-
-  quick-picks: 
-    show-quick-picks: false
-
-  security: 
-    session-state-protection: Unrestricted
-    store-value-encrypted-in-session-state: true
-    restricted-characters: All characters can be saved.
-
-- # ====== Page Item: P953_SEARCH ==============================
-  id: 33205925073488605
-  identification: 
-    name: P953_SEARCH
-    type: Text Field
-
-  label: 
-    label: Search
-    alignment: Left
-
-  settings: 
-    subtype: Text
-    trim-spaces: Leading and Trailing
-    text-case: NO CHANGE
-    submit-when-enter-pressed: false
-    disabled: false
-
-  layout: 
-    sequence: 40
-    region: Search / Filters # 33205535539488601
-    slot: BODY
-    alignment: Left
-    start-new-layout: false
-    start-new-row: false
-    column: Automatic
-    new-column: true
-    column-span: 5
-    label-column-span: Page Template Default
-
-  appearance: 
-    template: Optional - Floating
-    template-options: 
-    - '#DEFAULT#'
-    width: 30
-    value-placeholder: Code, Name, Trade License, MOL, TRN
-
-  validation: 
-    value-required: false
-
-  advanced: 
-    warn-on-unsaved-changes: Page Default
-
-  source: 
-    type: Null
-    used: Always, replacing any existing value in session state
-
-  session-state: 
-    storage: Per Request (Memory Only)
-
-  quick-picks: 
-    show-quick-picks: false
-
-  security: 
-    session-state-protection: Unrestricted
-    store-value-encrypted-in-session-state: true
-    restricted-characters: All characters can be saved.
-
-buttons: 
-- # ====== Button: PB_SEARCH ===================================
-  id: 33206036350488606
-  identification: 
-    button-name: PB_SEARCH
-    label: Search
-
-  layout: 
-    sequence: 50
-    region: Search / Filters # 33205535539488601
-    slot: NEXT
     start-new-layout: false
     start-new-row: true
     column: Automatic
     new-column: true
     column-span: Automatic
 
-  appearance: 
-    button-template: Text with Icon
-    hot: true
-    template-options: 
+  appearance:
+    template: Interactive Report
+    template-options:
     - '#DEFAULT#'
-    - t-Button--iconLeft
-    icon: fa-search-plus
+    render-components: Above Content
 
-  behavior: 
-    action: Defined by Dynamic Action
-    execute-validations: true
+  accessibility:
+    use-landmark: true
+    landmark-type: Template Default
 
-- # ====== Button: PB_CLEAR ====================================
-  id: 33206156295488607
-  identification: 
-    button-name: PB_CLEAR
-    label: Clear
+  advanced:
+    region-display-selector: true
+    exclude-title-from-translation: false
 
-  layout: 
-    sequence: 60
-    region: Search / Filters # 33205535539488601
-    slot: NEXT
+  server-cache:
+    caching: Disabled
+
+  customization:
+    customizable: Not Customizable By End Users
+
+  server-side-condition:
+    type: Item is NOT NULL
+    item: P953_ORG_ID
+
+  attributes:
+    id: 94000000000007
+    link:
+      link-column: Exclude Link Column
+
+    pagination:
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    search-bar:
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu:
+      include-actions-menu: true
+
+    download:
+      formats:
+      - CSV
+
+- # ====== Region: Buttons ========================================
+  id: 94000000000004
+  identification:
+    name: Buttons
+    type: Static Content
+
+  layout:
+    sequence: 5
+    parent-region: No Parent
+    slot: REGION_POSITION_02
     start-new-layout: false
     start-new-row: true
     column: Automatic
     new-column: true
     column-span: Automatic
 
-  appearance: 
+  appearance:
+    template: Buttons Container
+    template-options:
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility:
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced:
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization:
+    customizable: Not Customizable By End Users
+
+  attributes:
+    settings:
+      output-as: Text (escape special characters)
+      show-line-breaks: true
+
+page-items:
+- # ====== Page Item: P953_GROUP_ID =========================
+  id: 94000000000008
+  identification:
+    name: P953_GROUP_ID
+    type: Hidden
+
+  settings:
+    value-protected: false
+
+  layout:
+    sequence: 10
+    region: No Parent
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  session-state:
+    data-type: NUMBER
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P953_ORG_ID =========================
+  id: 94000000000009
+  identification:
+    name: P953_ORG_ID
+    type: Hidden
+
+  settings:
+    value-protected: false
+
+  layout:
+    sequence: 20
+    region: No Parent
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  session-state:
+    data-type: NUMBER
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons:
+- # ====== Button: ADD_ORG ======================================
+  id: 94000000000010
+  identification:
+    button-name: ADD_ORG
+    label: <span class="fa fa-plus"></span> Add Organization
+
+  layout:
+    sequence: 10
+    region: Buttons # 94000000000004
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
     button-template: Text with Icon
     hot: true
-    template-options: 
+    template-options:
     - '#DEFAULT#'
-    - t-Button--iconLeft
-    icon: fa-times-circle-o
 
-  behavior: 
+  behavior:
     action: Redirect to Page in this Application
-    target: 
-      url: 'f?p=&APP_ID.:953:&SESSION.::&DEBUG.:953::'
-      page: 953 # Organization Workbench
-      clear-cache: 953
+    target:
+      url: 'f?p=&APP_ID.:954:&SESSION.::&DEBUG.::P954_GROUP_ID:&P953_GROUP_ID.'
+      page: 954 # Organization Form
 
     warn-on-unsaved-changes: Do Not Check
 
-dynamic-actions: 
-- # ====== Dynamic Action:  Search Organizations ===============
-  id: 33208163937488627
-  identification: 
-    name: ' Search Organizations'
+  server-side-condition:
+    type: Item is NOT NULL
+    item: P953_GROUP_ID
 
-  execution: 
+- # ====== Button: ADD_DOC ======================================
+  id: 94000000000011
+  identification:
+    button-name: ADD_DOC
+    label: <span class="fa fa-plus"></span> Add Document
+
+  layout:
+    sequence: 20
+    region: Buttons # 94000000000004
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    button-template: Text with Icon
+    hot: true
+    template-options:
+    - '#DEFAULT#'
+
+  behavior:
+    action: Redirect to Page in this Application
+    target:
+      url: 'f?p=&APP_ID.:955:&SESSION.::&DEBUG.::P955_ORG_ID:&P953_ORG_ID.'
+      page: 955 # Org Document Form
+
+    warn-on-unsaved-changes: Do Not Check
+
+  server-side-condition:
+    type: Item is NOT NULL
+    item: P953_ORG_ID
+
+dynamic-actions:
+- # ====== Dynamic Action: REFRESH_AFTER_ORG_DIALOG ============
+  id: 94000000000012
+  identification:
+    name: REFRESH_AFTER_ORG_DIALOG
+
+  execution:
     sequence: 10
     event-scope: Static
     type: Immediate
 
-  when: 
-    event: Click
-    selection-type: Button
-    button: PB_SEARCH # 33206036350488606
-
-  actions: 
-  - # ====== Action: Refresh =====================================
-    id: 33208247479488628
-    identification: 
-      action: Refresh
-
-    settings: 
-      maintain-pagination: false
-
-    affected-elements: 
-      selection-type: Region
-      region: Organizations # 33206233117488608
-
-    execution: 
-      sequence: 10
-      event: ' Search Organizations' # 33208163937488627
-      fire-when-event-result-is: True
-      fire-on-initialization: false
-
-- # ====== Dynamic Action: Refresh on filters change ===========
-  id: 33208365259488629
-  identification: 
-    name: Refresh on filters change
-
-  execution: 
-    sequence: 20
-    event-scope: Static
-    type: Immediate
-
-  when: 
-    event: Change
-    selection-type: Item(s)
-    item(s): 
-    - P953_GROUP_ID
-    - P953_ORG_TYPE
-    - P953_IS_ACTIVE
-
-  actions: 
-  - # ====== Action: Refresh =====================================
-    id: 33208439984488630
-    identification: 
-      action: Refresh
-
-    settings: 
-      maintain-pagination: false
-
-    affected-elements: 
-      selection-type: Region
-      region: Organizations # 33206233117488608
-
-    execution: 
-      sequence: 10
-      event: Refresh on filters change # 33208365259488629
-      fire-when-event-result-is: True
-      fire-on-initialization: false
-
-- # ====== Dynamic Action: Refresh After Org Detail ============
-  id: 33208536843488631
-  identification: 
-    name: Refresh After Org Detail
-
-  execution: 
-    sequence: 30
-    event-scope: Static
-    type: Immediate
-
-  when: 
+  when:
     event: Dialog Closed
-    selection-type: Region
-    region: Organizations # 33206233117488608
+    selection-type: JavaScript Expression
+    javascript-expression: apex.gPageContext$
 
-  actions: 
+  actions:
   - # ====== Action: Refresh =====================================
-    id: 33208605531488632
-    identification: 
+    id: 94000000000013
+    identification:
       action: Refresh
 
-    settings: 
+    settings:
       maintain-pagination: false
 
-    affected-elements: 
-      selection-type: Region
-      region: Organizations # 33206233117488608
+    affected-elements:
+      selection-type: JavaScript Expression
+      javascript-expression: location.reload();
 
-    execution: 
+    execution:
       sequence: 10
-      event: Refresh After Org Detail # 33208536843488631
+      event: REFRESH_AFTER_ORG_DIALOG # 94000000000012
       fire-when-event-result-is: True
       fire-on-initialization: false
-

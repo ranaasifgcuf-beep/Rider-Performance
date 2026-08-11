@@ -1,0 +1,2384 @@
+---
+# ====== Page: Organization Form ============================
+id: 954
+identification:
+  name: Organization Form
+  alias: ORGANIZATION-FORM
+  title: Organization Form
+
+appearance:
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options:
+  - '#DEFAULT#'
+
+dialog:
+  chained: true
+  resizable: true
+
+navigation-menu:
+  override-user-interface-level: false
+
+navigation:
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security:
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management:
+  rejoin-sessions: Application Default
+
+advanced:
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache:
+  caching: Disabled
+
+regions:
+- # ====== Region: Organization Form ==================================
+  id: 93000000000001
+  identification:
+    name: Organization Form
+    type: Form
+
+  source:
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_ORGS
+    include-rowid-column: false
+
+  layout:
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    template: Standard
+    template-options:
+    - '#DEFAULT#'
+    - t-Region--noBorder
+    render-components: Above Content
+
+  accessibility:
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced:
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization:
+    customizable: Not Customizable By End Users
+
+  attributes:
+    edit:
+      enabled: true
+      allowed-operations:
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+- # ====== Region: Basic Info ===================================
+  id: 93000000000002
+  identification:
+    name: Basic Info
+    title: <span class="fa fa-building"></span> Basic Info
+    type: Static Content
+
+  layout:
+    sequence: 10
+    parent-region: Organization Form # 93000000000001
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    template: Standard
+    template-options:
+    - '#DEFAULT#'
+    icon: fa-building
+    render-components: Above Content
+
+  accessibility:
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced:
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization:
+    customizable: Not Customizable By End Users
+
+  attributes:
+    settings:
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Trade License & Government IDs ==============
+  id: 93000000000003
+  identification:
+    name: Trade License & Government IDs
+    title: <span class="fa fa-id-card"></span> Trade License & Government IDs
+    type: Static Content
+
+  layout:
+    sequence: 20
+    parent-region: Organization Form # 93000000000001
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    template: Standard
+    template-options:
+    - '#DEFAULT#'
+    icon: fa-id-card
+    render-components: Above Content
+
+  accessibility:
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced:
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization:
+    customizable: Not Customizable By End Users
+
+  attributes:
+    settings:
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Address & Contact ============================
+  id: 93000000000004
+  identification:
+    name: Address & Contact
+    title: <span class="fa fa-map-marker"></span> Address & Contact
+    type: Static Content
+
+  layout:
+    sequence: 30
+    parent-region: Organization Form # 93000000000001
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    template: Standard
+    template-options:
+    - '#DEFAULT#'
+    icon: fa-map-marker
+    render-components: Above Content
+
+  accessibility:
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced:
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization:
+    customizable: Not Customizable By End Users
+
+  attributes:
+    settings:
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Buttons =====================================
+  id: 93000000000005
+  identification:
+    name: Buttons
+    type: Static Content
+
+  layout:
+    sequence: 40
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    template: Buttons Container
+    template-options:
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility:
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced:
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization:
+    customizable: Not Customizable By End Users
+
+  attributes:
+    settings:
+      output-as: Text (escape special characters)
+      show-line-breaks: true
+
+page-items:
+- # ====== Page Item: P954_ORG_ID =========================
+  id: 93000000000006
+  identification:
+    name: P954_ORG_ID
+    type: Hidden
+
+  settings:
+    value-protected: true
+
+  layout:
+    sequence: 10
+    region: Organization Form # 93000000000001
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: ORG_ID
+    data-type: NUMBER
+    query-only: true
+    primary-key: true
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security:
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_CREATED_BY =========================
+  id: 93000000000007
+  identification:
+    name: P954_CREATED_BY
+    type: Hidden
+
+  settings:
+    value-protected: true
+
+  layout:
+    sequence: 200
+    region: Organization Form # 93000000000001
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: CREATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_CREATED_DT =========================
+  id: 93000000000008
+  identification:
+    name: P954_CREATED_DT
+    type: Hidden
+
+  settings:
+    value-protected: true
+
+  layout:
+    sequence: 210
+    region: Organization Form # 93000000000001
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: CREATED_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_UPDATED_BY =========================
+  id: 93000000000009
+  identification:
+    name: P954_UPDATED_BY
+    type: Hidden
+
+  settings:
+    value-protected: true
+
+  layout:
+    sequence: 220
+    region: Organization Form # 93000000000001
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: UPDATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_UPDATED_DT =========================
+  id: 93000000000010
+  identification:
+    name: P954_UPDATED_DT
+    type: Hidden
+
+  settings:
+    value-protected: true
+
+  layout:
+    sequence: 230
+    region: Organization Form # 93000000000001
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: UPDATED_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_GROUP_ID =========================
+  id: 93000000000011
+  identification:
+    name: P954_GROUP_ID
+    type: Select List
+
+  label:
+    label: Group
+    alignment: Left
+
+  settings:
+    page-action-on-selection: None
+
+  multiple-values:
+    type: No
+
+  layout:
+    sequence: 10
+    region: Basic Info # 93000000000002
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Required - Floating
+    template-options:
+    - '#DEFAULT#'
+    height: 1
+
+  validation:
+    value-required: true
+
+  list-of-values:
+    type: SQL Query
+    sql-query: |
+      select group_name, group_id
+      from hr_groups
+      where is_active = 'Y'
+      order by group_name
+    display-extra-values: true
+    display-null-value: true
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: GROUP_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_PARENT_ORG_ID =========================
+  id: 93000000000012
+  identification:
+    name: P954_PARENT_ORG_ID
+    type: Select List
+
+  label:
+    label: Parent Organization
+    alignment: Left
+
+  settings:
+    page-action-on-selection: None
+
+  multiple-values:
+    type: No
+
+  layout:
+    sequence: 20
+    region: Basic Info # 93000000000002
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    height: 1
+
+  validation:
+    value-required: false
+
+  list-of-values:
+    type: SQL Query
+    sql-query: |
+      select org_name || ' (' || org_code || ')', org_id
+      from hr_orgs
+      where is_active = 'Y'
+        and (org_id != :P954_ORG_ID or :P954_ORG_ID is null)
+      order by org_name
+    display-extra-values: true
+    display-null-value: true
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: PARENT_ORG_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_ORG_CODE =========================
+  id: 93000000000013
+  identification:
+    name: P954_ORG_CODE
+    type: Text Field
+
+  label:
+    label: Org Code
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 30
+    region: Basic Info # 93000000000002
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Required - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: true
+    maximum-length: 30
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: ORG_CODE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_ORG_NAME =========================
+  id: 93000000000014
+  identification:
+    name: P954_ORG_NAME
+    type: Text Field
+
+  label:
+    label: Org Name
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 40
+    region: Basic Info # 93000000000002
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Required - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 60
+
+  validation:
+    value-required: true
+    maximum-length: 200
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: ORG_NAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_ORG_TYPE =========================
+  id: 93000000000015
+  identification:
+    name: P954_ORG_TYPE
+    type: Select List
+
+  label:
+    label: Org Type
+    alignment: Left
+
+  settings:
+    page-action-on-selection: None
+
+  multiple-values:
+    type: No
+
+  layout:
+    sequence: 50
+    region: Basic Info # 93000000000002
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Required - Floating
+    template-options:
+    - '#DEFAULT#'
+    height: 1
+
+  validation:
+    value-required: true
+
+  list-of-values:
+    type: Static Values
+    static-values: 'STATIC:Company;COMPANY,Branch;BRANCH'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: ORG_TYPE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default:
+    type: Static
+    static-value: COMPANY
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_IS_MAIN_UNIT =========================
+  id: 93000000000016
+  identification:
+    name: P954_IS_MAIN_UNIT
+    type: Select List
+
+  label:
+    label: Main Unit
+    alignment: Left
+
+  settings:
+    page-action-on-selection: None
+
+  multiple-values:
+    type: No
+
+  layout:
+    sequence: 60
+    region: Basic Info # 93000000000002
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    height: 1
+
+  validation:
+    value-required: false
+
+  list-of-values:
+    type: Static Values
+    static-values: 'STATIC:Yes;Y,No;N'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: IS_MAIN_UNIT
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default:
+    type: Static
+    static-value: N
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_IS_ACTIVE =========================
+  id: 93000000000017
+  identification:
+    name: P954_IS_ACTIVE
+    type: Select List
+
+  label:
+    label: Active
+    alignment: Left
+
+  settings:
+    page-action-on-selection: None
+
+  multiple-values:
+    type: No
+
+  layout:
+    sequence: 70
+    region: Basic Info # 93000000000002
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    height: 1
+
+  validation:
+    value-required: false
+
+  list-of-values:
+    type: Static Values
+    static-values: 'STATIC:Yes;Y,No;N'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: IS_ACTIVE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default:
+    type: Static
+    static-value: Y
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_COMPANY_CODE =========================
+  id: 93000000000018
+  identification:
+    name: P954_COMPANY_CODE
+    type: Text Field
+
+  label:
+    label: Company Code
+    alignment: Left
+
+  settings:
+    subtype: Number
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 80
+    region: Basic Info # 93000000000002
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: COMPANY_CODE
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_TRADE_LIC_NO =========================
+  id: 93000000000019
+  identification:
+    name: P954_TRADE_LIC_NO
+    type: Text Field
+
+  label:
+    label: Trade License No
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 10
+    region: Trade License & Government IDs # 93000000000003
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 20
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: TRADE_LIC_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_TRADE_LIC_ISSUE_DT =========================
+  id: 93000000000020
+  identification:
+    name: P954_TRADE_LIC_ISSUE_DT
+    type: Date Picker
+
+  label:
+    label: Trade License Issue Date
+    alignment: Left
+
+  settings:
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout:
+    sequence: 20
+    region: Trade License & Government IDs # 93000000000003
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 255
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: TRADE_LIC_ISSUE_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_TRADE_LIC_EXPIRY_DT =========================
+  id: 93000000000021
+  identification:
+    name: P954_TRADE_LIC_EXPIRY_DT
+    type: Date Picker
+
+  label:
+    label: Trade License Expiry Date
+    alignment: Left
+
+  settings:
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout:
+    sequence: 30
+    region: Trade License & Government IDs # 93000000000003
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 255
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: TRADE_LIC_EXPIRY_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_MOL_CODE =========================
+  id: 93000000000022
+  identification:
+    name: P954_MOL_CODE
+    type: Text Field
+
+  label:
+    label: MOL Code
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 40
+    region: Trade License & Government IDs # 93000000000003
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 100
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: MOL_CODE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_MOHRE_ESTABLISHMENT_NO =========================
+  id: 93000000000023
+  identification:
+    name: P954_MOHRE_ESTABLISHMENT_NO
+    type: Text Field
+
+  label:
+    label: MOHRE Establishment No
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 50
+    region: Trade License & Government IDs # 93000000000003
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 100
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: MOHRE_ESTABLISHMENT_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_IMMIGRATION_FILE_NO =========================
+  id: 93000000000024
+  identification:
+    name: P954_IMMIGRATION_FILE_NO
+    type: Text Field
+
+  label:
+    label: Immigration File No
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 60
+    region: Trade License & Government IDs # 93000000000003
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 100
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: IMMIGRATION_FILE_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_ESTABLISHMENT_CARD_NO =========================
+  id: 93000000000025
+  identification:
+    name: P954_ESTABLISHMENT_CARD_NO
+    type: Text Field
+
+  label:
+    label: Establishment Card No
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 70
+    region: Trade License & Government IDs # 93000000000003
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 100
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: ESTABLISHMENT_CARD_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_WPS_EMPLOYER_ID =========================
+  id: 93000000000026
+  identification:
+    name: P954_WPS_EMPLOYER_ID
+    type: Text Field
+
+  label:
+    label: WPS Employer ID
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 80
+    region: Trade License & Government IDs # 93000000000003
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 100
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: WPS_EMPLOYER_ID
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_TRN_NO =========================
+  id: 93000000000027
+  identification:
+    name: P954_TRN_NO
+    type: Text Field
+
+  label:
+    label: TRN No
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 90
+    region: Trade License & Government IDs # 93000000000003
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 50
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: TRN_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_COUNTRY_ID =========================
+  id: 93000000000028
+  identification:
+    name: P954_COUNTRY_ID
+    type: Select List
+
+  label:
+    label: Country
+    alignment: Left
+
+  settings:
+    page-action-on-selection: None
+
+  multiple-values:
+    type: No
+
+  layout:
+    sequence: 10
+    region: Address & Contact # 93000000000004
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    height: 1
+
+  validation:
+    value-required: false
+
+  list-of-values:
+    type: SQL Query
+    sql-query: |
+      select country_name, country_id
+      from ref_countries
+      where is_active = 'Y'
+      order by country_name
+    display-extra-values: true
+    display-null-value: true
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: COUNTRY_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_CITY_ID =========================
+  id: 93000000000029
+  identification:
+    name: P954_CITY_ID
+    type: Select List
+
+  label:
+    label: City
+    alignment: Left
+
+  settings:
+    page-action-on-selection: None
+
+  multiple-values:
+    type: No
+
+  layout:
+    sequence: 20
+    region: Address & Contact # 93000000000004
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    height: 1
+
+  validation:
+    value-required: false
+
+  list-of-values:
+    type: SQL Query
+    sql-query: |
+      select city_name, city_id
+      from ref_cities
+      where is_active = 'Y'
+        and country_id = :P954_COUNTRY_ID
+      order by city_name
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values:
+    parent-item(s):
+    - P954_COUNTRY_ID
+    parent-required: false
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: CITY_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_ADDRESS_LINE1 =========================
+  id: 93000000000030
+  identification:
+    name: P954_ADDRESS_LINE1
+    type: Text Field
+
+  label:
+    label: Address Line 1
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 30
+    region: Address & Contact # 93000000000004
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 60
+
+  validation:
+    value-required: false
+    maximum-length: 250
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: ADDRESS_LINE1
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_ADDRESS_LINE2 =========================
+  id: 93000000000031
+  identification:
+    name: P954_ADDRESS_LINE2
+    type: Text Field
+
+  label:
+    label: Address Line 2
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 40
+    region: Address & Contact # 93000000000004
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 60
+
+  validation:
+    value-required: false
+    maximum-length: 250
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: ADDRESS_LINE2
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_PO_BOX =========================
+  id: 93000000000032
+  identification:
+    name: P954_PO_BOX
+    type: Text Field
+
+  label:
+    label: PO Box
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 50
+    region: Address & Contact # 93000000000004
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 50
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: PO_BOX
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_CONTACT_PERSON =========================
+  id: 93000000000033
+  identification:
+    name: P954_CONTACT_PERSON
+    type: Text Field
+
+  label:
+    label: Contact Person
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 60
+    region: Address & Contact # 93000000000004
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 120
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: CONTACT_PERSON
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_PHONE =========================
+  id: 93000000000034
+  identification:
+    name: P954_PHONE
+    type: Text Field
+
+  label:
+    label: Phone
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 70
+    region: Address & Contact # 93000000000004
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 30
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: PHONE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_MOBILE =========================
+  id: 93000000000035
+  identification:
+    name: P954_MOBILE
+    type: Text Field
+
+  label:
+    label: Mobile
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 80
+    region: Address & Contact # 93000000000004
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 30
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: MOBILE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_EMAIL =========================
+  id: 93000000000036
+  identification:
+    name: P954_EMAIL
+    type: Text Field
+
+  label:
+    label: Email
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 90
+    region: Address & Contact # 93000000000004
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 120
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: EMAIL
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P954_REMARKS =========================
+  id: 93000000000037
+  identification:
+    name: P954_REMARKS
+    type: Textarea
+
+  label:
+    label: Remarks
+    alignment: Right
+
+  settings:
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout:
+    sequence: 100
+    region: Address & Contact # 93000000000004
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 60
+    height: 4
+
+  validation:
+    value-required: false
+    maximum-length: 4000
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Organization Form # 93000000000001
+    column: REMARKS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons:
+- # ====== Button: CANCEL ======================================
+  id: 93000000000038
+  identification:
+    button-name: CANCEL
+    label: Cancel
+
+  layout:
+    sequence: 10
+    region: Buttons # 93000000000005
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    button-template: Text
+    hot: false
+    template-options:
+    - '#DEFAULT#'
+
+  behavior:
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: DELETE ======================================
+  id: 93000000000039
+  identification:
+    button-name: DELETE
+    label: Delete
+
+  layout:
+    sequence: 20
+    region: Buttons # 93000000000005
+    slot: DELETE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    button-template: Text
+    hot: false
+    template-options:
+    - '#DEFAULT#'
+
+  behavior:
+    action: Submit Page
+    execute-validations: false
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL DELETE action
+
+  confirmation:
+    message: '&APP_TEXT$DELETE_MSG!RAW.'
+    style: Danger
+
+  server-side-condition:
+    type: Item is NOT NULL
+    item: P954_ORG_ID
+
+- # ====== Button: SAVE ========================================
+  id: 93000000000040
+  identification:
+    button-name: SAVE
+    label: Apply Changes
+
+  layout:
+    sequence: 30
+    region: Buttons # 93000000000005
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    button-template: Text
+    hot: true
+    template-options:
+    - '#DEFAULT#'
+
+  behavior:
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+  server-side-condition:
+    type: Item is NOT NULL
+    item: P954_ORG_ID
+
+- # ====== Button: CREATE ======================================
+  id: 93000000000041
+  identification:
+    button-name: CREATE
+    label: Create
+
+  layout:
+    sequence: 40
+    region: Buttons # 93000000000005
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    button-template: Text
+    hot: true
+    template-options:
+    - '#DEFAULT#'
+
+  behavior:
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+  server-side-condition:
+    type: Item is NULL
+    item: P954_ORG_ID
+
+dynamic-actions:
+- # ====== Dynamic Action: Cancel Dialog =======================
+  id: 93000000000042
+  identification:
+    name: Cancel Dialog
+
+  execution:
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when:
+    event: Click
+    selection-type: Button
+    button: CANCEL # 93000000000038
+
+  actions:
+  - # ====== Action: Cancel Dialog ===============================
+    id: 93000000000043
+    identification:
+      action: Cancel Dialog
+
+    execution:
+      sequence: 10
+      event: Cancel Dialog # 93000000000042
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations:
+- # ====== Validation: Trade License Expiry After Issue ========
+  id: 93000000000044
+  identification:
+    name: Trade License Expiry After Issue
+
+  execution:
+    sequence: 10
+
+  validation:
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: |
+      :P954_TRADE_LIC_EXPIRY_DT is null
+      or :P954_TRADE_LIC_ISSUE_DT is null
+      or :P954_TRADE_LIC_EXPIRY_DT > :P954_TRADE_LIC_ISSUE_DT
+    always-execute: false
+
+  error:
+    error-message: Trade License Expiry Date cannot be earlier than Issue Date.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: Org Code Unique ==========================
+  id: 93000000000045
+  identification:
+    name: Org Code Unique
+
+  execution:
+    sequence: 20
+
+  validation:
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      declare
+          l_cnt number;
+      begin
+          select count(*)
+            into l_cnt
+            from hr_orgs o
+           where upper(o.org_code) = upper(:P954_ORG_CODE)
+             and nvl(o.org_id, -1) <> nvl(:P954_ORG_ID, -1);
+
+          return l_cnt = 0;
+      end;
+    always-execute: false
+
+  error:
+    error-message: Org Code already exists.
+    display-location: Inline with Field and in Notification
+
+processes:
+- # ====== Process: Initialize form Organization Form =========
+  id: 93000000000046
+  identification:
+    name: Initialize form Organization Form
+    type: Form - Initialization
+    execution-chain: None
+    form-region: Organization Form # 93000000000001
+
+  execution:
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Process form Organization Form ============
+  id: 93000000000047
+  identification:
+    name: Process form Organization Form
+    type: Form - Automatic Row Processing (DML)
+    execution-chain: None
+    form-region: Organization Form # 93000000000001
+
+  settings:
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution:
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error:
+    display-location: Inline in Notification
+
+- # ====== Process: Close Dialog ===============================
+  id: 93000000000048
+  identification:
+    name: Close Dialog
+    type: Close Dialog
+    execution-chain: None
+
+  settings:
+    show-success-messages: true
+
+  execution:
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error:
+    display-location: Inline in Notification
+
+  server-side-condition:
+    type: Request is contained in Value
+    value: CREATE,SAVE,DELETE
+
+branches:
+- # ====== Branch: Go to Page 953 ==============================
+  id: 93000000000049
+  identification:
+    name: Go to Page 953
+
+  execution:
+    sequence: 10
+    point: After Processing
+
+  behavior:
+    type: Page or URL (Redirect)
+    target:
+      url: 'f?p=&APP_ID.:953:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 953 # Organization Workbench

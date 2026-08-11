@@ -1,0 +1,1090 @@
+---
+# ====== Page: Org Document Form ============================
+id: 955
+identification:
+  name: Org Document Form
+  alias: ORG-DOCUMENT-FORM
+  title: Org Document Form
+
+appearance:
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options:
+  - '#DEFAULT#'
+
+dialog:
+  chained: true
+  resizable: true
+
+navigation-menu:
+  override-user-interface-level: false
+
+navigation:
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security:
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management:
+  rejoin-sessions: Application Default
+
+advanced:
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache:
+  caching: Disabled
+
+regions:
+- # ====== Region: Org Document Form ==========================
+  id: 92000000000001
+  identification:
+    name: Org Document Form
+    type: Form
+
+  source:
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HR_ORG_DOCS
+    include-rowid-column: false
+
+  layout:
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    template: Blank with Attributes
+    template-options:
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility:
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced:
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization:
+    customizable: Not Customizable By End Users
+
+  attributes:
+    edit:
+      enabled: true
+      allowed-operations:
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+- # ====== Region: Buttons =====================================
+  id: 92000000000002
+  identification:
+    name: Buttons
+    type: Static Content
+
+  layout:
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    template: Buttons Container
+    template-options:
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility:
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced:
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization:
+    customizable: Not Customizable By End Users
+
+  attributes:
+    settings:
+      output-as: Text (escape special characters)
+      show-line-breaks: true
+
+page-items:
+- # ====== Page Item: P955_ORG_DOC_ID =========================
+  id: 92000000000003
+  identification:
+    name: P955_ORG_DOC_ID
+    type: Hidden
+
+  settings:
+    value-protected: true
+
+  layout:
+    sequence: 10
+    region: Org Document Form # 92000000000001
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: ORG_DOC_ID
+    data-type: NUMBER
+    query-only: true
+    primary-key: true
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security:
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P955_ORG_ID =========================
+  id: 92000000000004
+  identification:
+    name: P955_ORG_ID
+    type: Hidden
+
+  settings:
+    value-protected: true
+
+  layout:
+    sequence: 20
+    region: Org Document Form # 92000000000001
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: ORG_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P955_DOC_TYPE_CODE =========================
+  id: 92000000000005
+  identification:
+    name: P955_DOC_TYPE_CODE
+    type: Select List
+
+  label:
+    label: Document Type
+    alignment: Left
+
+  settings:
+    page-action-on-selection: None
+
+  multiple-values:
+    type: No
+
+  layout:
+    sequence: 30
+    region: Org Document Form # 92000000000001
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Required - Floating
+    template-options:
+    - '#DEFAULT#'
+    height: 1
+
+  validation:
+    value-required: true
+
+  list-of-values:
+    type: SQL Query
+    sql-query: |
+      select doc_type_name, doc_type_code
+      from hr_org_doc_type_master
+      where is_active = 'Y'
+      order by seq_no
+    display-extra-values: true
+    display-null-value: true
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: DOC_TYPE_CODE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P955_DOC_NO =========================
+  id: 92000000000006
+  identification:
+    name: P955_DOC_NO
+    type: Text Field
+
+  label:
+    label: Document No
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 40
+    region: Org Document Form # 92000000000001
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Required - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: true
+    maximum-length: 100
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: DOC_NO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P955_ISSUE_DT =========================
+  id: 92000000000007
+  identification:
+    name: P955_ISSUE_DT
+    type: Date Picker
+
+  label:
+    label: Issue Date
+    alignment: Left
+
+  settings:
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout:
+    sequence: 50
+    region: Org Document Form # 92000000000001
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 255
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: ISSUE_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P955_EXPIRY_DT =========================
+  id: 92000000000008
+  identification:
+    name: P955_EXPIRY_DT
+    type: Date Picker
+
+  label:
+    label: Expiry Date
+    alignment: Left
+
+  settings:
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout:
+    sequence: 60
+    region: Org Document Form # 92000000000001
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 32
+
+  validation:
+    value-required: false
+    maximum-length: 255
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: EXPIRY_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P955_IS_ACTIVE =========================
+  id: 92000000000009
+  identification:
+    name: P955_IS_ACTIVE
+    type: Select List
+
+  label:
+    label: Active
+    alignment: Left
+
+  settings:
+    page-action-on-selection: None
+
+  multiple-values:
+    type: No
+
+  layout:
+    sequence: 70
+    region: Org Document Form # 92000000000001
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    height: 1
+
+  validation:
+    value-required: false
+
+  list-of-values:
+    type: Static Values
+    static-values: 'STATIC:Yes;Y,No;N'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: IS_ACTIVE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default:
+    type: Static
+    static-value: Y
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P955_IS_CURRENT =========================
+  id: 92000000000010
+  identification:
+    name: P955_IS_CURRENT
+    type: Hidden
+
+  settings:
+    value-protected: true
+
+  layout:
+    sequence: 80
+    region: Org Document Form # 92000000000001
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: IS_CURRENT
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default:
+    type: Static
+    static-value: Y
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P955_FILE_REF =========================
+  id: 92000000000011
+  identification:
+    name: P955_FILE_REF
+    type: Text Field
+
+  label:
+    label: File Reference
+    alignment: Left
+
+  settings:
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout:
+    sequence: 90
+    region: Org Document Form # 92000000000001
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 60
+
+  validation:
+    value-required: false
+    maximum-length: 4000
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: FILE_REF
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P955_REMARKS =========================
+  id: 92000000000012
+  identification:
+    name: P955_REMARKS
+    type: Textarea
+
+  label:
+    label: Remarks
+    alignment: Right
+
+  settings:
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout:
+    sequence: 100
+    region: Org Document Form # 92000000000001
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance:
+    template: Optional - Floating
+    template-options:
+    - '#DEFAULT#'
+    width: 60
+    height: 4
+
+  validation:
+    value-required: false
+    maximum-length: 4000
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: REMARKS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks:
+    show-quick-picks: false
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P955_CREATED_BY =========================
+  id: 92000000000013
+  identification:
+    name: P955_CREATED_BY
+    type: Hidden
+
+  settings:
+    value-protected: true
+
+  layout:
+    sequence: 110
+    region: Org Document Form # 92000000000001
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: CREATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P955_CREATED_DT =========================
+  id: 92000000000014
+  identification:
+    name: P955_CREATED_DT
+    type: Hidden
+
+  settings:
+    value-protected: true
+
+  layout:
+    sequence: 120
+    region: Org Document Form # 92000000000001
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: CREATED_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P955_UPDATED_BY =========================
+  id: 92000000000015
+  identification:
+    name: P955_UPDATED_BY
+    type: Hidden
+
+  settings:
+    value-protected: true
+
+  layout:
+    sequence: 130
+    region: Org Document Form # 92000000000001
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: UPDATED_BY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P955_UPDATED_DT =========================
+  id: 92000000000016
+  identification:
+    name: P955_UPDATED_DT
+    type: Hidden
+
+  settings:
+    value-protected: true
+
+  layout:
+    sequence: 140
+    region: Org Document Form # 92000000000001
+    slot: BODY
+
+  advanced:
+    warn-on-unsaved-changes: Page Default
+
+  source:
+    form-region: Org Document Form # 92000000000001
+    column: UPDATED_DT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state:
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security:
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons:
+- # ====== Button: CANCEL ======================================
+  id: 92000000000017
+  identification:
+    button-name: CANCEL
+    label: Cancel
+
+  layout:
+    sequence: 10
+    region: Buttons # 92000000000002
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    button-template: Text
+    hot: false
+    template-options:
+    - '#DEFAULT#'
+
+  behavior:
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: DELETE ======================================
+  id: 92000000000018
+  identification:
+    button-name: DELETE
+    label: Delete
+
+  layout:
+    sequence: 20
+    region: Buttons # 92000000000002
+    slot: DELETE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    button-template: Text
+    hot: false
+    template-options:
+    - '#DEFAULT#'
+
+  behavior:
+    action: Submit Page
+    execute-validations: false
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL DELETE action
+
+  confirmation:
+    message: '&APP_TEXT$DELETE_MSG!RAW.'
+    style: Danger
+
+  server-side-condition:
+    type: Item is NOT NULL
+    item: P955_ORG_DOC_ID
+
+- # ====== Button: SAVE ========================================
+  id: 92000000000019
+  identification:
+    button-name: SAVE
+    label: Apply Changes
+
+  layout:
+    sequence: 30
+    region: Buttons # 92000000000002
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    button-template: Text
+    hot: true
+    template-options:
+    - '#DEFAULT#'
+
+  behavior:
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+  server-side-condition:
+    type: Item is NOT NULL
+    item: P955_ORG_DOC_ID
+
+- # ====== Button: CREATE ======================================
+  id: 92000000000020
+  identification:
+    button-name: CREATE
+    label: Create
+
+  layout:
+    sequence: 40
+    region: Buttons # 92000000000002
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance:
+    button-template: Text
+    hot: true
+    template-options:
+    - '#DEFAULT#'
+
+  behavior:
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+  server-side-condition:
+    type: Item is NULL
+    item: P955_ORG_DOC_ID
+
+dynamic-actions:
+- # ====== Dynamic Action: Cancel Dialog =======================
+  id: 92000000000021
+  identification:
+    name: Cancel Dialog
+
+  execution:
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when:
+    event: Click
+    selection-type: Button
+    button: CANCEL # 92000000000017
+
+  actions:
+  - # ====== Action: Cancel Dialog ===============================
+    id: 92000000000022
+    identification:
+      action: Cancel Dialog
+
+    execution:
+      sequence: 10
+      event: Cancel Dialog # 92000000000021
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations:
+- # ====== Validation: Expiry After Issue =======================
+  id: 92000000000023
+  identification:
+    name: Expiry After Issue
+
+  execution:
+    sequence: 10
+
+  validation:
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: |
+      :P955_EXPIRY_DT is null
+      or :P955_ISSUE_DT is null
+      or :P955_EXPIRY_DT > :P955_ISSUE_DT
+    always-execute: false
+
+  error:
+    error-message: Expiry Date cannot be earlier than Issue Date.
+    display-location: Inline with Field and in Notification
+
+- # ====== Validation: Date Overlapping ========================
+  id: 92000000000024
+  identification:
+    name: Date Overlapping
+
+  execution:
+    sequence: 20
+
+  validation:
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      declare
+          l_cnt number;
+      begin
+          select count(*)
+            into l_cnt
+            from hr_org_docs d
+           where d.org_id       = :P955_ORG_ID
+             and d.doc_type_code = :P955_DOC_TYPE_CODE
+             and nvl(d.org_doc_id, -1) <> nvl(:P955_ORG_DOC_ID, -1)
+             and nvl(:P955_ISSUE_DT, date '1900-01-01') <= nvl(d.expiry_dt, date '4712-12-31')
+             and nvl(:P955_EXPIRY_DT, date '4712-12-31') >= nvl(d.issue_dt, date '1900-01-01');
+
+          return l_cnt = 0;
+      end;
+    always-execute: false
+
+  error:
+    error-message: Overlapping document period exists for the same organization and document type
+    display-location: Inline with Field and in Notification
+
+processes:
+- # ====== Process: Initialize form Org Document Form =========
+  id: 92000000000025
+  identification:
+    name: Initialize form Org Document Form
+    type: Form - Initialization
+    execution-chain: None
+    form-region: Org Document Form # 92000000000001
+
+  execution:
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Process form Org Document Form ============
+  id: 92000000000026
+  identification:
+    name: Process form Org Document Form
+    type: Form - Automatic Row Processing (DML)
+    execution-chain: None
+    form-region: Org Document Form # 92000000000001
+
+  settings:
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution:
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error:
+    display-location: Inline in Notification
+
+- # ====== Process: Close Dialog ===============================
+  id: 92000000000027
+  identification:
+    name: Close Dialog
+    type: Close Dialog
+    execution-chain: None
+
+  settings:
+    show-success-messages: true
+
+  execution:
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error:
+    display-location: Inline in Notification
+
+  server-side-condition:
+    type: Request is contained in Value
+    value: CREATE,SAVE,DELETE
+
+branches:
+- # ====== Branch: Go to Page 953 ==============================
+  id: 92000000000028
+  identification:
+    name: Go to Page 953
+
+  execution:
+    sequence: 10
+    point: After Processing
+
+  behavior:
+    type: Page or URL (Redirect)
+    target:
+      url: 'f?p=&APP_ID.:953:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 953 # Organization Workbench

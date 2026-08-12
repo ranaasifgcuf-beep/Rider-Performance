@@ -57,20 +57,20 @@ regions:
              a.start_dt,
              a.end_dt,
              a.status assignment_status,
-      
+
              sup.emp_code || ' - ' || sup.first_name || ' ' || sup.last_name as supervisor_name,
-      
+
              e.current_status_code as current_status,
              e.current_status_name,
              e.status_badge_text,
-      
+
              e.current_legal_code,
              e.current_legal_name,
-      
+
              case
                  when replace(upper(nvl(e.current_legal_code,'NOT_SET')), 'LEGAL_', '') = 'VALID' then
                      '<span class="t-Badge t-Badge--success">Valid</span>'
-      
+
                  when replace(upper(nvl(e.current_legal_code,'NOT_SET')), 'LEGAL_', '') in (
                      'IN_PROCESS',
                      'ON_HOLD',
@@ -79,7 +79,7 @@ regions:
                      '<span class="t-Badge t-Badge--warning">' ||
                      apex_escape.html(nvl(e.current_legal_name,'Not Set')) ||
                      '</span>'
-      
+
                  when replace(upper(nvl(e.current_legal_code,'NOT_SET')), 'LEGAL_', '') in (
                      'ABSCONDING',
                      'ABSCONDER',
@@ -92,41 +92,129 @@ regions:
                      '<span class="t-Badge t-Badge--danger">' ||
                      apex_escape.html(nvl(e.current_legal_name,'Risk')) ||
                      '</span>'
-      
+
                  else
                      '<span class="t-Badge t-Badge--warning">Not Set</span>'
              end as legal_status_badge,
-      
+
              null as unassign_link,
+
              a.agg_rider_id as project_rider_id,
              jb.job_name,
-      ac.current_bike_badge as current_bike,
-        e.worker_type,
-             e.supplier_name
+
+             ------------------------------------------------------------------
+             -- Current Bike
+             ------------------------------------------------------------------
+             ac.current_bike_badge as current_bike,
+
+             ------------------------------------------------------------------
+             -- Current SIM
+             ------------------------------------------------------------------
+             case
+                 when nvl(jb.sim_required_yn, 'N') = 'N' then
+                     '<span class="t-Badge t-Badge--normal">SIM Not Required</span>'
+
+                 when nvl(ss.active_sim_count, 0) > 0 then
+                     ss.sim_summary_badge
+
+                 when sr.request_id is not null then
+                     '<span class="t-Badge t-Badge--warning">SIM Request #' ||
+                     sr.request_id || ' Open</span>'
+
+                 else
+                     '<a href="' ||
+                     apex_util.prepare_url(
+                         'f?p=' || :APP_ID || ':328:' || :APP_SESSION ||
+                         '::NO::P328_EMP_ID,P328_REQUEST_TYPE,P328_REQUESTED_PROJECT_ID,P328_REQUESTED_CITY_ID,P328_FROM_PAGE:' ||
+                         e.emp_id ||
+                         ',NEW_ONBOARDING,' ||
+                         a.project_id ||
+                         ',' ||
+                         a.city_id ||
+                         ',108'
+                     ) ||
+                     '" title="Raise SIM Request">' ||
+                     '<span class="fa fa-sim-card" aria-hidden="true"></span> Request SIM' ||
+                     '</a>'
+             end as current_sim,
+
+             e.worker_type,
+             e.supplier_name,
+
+             case
+                 when ac.current_bike_id is not null then
+                     '<a href="' ||
+                     apex_util.prepare_url(
+                         'f?p=' || :APP_ID || ':324:' || :APP_SESSION ||
+                         '::NO::P324_EMP_ID,P324_REQUEST_TYPE,P324_REQUESTED_PROJECT_ID,P324_REQUESTED_CITY_ID,P324_CURRENT_BIKE_ID,P324_LOCK_CONTEXT_YN:' ||
+                         e.emp_id ||
+                         ',REPLACEMENT_MAINTENANCE,' ||
+                         a.project_id ||
+                         ',' ||
+                         a.city_id ||
+                         ',' ||
+                         ac.current_bike_id ||
+                         ',Y'
+                     ) ||
+                     '" title="Request Bike Change">' ||
+                     '<span class="fa fa-exchange" aria-hidden="true"></span> Bike Change' ||
+                     '</a>'
+                 else
+                     null
+             end as bike_change_request,
+
+             case
+                 when nvl(ss.active_sim_count, 0) > 0 then
+                     '<a href="' ||
+                     apex_util.prepare_url(
+                         'f?p=' || :APP_ID || ':328:' || :APP_SESSION ||
+                         '::NO::P328_EMP_ID,P328_REQUEST_TYPE,P328_REQUESTED_PROJECT_ID,P328_REQUESTED_CITY_ID,P328_CURRENT_SIM_ID,P328_FROM_PAGE:' ||
+                         e.emp_id ||
+                         ',REPLACEMENT_DAMAGED,' ||
+                         a.project_id ||
+                         ',' ||
+                         a.city_id ||
+                         ',' ||
+                         (select min(cs.sim_id) from vw_hr_emp_current_sims cs where cs.emp_id = e.emp_id) ||
+                         ',108'
+                     ) ||
+                     '" title="Request SIM Change">' ||
+                     '<span class="fa fa-exchange" aria-hidden="true"></span> SIM Change' ||
+                     '</a>'
+                 else
+                     null
+             end as sim_change_request
+
       from hr_assignments a
-      
+
       join ref_jobs jb
         on jb.job_id = a.job_id
-      
+
       join vw_hr_employee_list e
         on e.emp_id = a.emp_id
       join vw_hr_emp_asset_control ac
         on ac.emp_id = e.emp_id
-      
+
       join hr_projects p
         on p.project_id = a.project_id
-      
+
       join ref_cities c
         on c.city_id = a.city_id
-      
+
       left join hr_employees sup
         on sup.emp_id = a.supervisor_emp_id
-      
+
+      left join vw_hr_emp_sim_summary ss
+        on ss.emp_id = e.emp_id
+
+      left join vw_hr_emp_open_sim_req sr
+        on sr.emp_id = e.emp_id
+
       where a.end_dt is null
-      
+
         -- Active Fleet means employee is operationally working
         and upper(nvl(e.current_status_code, 'NO_STATUS')) = 'ACTIVE'
-      
+
       order by a.asg_id desc;
 
   layout: 

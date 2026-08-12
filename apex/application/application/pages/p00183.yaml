@@ -2923,30 +2923,4 @@ processes:
     type: Request is contained in Value
     value: CREATE,SAVE,DELETE
 
-- # ====== Process: New ========================================
-  id: 40309683702675220
-  identification: 
-    name: New
-    type: Execute Code
-    execution-chain: None
-
-  source: 
-    location: Local Database
-    language: PL/SQL
-    pl/sql-code: |
-      begin
-          hr_legal_status_sync_pkg.sync_working_status(
-              p_emp_id       => :P183_EMP_ID,
-              p_legal_status => :P183_LEGAL_STATUS,
-              p_reason       => :P183_LEGAL_STATUS_REASON
-          );
-      end;
-
-  execution: 
-    sequence: 20
-    point: Processing
-    run-process: Once Per Page Visit (default)
-
-  error: 
-    display-location: Inline in Notification
 
